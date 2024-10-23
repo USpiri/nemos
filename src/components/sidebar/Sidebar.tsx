@@ -1,41 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import { SidebarHeader } from "./sidebar-header/SidebarHeader";
 import { SidebarContent } from "./sidebar-content/SidebarContent";
 import { SidebarFooter } from "./sidebar-footer/SidebarFooter";
+import { useSidebarResize } from "@/hooks/useSidebarResize";
 
 export const Sidebar = () => {
-  const sidebarRef = useRef<HTMLDivElement | null>(null);
-  const [isResizing, setIsResizing] = useState(false);
-  const [width, setWidth] = useState(268);
-
-  const startResizing = useCallback(() => {
-    setIsResizing(true);
-  }, []);
-
-  const stopResizing = useCallback(() => {
-    setIsResizing(false);
-  }, []);
-
-  const resize = useCallback(
-    (mouseMoveEvent: MouseEvent) => {
-      if (isResizing) {
-        setWidth(
-          mouseMoveEvent.clientX -
-            sidebarRef?.current!.getBoundingClientRect().left,
-        );
-      }
-    },
-    [isResizing],
-  );
-
-  useEffect(() => {
-    window.addEventListener("mousemove", resize);
-    window.addEventListener("mouseup", stopResizing);
-    return () => {
-      window.removeEventListener("mousemove", resize);
-      window.removeEventListener("mouseup", stopResizing);
-    };
-  }, [resize, stopResizing]);
+  const { sidebarRef, width, startResizing } = useSidebarResize();
 
   return (
     <div
