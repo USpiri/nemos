@@ -1,7 +1,11 @@
+import { Sidebar } from "@/components/sidebar/Sidebar";
 function App() {
   return (
     <>
-      <h1 className="text-2xl">Hello world</h1>
+      <main className="grid h-screen grid-cols-[auto_1fr]">
+        <Sidebar />
+        <div>App content</div>
+      </main>
     </>
   );
 }
