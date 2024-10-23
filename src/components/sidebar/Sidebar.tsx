@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { SidebarHeader } from "./sidebar-header/SidebarHeader";
+import { SidebarContent } from "./sidebar-content/SidebarContent";
+import { SidebarFooter } from "./sidebar-footer/SidebarFooter";
 
 export const Sidebar = () => {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
@@ -41,9 +44,9 @@ export const Sidebar = () => {
       style={{ width: width }}
       onMouseDown={(e) => e.preventDefault()}
     >
-      <div className="h-11 border-b border-neutral-800">Sidebar Title</div>
-      <div>Sidebar Content</div>
-      <div className="h-11 border-t border-neutral-800">Sidebar Footer</div>
+      <SidebarHeader />
+      <SidebarContent />
+      <SidebarFooter />
       <div
         className="absolute right-0 top-0 h-full w-1.5 border-r-[3px] border-transparent transition-colors hover:cursor-ew-resize active:border-emerald-700"
         onMouseDown={startResizing}
