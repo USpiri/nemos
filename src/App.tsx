@@ -6,9 +6,9 @@ function App() {
       <Sidebar />
       <div>
         <div className="flex h-11 items-center justify-center border-b border-neutral-800 print:hidden">
-          TitleBar
+          File title and buttons
         </div>
-        <div>App content</div>
+        <div>Editor</div>
       </div>
     </main>
   );
