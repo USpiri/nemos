@@ -20,6 +20,9 @@ export const useSidebarResize = (initialWidth = 250) => {
           mouseMoveEvent.clientX -
             sidebarRef?.current!.getBoundingClientRect().left,
         );
+        sidebarRef.current?.classList.add("resizing");
+      } else {
+        sidebarRef.current?.classList.remove("resizing");
       }
     },
     [isResizing],

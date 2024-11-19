@@ -1,0 +1,13 @@
+.sidebar {
+  :not(&.resizing) {
+    transition:
+      width 0.15s linear,
+      min-width 0.15s linear;
+  }
+  &.open {
+    @apply min-w-40 max-w-80 border-r border-neutral-800;
+  }
+  &.close {
+    @apply w-0 min-w-0;
+  }
+}

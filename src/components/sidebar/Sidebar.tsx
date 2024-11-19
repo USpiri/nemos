@@ -2,15 +2,20 @@ import { SidebarHeader } from "./sidebar-header/SidebarHeader";
 import { SidebarContent } from "./sidebar-content/SidebarContent";
 import { SidebarFooter } from "./sidebar-footer/SidebarFooter";
 import { useSidebarResize } from "@/hooks/useSidebarResize";
+import "./sidebar.css";
+import { useUIStore } from "@/store/ui/ui.store";
 
 export const Sidebar = () => {
+  const isOpen = useUIStore((store) => store.isSidebarOpen);
   const { sidebarRef, width, startResizing } = useSidebarResize();
 
   return (
     <div
-      className="relative grid min-w-40 max-w-80 grid-rows-[auto_1fr_auto] border-r border-neutral-800 print:hidden"
+      className={`sidebar relative grid grid-rows-[auto_1fr_auto] overflow-hidden print:hidden ${
+        isOpen ? "open" : "close"
+      }`}
       ref={sidebarRef}
-      style={{ width: width }}
+      style={{ width: isOpen ? width : 0 }}
       onMouseDown={(e) => e.preventDefault()}
     >
       <SidebarHeader />
