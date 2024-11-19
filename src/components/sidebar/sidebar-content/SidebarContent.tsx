@@ -1,3 +1,3 @@
 export const SidebarContent = () => {
-  return <div>SidebarContent</div>;
+  return <div className="w-full overflow-hidden">SidebarContent</div>;
 };

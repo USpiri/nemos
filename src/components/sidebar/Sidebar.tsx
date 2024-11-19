@@ -11,16 +11,18 @@ export const Sidebar = () => {
 
   return (
     <div
-      className={`sidebar relative grid grid-rows-[auto_1fr_auto] overflow-hidden print:hidden ${
+      className={`sidebar relative overflow-hidden print:hidden ${
         isOpen ? "open" : "close"
       }`}
       ref={sidebarRef}
       style={{ width: isOpen ? width : 0 }}
       onMouseDown={(e) => e.preventDefault()}
     >
-      <SidebarHeader />
-      <SidebarContent />
-      <SidebarFooter />
+      <div className="grid h-full w-full grid-rows-[auto_1fr_auto] overflow-hidden">
+        <SidebarHeader />
+        <SidebarContent />
+        <SidebarFooter />
+      </div>
       <div
         className="absolute right-0 top-0 h-full w-1.5 border-r-[3px] border-transparent transition-colors hover:cursor-ew-resize active:border-emerald-700"
         onMouseDown={startResizing}
