@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: #121212;
-  --foreground: #e7e5e4;
+  --background: 18 18 18;
+  --foreground: 231 229 228;
+  --foreground-darker: 168 162 158;
+  --border-color: 38 38 38;
+  --detail: 4 120 87;
+  --topbar-height: 2.75rem;
 }

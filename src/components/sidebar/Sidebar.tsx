@@ -24,7 +24,7 @@ export const Sidebar = () => {
         <SidebarFooter />
       </div>
       <div
-        className="absolute right-0 top-0 h-full w-1.5 border-r-[3px] border-transparent transition-colors hover:cursor-ew-resize active:border-emerald-700"
+        className="absolute right-0 top-0 h-full w-1.5 border-r-[3px] border-transparent transition-colors hover:cursor-ew-resize active:border-detail"
         onMouseDown={startResizing}
       />
     </div>

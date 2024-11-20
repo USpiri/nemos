@@ -3,7 +3,7 @@ import { FolderPlus, Settings, SquarePen } from "lucide-react";
 
 export const SidebarHeader = () => {
   return (
-    <div className="flex h-11 items-center justify-center gap-2 border-b border-neutral-800">
+    <div className="flex h-topbar items-center justify-center gap-2 border-b border-neutral-800">
       <Button>
         <SquarePen className="h-4 w-4" />
       </Button>
