@@ -9,7 +9,7 @@ export const Topbar = () => {
       <Button onClick={() => toogleSidebar()}>
         <Menu className="h-4 w-4" />
       </Button>
-      <p className="text-sm text-foreground/65">hello.note</p>
+      <p className="text-sm text-foreground-darker">hello.note</p>
       <Button>
         <EllipsisVertical className="h-4 w-4" />
       </Button>
