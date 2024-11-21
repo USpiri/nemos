@@ -8,8 +8,10 @@ function App() {
       <Sidebar />
       <div className="flex flex-col overflow-hidden">
         <Topbar />
-        <div className="flex-1 overflow-auto px-2 py-1">
-          <Editor />
+        <div className="flex-1 overflow-auto px-8 pb-[30vh] pt-32">
+          <div className="editor-wrapper mx-auto w-full max-w-2xl">
+            <Editor />
+          </div>
         </div>
       </div>
     </main>
