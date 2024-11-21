@@ -3,10 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --background: 18 18 18;
-  --foreground: 231 229 228;
-  --foreground-darker: 168 162 158;
-  --border-color: 38 38 38;
-  --detail: 4 120 87;
+  --background: rgb(18 18 18);
+  --foreground: rgb(231 229 228);
+  --foreground-dark: #505050;
+  --foreground-darker: rgb(168 162 158);
+  --code-bg: #242424;
+  --border-color: rgb(38 38 38);
+  --detail: rgb(4 120 87);
   --topbar-height: 2.75rem;
+
+  --prose-body: var(--foreground);
+  --prose-headings: var(--foreground);
+  --prose-lead: var(--foreground);
+  --prose-links: var(--foreground);
+  --prose-bold: var(--foreground);
+  --prose-counters: var(--foreground-dark);
+  --prose-bullets: var(--foreground-dark);
+  --prose-hr: var(--foreground-dark);
+  --prose-quotes: var(--foreground-darker);
+  --prose-quote-borders: var(--foreground-dark);
+  --prose-captions: var(--foreground-dark);
+  --prose-code: var(--foreground);
+  --prose-pre-code: var(--foreground);
+  --prose-pre-bg: var(--code-bg);
+  --prose-th-borders: var(--foreground-dark);
+  --prose-td-borders: var(--foreground-dark);
+}
+
+::-webkit-scrollbar {
+  @apply w-1.5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme(colors.neutral.600);
+  outline: 0;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
