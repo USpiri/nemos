@@ -11,10 +11,13 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@tiptap/extension-code-block-lowlight": "^2.10.2",
     "@tiptap/pm": "^2.10.0",
     "@tiptap/react": "^2.10.0",
     "@tiptap/starter-kit": "^2.10.0",
     "clsx": "^2.1.1",
+    "highlight.js": "^11.10.0",
+    "lowlight": "^3.1.0",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

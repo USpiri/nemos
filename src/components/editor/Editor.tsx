@@ -3,6 +3,8 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { Extensions } from "./extensions";
 import { content } from "@/utils/fake-content";
 
+import "@/styles/editor-higlights.css";
+
 interface Props {
   className?: string;
 }
@@ -30,6 +32,12 @@ export const Editor = ({ className }: Props) => {
   return (
     <>
       <EditorContent editor={editor} />
+      <details>
+        <summary>
+          <strong>HTML:</strong>
+        </summary>
+        <pre className="text-wrap">{JSON.stringify(editor.getHTML())}</pre>
+      </details>
     </>
   );
 };

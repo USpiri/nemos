@@ -28,6 +28,19 @@
   --prose-pre-bg: var(--code-bg);
   --prose-th-borders: var(--foreground-dark);
   --prose-td-borders: var(--foreground-dark);
+
+  /* Code Block colors  */
+  --prose-codeblock-higlight-1: #ca9ee6;
+  --prose-codeblock-higlight-2: #e78284;
+  --prose-codeblock-higlight-3: #e5c890;
+  --prose-codeblock-higlight-4: #8caaee;
+  --prose-codeblock-higlight-5: #81c8be;
+  --prose-codeblock-higlight-6: #eebebe;
+  --prose-codeblock-higlight-7: #ef9f76;
+  --prose-codeblock-higlight-8: #85c1dc;
+  --prose-codeblock-higlight-9: #a6d189;
+  --prose-codeblock-higlight-10: #b5bfe2;
+  --prose-codeblock-higlight-11: #808080;
 }
 
 ::-webkit-scrollbar {
