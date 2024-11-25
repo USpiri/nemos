@@ -1,12 +1,13 @@
 import cn from "@/utils/cn";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { Editor as EditorI, EditorContent, useEditor } from "@tiptap/react";
 import { Extensions } from "./extensions";
-import { content } from "@/utils/fake-content";
 
 import "@/styles/editor-higlights.css";
 
 interface Props {
   className?: string;
+  onChange?: (editor: EditorI) => void;
+  content?: string;
 }
 
 const baseClasses =
@@ -15,7 +16,7 @@ const baseClasses =
 // TODO:
 // - Enable spellcheck and allow different languages
 
-export const Editor = ({ className }: Props) => {
+export const Editor = ({ className, onChange, content = "" }: Props) => {
   const editor = useEditor({
     extensions: [...Extensions],
     editorProps: {
@@ -25,6 +26,9 @@ export const Editor = ({ className }: Props) => {
       },
     },
     content,
+    onUpdate: ({ editor }) => {
+      if (onChange) onChange(editor);
+    },
   });
 
   if (!editor) return null;

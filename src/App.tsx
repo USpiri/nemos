@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Topbar } from "./components/topbar/Topbar";
 import { Editor } from "./components/editor/Editor";
+import { content } from "./utils/fake-content";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
         <Topbar />
         <div className="flex-1 overflow-auto px-8 pb-[30vh] pt-32">
           <div className="editor-wrapper mx-auto w-full max-w-2xl">
-            <Editor />
+            <Editor content={content} />
           </div>
         </div>
       </div>
