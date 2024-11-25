@@ -11,6 +11,8 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-fs": "~2",
     "@tiptap/extension-code-block-lowlight": "^2.10.2",
     "@tiptap/pm": "^2.10.0",
     "@tiptap/react": "^2.10.0",
