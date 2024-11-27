@@ -11,6 +11,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@minoru/react-dnd-treeview": "^3.4.4",
     "@tauri-apps/api": "^2.1.1",
     "@tauri-apps/plugin-fs": "~2",
     "@tiptap/extension-code-block-lowlight": "^2.10.2",
@@ -22,6 +23,7 @@
     "lowlight": "^3.1.0",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
+    "react-dnd": "^16.0.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.5.4",
     "zustand": "^5.0.1"
