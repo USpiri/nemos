@@ -8,12 +8,15 @@
     "fs:default",
     {
       "identifier": "fs:allow-write-text-file",
-      "allow": [{ "path": "$DOCUMENT/notes-app/*" }]
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
     },
     {
       "identifier": "fs:allow-read-text-file",
-      "allow": [{ "path": "$DOCUMENT/notes-app/*" }]
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
+    },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [{ "path": "$DOCUMENT/**" }]
     }
   ]
 }
-
