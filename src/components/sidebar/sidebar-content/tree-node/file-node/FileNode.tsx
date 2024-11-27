@@ -5,7 +5,7 @@ import { Folder, FolderOpen } from "lucide-react";
 interface FolderNodeProps {
   text: string;
   isOpen: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const iconClasses = "h-4 w-4 shrink-0";

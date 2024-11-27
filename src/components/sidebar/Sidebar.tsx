@@ -16,9 +16,8 @@ export const Sidebar = () => {
       }`}
       ref={sidebarRef}
       style={{ width: isOpen ? width : 0 }}
-      onMouseDown={(e) => e.preventDefault()}
     >
-      <div className="grid h-full w-full grid-rows-[auto_1fr_auto] overflow-hidden">
+      <div className="grid h-full w-full select-none grid-rows-[auto_1fr_auto] overflow-hidden">
         <SidebarHeader />
         <SidebarContent />
         <SidebarFooter />

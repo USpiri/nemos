@@ -10,9 +10,7 @@ import { TreeNode } from "./tree-node/TreeNode";
 import { getTreeNodeFiles } from "@/utils/fs";
 
 // TODO:
-// - Drag&Drop files and folders
-// - Drag&Drop previews for files and folders
-// - Drag&Drop zones colors
+// - Effects of Drag&Drop files and folder (File System)
 
 export const SidebarContent = () => {
   const [files, setFiles] = useState<NodeModel[]>([]);
@@ -26,6 +24,8 @@ export const SidebarContent = () => {
     });
   };
 
+  const handleDrop = (tree: NodeModel[]) => setFiles(tree);
+
   useEffect(() => {
     getTreeNodeFiles("notes-app").then((files) => setFiles(files));
   }, []);
@@ -36,6 +36,7 @@ export const SidebarContent = () => {
         <Tree
           tree={files}
           rootId={"notes-app"}
+          dropTargetOffset={5}
           render={(node, { depth, isOpen, onToggle }) => (
             <TreeNode
               node={node}
@@ -47,12 +48,31 @@ export const SidebarContent = () => {
               }}
             />
           )}
-          dragPreviewRender={(monitorProps) => (
-            <div>{monitorProps.item.text}</div>
-          )}
-          onDrop={console.log}
+          canDrop={(_, { dragSource, dropTargetId }) => {
+            if (dragSource?.parent === dropTargetId) {
+              return true;
+            }
+          }}
+          classes={{
+            draggingSource: "opacity-20",
+          }}
+          onDrop={handleDrop}
+          placeholderRender={(_, { depth }) => <Placeholder depth={depth} />}
         />
       </DndProvider>
     </div>
+  );
+};
+
+interface PlaceholderProps {
+  depth: number;
+}
+
+const Placeholder = ({ depth }: PlaceholderProps) => {
+  return (
+    <div
+      className="absolute right-0 mx-2 h-0.5 bg-detail"
+      style={{ left: depth * 15 }}
+    />
   );
 };
