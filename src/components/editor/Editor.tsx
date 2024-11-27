@@ -17,19 +17,22 @@ const baseClasses =
 // - Enable spellcheck and allow different languages
 
 export const Editor = ({ className, onChange, content = "" }: Props) => {
-  const editor = useEditor({
-    extensions: [...Extensions],
-    editorProps: {
-      attributes: {
-        class: cn(baseClasses, className),
-        spellcheck: "false",
+  const editor = useEditor(
+    {
+      extensions: [...Extensions],
+      editorProps: {
+        attributes: {
+          class: cn(baseClasses, className),
+          spellcheck: "false",
+        },
+      },
+      content,
+      onUpdate: ({ editor }) => {
+        if (onChange) onChange(editor);
       },
     },
-    content,
-    onUpdate: ({ editor }) => {
-      if (onChange) onChange(editor);
-    },
-  });
+    [content],
+  );
 
   if (!editor) return null;
 
@@ -40,7 +43,9 @@ export const Editor = ({ className, onChange, content = "" }: Props) => {
         <summary>
           <strong>HTML:</strong>
         </summary>
-        <pre className="text-wrap">{JSON.stringify(editor.getHTML())}</pre>
+        <pre className="text-wrap text-sm">
+          {JSON.stringify(editor.getHTML())}
+        </pre>
       </details>
     </>
   );
