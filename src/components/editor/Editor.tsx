@@ -2,6 +2,7 @@ import cn from "@/utils/cn";
 import { Editor as EditorI, EditorContent, useEditor } from "@tiptap/react";
 import { Extensions } from "./extensions";
 
+import "./editor.css";
 import "@/styles/editor-higlights.css";
 
 interface Props {
@@ -11,10 +12,11 @@ interface Props {
 }
 
 const baseClasses =
-  "focus:outline-none prose prose-theme max-w-[unset] print:prose-neutral";
+  "editor focus:outline-none prose prose-theme max-w-[unset] print:prose-neutral";
 
 // TODO:
 // - Enable spellcheck and allow different languages
+// - Change placeholder on new nodes and first nodes (Slash command)
 
 export const Editor = ({ className, onChange, content = "" }: Props) => {
   const editor = useEditor(
