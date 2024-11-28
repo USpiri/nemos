@@ -12,7 +12,7 @@ interface Props {
 }
 
 const baseClasses =
-  "editor focus:outline-none prose prose-theme max-w-[unset] print:prose-neutral";
+  "editor focus:outline-none prose prose-theme max-w-[unset] print:prose-neutral print:prose-sm";
 
 // TODO:
 // - Enable spellcheck and allow different languages
@@ -28,6 +28,7 @@ export const Editor = ({ className, onChange, content = "" }: Props) => {
           spellcheck: "false",
         },
       },
+      autofocus: true,
       content,
       onUpdate: ({ editor }) => {
         if (onChange) onChange(editor);
@@ -38,17 +39,5 @@ export const Editor = ({ className, onChange, content = "" }: Props) => {
 
   if (!editor) return null;
 
-  return (
-    <>
-      <EditorContent editor={editor} />
-      <details>
-        <summary>
-          <strong>HTML:</strong>
-        </summary>
-        <pre className="text-wrap text-sm">
-          {JSON.stringify(editor.getHTML())}
-        </pre>
-      </details>
-    </>
-  );
+  return <EditorContent editor={editor} />;
 };
