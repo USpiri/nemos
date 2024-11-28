@@ -15,6 +15,14 @@
       "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
     },
     {
+      "identifier": "fs:allow-rename",
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
+    },
+    {
       "identifier": "fs:allow-read-dir",
       "allow": [{ "path": "$DOCUMENT/**" }]
     }

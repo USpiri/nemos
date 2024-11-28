@@ -3,11 +3,12 @@ import {
   MultiBackend,
   Tree,
   NodeModel,
+  DropOptions,
 } from "@minoru/react-dnd-treeview";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { TreeNode } from "./tree-node/TreeNode";
-import { getTreeNodeFiles } from "@/utils/fs";
+import { getTreeNodeFiles, move } from "@/utils/fs";
 
 // TODO:
 // - Effects of Drag&Drop files and folder (File System)
@@ -24,7 +25,20 @@ export const SidebarContent = () => {
     });
   };
 
-  const handleDrop = (tree: NodeModel[]) => setFiles(tree);
+  const handleDrop = async (tree: NodeModel[], options: DropOptions) => {
+    const { dragSource, dropTarget, dropTargetId } = options;
+
+    if (!dragSource) return;
+
+    const sourcePath = `${dragSource.parent}/${dragSource.text}`;
+    const targetPath = dropTarget
+      ? `${dropTarget.parent}/${dropTarget.text}/${dragSource.text}`
+      : `${dropTargetId}/${dragSource.text}`;
+
+    await move(sourcePath, targetPath);
+
+    setFiles(tree);
+  };
 
   useEffect(() => {
     getTreeNodeFiles("notes-app").then((files) => setFiles(files));
