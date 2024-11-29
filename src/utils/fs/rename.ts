@@ -12,7 +12,7 @@ const options = {
 export const move = async (from: string | URL, to: string | URL) => {
   try {
     if (to === from) return;
-    if (await exists(from, { baseDir: BaseDirectory.Document }))
+    if (await exists(to, { baseDir: BaseDirectory.Document }))
       throw "File already exists";
 
     return await tauriRename(from, to, options);
