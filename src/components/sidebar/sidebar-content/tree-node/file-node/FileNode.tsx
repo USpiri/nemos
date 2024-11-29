@@ -18,7 +18,7 @@ export const FolderNode = ({ isOpen, text, onClick }: FolderNodeProps) => {
       ) : (
         <Folder className={iconClasses} />
       )}
-      <span className="truncate">{text}</span>
+      <FileName name={text} />
     </NodeWrapper>
   );
 };
@@ -28,13 +28,37 @@ interface FileNodeProps {
   path: string;
 }
 
+const splitFileName = (str: string) => [
+  str.substring(0, str.lastIndexOf(".")),
+  str.substring(str.lastIndexOf("."), str.length),
+];
+
 export const FileNode = ({ text, path }: FileNodeProps) => {
   const { setActiveFile } = useActiveFile();
+  const [fileName, extension] = splitFileName(text);
   return (
     <NodeWrapper onClick={() => setActiveFile(path)}>
       <FileIcon fileName={text} className={iconClasses} />
-      <span className="truncate">{text}</span>
+      <FileName name={fileName} extension={extension} />
     </NodeWrapper>
+  );
+};
+
+// TODO:
+// - replace color and hover color with variable colors
+// - Move FileName to its own component
+
+interface FileNameProps {
+  name: string;
+  extension?: string;
+}
+
+const FileName = ({ name, extension }: FileNameProps) => {
+  return (
+    <span className="truncate">
+      {name}
+      {extension && <span className="text-stone-500">{extension}</span>}
+    </span>
   );
 };
 

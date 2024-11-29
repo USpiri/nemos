@@ -10,6 +10,9 @@ interface Props {
   onToggle: () => void;
 }
 
+// TODO:
+// - replace color and hover color with variable colors
+
 export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
   const { path } = useActiveFile();
   const isActive = path === `${node.parent}/${node.text}`;
@@ -18,7 +21,7 @@ export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
     <div
       style={{ paddingInlineStart: depth * 10 }}
       className={cn(
-        "cursor-pointer rounded text-sm text-foreground-darker",
+        "group cursor-pointer rounded text-sm text-foreground-darker",
         isActive
           ? "bg-neutral-700/30 text-foreground"
           : "hover:bg-neutral-700/30 hover:text-foreground",
