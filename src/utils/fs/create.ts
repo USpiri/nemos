@@ -12,9 +12,13 @@ export const createNote = async (path: string | URL) => {
     count++;
   }
 
-  const file = `${fileName}${count ? `-${count}` : ""}.note`;
+  const file = `${path}/${fileName}${count ? `-${count}` : ""}.note`;
 
-  return await create(`${path}/${file}`, {
+  await create(file, {
     baseDir: BaseDirectory.Document,
   });
+
+  return {
+    path: file,
+  };
 };
