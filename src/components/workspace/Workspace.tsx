@@ -16,7 +16,7 @@ export const Workspace = () => {
   return (
     <div className="editor-wrapper mx-auto h-full w-full max-w-2xl *:h-full">
       <Editor
-        className="h-full pb-[30vh]"
+        className="pb-[30vh]"
         content={content}
         onChange={async (editor) => {
           if (!path) return;
