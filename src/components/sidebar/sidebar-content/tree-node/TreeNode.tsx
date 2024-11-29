@@ -1,5 +1,7 @@
+import { useActiveFile } from "@/hooks/useActiveFile";
 import { FileNode, FolderNode } from "./file-node/FileNode";
 import { NodeModel } from "@minoru/react-dnd-treeview";
+import cn from "@/utils/cn";
 
 interface Props {
   depth: number;
@@ -9,10 +11,18 @@ interface Props {
 }
 
 export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
+  const { path } = useActiveFile();
+  const isActive = path === `${node.parent}/${node.text}`;
+
   return (
     <div
       style={{ paddingInlineStart: depth * 10 }}
-      className="cursor-pointer rounded text-sm text-foreground-darker hover:bg-neutral-700/30 hover:text-foreground"
+      className={cn(
+        "cursor-pointer rounded text-sm text-foreground-darker",
+        isActive
+          ? "bg-neutral-700/30 text-foreground"
+          : "hover:bg-neutral-700/30 hover:text-foreground",
+      )}
     >
       {node.droppable ? (
         <FolderNode
