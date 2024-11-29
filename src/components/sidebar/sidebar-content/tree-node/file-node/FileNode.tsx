@@ -1,5 +1,5 @@
 import { FileIcon } from "@/components/ui/file-icon/FileIcon";
-import { useFileStore } from "@/store/file/file.store";
+import { useActiveFile } from "@/hooks/useActiveFile";
 import { Folder, FolderOpen } from "lucide-react";
 
 interface FolderNodeProps {
@@ -29,7 +29,7 @@ interface FileNodeProps {
 }
 
 export const FileNode = ({ text, path }: FileNodeProps) => {
-  const setActiveFile = useFileStore((store) => store.setActiveFile);
+  const { setActiveFile } = useActiveFile();
   return (
     <NodeWrapper onClick={() => setActiveFile(path)}>
       <FileIcon fileName={text} className={iconClasses} />
