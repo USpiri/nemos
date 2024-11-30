@@ -6,6 +6,7 @@ import {
 import { DndProvider } from "react-dnd";
 import { TreeNode } from "./tree-node/TreeNode";
 import { useSidebar } from "@/hooks/useSidebar";
+import { getPath } from "@/utils/tree-node";
 
 export const SidebarContent = () => {
   const { tree, loadChildrens, handleDrop } = useSidebar();
@@ -24,7 +25,7 @@ export const SidebarContent = () => {
               depth={depth}
               onToggle={() => {
                 onToggle();
-                loadChildrens(node.id.toString());
+                loadChildrens(getPath(node));
               }}
             />
           )}
