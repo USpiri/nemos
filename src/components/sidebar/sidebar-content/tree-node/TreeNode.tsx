@@ -2,6 +2,7 @@ import { useActiveFile } from "@/hooks/useActiveFile";
 import { FileNode, FolderNode } from "./file-node/FileNode";
 import { NodeModel } from "@minoru/react-dnd-treeview";
 import cn from "@/utils/cn";
+import { getPath } from "@/utils/tree-node";
 
 interface Props {
   depth: number;
@@ -14,7 +15,7 @@ interface Props {
 // - replace color and hover color with variable colors
 
 export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
-  const { path } = useActiveFile();
+  const { path, setActiveFile } = useActiveFile();
   const isActive = path === `${node.parent}/${node.text}`;
 
   return (
@@ -34,7 +35,12 @@ export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
           onClick={() => onToggle()}
         />
       ) : (
-        <FileNode text={node.text} path={node.id.toString()} />
+        <FileNode
+          text={node.text}
+          onClick={() => {
+            setActiveFile(getPath(node));
+          }}
+        />
       )}
     </div>
   );

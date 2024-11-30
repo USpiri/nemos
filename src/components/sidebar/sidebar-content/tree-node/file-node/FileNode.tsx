@@ -1,5 +1,4 @@
 import { FileIcon } from "@/components/ui/file-icon/FileIcon";
-import { useActiveFile } from "@/hooks/useActiveFile";
 import { Folder, FolderOpen } from "lucide-react";
 
 interface FolderNodeProps {
@@ -25,7 +24,7 @@ export const FolderNode = ({ isOpen, text, onClick }: FolderNodeProps) => {
 
 interface FileNodeProps {
   text: string;
-  path: string;
+  onClick?: () => void;
 }
 
 const splitFileName = (str: string) => [
@@ -33,11 +32,10 @@ const splitFileName = (str: string) => [
   str.substring(str.lastIndexOf("."), str.length),
 ];
 
-export const FileNode = ({ text, path }: FileNodeProps) => {
-  const { setActiveFile } = useActiveFile();
+export const FileNode = ({ text, onClick }: FileNodeProps) => {
   const [fileName, extension] = splitFileName(text);
   return (
-    <NodeWrapper onClick={() => setActiveFile(path)}>
+    <NodeWrapper onClick={onClick}>
       <FileIcon fileName={text} className={iconClasses} />
       <FileName name={fileName} extension={extension} />
     </NodeWrapper>
