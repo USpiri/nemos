@@ -20,6 +20,6 @@ export const createNote = async (path: string | URL) => {
 
   return {
     path: file,
-    fileName: `${fileName}.note`,
+    fileName: `${fileName}${count ? `-${count}` : ""}.note`,
   };
 };
