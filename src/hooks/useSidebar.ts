@@ -1,11 +1,13 @@
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import { getTreeNodeFiles, move } from "@/utils/fs";
+import { getPath } from "@/utils/tree-node";
 import { DropOptions, NodeModel } from "@minoru/react-dnd-treeview";
 import { useEffect } from "react";
 
 export const useSidebar = () => {
   const tree = useSidebarStore((store) => store.tree);
   const mergeTree = useSidebarStore((store) => store.mergeTree);
+  const setTree = useSidebarStore((store) => store.setTree);
 
   const loadChildrens = async (fileName: string) => {
     await getTreeNodeFiles(fileName).then((nodes) => mergeTree(nodes));
@@ -15,18 +17,21 @@ export const useSidebar = () => {
     const { dragSource, dropTarget, dropTargetId } = options;
     if (!dragSource) return;
 
-    const sourcePath = `${dragSource.parent}/${dragSource.text}`;
+    const sourcePath = getPath(dragSource);
     const targetPath = dropTarget
-      ? `${dropTarget.parent}/${dropTarget.text}/${dragSource.text}`
+      ? `${getPath(dropTarget)}/${dragSource.text}`
       : `${dropTargetId}/${dragSource.text}`;
 
-    await move(sourcePath, targetPath);
+    const updatedNodes = nodes.map((node) => {
+      return getPath(node) === targetPath ? { ...node, id: targetPath } : node;
+    });
 
-    mergeTree(nodes);
+    await move(sourcePath, targetPath);
+    setTree(updatedNodes);
   };
 
   useEffect(() => {
-    getTreeNodeFiles("notes-app").then((nodes) => mergeTree(nodes));
+    getTreeNodeFiles("notes-app").then((nodes) => setTree(nodes));
   }, []);
 
   return {
