@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button/Button";
 import { useActiveFile } from "@/hooks/useActiveFile";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
+import { useUIStore } from "@/store/ui/ui.store";
 import { createNote } from "@/utils/fs";
 import { FolderPlus, Settings, SquarePen } from "lucide-react";
 
 export const SidebarHeader = () => {
   const addNode = useSidebarStore((store) => store.addNode);
+  const toggleConfig = useUIStore((store) => store.toggleConfig);
   const { setActiveFile } = useActiveFile();
 
   const onCreateNote = async () => {
@@ -28,7 +30,7 @@ export const SidebarHeader = () => {
       <Button>
         <FolderPlus className="h-4 w-4" />
       </Button>
-      <Button>
+      <Button onClick={() => toggleConfig(true)}>
         <Settings className="h-4 w-4" />
       </Button>
     </div>
