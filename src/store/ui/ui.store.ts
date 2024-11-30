@@ -7,11 +7,24 @@ interface State {
   toggleConfig: (open?: boolean) => void;
 }
 
-export const useUIStore = create<State>()((set) => ({
-  isSidebarOpen: false,
-  isConfigOpen: false,
-  toggleSidebar: (open) =>
-    set((state) => ({ isSidebarOpen: open ?? !state.isSidebarOpen })),
+const initialState = () => {
+  const { isSidebarOpen = false } = JSON.parse(
+    localStorage.getItem("UI") || "undefined",
+  );
+  return {
+    isSidebarOpen,
+    isConfigOpen: false,
+  };
+};
+
+export const useUIStore = create<State>()((set, get) => ({
+  ...initialState(),
+  toggleSidebar: (open) => {
+    const { isSidebarOpen } = get();
+    const newState = open ?? !isSidebarOpen;
+    localStorage.setItem("UI", JSON.stringify({ isSidebarOpen: newState }));
+    set({ isSidebarOpen: newState });
+  },
   toggleConfig: (open) =>
     set((state) => ({ isConfigOpen: open ?? !state.isConfigOpen })),
 }));
