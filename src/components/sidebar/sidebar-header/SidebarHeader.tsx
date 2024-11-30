@@ -1,17 +1,22 @@
 import { Button } from "@/components/ui/button/Button";
 import { useActiveFile } from "@/hooks/useActiveFile";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
-import { createNote, getTreeNodeFiles } from "@/utils/fs";
+import { createNote } from "@/utils/fs";
 import { FolderPlus, Settings, SquarePen } from "lucide-react";
 
 export const SidebarHeader = () => {
-  const mergeTree = useSidebarStore((store) => store.mergeTree);
+  const addNode = useSidebarStore((store) => store.addNode);
   const { setActiveFile } = useActiveFile();
 
   const onCreateNote = async () => {
-    const { path } = await createNote("notes-app");
-    const nodes = await getTreeNodeFiles("notes-app");
-    mergeTree(nodes);
+    const { path, fileName } = await createNote("notes-app");
+    const node = {
+      id: path,
+      parent: "notes-app",
+      droppable: false,
+      text: fileName,
+    };
+    addNode(node);
     setActiveFile(path);
   };
 

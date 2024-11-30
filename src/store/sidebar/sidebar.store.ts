@@ -5,6 +5,7 @@ interface State {
   tree: NodeModel[];
   setTree: (nodes: NodeModel[]) => void;
   mergeTree: (nodes: NodeModel[]) => void;
+  addNode: (node: NodeModel) => void;
 }
 
 export const useSidebarStore = create<State>()((set, get) => ({
@@ -17,5 +18,9 @@ export const useSidebarStore = create<State>()((set, get) => ({
       ...tree.filter((i) => !nodes.map((i) => i.id).includes(i.id)),
     ];
     set({ tree: newTree });
+  },
+  addNode: (node) => {
+    const { tree } = get();
+    set({ tree: [...tree, node] });
   },
 }));
