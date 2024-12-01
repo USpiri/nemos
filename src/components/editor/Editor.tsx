@@ -28,7 +28,6 @@ export const Editor = ({ className, onChange, content = "" }: Props) => {
           spellcheck: "false",
         },
       },
-      autofocus: true,
       content,
       onUpdate: ({ editor }) => {
         if (onChange) onChange(editor);
