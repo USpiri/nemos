@@ -11,4 +11,30 @@
   ul > li > p {
     margin-block: 0px;
   }
+
+  ul[data-type="taskList"] {
+    list-style: none;
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      > label {
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+
+    /* Nested task lists */
+    ul[data-type="taskList"] {
+      margin: 0;
+    }
+  }
 }
