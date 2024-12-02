@@ -20,3 +20,4 @@ export const move = async (from: string | URL, to: string | URL) => {
     throw new Error(`Unable to rename file or directory: ${e}`);
   }
 };
+export const rename = move;
