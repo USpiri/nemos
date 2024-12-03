@@ -35,6 +35,7 @@ export const SidebarContent = () => {
             }
           }}
           classes={{
+            root: "h-full",
             draggingSource: "opacity-20",
           }}
           onDrop={handleDrop}
