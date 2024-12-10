@@ -48,7 +48,7 @@ export const Dialog = ({
         }
       }}
       className={cn(
-        "h-[85vh] w-[calc(100%-2rem)] max-w-5xl rounded-md border border-border bg-background text-foreground outline-none backdrop:bg-neutral-950/50 backdrop:backdrop-blur-[1px]",
+        "h-[85vh] w-[calc(100%-2rem)] max-w-5xl rounded-md border border-border bg-background-primary text-foreground outline-none backdrop:bg-neutral-950/50 backdrop:backdrop-blur-[1px]",
         dialogClassName,
       )}
     >

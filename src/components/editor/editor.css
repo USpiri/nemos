@@ -1,6 +1,6 @@
 .editor {
   p.is-empty::before {
-    color: var(--foreground-dark);
+    color: var(--foreground-faint);
     content: attr(data-placeholder);
     float: left;
     height: 0;

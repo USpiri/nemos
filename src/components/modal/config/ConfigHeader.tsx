@@ -12,8 +12,8 @@ export const ConfigHeader = ({ settingName }: Props) => {
   return (
     <header className="flex items-center justify-between border-b border-border p-3 pl-4">
       <div className="flex items-center gap-2 text-sm font-medium">
-        <h1 className="text-foreground-darker">Settings</h1>
-        <ChevronRight className="size-4 text-foreground-darker" />
+        <h1 className="text-foreground-muted">Settings</h1>
+        <ChevronRight className="size-4 text-foreground-muted" />
         <h2>{settingName}</h2>
       </div>
       <Button onClick={() => toggleConfig(false)}>

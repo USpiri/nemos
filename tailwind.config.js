@@ -4,9 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
+        "background-primary": "var(--background-primary)",
+        "background-primary-alt": "var(--background-primary-alt)",
+        "background-primary-hover": "var(--background-primary-hover)",
+        "background-secondary": "var(--background-secondary)",
+        "background-secondary-alt": "var(--background-secondary-alt)",
+        "background-secondary-hover": "var(--background-secondary-hover)",
+        "background-select": "var(--background-selection)",
         foreground: "var(--foreground)",
-        "foreground-darker": "var(--foreground-darker)",
+        "foreground-muted": "var(--foreground-muted)",
+        "foreground-faint": "var(--foreground-faint)",
+        "foreground-select": "var(--foreground-selection)",
         border: "var(--border-color)",
         detail: "var(--detail)",
       },

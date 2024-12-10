@@ -32,8 +32,10 @@ export const ConfigModal = () => {
         <ConfigHeader settingName={activeItem.name} />
         <div className="p-8">
           <div className="flex flex-1 flex-col gap-4 overflow-y-auto">
-            <h2 className="text-3xl font-semibold">{activeItem.name}</h2>
-            {activeItem.description && <p>{activeItem.description}</p>}
+            <header className="mb-5 flex flex-col gap-4">
+              <h2 className="text-3xl font-semibold">{activeItem.name}</h2>
+              {activeItem.description && <p>{activeItem.description}</p>}
+            </header>
             <activeItem.component />
           </div>
         </div>

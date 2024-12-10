@@ -55,7 +55,7 @@ const FileName = ({ name, extension }: FileNameProps) => {
   return (
     <span className="truncate">
       {name}
-      {extension && <span className="text-stone-500">{extension}</span>}
+      {extension && <span className="text-foreground-faint">{extension}</span>}
     </span>
   );
 };

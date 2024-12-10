@@ -29,7 +29,7 @@ export const Filename = () => {
 
   return (
     <p
-      className="text-sm text-foreground-darker"
+      className="text-sm text-foreground-muted"
       onDoubleClick={() => setEditing(true)}
     >
       <EditableLabel
