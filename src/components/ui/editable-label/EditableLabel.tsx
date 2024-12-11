@@ -1,3 +1,4 @@
+import cn from "@/utils/cn";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -21,14 +22,15 @@ export const EditableLabel = ({
   }, [value]);
 
   return (
-    <>
-      {isEditing ? (
+    <span className="relative">
+      <span className={cn(isEditing && "invisible")}>{text}</span>
+      {isEditing && (
         <input
           type="text"
           value={text}
           autoFocus
-          size={text.length}
-          className="inline-flex bg-transparent text-center outline-none"
+          size={text.length || 1}
+          className="absolute right-0 top-0 inline-flex bg-transparent text-right outline-none"
           onChange={(event) => {
             setText(event.target.value);
           }}
@@ -45,9 +47,7 @@ export const EditableLabel = ({
             else setText(value);
           }}
         />
-      ) : (
-        <span>{text}</span>
       )}
-    </>
+    </span>
   );
 };
