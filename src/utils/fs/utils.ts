@@ -1,3 +1,4 @@
+import { BaseDirectory, exists } from "@tauri-apps/plugin-fs";
 import { readDir } from "./read";
 
 export const getExtension = (str: string) => str.slice(str.lastIndexOf("."));
@@ -14,4 +15,21 @@ export const getTreeNodeFiles = async (path: string) => {
       data: item,
     })),
   );
+};
+
+export const generateUniqueName = async (
+  path: string | URL,
+  baseName: string,
+  extension = "",
+) => {
+  let count = 0;
+  let fullPath;
+
+  do {
+    const suffix = count ? `-${count}` : "";
+    fullPath = `${path}/${baseName}${suffix}${extension}`;
+    count++;
+  } while (await exists(fullPath, { baseDir: BaseDirectory.Document }));
+
+  return fullPath;
 };

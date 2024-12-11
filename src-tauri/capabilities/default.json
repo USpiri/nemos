@@ -29,6 +29,10 @@
     {
       "identifier": "fs:allow-read-dir",
       "allow": [{ "path": "$DOCUMENT/**" }]
+    },
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
     }
   ]
 }

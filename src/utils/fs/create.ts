@@ -1,25 +1,22 @@
-import { BaseDirectory, create, exists } from "@tauri-apps/plugin-fs";
+import { BaseDirectory, create, mkdir } from "@tauri-apps/plugin-fs";
+import { generateUniqueName } from "./utils";
 
 export const createNote = async (path: string | URL) => {
-  const fileName = "new-note";
-  let count = 0;
-
-  while (
-    await exists(`${path}/${fileName}${count ? `-${count}` : ""}.note`, {
-      baseDir: BaseDirectory.Document,
-    })
-  ) {
-    count++;
-  }
-
-  const file = `${path}/${fileName}${count ? `-${count}` : ""}.note`;
-
-  await create(file, {
-    baseDir: BaseDirectory.Document,
-  });
+  const file = await generateUniqueName(path, "new-note", ".note");
+  await create(file, { baseDir: BaseDirectory.Document });
 
   return {
     path: file,
-    fileName: `${fileName}${count ? `-${count}` : ""}.note`,
+    name: file.split("/").pop(),
+  };
+};
+
+export const createDir = async (path: string | URL) => {
+  const dir = await generateUniqueName(path, "new-folder");
+  await mkdir(dir, { baseDir: BaseDirectory.Document });
+
+  return {
+    path: dir,
+    name: dir.split("/").pop(),
   };
 };
