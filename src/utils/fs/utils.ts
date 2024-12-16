@@ -5,6 +5,11 @@ export const getExtension = (str: string) => str.slice(str.lastIndexOf("."));
 
 export const getFilename = (str: string) => str.slice(str.lastIndexOf("/") + 1);
 
+export const splitFileName = (str: string) => ({
+  file: str.substring(0, str.lastIndexOf(".")),
+  extension: str.substring(str.lastIndexOf("."), str.length),
+});
+
 export const getTreeNodeFiles = async (path: string) => {
   return await readDir(path).then((data) =>
     data.map((item) => ({
