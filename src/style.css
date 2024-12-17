@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background-primary: rgb(231 229 228);
-  --background-primary-alt: rgb(214 211 209);
-  --background-primary-hover: rgb(214 211 209);
-  --background-secondary: rgb(214 211 209);
-  --background-secondary-alt: rgb(231 229 228);
-  --background-secondary-hover: rgb(231 229 228);
+  --background-primary: rgb(245 245 244);
+  --background-primary-alt: rgb(231 229 228);
+  --background-primary-hover: rgb(231 229 228);
+  --background-secondary: rgb(231 229 228);
+  --background-secondary-alt: rgb(214 211 209);
+  --background-secondary-hover: rgb(214 211 209);
   --background-selection: rgb(18 18 18 / 70%);
 
   --foreground: rgb(18 18 18);
@@ -19,7 +19,7 @@
   --scrollbar-color: rgb(163 163 163);
 
   --code-bg: rgb(250 250 250);
-  --border-color: rgb(190 190 190);
+  --border-color: rgb(214 211 209);
   --detail: rgb(4 120 87);
 
   --topbar-height: 2.75rem;
