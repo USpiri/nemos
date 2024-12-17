@@ -4,9 +4,10 @@ import {
   Tree,
 } from "@minoru/react-dnd-treeview";
 import { DndProvider } from "react-dnd";
-import { TreeNode } from "./tree-node/TreeNode";
 import { useSidebar } from "@/hooks/useSidebar";
 import { getPath } from "@/utils/tree-node";
+import { PlaceholderNode } from "@/components/ui/tree-node/PlaceholderNode";
+import { TreeNode } from "@/components/ui/tree-node/TreeNode";
 
 export const SidebarContent = () => {
   const { tree, loadChildrens, handleDrop } = useSidebar();
@@ -39,22 +40,11 @@ export const SidebarContent = () => {
             draggingSource: "opacity-20",
           }}
           onDrop={handleDrop}
-          placeholderRender={(_, { depth }) => <Placeholder depth={depth} />}
+          placeholderRender={(_, { depth }) => (
+            <PlaceholderNode depth={depth} />
+          )}
         />
       </DndProvider>
     </div>
-  );
-};
-
-interface PlaceholderProps {
-  depth: number;
-}
-
-const Placeholder = ({ depth }: PlaceholderProps) => {
-  return (
-    <div
-      className="absolute right-0 mx-2 h-0.5 bg-detail"
-      style={{ left: depth * 15 }}
-    />
   );
 };

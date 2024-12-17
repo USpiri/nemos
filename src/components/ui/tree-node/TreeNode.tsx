@@ -1,9 +1,10 @@
-import { FileNode, FolderNode } from "./file-node/FileNode";
 import { NodeModel } from "@minoru/react-dnd-treeview";
 import cn from "@/utils/cn";
 import { getPath } from "@/utils/tree-node";
 import { useNavigate, useParams } from "react-router";
 import { getExtension } from "@/utils/fs";
+import { FolderNode } from "./FolderNode";
+import { FileNode } from "./FileNode";
 
 interface Props {
   depth: number;
@@ -11,9 +12,6 @@ interface Props {
   isOpen: boolean;
   onToggle: () => void;
 }
-
-// TODO:
-// - replace color and hover color with variable colors
 
 export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
   const { "*": path } = useParams();
@@ -31,14 +29,10 @@ export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
       )}
     >
       {node.droppable ? (
-        <FolderNode
-          isOpen={isOpen}
-          text={node.text}
-          onClick={() => onToggle()}
-        />
+        <FolderNode isOpen={isOpen} node={node} onClick={() => onToggle()} />
       ) : (
         <FileNode
-          text={node.text}
+          node={node}
           onClick={() => {
             const path = getPath(node);
             if (getExtension(path) !== ".note") return;
