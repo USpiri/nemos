@@ -8,12 +8,13 @@ import { useSidebar } from "@/hooks/useSidebar";
 import { getPath } from "@/utils/tree-node";
 import { PlaceholderNode } from "@/components/ui/tree-node/PlaceholderNode";
 import { TreeNode } from "@/components/ui/tree-node/TreeNode";
+import { SidebarContentMenu } from "./SidebarContentMenu";
 
 export const SidebarContent = () => {
   const { tree, loadChildrens, handleDrop } = useSidebar();
 
   return (
-    <div className="mt-5 w-full overflow-hidden p-2">
+    <SidebarContentMenu>
       <DndProvider backend={MultiBackend} options={getBackendOptions()}>
         <Tree
           tree={tree}
@@ -45,6 +46,6 @@ export const SidebarContent = () => {
           )}
         />
       </DndProvider>
-    </div>
+    </SidebarContentMenu>
   );
 };
