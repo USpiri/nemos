@@ -16,6 +16,8 @@
   --foreground-faint: rgb(163 163 163);
   --foreground-selection: rgb(231 229 228);
 
+  --destructive: rgb(254 202 202);
+
   --scrollbar-color: rgb(163 163 163);
 
   --code-bg: rgb(250 250 250);
@@ -68,6 +70,8 @@
   --foreground-faint: rgb(120 113 108);
   --foreground-selection: rgb(18 18 18);
 
+  --destructive: rgb(185 28 28 / 0.3);
+
   --scrollbar-color: rgb(120 113 108 / 0.5);
 
   --code-bg: #242424;
@@ -114,6 +118,8 @@
   --background-secondary-hover: #ccd0da;
   --background-selection: rgb(114 135 253 / 0.5);
 
+  --destructive: rgb(243 139 168 / 0.5);
+
   --foreground: #4c4f69;
   --foreground-muted: #6c6f85;
   --foreground-faint: #8c8fa1;
@@ -133,6 +139,8 @@
     --background-secondary-alt: #313244;
     --background-secondary-hover: #313244;
     --background-selection: rgb(180 190 254 / 0.5);
+
+    --destructive: rgb(210 15 57 / 0.5);
 
     --foreground: #cdd6f4;
     --foreground-muted: #a6adc8;

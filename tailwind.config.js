@@ -15,6 +15,7 @@ export default {
         "foreground-muted": "var(--foreground-muted)",
         "foreground-faint": "var(--foreground-faint)",
         "foreground-select": "var(--foreground-selection)",
+        destructive: "var(--destructive)",
         border: "var(--border-color)",
         detail: "var(--detail)",
       },
