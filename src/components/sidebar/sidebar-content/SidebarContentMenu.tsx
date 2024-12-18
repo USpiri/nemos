@@ -15,7 +15,7 @@ export const SidebarContentMenu = ({ children }: Props) => {
   const { createFolder, createNote } = useSidebarActions();
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="mt-5 w-full overflow-hidden p-2">
+      <ContextMenuTrigger className="w-full overflow-hidden overflow-y-auto p-2">
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent>
