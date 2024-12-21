@@ -5,13 +5,12 @@ import {
 } from "@minoru/react-dnd-treeview";
 import { DndProvider } from "react-dnd";
 import { useSidebar } from "@/hooks/useSidebar";
-import { getPath } from "@/utils/tree-node";
 import { PlaceholderNode } from "@/components/ui/tree-node/PlaceholderNode";
 import { TreeNode } from "@/components/ui/tree-node/TreeNode";
 import { SidebarContentMenu } from "./SidebarContentMenu";
 
 export const SidebarContent = () => {
-  const { tree, loadChildrens, handleDrop } = useSidebar();
+  const { tree, handleDrop } = useSidebar();
 
   return (
     <SidebarContentMenu>
@@ -25,10 +24,7 @@ export const SidebarContent = () => {
               node={node}
               isOpen={isOpen}
               depth={depth}
-              onToggle={() => {
-                onToggle();
-                loadChildrens(getPath(node));
-              }}
+              onToggle={onToggle}
             />
           )}
           canDrop={(_, { dragSource, dropTargetId }) => {

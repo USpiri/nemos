@@ -9,10 +9,9 @@ export const useSidebar = () => {
   const mergeTree = useSidebarStore((store) => store.mergeTree);
   const setTree = useSidebarStore((store) => store.setTree);
 
-  const loadChildrens = async (fileName: string) => {
-    await getTreeNodeFiles(fileName).then((nodes) => mergeTree(nodes));
-  };
-
+  // TODO:
+  // - check move active note and modify.
+  // If the active node were moved this sould update the active note
   const handleDrop = async (nodes: NodeModel[], options: DropOptions) => {
     const { dragSource, dropTarget, dropTargetId } = options;
     if (!dragSource) return;
@@ -37,7 +36,6 @@ export const useSidebar = () => {
   return {
     tree,
     mergeTree,
-    loadChildrens,
     handleDrop,
   };
 };

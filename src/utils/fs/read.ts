@@ -11,6 +11,18 @@ export const readDir = async (path: string | URL) => {
   });
 };
 
+export const readDirRecursively = async (path: string) => {
+  const entries = (await readDir(path)).map((e) => ({ ...e, path }));
+  let results = [...entries];
+
+  for (const entry of entries) {
+    if (entry.isDirectory) {
+      results.push(...(await readDirRecursively(`${path}/${entry.name}`)));
+    }
+  }
+  return results;
+};
+
 export const readFile = async (path: string | URL) => {
   return await readTextFile(path, {
     baseDir: BaseDirectory.Document,
