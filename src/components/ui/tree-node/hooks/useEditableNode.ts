@@ -28,7 +28,7 @@ export const useEditableNode = (
       setEditing(false);
       await rename(node.id.toString(), target);
       updateNodeName(node.id.toString(), target);
-      if (extension && extension === ".note") navigate(`file/${target}`);
+      if (extension === ".note") navigate(`file/${target}`);
     } catch {
       restoreState();
     }
