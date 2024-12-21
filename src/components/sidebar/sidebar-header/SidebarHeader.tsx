@@ -9,10 +9,10 @@ export const SidebarHeader = () => {
 
   return (
     <div className="flex h-topbar items-center justify-center gap-2 border-b border-border">
-      <Button onClick={createNote}>
+      <Button onClick={() => createNote()}>
         <SquarePen className="h-4 w-4" />
       </Button>
-      <Button onClick={createFolder}>
+      <Button onClick={() => createFolder()}>
         <FolderPlus className="h-4 w-4" />
       </Button>
       <Button onClick={() => toggleConfig(true)}>
