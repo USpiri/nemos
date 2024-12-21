@@ -3,15 +3,15 @@ import { getTreeNodeFiles, move } from "@/utils/fs";
 import { getPath } from "@/utils/tree-node";
 import { DropOptions, NodeModel } from "@minoru/react-dnd-treeview";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 
 export const useSidebar = () => {
   const tree = useSidebarStore((store) => store.tree);
   const mergeTree = useSidebarStore((store) => store.mergeTree);
   const setTree = useSidebarStore((store) => store.setTree);
+  const { "*": activeNoteId } = useParams();
+  const navigate = useNavigate();
 
-  // TODO:
-  // - check move active note and modify.
-  // If the active node were moved this sould update the active note
   const handleDrop = async (nodes: NodeModel[], options: DropOptions) => {
     const { dragSource, dropTarget, dropTargetId } = options;
     if (!dragSource) return;
@@ -25,7 +25,11 @@ export const useSidebar = () => {
       return getPath(node) === targetPath ? { ...node, id: targetPath } : node;
     });
 
-    await move(sourcePath, targetPath);
+    if (sourcePath !== targetPath) {
+      await move(sourcePath, targetPath).then(() => {
+        if (activeNoteId === sourcePath) navigate(`/file/${targetPath}`);
+      });
+    }
     setTree(updatedNodes);
   };
 
