@@ -13,8 +13,8 @@ export const splitFileName = (str: string) => ({
 export const getTreeNodeFiles = async (path: string) => {
   return await readDirRecursively(path).then((data) =>
     data.map((item) => ({
-      id: `${item.path}/${item.name}`,
-      parent: item.path,
+      id: item.id,
+      parent: item.parentId,
       droppable: item.isDirectory,
       text: item.name,
       data: item,

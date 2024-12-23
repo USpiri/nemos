@@ -1,4 +1,3 @@
-import { NodeModel } from "@minoru/react-dnd-treeview";
 import cn from "@/utils/cn";
 import { getPath } from "@/utils/tree-node";
 import { useNavigate, useParams } from "react-router";
@@ -7,6 +6,7 @@ import { FolderNode } from "./FolderNode";
 import { FileNode } from "./FileNode";
 import { TreeNodeMenu } from "./components/TreeNodeMenu";
 import { useState } from "react";
+import { NodeModel } from "@/models/tree-node.interface";
 
 interface Props {
   depth: number;
@@ -19,7 +19,6 @@ export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
   const { "*": path } = useParams();
   const navigate = useNavigate();
   const isActive = path === getPath(node);
-
   const [selected, setSelected] = useState(false);
 
   return (

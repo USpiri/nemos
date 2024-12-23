@@ -4,6 +4,7 @@ import {
   readDir as readDirectory,
   readTextFile,
 } from "@tauri-apps/plugin-fs";
+import { v4 as uuid } from "uuid";
 
 export const readDir = async (path: string | URL) => {
   return await readDirectory(`${path}/`, {
@@ -11,13 +12,20 @@ export const readDir = async (path: string | URL) => {
   });
 };
 
-export const readDirRecursively = async (path: string) => {
-  const entries = (await readDir(path)).map((e) => ({ ...e, path }));
+export const readDirRecursively = async (path: string, parentId?: string) => {
+  const entries = (await readDir(path)).map((e) => ({
+    ...e,
+    path,
+    id: uuid(),
+    parentId: parentId ?? path,
+  }));
   let results = [...entries];
 
   for (const entry of entries) {
     if (entry.isDirectory) {
-      results.push(...(await readDirRecursively(`${path}/${entry.name}`)));
+      results.push(
+        ...(await readDirRecursively(`${path}/${entry.name}`, entry.id)),
+      );
     }
   }
   return results;
