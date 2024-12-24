@@ -38,7 +38,7 @@ export const updateNodes = (
 
     // Others unchanged...
     return node;
-  });
+  }) as NodeModel[];
 
   return { updatedNodes, newActivePath };
 };

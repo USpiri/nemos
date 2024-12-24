@@ -1,7 +1,7 @@
 import { NodeModel } from "@/models/tree-node.interface";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import { rename } from "@/utils/fs";
-import { getPath } from "@/utils/tree-node";
+import { getPath, updateNodes } from "@/utils/tree-node";
 import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
@@ -13,8 +13,8 @@ export const useEditableNode = (
   const [label, setLabel] = useState(fileName);
   const [isEditing, setEditing] = useState(false);
   const navigate = useNavigate();
-  const { "*": activeNoteId } = useParams();
-  const tree = useSidebarStore((store) => store.tree);
+  const { "*": activeNote } = useParams();
+  const nodes = useSidebarStore((store) => store.tree);
   const setTree = useSidebarStore((store) => store.setTree);
 
   const restoreState = useCallback(() => {
@@ -25,47 +25,25 @@ export const useEditableNode = (
   const onChange = async (value: string) => {
     if (value === label) return restoreState();
     setLabel(value);
-    const target = `${node.data!.path}/${value}${extension}`;
-    let newActivePath = "";
+
+    const targetPath = `${node.data!.path}/${value}${extension}`;
+    const sourcePath = getPath(node);
+    setEditing(false);
+
+    const { updatedNodes, newActivePath } = updateNodes(
+      nodes,
+      targetPath,
+      sourcePath,
+      activeNote ?? "",
+      `${value}${extension}`,
+    );
 
     try {
-      setEditing(false);
-      const nodePath = getPath(node);
-
-      const updatedNodes = tree.map((node) => {
-        // Update inner nodes only if dragSource is a folder (droppable)
-        if (node.data!.path.includes(nodePath)) {
-          const path = node.data!.path.replace(nodePath, target);
-          if (getPath(node) === activeNoteId)
-            newActivePath = `${target}/${node.text}`;
-          const data = {
-            ...node.data,
-            path,
-          };
-          return { ...node, data } as NodeModel;
-        }
-
-        // Update current node
-        if (nodePath === getPath(node)) {
-          return {
-            ...node,
-            text: `${value}${extension}`,
-            data: {
-              ...node.data,
-              path: target.substring(0, target.lastIndexOf("/")),
-            },
-          } as NodeModel;
-        }
-
-        // Other nodes
-        return node;
-      });
-
-      await rename(nodePath, target).then(() => {
+      await rename(sourcePath, targetPath).then(() => {
         setTree(updatedNodes);
         if (node.droppable && newActivePath) navigate(`file/${newActivePath}`);
         if (extension === ".note" && !node.droppable)
-          navigate(`file/${target}`);
+          navigate(`file/${targetPath}`);
       });
     } catch (e) {
       console.log("Failing update", e);
