@@ -19,7 +19,6 @@ interface Props {
 }
 
 // TODO:
-// - Implement copy action
 // - Prevent oppening menu while there is another meno oppened
 
 export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
