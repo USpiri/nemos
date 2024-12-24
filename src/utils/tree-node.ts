@@ -17,7 +17,7 @@ export const updateNodes = (
     if (node.data!.path.includes(sourcePath)) {
       const newPath = node.data!.path.replace(sourcePath, targetPath);
       if (currentNodePath === activeNotePath)
-        newActivePath = `${targetPath}/${node.text}`;
+        newActivePath = `${newPath}/${node.text}`;
 
       return {
         ...node,
