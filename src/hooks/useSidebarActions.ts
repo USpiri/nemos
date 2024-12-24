@@ -1,6 +1,6 @@
 import { NodeModel } from "@/models/tree-node.interface";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
-import { createDir, createNote as createNoteAction } from "@/utils/fs";
+import { copy, createDir, createNote as createNoteAction } from "@/utils/fs";
 import { getParentByPath } from "@/utils/tree-node";
 import { useNavigate } from "react-router";
 import { v4 as uuid } from "uuid";
@@ -39,5 +39,20 @@ export const useSidebarActions = () => {
     addNode(node);
   };
 
-  return { createNote, createFolder };
+  const copyFile = async (path: string) => {
+    const { path: filePath, name } = await copy(path);
+
+    const node = {
+      id: uuid(),
+      parent: getParentByPath(nodes, path)!.parent,
+      droppable: false,
+      text: name,
+      data: {
+        path: filePath.substring(0, filePath.lastIndexOf("/")),
+      },
+    } as NodeModel;
+    addNode(node);
+  };
+
+  return { createNote, createFolder, copyFile };
 };

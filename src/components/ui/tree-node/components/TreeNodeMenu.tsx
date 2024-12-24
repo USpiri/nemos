@@ -23,10 +23,10 @@ interface Props {
 // - Prevent oppening menu while there is another meno oppened
 
 export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
-  const { createNote, createFolder } = useSidebarActions();
+  const { createNote, createFolder, copyFile } = useSidebarActions();
   const creationPath = node.droppable ? getPath(node) : node.data!.path;
 
-  const deleteAction = () => {
+  const deleteFolder = () => {
     console.log("Elemento eliminado");
   };
 
@@ -41,7 +41,7 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
           <Folder className="mr-2 size-4" /> New folder
         </ContextMenuItem>
         {!node.droppable && getExtension(node.text) === ".note" && (
-          <ContextMenuItem>
+          <ContextMenuItem onClick={() => copyFile(getPath(node))}>
             <Copy className="mr-2 size-4" /> Copy note
           </ContextMenuItem>
         )}
@@ -50,7 +50,7 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
           icon={<Trash2 className="mr-2 size-4" />}
           color="var(--destructive)"
           time={2000}
-          onCompleteHolding={deleteAction}
+          onCompleteHolding={deleteFolder}
         />
       </ContextMenuContent>
     </ContextMenu>

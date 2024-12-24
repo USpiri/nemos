@@ -33,6 +33,10 @@
     {
       "identifier": "fs:allow-mkdir",
       "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
+    },
+    {
+      "identifier": "fs:allow-copy-file",
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
     }
   ]
 }
