@@ -42,3 +42,7 @@ export const updateNodes = (
 
   return { updatedNodes, newActivePath };
 };
+
+export const getParentByPath = (nodes: NodeModel[], path: string) => {
+  return nodes.find((node) => getPath(node) === path);
+};

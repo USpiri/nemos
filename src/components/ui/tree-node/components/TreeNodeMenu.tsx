@@ -1,4 +1,8 @@
+import { useSidebarActions } from "@/hooks/useSidebarActions";
+import { NodeModel } from "@/models/tree-node.interface";
+import { getExtension } from "@/utils/fs";
 import { Copy, FileText, Folder, Trash2 } from "lucide-react";
+import { ReactNode } from "react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -6,9 +10,7 @@ import {
   ContextMenuTrigger,
 } from "../../context-menu";
 import { ContextMenuHoldingItem } from "../../context-menu-holding-item";
-import { ReactNode } from "react";
-import { useSidebarActions } from "@/hooks/useSidebarActions";
-import { NodeModel } from "@minoru/react-dnd-treeview";
+import { getPath } from "@/utils/tree-node";
 
 interface Props {
   node: NodeModel;
@@ -22,7 +24,7 @@ interface Props {
 
 export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
   const { createNote, createFolder } = useSidebarActions();
-  const creationPath = (node.droppable ? node.id : node.parent).toString();
+  const creationPath = node.droppable ? getPath(node) : node.data!.path;
 
   const deleteAction = () => {
     console.log("Elemento eliminado");
@@ -38,11 +40,13 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
         <ContextMenuItem onClick={() => createFolder(creationPath)}>
           <Folder className="mr-2 size-4" /> New folder
         </ContextMenuItem>
-        <ContextMenuItem>
-          <Copy className="mr-2 size-4" /> Copy note
-        </ContextMenuItem>
+        {!node.droppable && getExtension(node.text) === ".note" && (
+          <ContextMenuItem>
+            <Copy className="mr-2 size-4" /> Copy note
+          </ContextMenuItem>
+        )}
         <ContextMenuHoldingItem
-          label="Delete note"
+          label={node.droppable ? "Delete folder" : "Delete Node"}
           icon={<Trash2 className="mr-2 size-4" />}
           color="var(--destructive)"
           time={2000}
