@@ -5,6 +5,7 @@ import {
   createDir,
   createNote as createNoteAction,
   deleteFile as deleteFileAction,
+  deleteFolder as deleteFolderAction,
 } from "@/utils/fs";
 import { getNodeByPath } from "@/utils/tree-node";
 import { useNavigate, useParams } from "react-router";
@@ -69,5 +70,13 @@ export const useSidebarActions = () => {
       .then(() => deleteNode(getNodeByPath(nodes, path)!));
   };
 
-  return { createNote, createFolder, copyFile, deleteFile };
+  const deleteFolder = async (path: string) => {
+    await deleteFolderAction(path)
+      .then(() => {
+        if (splat === path) navigate("/no-file");
+      })
+      .then(() => deleteNode(getNodeByPath(nodes, path)!));
+  };
+
+  return { createNote, createFolder, copyFile, deleteFile, deleteFolder };
 };

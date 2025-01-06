@@ -27,11 +27,16 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
     createFolder,
     copyFile,
     deleteFile: deleteFileAction,
+    deleteFolder,
   } = useSidebarActions();
   const creationPath = node.droppable ? getPath(node) : node.data!.path;
 
-  const deleteFile = async (path: string) => {
-    await deleteFileAction(path);
+  const deleteNode = async (path: string) => {
+    if (node.droppable) {
+      await deleteFolder(path);
+    } else {
+      await deleteFileAction(path);
+    }
   };
 
   return (
@@ -54,7 +59,7 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
           icon={<Trash2 className="mr-2 size-4" />}
           color="var(--destructive)"
           time={1500}
-          onCompleteHolding={async () => await deleteFile(getPath(node))}
+          onCompleteHolding={async () => await deleteNode(getPath(node))}
         />
       </ContextMenuContent>
     </ContextMenu>
