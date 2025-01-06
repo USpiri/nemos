@@ -50,10 +50,12 @@ const ContextMenuHoldingItem = forwardRef<
           } else {
             stopCounter(true);
             if (escape) {
-              const target = e.target;
-              target.dispatchEvent(
-                new KeyboardEvent("keydown", { key: "Escape" }),
-              );
+              setTimeout(() => {
+                const target = e.target as HTMLElement;
+                target.dispatchEvent(
+                  new KeyboardEvent("keydown", { key: "Escape" }),
+                );
+              }, 0);
             }
             return 0;
           }

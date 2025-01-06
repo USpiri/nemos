@@ -37,6 +37,10 @@
     {
       "identifier": "fs:allow-copy-file",
       "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
+    },
+    {
+      "identifier": "fs:allow-remove",
+      "allow": [{ "path": "$DOCUMENT/notes-app/**" }]
     }
   ]
 }

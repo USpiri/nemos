@@ -10,12 +10,12 @@ export const NoFile = () => {
   const navigate = useNavigate();
 
   const onCreateNote = async () => {
-    const { path, fileName } = await createNote("notes-app");
+    const { path, name } = await createNote("notes-app");
     const node = {
       id: path,
       parent: "notes-app",
       droppable: false,
-      text: fileName,
+      text: name!,
     };
     addNode(node);
     navigate(`/file/${path}`);
@@ -29,9 +29,9 @@ export const NoFile = () => {
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-8 pt-32">
       <h1 className="text-4xl font-semibold">There is something missing!</h1>
       <p className="text-foreground-darker">
-        Navigate to a new file or create a new one!
+        Navigate to an existing file or create a new one!
       </p>
-      <hr className="border-foreground-darker" />
+      <hr className="border-foreground-faint" />
       <div className="flex gap-2 *:text-foreground">
         <Button className="px-4" onClick={onNavigate}>
           Navigate

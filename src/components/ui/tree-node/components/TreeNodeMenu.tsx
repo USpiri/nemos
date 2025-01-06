@@ -22,11 +22,16 @@ interface Props {
 // - Prevent oppening menu while there is another meno oppened
 
 export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
-  const { createNote, createFolder, copyFile } = useSidebarActions();
+  const {
+    createNote,
+    createFolder,
+    copyFile,
+    deleteFile: deleteFileAction,
+  } = useSidebarActions();
   const creationPath = node.droppable ? getPath(node) : node.data!.path;
 
-  const deleteFolder = () => {
-    console.log("Elemento eliminado");
+  const deleteFile = async (path: string) => {
+    await deleteFileAction(path);
   };
 
   return (
@@ -45,11 +50,11 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
           </ContextMenuItem>
         )}
         <ContextMenuHoldingItem
-          label={node.droppable ? "Delete folder" : "Delete Node"}
+          label={node.droppable ? "Delete folder" : "Delete"}
           icon={<Trash2 className="mr-2 size-4" />}
           color="var(--destructive)"
-          time={2000}
-          onCompleteHolding={deleteFolder}
+          time={1500}
+          onCompleteHolding={async () => await deleteFile(getPath(node))}
         />
       </ContextMenuContent>
     </ContextMenu>
