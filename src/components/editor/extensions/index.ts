@@ -4,6 +4,7 @@ import lowlight from "./lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
+import { Math } from "./math";
 
 export const Extensions = [
   StarterKit.configure({ codeBlock: false }),
@@ -14,5 +15,9 @@ export const Extensions = [
   Placeholder.configure({
     placeholder: "Write something...",
   }),
-  CodeBlockLowlight.configure({ lowlight, defaultLanguage: "plaintext" }),
+  CodeBlockLowlight.extend({ excludes: "math" }).configure({
+    lowlight,
+    defaultLanguage: "plaintext",
+  }),
+  Math,
 ];

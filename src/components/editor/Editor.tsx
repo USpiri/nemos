@@ -4,6 +4,7 @@ import { Extensions } from "./extensions";
 
 import "./editor.css";
 import "@/styles/editor-higlights.css";
+import "katex/dist/katex.min.css";
 
 interface Props {
   className?: string;

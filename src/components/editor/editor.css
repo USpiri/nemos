@@ -37,4 +37,51 @@
       margin: 0;
     }
   }
+
+  .math {
+    cursor: pointer;
+  }
+
+  .math-display {
+    border-radius: 0.125rem;
+    border-width: 1px;
+    border-color: var(--border-color);
+    margin-block: 0.75rem;
+
+    .math-content {
+      padding: 0.5rem;
+      &::before,
+      &::after {
+        content: "$$";
+        display: block;
+        color: var(--foreground-faint);
+      }
+    }
+  }
+
+  .math-inline {
+    .math-content {
+      padding: 0.125rem 0.25rem;
+      border-radius: 0.125rem;
+      border-width: 1px;
+      border-color: var(--border-color);
+    }
+  }
+
+  .math-selected {
+    cursor: text;
+  }
+
+  .math-content {
+    @apply font-mono text-sm;
+    color: var(--foreground-muted);
+    background: var(--code-bg);
+
+    &::before,
+    &::after {
+      content: "$";
+      display: inline;
+      color: var(--foreground-faint);
+    }
+  }
 }
