@@ -1,0 +1,162 @@
+.mermaid-render {
+  /* Selector for '.flowchart-link' that does not have custom styles */
+  .flowchart-link[style=""],
+  .messageLine0,
+  .messageLine1,
+  .actor-line,
+  .relation,
+  .transition,
+  .relationshipLine {
+    stroke: var(--foreground-faint) !important;
+  }
+
+  /* .marker > path, */
+  .arrowMarkerPath {
+    fill: var(--foreground-muted) !important;
+  }
+
+  span:not([aria-roledescription="kanban"] .cluster span) {
+    color: var(--foreground) !important;
+  }
+
+  /* Class diagrams */
+  .dependency path,
+  .composition path {
+    fill: var(--foreground-faint) !important;
+    stroke: var(--foreground-faint) !important;
+  }
+
+  .aggregation path,
+  .extension path {
+    stroke: var(--foreground-faint) !important;
+  }
+
+  .statediagram,
+  [aria-roledescription="requirement"] {
+    marker {
+      fill: var(--foreground-faint) !important;
+      stroke: var(--foreground-faint) !important;
+    }
+  }
+
+  .relationshipLabelBox {
+    fill: var(--background-primary) !important;
+  }
+
+  .data-point circle:not([stroke^="#"], [fill^="#"]) {
+    fill: var(--foreground-faint);
+    stroke: var(--foreground-faint);
+  }
+
+  .mindmap-node path {
+    fill: var(--background-secondary-alt) !important;
+    stroke: var(--background-primary-alt) !important;
+  }
+
+  [aria-roledescription="journey"],
+  [aria-roledescription="quadrantChart"] {
+    text:not(.legend) {
+      fill: var(--foreground);
+    }
+    .label {
+      color: unset !important;
+    }
+  }
+
+  circle.commit-merge {
+    fill: var(--background-primary) !important;
+    stroke: var(--background-primary) !important;
+  }
+
+  .plot rect {
+    fill: var(--prose-codeblock-higlight-4);
+  }
+
+  rect:not(
+      .rect,
+      .relationshipLabelBox,
+      .section,
+      .legend rect,
+      [aria-roledescription="sankey"] rect,
+      [aria-roledescription="kanban"] rect:not(.basic),
+      .plot rect
+    ),
+  polygon,
+  circle:not([class^="actor"], .data-point circle, .commit),
+  line:not([aria-roledescription="kanban"] line),
+  .cross,
+  .node path[style=""],
+  .node .default > path {
+    fill: var(--background-secondary) !important;
+    stroke: var(--foreground-faint) !important;
+  }
+
+  rect.note {
+    fill: var(--background-secondary) !important;
+    stroke: var(--background-secondary-alt) !important;
+  }
+
+  .noteText tspan {
+    fill: var(--foreground-muted) !important;
+  }
+
+  #arrowhead path,
+  .actor-man line,
+  .loopLine {
+    fill: var(--foreground-faint) !important;
+    stroke: var(--foreground-faint) !important;
+  }
+
+  .relationshipLabelBox {
+    stroke: var(--background-primary) !important;
+  }
+
+  .axisl-line path,
+  .axis-line path {
+    stroke: var(--foreground-faint) !important;
+  }
+
+  .pieTitleText,
+  .classDiagramTitleText,
+  .statediagramTitleText,
+  [aria-roledescription="timeline"] text:not(:has(tspan)),
+  .flowchartTitleText,
+  .chart-title text,
+  .packetTitle,
+  .titleText,
+  .gitTitleText,
+  .entityTitleText,
+  .messageText,
+  .labelText,
+  .entityLabel,
+  .relationshipLabel,
+  .taskTextOutsideLeft,
+  .taskTextOutsideRight,
+  .tick text,
+  .legend text,
+  .tag-label,
+  .commit-label,
+  .label text,
+  .title text,
+  .packetLabel,
+  tspan:not([aria-roledescription="timeline"] tspan) {
+    fill: var(--foreground) !important;
+  }
+
+  .labelBkg {
+    background-color: var(--background-primary) !important;
+  }
+
+  .edgeLabel p {
+    background-color: var(--background-primary) !important;
+  }
+
+  .legend {
+  }
+}
+
+.dark {
+  [aria-roledescription="sankey"] {
+    filter: invert(1);
+  }
+}

@@ -38,6 +38,23 @@
     }
   }
 
+  .mermaid {
+    border-radius: 0.125rem;
+    border-width: 1px;
+    border-color: var(--border-color);
+    margin-block: 0.75rem;
+    pre {
+      margin: 0;
+      border-radius: 0rem;
+    }
+    .mermaid-render {
+      padding: 0.5rem;
+      svg {
+        margin-inline: auto;
+      }
+    }
+  }
+
   .math {
     cursor: pointer;
   }

@@ -1,13 +1,14 @@
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import StarterKit from "@tiptap/starter-kit";
-import lowlight from "./lowlight";
+import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
-import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+import StarterKit from "@tiptap/starter-kit";
 import { Math } from "./math";
+import { CodeBlock } from "./codeblock";
 
 export const Extensions = [
   StarterKit.configure({ codeBlock: false }),
+  Focus,
   TaskList,
   TaskItem.configure({
     nested: true,
@@ -15,9 +16,6 @@ export const Extensions = [
   Placeholder.configure({
     placeholder: "Write something...",
   }),
-  CodeBlockLowlight.extend({ excludes: "math" }).configure({
-    lowlight,
-    defaultLanguage: "plaintext",
-  }),
+  CodeBlock,
   Math,
 ];
