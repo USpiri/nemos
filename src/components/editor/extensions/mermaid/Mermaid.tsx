@@ -5,9 +5,6 @@ import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import "./mermaid.css";
 
-// TODO:
-// - implement haskell syntax higlight
-
 mermaid.initialize({
   startOnLoad: false,
   suppressErrorRendering: true,

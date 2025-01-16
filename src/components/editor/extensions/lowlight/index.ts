@@ -14,6 +14,7 @@ import rust from "highlight.js/lib/languages/rust";
 import java from "highlight.js/lib/languages/java";
 import bash from "highlight.js/lib/languages/bash";
 import shell from "highlight.js/lib/languages/shell";
+import haskell from "highlight.js/lib/languages/haskell";
 
 const lowlight = createLowlight(common);
 
@@ -30,7 +31,9 @@ lowlight.register("md", md);
 lowlight.register("rust", rust);
 lowlight.register("java", java);
 lowlight.register("bash", bash);
+lowlight.register("haskell", haskell);
 lowlight.register("console", shell);
 
 // Aliases
+lowlight.registerAlias({ haskell: ["mermaid"] });
 export default lowlight;

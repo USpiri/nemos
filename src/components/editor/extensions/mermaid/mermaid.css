@@ -1,3 +1,4 @@
+/* TODO: review styles for mermaid-render*/
 .mermaid-render {
   /* Selector for '.flowchart-link' that does not have custom styles */
   .flowchart-link[style=""],
