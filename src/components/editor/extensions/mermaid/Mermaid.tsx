@@ -32,7 +32,11 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
   const id = `mermaid_${uuid().replace(/-/g, "")}`;
 
   useEffect(() => {
-    if (!node.textContent.trim() && node.textContent.trim().length === 0)
+    if (
+      !node.textContent.trim() &&
+      node.textContent.trim().length === 0 &&
+      !element
+    )
       return;
     mermaid
       .render(id, node.textContent, element)
