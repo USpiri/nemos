@@ -8,7 +8,10 @@ import { CodeBlock } from "./codeblock";
 import { Math } from "./math";
 
 export const Extensions = [
-  StarterKit.configure({ codeBlock: false }),
+  StarterKit.configure({
+    codeBlock: false,
+    dropcursor: { class: "dropcursor" },
+  }),
   Focus,
   TaskList,
   TaskItem.configure({

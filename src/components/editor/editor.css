@@ -112,6 +112,10 @@
   }
 }
 
+.dropcursor {
+  color: var(--detail);
+}
+
 .drag-handle {
   position: fixed;
   opacity: 1;
