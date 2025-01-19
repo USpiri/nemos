@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button/Button";
+import { NodeModel } from "@/models/tree-node.interface";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import { useUIStore } from "@/store/ui/ui.store";
 import { createNote } from "@/utils/fs";
 import { useNavigate } from "react-router";
+import { v4 as uuid } from "uuid";
 
 export const NoFile = () => {
   const toggleSidebar = useUIStore((store) => store.toggleSidebar);
@@ -12,11 +14,14 @@ export const NoFile = () => {
   const onCreateNote = async () => {
     const { path, name } = await createNote("notes-app");
     const node = {
-      id: path,
+      id: uuid(),
       parent: "notes-app",
       droppable: false,
       text: name!,
-    };
+      data: {
+        path: path.substring(0, path.lastIndexOf("/")),
+      },
+    } as NodeModel;
     addNode(node);
     navigate(`/file/${path}`);
   };
