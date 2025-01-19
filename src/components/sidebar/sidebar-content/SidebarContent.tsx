@@ -15,8 +15,8 @@ export const SidebarContent = () => {
   const contextRef = useRef(null);
 
   return (
-    <div ref={contextRef} className="overflow-hidden">
-      <SidebarContentMenu>
+    <SidebarContentMenu>
+      <div ref={contextRef} className="overflow-hidden py-4">
         {contextRef.current && (
           <DndProvider
             backend={MultiBackend}
@@ -51,7 +51,7 @@ export const SidebarContent = () => {
             />
           </DndProvider>
         )}
-      </SidebarContentMenu>
-    </div>
+      </div>
+    </SidebarContentMenu>
   );
 };
