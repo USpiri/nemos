@@ -43,10 +43,14 @@ export const CodeBlock = ({
           as="code"
         />
       </pre>
-      <div className="absolute bottom-2 right-2 flex flex-row items-center">
+      <div
+        className="absolute bottom-2 right-2 flex select-none flex-row items-center"
+        contentEditable={false}
+      >
         <Button
           className="z-40 p-1 text-sm text-foreground-faint transition-colors hover:bg-transparent hover:text-foreground-muted"
           onClick={onCopy}
+          tabIndex={-1}
         >
           {copied ? (
             <Check className="size-3.5" />
@@ -56,7 +60,10 @@ export const CodeBlock = ({
         </Button>
         {editor.isEditable && (
           <Select defaultValue={currentLanguage?.id} onValueChange={onChange}>
-            <SelectTrigger className="languages w-auto min-w-32 px-2 py-1 transition-colors hover:text-foreground-muted">
+            <SelectTrigger
+              className="languages w-auto min-w-32 px-2 py-1 transition-colors hover:text-foreground-muted"
+              tabIndex={-1}
+            >
               {currentLanguage?.name}
             </SelectTrigger>
             <SelectContent>
