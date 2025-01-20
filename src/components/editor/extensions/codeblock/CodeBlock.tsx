@@ -6,6 +6,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { supportedLanguages } from "@/config/code-languages";
+import { isInsideNode } from "@/utils/editor";
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
@@ -13,6 +14,7 @@ import { useState } from "react";
 export const CodeBlock = ({
   editor,
   node,
+  getPos,
   updateAttributes,
 }: NodeViewProps) => {
   const [copied, setCopied] = useState(false);
@@ -58,27 +60,34 @@ export const CodeBlock = ({
             <Copy className="size-3.5" />
           )}
         </Button>
-        {editor.isEditable && (
-          <Select defaultValue={currentLanguage?.id} onValueChange={onChange}>
-            <SelectTrigger
-              className="languages w-auto min-w-32 px-2 py-1 transition-colors hover:text-foreground-muted"
-              tabIndex={-1}
-            >
-              {currentLanguage?.name}
-            </SelectTrigger>
-            <SelectContent>
-              {supportedLanguages.map((lang) => (
-                <SelectItem
-                  key={lang.id}
-                  value={lang.id}
-                  className="languages-options py-1 pl-1.5"
-                >
-                  {lang.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+        {editor.isEditable &&
+          isInsideNode(
+            editor.state.selection.from,
+            editor.state.selection.to,
+            getPos(),
+            node.nodeSize,
+          ) &&
+          editor.isFocused && (
+            <Select defaultValue={currentLanguage?.id} onValueChange={onChange}>
+              <SelectTrigger
+                className="languages w-auto min-w-32 px-2 py-1 transition-colors hover:text-foreground-muted"
+                tabIndex={-1}
+              >
+                {currentLanguage?.name}
+              </SelectTrigger>
+              <SelectContent>
+                {supportedLanguages.map((lang) => (
+                  <SelectItem
+                    key={lang.id}
+                    value={lang.id}
+                    className="languages-options py-1 pl-1.5"
+                  >
+                    {lang.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
       </div>
     </NodeViewWrapper>
   );

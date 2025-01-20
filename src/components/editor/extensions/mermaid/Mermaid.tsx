@@ -1,9 +1,10 @@
 import cn from "@/utils/cn";
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import mermaid, { RenderResult } from "mermaid";
-import { CSSProperties, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import "./mermaid.css";
+import { isInsideNode, hiddenStyle } from "@/utils/editor";
 
 mermaid.initialize({
   startOnLoad: false,
@@ -11,17 +12,6 @@ mermaid.initialize({
   theme: "base",
   securityLevel: "loose",
 });
-
-const isSelected = (from: number, to: number, pos: any, nodeSize: number) =>
-  from > pos && to < pos + nodeSize + 1;
-
-const hiddenStyle = {
-  opacity: 0,
-  overflow: "hidden",
-  position: "absolute",
-  width: "0px",
-  height: "0px",
-} as CSSProperties;
 
 export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
   const [render_result, setRenderResult] = useState<RenderResult>();
@@ -69,7 +59,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
     <NodeViewWrapper className="mermaid">
       <pre
         style={
-          !isSelected(
+          !isInsideNode(
             editor.state.selection.from,
             editor.state.selection.to,
             getPos(),
