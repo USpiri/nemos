@@ -13,6 +13,7 @@
   "dependencies": {
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@radix-ui/react-context-menu": "^2.2.4",
+    "@radix-ui/react-select": "^2.1.4",
     "@tauri-apps/api": "^2.1.1",
     "@tauri-apps/plugin-fs": "~2",
     "@tiptap/extension-code-block-lowlight": "^2.10.2",

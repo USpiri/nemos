@@ -38,6 +38,15 @@
     }
   }
 
+  .codeblock {
+    position: relative;
+    margin-block: 1.75em;
+
+    pre {
+      margin: 0;
+    }
+  }
+
   .mermaid {
     border-radius: 0.125rem;
     border-width: 1px;
