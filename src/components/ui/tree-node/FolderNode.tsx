@@ -1,8 +1,8 @@
-import { NodeModel } from "@minoru/react-dnd-treeview";
-import { useEditableNode } from "./hooks/useEditableNode";
+import { NodeModel } from "@/models/tree-node.interface";
 import { Folder, FolderOpen } from "lucide-react";
 import { EditableLabel } from "../editable-label/EditableLabel";
 import { NodeWrapper } from "./components/NodeWrapper";
+import { useEditableNode } from "./hooks/useEditableNode";
 
 const ICON_CLASSES = "h-4 w-4 shrink-0";
 
