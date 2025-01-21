@@ -1,11 +1,9 @@
 import { splitFileName } from "@/utils/fs";
-import { NodeModel } from "@minoru/react-dnd-treeview";
 import { useEditableNode } from "./hooks/useEditableNode";
 import { NodeWrapper } from "./components/NodeWrapper";
 import { FileIcon } from "../file-icon/FileIcon";
 import { EditableLabel } from "../editable-label/EditableLabel";
-
-const ICON_CLASSES = "h-4 w-4 shrink-0";
+import { NodeModel } from "@/models/tree-node.interface";
 
 interface Props {
   node: NodeModel;
@@ -22,7 +20,7 @@ export const FileNode = ({ node, onClick }: Props) => {
 
   return (
     <NodeWrapper onClick={onClick}>
-      <FileIcon fileName={node.text} className={ICON_CLASSES} />
+      <FileIcon fileName={node.text} className="h-4 w-4 shrink-0" />
       <span className="truncate" onDoubleClick={() => setEditing(true)}>
         <EditableLabel
           value={fileName}
