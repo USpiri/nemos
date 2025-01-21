@@ -9,7 +9,7 @@ interface State {
 
 const initialState = () => {
   const { isSidebarOpen = false } = JSON.parse(
-    localStorage.getItem("UI") || "undefined",
+    localStorage.getItem("UI") || "{}",
   );
   return {
     isSidebarOpen,

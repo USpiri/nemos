@@ -10,8 +10,8 @@ export const AppearanceConfig = () => {
   const [theme, setTheme] = useState<ThemeType>(
     () => (localStorage.getItem("theme") as ThemeType) ?? "system",
   );
-  const [colorScheme, setColorScheme] = useState<string | undefined>(() =>
-    JSON.parse(localStorage.getItem("color-scheme") ?? "undefined"),
+  const [colorScheme, setColorScheme] = useState<string | null>(() =>
+    JSON.parse(localStorage.getItem("color-scheme") ?? "null"),
   );
 
   const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -94,7 +94,7 @@ export const AppearanceConfig = () => {
           <select
             className="w-full bg-background-primary py-1.5 outline-none"
             defaultValue={colorScheme ?? undefined}
-            onChange={(e) => setColorScheme(e.target.value)}
+            onChange={(e) => setColorScheme(e.target.value ?? null)}
           >
             <option value="">Default</option>
             <option value="custom">Custom</option>
