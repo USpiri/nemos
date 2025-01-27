@@ -7,6 +7,7 @@ import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { CodeBlock } from "./codeblock";
 import { Math } from "./math";
+import { SlashCommands } from "./slash-command";
 
 export const Extensions = [
   StarterKit.configure({
@@ -24,5 +25,6 @@ export const Extensions = [
   CodeBlock,
   Math,
   AutoJoiner,
+  SlashCommands,
   GlobalDragHandle,
 ];
