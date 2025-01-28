@@ -8,12 +8,14 @@ import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { CodeBlock } from "./codeblock";
 import { Math } from "./math";
 import { SlashCommands } from "./slash-command";
+import { MarkLink } from "./link";
 
 export const Extensions = [
   StarterKit.configure({
     codeBlock: false,
     dropcursor: { class: "dropcursor" },
   }),
+  MarkLink,
   Focus,
   TaskList,
   TaskItem.configure({
