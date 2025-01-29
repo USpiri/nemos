@@ -12,7 +12,7 @@ declare module "@tiptap/react" {
 
 const name = "math-inline";
 const tag = "math-inline";
-const inputRule = /\$([^\s])([^$]*)\$$/;
+const inputRule = /\$([^\s][^$]*)\$$/;
 
 export const MathInline = Node.create({
   name,
@@ -46,9 +46,8 @@ export const MathInline = Node.create({
         handler({ range, match, chain, state }) {
           const start = range.from;
           let end = range.to;
-
-          if (match[2]) {
-            const text = state.schema.text(match[2]);
+          const text = state.schema.text(match[1]);
+          if (text) {
             chain()
               .command(({ tr }) => {
                 //@ts-ignore
