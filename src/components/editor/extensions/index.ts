@@ -22,7 +22,7 @@ export const Extensions = [
     nested: true,
   }),
   Placeholder.configure({
-    placeholder: "Write something...",
+    placeholder: 'Write something or type "/" for commands...',
   }),
   CodeBlock,
   Math,
