@@ -10,6 +10,7 @@ interface Props {
   className?: string;
   onChange?: (editor: EditorI) => void;
   content?: string;
+  readonly?: boolean;
 }
 
 const baseClasses =
@@ -18,7 +19,12 @@ const baseClasses =
 // TODO:
 // - Enable spellcheck and allow different languages
 
-export const Editor = ({ className, onChange, content = "" }: Props) => {
+export const Editor = ({
+  className,
+  onChange,
+  content = "",
+  readonly = false,
+}: Props) => {
   const editor = useEditor(
     {
       extensions: [...Extensions],
@@ -29,11 +35,12 @@ export const Editor = ({ className, onChange, content = "" }: Props) => {
         },
       },
       content,
+      editable: !readonly,
       onUpdate: ({ editor }) => {
         if (onChange) onChange(editor);
       },
     },
-    [content],
+    [content, readonly],
   );
 
   if (!editor) return null;
