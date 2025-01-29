@@ -73,7 +73,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
       </pre>
       <div
         className={cn(
-          "mermaid-render transition-all",
+          "mermaid-render select-none transition-all",
           error && "h-0 opacity-0",
         )}
         contentEditable={false}
