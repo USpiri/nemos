@@ -46,7 +46,7 @@ export const CodeBlock = ({
         />
       </pre>
       <div
-        className="absolute bottom-2 right-2 flex select-none flex-row items-center"
+        className="absolute bottom-2 right-2 flex select-none flex-row items-center print:hidden"
         contentEditable={false}
       >
         <Button
