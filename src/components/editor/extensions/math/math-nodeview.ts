@@ -55,7 +55,7 @@ class MathNodeView implements NodeView {
 
     dom.setAttribute("draggable", "true");
 
-    if (!this.showSource) {
+    if (!this.showSource || !this.editor.isEditable) {
       source.setAttribute(
         "style",
         "opacity: 0; overflow: hidden; position: absolute; width: 0px; height: 0px;",
