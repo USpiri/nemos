@@ -66,8 +66,7 @@ export const CodeBlock = ({
             editor.state.selection.to,
             getPos(),
             node.nodeSize,
-          ) &&
-          editor.isFocused && (
+          ) && (
             <Select defaultValue={currentLanguage?.id} onValueChange={onChange}>
               <SelectTrigger
                 className="languages w-auto min-w-32 px-2 py-1 transition-colors hover:text-foreground-muted"
