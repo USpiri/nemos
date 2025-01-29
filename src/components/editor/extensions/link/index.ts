@@ -3,28 +3,10 @@
  * Original source: https://github.com/Doist/typist/blob/main/src/extensions/rich-text/rich-text-link.ts
  */
 
+import { openUrl } from "@tauri-apps/plugin-opener";
 import Link, { type LinkOptions } from "@tiptap/extension-link";
 import { Plugin } from "@tiptap/pm/state";
-import {
-  InputRule,
-  markInputRule,
-  markPasteRule,
-  PasteRule,
-} from "@tiptap/react";
-
-function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
-  const defaultMarkPasteRule = markPasteRule(config);
-
-  return new PasteRule({
-    find: config.find,
-    handler(props) {
-      const { tr } = props.state;
-
-      defaultMarkPasteRule.handler(props);
-      tr.setMeta("preventAutolink", true);
-    },
-  });
-}
+import { InputRule, markInputRule } from "@tiptap/react";
 
 function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
   const defaultMarkInputRule = markInputRule(config);
@@ -39,9 +21,7 @@ function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
     },
   });
 }
-
 const inputRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)$/i;
-const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)/gi;
 
 const MarkLink = Link.extend<LinkOptions>({
   inclusive: false,
@@ -77,42 +57,84 @@ const MarkLink = Link.extend<LinkOptions>({
     ];
   },
 
-  addPasteRules() {
-    return [
-      linkPasteRule({
-        find: pasteRegex,
-        type: this.type,
-        getAttributes(match) {
-          return {
-            title: match.pop()?.trim(),
-            href: match.pop()?.trim(),
-          };
-        },
-      }),
-    ];
-  },
+  /*
+   * addPasteRules prevents paste links directly.
+   */
+  // addPasteRules() {
+  //   return [
+  //     linkPasteRule({
+  //       find: pasteRegex,
+  //       type: this.type,
+  //       getAttributes(match) {
+  //         return {
+  //           title: match.pop()?.trim(),
+  //           href: match.pop()?.trim(),
+  //         };
+  //       },
+  //     }),
+  //   ];
+  // },
 
   addProseMirrorPlugins() {
     let hoveredElement: HTMLElement | null = null;
     return [
       new Plugin({
         props: {
+          /*
+           * Ctrl + click to open on edit mode
+           * Click to open on read-only mode
+           * */
           handleClick(view, _pos, event) {
             if (!view.editable) return false;
             if (!event.ctrlKey) return false;
-            // TODO: handle open link on external browser
-            console.log(event.target);
+
+            const element = event.target as HTMLElement;
+            const target = (
+              element.matches("a") ? event.target : element.parentElement
+            ) as HTMLAnchorElement;
+            if (target.tagName !== "A" && !target.hasAttribute("href"))
+              return false;
+
+            const url = target.href;
+            openUrl(url);
           },
+
           handleDOMEvents: {
+            /*
+             * Prevent default anchor behaviour
+             * https://github.com/tauri-apps/tauri/issues/2791
+             * */
+            click: (view, event) => {
+              if (!view.editable) return;
+
+              const element = event.target as HTMLElement;
+              const target = (
+                element.matches("a") ? event.target : element.parentElement
+              ) as HTMLAnchorElement;
+              if (target.tagName === "A" && target.hasAttribute("href")) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+            },
+
+            /*
+             * cursor-pointer on ctrl + key + hover
+             * */
             mouseover: (_, event) => {
-              const target = event.target as HTMLElement;
+              const element = event.target as HTMLElement;
+              const target = (
+                element.matches("a") ? event.target : element.parentElement
+              ) as HTMLAnchorElement;
               if (target.tagName === "A" && target.hasAttribute("href")) {
                 hoveredElement = target;
                 if (event.ctrlKey) target.classList.add("cursor-pointer");
               }
             },
             mouseout: (_, event) => {
-              const target = event.target as HTMLElement;
+              const element = event.target as HTMLElement;
+              const target = (
+                element.matches("a") ? event.target : element.parentElement
+              ) as HTMLAnchorElement;
               if (target.tagName === "A" && target.hasAttribute("href")) {
                 target.classList.remove("cursor-pointer");
                 hoveredElement = null;
@@ -136,3 +158,18 @@ const MarkLink = Link.extend<LinkOptions>({
 });
 
 export { MarkLink };
+
+// function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
+//   const defaultMarkPasteRule = markPasteRule(config);
+//
+//   return new PasteRule({
+//     find: config.find,
+//     handler(props) {
+//       const { tr } = props.state;
+//
+//       defaultMarkPasteRule.handler(props);
+//       tr.setMeta("preventAutolink", true);
+//     },
+//   });
+// }
+// const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)/gi;
