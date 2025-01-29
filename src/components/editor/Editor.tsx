@@ -17,7 +17,6 @@ const baseClasses =
 
 // TODO:
 // - Enable spellcheck and allow different languages
-// - Change placeholder on new nodes and first nodes (Slash command)
 
 export const Editor = ({ className, onChange, content = "" }: Props) => {
   const editor = useEditor(

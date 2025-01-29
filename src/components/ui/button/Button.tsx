@@ -1,7 +1,6 @@
 import cn from "@/utils/cn";
 
 // TODO:
-// - Change bg colors to variables
 // - Add variables and sizes
 
 export const Button = ({
