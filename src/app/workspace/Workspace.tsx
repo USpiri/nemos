@@ -15,9 +15,9 @@ export const Workspace = () => {
 
   useEffect(() => {
     readNote(splat!)
-      .then((note) => {
-        setNote(note);
-        setContent(note.content);
+      .then((data) => {
+        setNote(data);
+        setContent(data.content);
       })
       .catch(() => navigate("/no-file"));
   }, [splat]);
