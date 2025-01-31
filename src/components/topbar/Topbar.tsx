@@ -2,26 +2,24 @@ import { useUIStore } from "@/store/ui/ui.store";
 import { EllipsisVertical, Lock, Menu, PenLine } from "lucide-react";
 import { Button } from "../ui/button/Button";
 import { Filename } from "./filename/Filename";
-import { useEditorStore } from "@/store/editor/editor.store";
-import { readNote, write } from "@/utils/fs";
+import { write } from "@/utils/fs";
 import { useParams } from "react-router";
+import { useNoteStore } from "@/store/note/note.store";
 
 // TODO:
 // - Move readonly button
 
 export const Topbar = () => {
   const toogleSidebar = useUIStore((store) => store.toggleSidebar);
-  const readonly = useEditorStore((store) => store.readonly);
-  const setReadonly = useEditorStore((store) => store.setReadOnly);
   const { "*": splat } = useParams();
 
+  const note = useNoteStore((state) => state.note);
+  const setReadonly = useNoteStore((state) => state.setReadOnly);
+
   const onSetReadonly = async () => {
-    if (!splat) return;
-    const note = await readNote(splat);
-    await write(splat, {
-      ...note,
-      readonly: !readonly,
-    }).then(() => setReadonly(!readonly));
+    if (!splat || !note) return;
+    await write(splat, { ...note, readonly: !note.readonly });
+    setReadonly(!note.readonly);
   };
 
   return (
@@ -32,7 +30,7 @@ export const Topbar = () => {
       <Filename />
       <div className="flex gap-1">
         <Button onClick={onSetReadonly}>
-          {readonly ? (
+          {note?.readonly ? (
             <Lock className="size-4" />
           ) : (
             <PenLine className="size-4" />

@@ -1,10 +1,11 @@
 import cn from "@/utils/cn";
-import { Editor as EditorI, EditorContent, useEditor } from "@tiptap/react";
+import { EditorContent, Editor as EditorI, useEditor } from "@tiptap/react";
+import { useEffect } from "react";
 import { Extensions } from "./extensions";
 
-import "./editor.css";
 import "@/styles/editor-higlights.css";
 import "katex/dist/katex.min.css";
+import "./editor.css";
 
 interface Props {
   className?: string;
@@ -40,8 +41,16 @@ export const Editor = ({
         if (onChange) onChange(editor);
       },
     },
-    [content, readonly],
+    [content],
   );
+
+  //Keeps content unchanged and prevents reloading
+  //the editor
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(!readonly);
+    }
+  }, [readonly, editor]);
 
   if (!editor) return null;
 
