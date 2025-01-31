@@ -2,6 +2,7 @@ import { createSuggestionItems } from "@/utils/editor/sugesstion";
 import {
   ChartLine,
   Code,
+  FlaskConical,
   Heading1,
   Heading2,
   Heading3,
@@ -185,6 +186,21 @@ export const suggestionItems = createSuggestionItems([
         .deleteRange(range)
         .toggleCodeBlock({ language: "mermaid" })
         // .setNode("codeBlock", { language: "mermaid" })
+        .run();
+    },
+  },
+  {
+    title: "Chemical structure",
+    description: "Insert a SMILES chemical structure.",
+    searchTerms: ["science", "molecule", "atoms"],
+    icon: FlaskConical,
+    command: ({ editor, range }) => {
+      editor
+        .chain()
+        .focus()
+        // @ts-ignore
+        .deleteRange(range)
+        .toggleCodeBlock({ language: "smiles" })
         .run();
     },
   },
