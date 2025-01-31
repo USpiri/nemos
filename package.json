@@ -11,6 +11,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@ibm-materials/ts-smiles-drawer": "^0.0.3",
     "@minoru/react-dnd-treeview": "^3.4.4",
     "@radix-ui/react-context-menu": "^2.2.4",
     "@radix-ui/react-select": "^2.1.4",

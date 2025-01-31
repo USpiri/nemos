@@ -3,6 +3,7 @@ import lowlight from "../lowlight";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { Mermaid } from "../mermaid/Mermaid";
 import { CodeBlock as CodeBlockComponent } from "./CodeBlock";
+import { Smiles } from "../smiles/Smiles";
 
 export const CodeBlock = CodeBlockLowlight.extend({ excludes: "math" })
   .configure({
@@ -14,9 +15,17 @@ export const CodeBlock = CodeBlockLowlight.extend({ excludes: "math" })
       return (props) => {
         const { node } = props;
         const language = node.attrs.language;
-        return language === "mermaid"
-          ? ReactNodeViewRenderer(Mermaid)(props)
-          : ReactNodeViewRenderer(CodeBlockComponent)(props);
+
+        switch (language) {
+          case "mermaid":
+            return ReactNodeViewRenderer(Mermaid)(props);
+
+          case "smiles":
+            return ReactNodeViewRenderer(Smiles)(props);
+
+          default:
+            return ReactNodeViewRenderer(CodeBlockComponent)(props);
+        }
       };
     },
   });
