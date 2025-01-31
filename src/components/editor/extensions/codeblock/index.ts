@@ -21,6 +21,8 @@ export const CodeBlock = CodeBlockLowlight.extend({ excludes: "math" })
             return ReactNodeViewRenderer(Mermaid)(props);
 
           case "smiles":
+          case "chem":
+          case "chemistry":
             return ReactNodeViewRenderer(Smiles)(props);
 
           default:
