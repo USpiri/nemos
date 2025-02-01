@@ -1,28 +1,15 @@
-import cn from "@/utils/cn";
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { isInsideNode, hiddenStyle } from "@/utils/editor";
 import { useEffect } from "react";
-import { apply } from "@ibm-materials/ts-smiles-drawer";
-
-const options = {
-  explicitHydrogens: true,
-  terminalCarbons: true,
-  width: 500,
-  height: 300,
-};
-
-// TODO:
-//- inprove performance
-// using parse() instead of apply() should be better
+import { v4 as uuid } from "uuid";
+import { draw } from "@/utils/smiles";
 
 export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
+  const id = `smiles_${uuid().replace(/-/g, "")}`;
+
   useEffect(() => {
-    // prevents apply() to log into the console
-    const originalLog = console.log;
-    console.log = () => {};
-    apply(options, undefined, "dark");
-    console.log = originalLog;
-  }, [node.textContent]);
+    draw(node.textContent.trim(), id);
+  }, [node.textContent.trim()]);
 
   return (
     <NodeViewWrapper className="smiles">
@@ -41,10 +28,10 @@ export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
         <NodeViewContent className="smiles-source language-smiles" as="code" />
       </pre>
       <div
-        className={cn("smiles-render select-none transition-all")}
+        className="smiles-render select-none transition-all"
         contentEditable={false}
       >
-        <canvas data-smiles={node.textContent.trim()} className="mx-auto" />
+        <svg id={id} className="mx-auto max-w-sm" />
       </div>
     </NodeViewWrapper>
   );
