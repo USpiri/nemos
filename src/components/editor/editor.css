@@ -175,3 +175,14 @@
     opacity: 0;
   }
 }
+
+@media print {
+  [data-placeholder] {
+    display: none;
+  }
+  .mermaid,
+  .math-display,
+  .smiles {
+    border: unset;
+  }
+}
