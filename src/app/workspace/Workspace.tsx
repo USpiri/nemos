@@ -29,7 +29,7 @@ export const Workspace = () => {
     <div className="flex-1 overflow-auto px-8 pt-32">
       <div className="editor-wrapper mx-auto h-full w-full max-w-2xl *:h-full">
         <Editor
-          className="pb-[40vh]"
+          className="pb-[40vh] print:pb-0"
           content={content}
           readonly={note.readonly}
           onChange={async (editor) => {
