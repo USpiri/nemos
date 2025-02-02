@@ -6,7 +6,7 @@ import { Outlet } from "react-router";
 function App() {
   return (
     <>
-      <main className="grid h-dvh grid-cols-[auto_1fr]">
+      <main className="grid h-dvh grid-cols-[auto_1fr] print:block">
         <Sidebar />
         <div className="flex flex-col overflow-auto print:overflow-visible">
           <Topbar />
