@@ -33,7 +33,6 @@ export const SlashCommandList = ({ items, query, editor, range }: Props) => {
       const key = e.key;
 
       if (key === "Enter") {
-        console.log(selectedIndex);
         filteredItems[selectedIndex].command?.({ editor, range });
       } else {
         setSelectedIndex((index) => {

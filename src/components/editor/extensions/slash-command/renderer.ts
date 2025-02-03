@@ -25,7 +25,7 @@ export const renderItems = (elementRef?: React.RefObject<Element> | null) => {
         return false;
       }
 
-      //@ts-ignore
+      //@ts-expect-error actually targetting the body
       popup = tippy("body", {
         getReferenceClientRect: props.clientRect,
         appendTo: () => (elementRef ? elementRef.current : document.body),
@@ -56,9 +56,7 @@ export const renderItems = (elementRef?: React.RefObject<Element> | null) => {
         popup?.[0]?.hide();
         return true;
       }
-
-      // @ts-ignore
-      return component?.ref?.onKeyDown(props);
+      return false;
     },
 
     onExit: () => {

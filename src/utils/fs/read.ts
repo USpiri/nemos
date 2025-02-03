@@ -19,7 +19,7 @@ export const readDirRecursively = async (path: string, parentId?: string) => {
     id: uuid(),
     parentId: parentId ?? path,
   }));
-  let results = [...entries];
+  const results = [...entries];
 
   for (const entry of entries) {
     if (entry.isDirectory) {

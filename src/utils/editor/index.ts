@@ -3,7 +3,7 @@ import { CSSProperties } from "react";
 export const isInsideNode = (
   from: number,
   to: number,
-  pos: any,
+  pos: number,
   nodeSize: number,
 ) => from > pos && to < pos + nodeSize + 1;
 

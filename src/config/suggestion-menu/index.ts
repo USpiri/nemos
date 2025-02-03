@@ -27,7 +27,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .setNode("heading", { level: 1 })
         .run();
@@ -42,7 +41,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .setNode("heading", { level: 2 })
         .run();
@@ -57,7 +55,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .setNode("heading", { level: 3 })
         .run();
@@ -72,7 +69,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .setNode("heading", { level: 4 })
         .run();
@@ -87,7 +83,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .setNode("heading", { level: 5 })
         .run();
@@ -102,7 +97,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .setNode("heading", { level: 6 })
         .run();
@@ -114,7 +108,6 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["list", "bullet", "unordered"],
     icon: List,
     command: ({ editor, range }) => {
-      //@ts-ignore
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
     },
   },
@@ -124,7 +117,6 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["list", "numbered", "ordered"],
     icon: ListOrdered,
     command: ({ editor, range }) => {
-      //@ts-ignore
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
     },
   },
@@ -134,7 +126,6 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["list", "todo", "checkbox"],
     icon: ListTodo,
     command: ({ editor, range }) => {
-      //@ts-ignore
       editor.chain().focus().deleteRange(range).toggleTaskList().run();
     },
   },
@@ -144,7 +135,6 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["quote", "citation"],
     icon: Quote,
     command: ({ editor, range }) => {
-      //@ts-ignore
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
     },
   },
@@ -154,7 +144,6 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["snippet"],
     icon: Code,
     command: ({ editor, range }) => {
-      //@ts-ignore
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run();
     },
   },
@@ -167,7 +156,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        //@ts-ignore
         .deleteRange(range)
         .insertContent("<math-display></math-display>")
         .run();
@@ -182,10 +170,8 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        // @ts-ignore
         .deleteRange(range)
         .toggleCodeBlock({ language: "mermaid" })
-        // .setNode("codeBlock", { language: "mermaid" })
         .run();
     },
   },
@@ -198,7 +184,6 @@ export const suggestionItems = createSuggestionItems([
       editor
         .chain()
         .focus()
-        // @ts-ignore
         .deleteRange(range)
         .toggleCodeBlock({ language: "smiles" })
         .run();
@@ -210,7 +195,6 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["divider", "line", "hr"],
     icon: Minus,
     command: ({ editor, range }) => {
-      //@ts-ignore
       editor.chain().focus().deleteRange(range).setHorizontalRule().run();
     },
   },

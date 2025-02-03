@@ -28,7 +28,7 @@ const MarkLink = Link.extend<LinkOptions>({
 
   addOptions() {
     return {
-      ...this.parent?.()!,
+      ...(this.parent?.() as LinkOptions),
       openOnClick: "whenNotEditable",
     };
   },
@@ -56,24 +56,6 @@ const MarkLink = Link.extend<LinkOptions>({
       }),
     ];
   },
-
-  /*
-   * addPasteRules prevents paste links directly.
-   */
-  // addPasteRules() {
-  //   return [
-  //     linkPasteRule({
-  //       find: pasteRegex,
-  //       type: this.type,
-  //       getAttributes(match) {
-  //         return {
-  //           title: match.pop()?.trim(),
-  //           href: match.pop()?.trim(),
-  //         };
-  //       },
-  //     }),
-  //   ];
-  // },
 
   addProseMirrorPlugins() {
     let hoveredElement: HTMLElement | null = null;
@@ -158,18 +140,3 @@ const MarkLink = Link.extend<LinkOptions>({
 });
 
 export { MarkLink };
-
-// function linkPasteRule(config: Parameters<typeof markPasteRule>[0]) {
-//   const defaultMarkPasteRule = markPasteRule(config);
-//
-//   return new PasteRule({
-//     find: config.find,
-//     handler(props) {
-//       const { tr } = props.state;
-//
-//       defaultMarkPasteRule.handler(props);
-//       tr.setMeta("preventAutolink", true);
-//     },
-//   });
-// }
-// const pasteRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)/gi;

@@ -9,11 +9,6 @@ const SlashCommand = Extension.create({
     return {
       suggestion: {
         char: "/",
-        //@ts-ignore
-        command: ({ editor, range, props }) => {
-          console.log(props);
-          props.command({ editor, range });
-        },
       },
     };
   },

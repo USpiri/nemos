@@ -45,12 +45,12 @@ export const MathInline = Node.create({
         type: this.type,
         handler({ range, match, chain, state }) {
           const start = range.from;
-          let end = range.to;
+          const end = range.to;
           const text = state.schema.text(match[1]);
           if (text) {
             chain()
               .command(({ tr }) => {
-                //@ts-ignore
+                // @ts-expect-error this.type
                 tr.replaceRangeWith(start, end, this.type.create(null, text));
                 return true;
               })

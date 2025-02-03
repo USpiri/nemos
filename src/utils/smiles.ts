@@ -18,9 +18,11 @@ export const draw = (smiles: string, nodeId: string, theme?: string) => {
   console.log = () => {};
   parse(
     smiles,
+    // eslint-disable-next-line
     (res: any) => {
       drawer.draw(res, nodeId, theme ?? docTheme);
     },
+    // eslint-disable-next-line
     (e: any) => console.error(e),
   );
   console.log = originalLog;

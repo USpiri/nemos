@@ -16,7 +16,7 @@ class MathNodeView implements NodeView {
   constructor(props: NodeViewRendererProps, isInline = false) {
     this.editor = props.editor;
     this.node = props.node;
-    this.getPos = props.getPos as any;
+    this.getPos = props.getPos;
     this.showSource = this.node.attrs.showSource;
     this.type = isInline ? "math-inline" : "math-display";
     this.isInline = isInline;
@@ -145,7 +145,7 @@ class MathNodeView implements NodeView {
 
   stopEvent() {
     // when the node is selected, don't allow it to be dragged
-    return !!!this.renderer.getAttribute("draggable");
+    return !!this.renderer.getAttribute("draggable");
   }
 }
 export default MathNodeView;
