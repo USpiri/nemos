@@ -2,6 +2,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Topbar } from "../components/topbar/Topbar";
 import { ConfigModal } from "../components/modal/config/ConfigModal";
 import { Outlet } from "react-router";
+import { Updater } from "@/components/updater/Updater";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Outlet />
         </div>
       </main>
+      <Updater />
       <ConfigModal />
     </>
   );
