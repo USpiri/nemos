@@ -1,4 +1,5 @@
 import { check, Update } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
 import { useEffect, useState } from "react";
 
 export const useUpdate = () => {
@@ -21,21 +22,26 @@ export const useUpdate = () => {
     if (!update) return;
     setIsDownloading(true);
 
-    await update.download((event) => {
-      switch (event.event) {
-        case "Started":
-          setUpdateLength(event.data.contentLength);
-          break;
+    await update
+      .downloadAndInstall((event) => {
+        switch (event.event) {
+          case "Started":
+            setUpdateLength(event.data.contentLength);
+            break;
 
-        case "Progress":
-          setDownloaded((prev) => prev + event.data.chunkLength);
-          break;
+          case "Progress":
+            setDownloaded((prev) => prev + event.data.chunkLength);
+            break;
 
-        case "Finished":
-          setIsDownloading(false);
-          break;
-      }
-    });
+          case "Finished":
+            setIsDownloading(false);
+            break;
+        }
+      })
+      .then(async () => {
+        setDownloaded(updateLength!);
+        await relaunch();
+      });
   };
 
   return {
