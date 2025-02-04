@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Notes",
+  "productName": "Nemos",
   "version": "0.1.0",
-  "identifier": "com.notes.dev",
+  "identifier": "com.nemos.dev",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Notes",
+        "title": "Nemos",
         "width": 800,
         "height": 600,
         "resizable": true,
@@ -33,6 +33,15 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcwMzEyMEVBM0NCNTlCMEMKUldRTW03VTg2aUF4Y040Z3U5YWZLOGFJNkNnY3dNZ2NGSkZGeFFuWHUxUjEvWjZ4MDkxNXcvbEgK",
+      "endpoints": [
+        "https://github.com/USpiri/nemos/releases/latest/download/latest.json"
+      ]
+    }
   }
 }
