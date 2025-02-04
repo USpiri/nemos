@@ -38,7 +38,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcwMzEyMEVBM0NCNTlCMEMKUldRTW03VTg2aUF4Y040Z3U5YWZLOGFJNkNnY3dNZ2NGSkZGeFFuWHUxUjEvWjZ4MDkxNXcvbEgK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ5NEFBMkExRTExMkY2QjQKUldTMDloTGhvYUpLMmY3RGhEbEhGOXVleGNSQ3lqRUlvM1ZIZXVGSy9Vd1Y1cWFLQXlxRUF0cEMK",
       "endpoints": [
         "https://github.com/USpiri/nemos/releases/latest/download/latest.json"
       ]
