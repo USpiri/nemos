@@ -1,5 +1,4 @@
 import Focus from "@tiptap/extension-focus";
-import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
@@ -11,6 +10,7 @@ import { FileHandler } from "./file-handler";
 import { MarkLink } from "./link";
 import { Math } from "./math";
 import { SlashCommands } from "./slash-command";
+import { Image } from "./image";
 
 export const Extensions = [
   StarterKit.configure({

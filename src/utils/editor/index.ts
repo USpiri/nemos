@@ -7,6 +7,15 @@ export const isInsideNode = (
   nodeSize: number,
 ) => from > pos && to < pos + nodeSize + 1;
 
+export const isNode = (
+  from: number,
+  to: number,
+  pos: number,
+  nodeSize: number,
+) => {
+  return from === pos && to === pos + nodeSize;
+};
+
 export const hiddenStyle = {
   opacity: 0,
   overflow: "hidden",
