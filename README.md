@@ -47,6 +47,10 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
 
 ## 🖼️ Screenshoots
 
+![916shots_so](https://github.com/user-attachments/assets/9b1c84b4-3fd8-42b9-8dbb-4c66a9307559)
+
+![736shots_so](https://github.com/user-attachments/assets/c9a94775-c4e6-4e53-bd73-ab8fe6075f65)
+
 ## 🛠️ Tech Stack
 
 - **Framework**: Tauri + React (Vite).
