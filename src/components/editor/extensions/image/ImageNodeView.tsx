@@ -93,7 +93,7 @@ export const ImageNodeView = ({
                 <GripVertical className="size-4 text-foreground-faint hover:text-foreground" />
               </div>
               <div
-                className="absolute bottom-full space-x-1 text-center print:hidden"
+                className="absolute bottom-full flex flex-row justify-center gap-1 print:hidden"
                 style={{ width: node.attrs.width }}
               >
                 {alignButtons.map((e) => (
