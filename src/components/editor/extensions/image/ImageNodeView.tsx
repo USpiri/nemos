@@ -70,7 +70,7 @@ export const ImageNodeView = ({
           {...node.attrs}
           className={cn(
             selected && "outline outline-1 outline-foreground-select",
-            "m-0",
+            "m-0 print:outline-none",
           )}
         />
         {editor.isEditable &&
@@ -85,12 +85,15 @@ export const ImageNodeView = ({
                 role="button"
                 tabIndex={0}
                 onMouseDown={onMouseDown}
-                className={cn(!selected && "hidden", "w-0 cursor-grab")}
+                className={cn(
+                  !selected && "hidden",
+                  "w-0 cursor-grab active:cursor-grabbing print:hidden",
+                )}
               >
                 <GripVertical className="size-4 text-foreground-muted hover:text-foreground" />
               </div>
               <div
-                className="absolute bottom-full space-x-1 text-center"
+                className="absolute bottom-full space-x-1 text-center print:hidden"
                 style={{ width: node.attrs.width }}
               >
                 {alignButtons.map((e) => (
