@@ -90,7 +90,7 @@ export const ImageNodeView = ({
                   "w-0 cursor-grab active:cursor-grabbing print:hidden",
                 )}
               >
-                <GripVertical className="size-4 text-foreground-muted hover:text-foreground" />
+                <GripVertical className="size-4 text-foreground-faint hover:text-foreground" />
               </div>
               <div
                 className="absolute bottom-full space-x-1 text-center print:hidden"
@@ -99,7 +99,10 @@ export const ImageNodeView = ({
                 {alignButtons.map((e) => (
                   <Button
                     key={e.value}
-                    className="hover:bg-transparent hover:text-foreground"
+                    className={cn(
+                      "text-foreground-faint hover:bg-transparent hover:text-foreground",
+                      e.value === node.attrs.align && "text-foreground",
+                    )}
                     onClick={() => editor.chain().setImageAlign(e.value).run()}
                   >
                     <e.icon className="size-4" />
