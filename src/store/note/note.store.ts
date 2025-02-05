@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 interface State {
   note: Note | null;
-  setNote: (note: Note) => void;
+  setNote: (note: Note | null) => void;
   updateContent: (content: string) => void;
   setReadOnly: (readonly: boolean) => void;
 }

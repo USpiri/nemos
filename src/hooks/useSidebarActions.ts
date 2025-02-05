@@ -1,4 +1,5 @@
 import { NodeModel } from "@/models/tree-node.interface";
+import { useNoteStore } from "@/store/note/note.store";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import {
   copy,
@@ -13,6 +14,7 @@ import { v4 as uuid } from "uuid";
 
 export const useSidebarActions = () => {
   const addNode = useSidebarStore((store) => store.addNode);
+  const setNote = useNoteStore((store) => store.setNote);
   const deleteNode = useSidebarStore((store) => store.deleteNode);
   const nodes = useSidebarStore((store) => store.tree);
   const navigate = useNavigate();
@@ -67,7 +69,10 @@ export const useSidebarActions = () => {
       .then(() => {
         if (splat === path) navigate("/no-file");
       })
-      .then(() => deleteNode(getNodeByPath(nodes, path)!));
+      .then(() => {
+        setNote(null);
+        deleteNode(getNodeByPath(nodes, path)!);
+      });
   };
 
   const deleteFolder = async (path: string) => {
