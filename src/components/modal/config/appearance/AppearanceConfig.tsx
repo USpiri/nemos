@@ -52,6 +52,7 @@ export const AppearanceConfig = () => {
               <SelectItem
                 className="cursor-pointer rounded-none hover:bg-background-primary-hover"
                 value={t.value}
+                key={t.value}
               >
                 {t.label}
               </SelectItem>
@@ -79,6 +80,7 @@ export const AppearanceConfig = () => {
               <SelectItem
                 className="cursor-pointer rounded-none hover:bg-background-primary-hover"
                 value={c.value}
+                key={c.value}
               >
                 {c.label}
               </SelectItem>
