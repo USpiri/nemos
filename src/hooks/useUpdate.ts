@@ -44,6 +44,8 @@ export const useUpdate = () => {
       });
   };
 
+  const close = () => setUpdate(null);
+
   return {
     available: !!update,
     update,
@@ -55,5 +57,6 @@ export const useUpdate = () => {
       ? Math.round((downloaded / updateLength) * 100)
       : 0,
     onInstall,
+    close,
   };
 };
