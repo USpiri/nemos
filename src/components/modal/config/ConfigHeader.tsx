@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button/Button";
-import { useUIStore } from "@/store/ui/ui.store";
+import { DialogClose } from "@/components/ui/dialog";
 import { ChevronRight, X } from "lucide-react";
 
 interface Props {
@@ -7,8 +7,6 @@ interface Props {
 }
 
 export const ConfigHeader = ({ settingName }: Props) => {
-  const toggleConfig = useUIStore((store) => store.toggleConfig);
-
   return (
     <header className="flex items-center justify-between border-b border-border p-3 pl-4">
       <div className="flex items-center gap-2 text-sm font-medium">
@@ -16,9 +14,11 @@ export const ConfigHeader = ({ settingName }: Props) => {
         <ChevronRight className="size-4 text-foreground-muted" />
         <h2>{settingName}</h2>
       </div>
-      <Button onClick={() => toggleConfig(false)}>
-        <X className="size-4" />
-      </Button>
+      <DialogClose asChild>
+        <Button>
+          <X className="size-4" />
+        </Button>
+      </DialogClose>
     </header>
   );
 };
