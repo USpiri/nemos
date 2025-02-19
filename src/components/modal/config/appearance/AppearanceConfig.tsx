@@ -1,60 +1,14 @@
-import { useEffect, useState } from "react";
-import { create } from "zustand";
-
-type ThemeType = "system" | "dark" | "light";
+import { ThemeType } from "@/models/theme.interface";
+import { useThemeStore } from "@/store/theme/theme.store";
 
 // TODO:
 // - Load color schemes dynamically
-// - Create a cusotm hook to handle configs
-// - Move zustand store
-
-interface ThemeStore {
-  theme: ThemeType;
-  setTheme: (theme: ThemeType) => void;
-}
-
-const useThemeStore = create<ThemeStore>()((set) => ({
-  theme: (localStorage.getItem("theme") as ThemeType) || "system",
-  setTheme: (theme) => {
-    localStorage.setItem("theme", theme);
-    set({ theme });
-  },
-}));
 
 export const AppearanceConfig = () => {
-  const { theme, setTheme } = useThemeStore();
-  const [colorScheme, setColorScheme] = useState<string | null>(() =>
-    JSON.parse(localStorage.getItem("color-scheme") ?? "null"),
-  );
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    const systemMedia = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const applyTheme = () => {
-      const systemDark = systemMedia.matches;
-      if (theme === "dark" || (theme === "system" && systemDark)) {
-        root.classList.add("dark");
-      } else {
-        root.classList.remove("dark");
-      }
-    };
-    applyTheme();
-
-    if (theme === "system") {
-      systemMedia.addEventListener("change", applyTheme);
-    }
-    return () => systemMedia.removeEventListener("change", applyTheme);
-  }, [theme]);
-
-  useEffect(() => {
-    localStorage.setItem("color-scheme", JSON.stringify(colorScheme));
-    if (!colorScheme) {
-      document.documentElement.removeAttribute("data-color-scheme");
-    } else {
-      document.documentElement.setAttribute("data-color-scheme", colorScheme);
-    }
-  }, [colorScheme]);
+  const theme = useThemeStore((s) => s.theme);
+  const setTheme = useThemeStore((s) => s.setTheme);
+  const colorScheme = useThemeStore((s) => s.colorScheme);
+  const setColorScheme = useThemeStore((s) => s.setColorScheme);
 
   return (
     <>
