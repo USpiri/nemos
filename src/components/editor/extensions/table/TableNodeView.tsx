@@ -18,8 +18,8 @@ export const TableNodeView = ({ getPos, editor, node }: NodeViewProps) => {
       .chain()
       .focus(getPos() + node.nodeSize - 1)
       .addRowAfter()
-      .focus(getPos() + node.nodeSize - 1)
       .fixTables()
+      .focus(getPos() + node.nodeSize - 1)
       .run();
   }, [editor, getPos, node.nodeSize]);
 
