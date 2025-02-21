@@ -15,6 +15,7 @@ import {
   Minus,
   Quote,
   Sigma,
+  Table,
 } from "lucide-react";
 
 export const suggestionItems = createSuggestionItems([
@@ -196,6 +197,20 @@ export const suggestionItems = createSuggestionItems([
     icon: Minus,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setHorizontalRule().run();
+    },
+  },
+  {
+    title: "Table",
+    description: "Insert Table",
+    searchTerms: [],
+    icon: Table,
+    command: ({ editor, range }) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .insertTable({ rows: 2, cols: 1, withHeaderRow: true })
+        .run();
     },
   },
 ]);

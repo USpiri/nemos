@@ -47,6 +47,34 @@
     }
   }
 
+  table {
+    p,
+    .node-image div,
+    ul,
+    ol,
+    li {
+      margin: 0;
+    }
+
+    th,
+    td {
+      padding: 0.5rem;
+      border-left: 1px solid var(--border-color);
+    }
+
+    tr {
+      border: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: var(--background-primary-alt);
+    }
+
+    .selectedCell {
+      border: 1px solid var(--detail);
+    }
+  }
+
   .mermaid,
   .smiles {
     border-radius: 0.125rem;
