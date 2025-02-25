@@ -13,16 +13,21 @@ export const Workspace = () => {
   const updateContent = useNoteStore((state) => state.updateContent);
   const [content, setContent] = useState<string | undefined>(note?.content);
 
+  const noFile = () => {
+    setNote(null);
+    navigate("/no-file", { replace: true });
+  };
+
   useEffect(() => {
     readNote(splat!)
       .then((data) => {
         setNote(data);
         setContent(data.content);
       })
-      .catch(() => navigate("/no-file"));
+      .catch(noFile);
   }, [splat]);
 
-  if (!splat) navigate("/no-file");
+  if (!splat) noFile();
   if (!note) return null;
 
   return (
