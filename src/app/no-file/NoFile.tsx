@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button/Button";
 import { NodeModel } from "@/models/tree-node.interface";
+import { useNoteStore } from "@/store/note/note.store";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import { useUIStore } from "@/store/ui/ui.store";
 import { createNote } from "@/utils/fs";
@@ -8,6 +9,7 @@ import { v4 as uuid } from "uuid";
 
 export const NoFile = () => {
   const toggleSidebar = useUIStore((store) => store.toggleSidebar);
+  const setNote = useNoteStore((state) => state.setNote);
   const addNode = useSidebarStore((store) => store.addNode);
   const navigate = useNavigate();
 
@@ -29,6 +31,8 @@ export const NoFile = () => {
   const onNavigate = () => {
     toggleSidebar(true);
   };
+
+  setNote(null);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-8 pt-32">
