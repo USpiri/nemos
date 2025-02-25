@@ -41,9 +41,10 @@ export const useEditableNode = (
     try {
       await rename(sourcePath, targetPath).then(() => {
         setTree(updatedNodes);
-        if (node.droppable && newActivePath) navigate(`file/${newActivePath}`);
+        if (node.droppable && newActivePath)
+          navigate(`file/${newActivePath}`, { replace: true });
         if (extension === ".note" && !node.droppable)
-          navigate(`file/${targetPath}`);
+          navigate(`file/${targetPath}`, { replace: true });
       });
     } catch (e) {
       console.log("Failing update", e);
