@@ -4,7 +4,7 @@ import { ConfigModal } from "../components/modal/config/ConfigModal";
 import { Outlet } from "react-router";
 import { Updater } from "@/components/updater/Updater";
 
-function App() {
+export function App() {
   return (
     <>
       <main className="grid h-dvh grid-cols-[auto_1fr] print:block">
@@ -19,5 +19,3 @@ function App() {
     </>
   );
 }
-
-export default App;
