@@ -1,3 +1,4 @@
+import { ROOT_FOLDER } from "@/config/constants";
 import { NodeModel } from "@/models/tree-node.interface";
 import { useNoteStore } from "@/store/note/note.store";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
@@ -20,7 +21,7 @@ export const useSidebarActions = () => {
   const navigate = useNavigate();
   const { "*": splat } = useParams();
 
-  const createNote = async (path = "notes-app") => {
+  const createNote = async (path = ROOT_FOLDER) => {
     const { path: notePath, name } = await createNoteAction(path);
     const node = {
       id: uuid(),
@@ -35,7 +36,7 @@ export const useSidebarActions = () => {
     navigate(`/file/${notePath}`);
   };
 
-  const createFolder = async (path = "notes-app") => {
+  const createFolder = async (path = ROOT_FOLDER) => {
     const { path: filePath, name } = await createDir(path);
     const node = {
       id: uuid(),

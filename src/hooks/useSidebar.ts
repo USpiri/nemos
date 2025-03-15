@@ -47,7 +47,7 @@ export const useSidebar = () => {
   };
 
   useEffect(() => {
-    getTreeNodeFiles("notes-app").then((nodes) => setTree(nodes));
+    getTreeNodeFiles().then((nodes) => setTree(nodes));
   }, []);
 
   return {

@@ -1,5 +1,6 @@
 import { BaseDirectory, exists } from "@tauri-apps/plugin-fs";
 import { readDirRecursively } from "./read";
+import { ROOT_FOLDER } from "@/config/constants";
 
 export const getExtension = (str: string) => str.slice(str.lastIndexOf("."));
 
@@ -10,8 +11,8 @@ export const splitFileName = (str: string) => ({
   extension: str.substring(str.lastIndexOf("."), str.length),
 });
 
-export const getTreeNodeFiles = async (path: string) => {
-  return await readDirRecursively(path).then((data) =>
+export const getTreeNodeFiles = async () => {
+  return await readDirRecursively(ROOT_FOLDER).then((data) =>
     data.map((item) => ({
       id: item.id,
       parent: item.parentId,

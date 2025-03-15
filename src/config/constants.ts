@@ -1,1 +1,1 @@
-export const ROOT_FOLDER = "nemos";
+export const ROOT_FOLDER = "Nemos";

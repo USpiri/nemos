@@ -9,6 +9,7 @@ import { PlaceholderNode } from "@/components/ui/tree-node/PlaceholderNode";
 import { TreeNode } from "@/components/ui/tree-node/TreeNode";
 import { SidebarContentMenu } from "./SidebarContentMenu";
 import { useRef } from "react";
+import { ROOT_FOLDER } from "@/config/constants";
 
 export const SidebarContent = () => {
   const { tree, handleDrop } = useSidebar();
@@ -25,7 +26,7 @@ export const SidebarContent = () => {
           >
             <Tree
               tree={tree}
-              rootId={"notes-app"}
+              rootId={ROOT_FOLDER}
               dropTargetOffset={5}
               render={(node, { depth, isOpen, onToggle }) => (
                 <TreeNode

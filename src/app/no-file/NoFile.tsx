@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button/Button";
+import { ROOT_FOLDER } from "@/config/constants";
 import { NodeModel } from "@/models/tree-node.interface";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import { useUIStore } from "@/store/ui/ui.store";
@@ -12,10 +13,10 @@ export const NoFile = () => {
   const navigate = useNavigate();
 
   const onCreateNote = async () => {
-    const { path, name } = await createNote("notes-app");
+    const { path, name } = await createNote(ROOT_FOLDER);
     const node = {
       id: uuid(),
-      parent: "notes-app",
+      parent: ROOT_FOLDER,
       droppable: false,
       text: name!,
       data: {
