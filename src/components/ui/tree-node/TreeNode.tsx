@@ -26,7 +26,7 @@ export const TreeNode = ({ depth, node, isOpen, onToggle }: Props) => {
       <div
         style={{ paddingInlineStart: depth * 10 }}
         className={cn(
-          "group cursor-pointer rounded text-sm text-foreground-muted transition-colors",
+          "group cursor-pointer text-sm text-foreground-muted transition-colors",
           isActive || selected
             ? "bg-background-primary-alt text-foreground"
             : "hover:bg-background-primary-hover hover:text-foreground",
