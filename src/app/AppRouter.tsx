@@ -1,10 +1,10 @@
+import { RedirectToLastRoute } from "@/components/router-watcher/RouterWatcher";
+import { initialize } from "@/utils/initialize";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router";
 import App from "./App";
-import { Workspace } from "./workspace/Workspace";
 import { NoFile } from "./no-file/NoFile";
-import { RedirectToLastRoute } from "@/components/router-watcher/RouterWatcher";
-import { useEffect } from "react";
-import { initialize } from "@/utils/initialize";
+import { Workspace } from "./workspace/Workspace";
 
 export const AppRouter = () => {
   useEffect(() => {
