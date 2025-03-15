@@ -3,8 +3,14 @@ import App from "./App";
 import { Workspace } from "./workspace/Workspace";
 import { NoFile } from "./no-file/NoFile";
 import { RedirectToLastRoute } from "@/components/router-watcher/RouterWatcher";
+import { useEffect } from "react";
+import { initialize } from "@/utils/initialize";
 
 export const AppRouter = () => {
+  useEffect(() => {
+    initialize();
+  }, []);
+
   return (
     <Routes>
       <Route element={<App />}>
