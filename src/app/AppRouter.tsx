@@ -11,9 +11,10 @@ export const AppRouter = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    initialize(({ fileDir }) => {
-      navigate(`/file/${fileDir}`);
-    }).then(() => setInitialized(true));
+    initialize().then(({ fileDir, check }) => {
+      if (!check) navigate(`/file/${fileDir}`);
+      setInitialized(true);
+    });
   }, []);
 
   if (!initialized) return null;
