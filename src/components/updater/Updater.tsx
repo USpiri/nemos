@@ -11,15 +11,16 @@ import {
   DialogClose,
 } from "../ui/dialog";
 
-// TODO:
-// - dynamically get this content or fetch to github
-
-const content =
-  "<h1>Nemos v0.3.0 | 15/03/2025</h1><h3>Added</h3><ul><li><p><strong>Tables:</strong> Add image display with size and align attributes.</p></li><li><p><strong>New Math Plugin:</strong> More user friendly and performant plugin for math expressions.</p></li><li><p>Default starter note.</p></li></ul><h3>Changed</h3><ul><li><p><strong>Using ShadCN dialogs instead of native </strong><code>&lt;dialog/&gt;</code><strong>.</strong></p></li><li><p>Tree node border radius</p></li></ul><h3>Fixed</h3><ul><li><p>Missing ShadCN animations.</p></li><li><p>System theme isn't work properly</p></li><li><p>Going back to a deleted note and returning to the current note may cause the loss of the note's content.</p></li><li><p>Crashes when there is no root folder</p></li></ul>";
-
 export const Updater = () => {
-  const { available, version, isDownloading, percentage, onInstall, close } =
-    useUpdate();
+  const {
+    available,
+    version,
+    isDownloading,
+    percentage,
+    onInstall,
+    close,
+    body,
+  } = useUpdate();
 
   return (
     <Dialog
@@ -49,7 +50,7 @@ export const Updater = () => {
             </DialogClose>
           </div>
           <div className="prose-sm max-h-96 overflow-auto px-8 outline-none">
-            <Editor content={content} readonly className="pt-10 outline-none" />
+            <Editor content={body} readonly className="pt-10 outline-none" />
           </div>
           <div className="relative flex items-center justify-end">
             {isDownloading && (
