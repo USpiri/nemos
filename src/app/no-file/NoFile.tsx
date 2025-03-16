@@ -1,31 +1,10 @@
 import { Button } from "@/components/ui/button/Button";
-import { ROOT_FOLDER } from "@/config/constants";
-import { NodeModel } from "@/models/tree-node.interface";
-import { useSidebarStore } from "@/store/sidebar/sidebar.store";
+import { useFiles } from "@/hooks/useFiles";
 import { useUIStore } from "@/store/ui/ui.store";
-import { createNote } from "@/utils/fs";
-import { useNavigate } from "react-router";
-import { v4 as uuid } from "uuid";
 
 export const NoFile = () => {
   const toggleSidebar = useUIStore((store) => store.toggleSidebar);
-  const addNode = useSidebarStore((store) => store.addNode);
-  const navigate = useNavigate();
-
-  const onCreateNote = async () => {
-    const { path, name } = await createNote(ROOT_FOLDER);
-    const node = {
-      id: uuid(),
-      parent: ROOT_FOLDER,
-      droppable: false,
-      text: name!,
-      data: {
-        path: path.substring(0, path.lastIndexOf("/")),
-      },
-    } as NodeModel;
-    addNode(node);
-    navigate(`/file/${path}`);
-  };
+  const { createNote } = useFiles();
 
   const onNavigate = () => {
     toggleSidebar(true);
@@ -42,7 +21,7 @@ export const NoFile = () => {
         <Button className="px-4" onClick={onNavigate}>
           Navigate
         </Button>
-        <Button className="px-4" onClick={onCreateNote}>
+        <Button className="px-4" onClick={() => createNote()}>
           Create new Note
         </Button>
       </div>

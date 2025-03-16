@@ -1,5 +1,5 @@
 export interface Note {
-  path: string;
+  path?: string;
   content: string;
   readonly?: boolean;
 }

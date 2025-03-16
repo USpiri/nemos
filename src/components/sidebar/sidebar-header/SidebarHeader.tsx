@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button/Button";
-import { useSidebarActions } from "@/hooks/useSidebarActions";
+import { useFiles } from "@/hooks/useFiles";
 import { useUIStore } from "@/store/ui/ui.store";
 import { FolderPlus, Settings, SquarePen } from "lucide-react";
 
 export const SidebarHeader = () => {
   const toggleConfig = useUIStore((store) => store.toggleConfig);
-  const { createNote, createFolder } = useSidebarActions();
+  const { createNote, createFolder } = useFiles();
 
   return (
     <div className="flex h-topbar items-center justify-center gap-2 border-b border-border">

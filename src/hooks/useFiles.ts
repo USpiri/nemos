@@ -1,5 +1,3 @@
-import { ROOT_FOLDER } from "@/config/constants";
-import { NodeModel } from "@/models/tree-node.interface";
 import { useNoteStore } from "@/store/note/note.store";
 import { useSidebarStore } from "@/store/sidebar/sidebar.store";
 import {
@@ -9,11 +7,10 @@ import {
   deleteFile as deleteFileAction,
   deleteFolder as deleteFolderAction,
 } from "@/utils/fs";
-import { getNodeByPath } from "@/utils/tree-node";
+import { createNode, getNodeByPath } from "@/utils/tree-node";
 import { useNavigate, useParams } from "react-router";
-import { v4 as uuid } from "uuid";
 
-export const useSidebarActions = () => {
+export const useFiles = () => {
   const addNode = useSidebarStore((store) => store.addNode);
   const setNote = useNoteStore((store) => store.setNote);
   const deleteNode = useSidebarStore((store) => store.deleteNode);
@@ -21,47 +18,35 @@ export const useSidebarActions = () => {
   const navigate = useNavigate();
   const { "*": splat } = useParams();
 
-  const createNote = async (path = ROOT_FOLDER) => {
+  const createNote = async (path?: string) => {
     const { path: notePath, name } = await createNoteAction(path);
-    const node = {
-      id: uuid(),
-      parent: getNodeByPath(nodes, path)?.id ?? path,
-      droppable: false,
-      text: name!,
-      data: {
-        path: notePath.substring(0, notePath.lastIndexOf("/")),
-      },
-    } as NodeModel;
+    const node = createNode({
+      text: name,
+      parent: getNodeByPath(nodes, path)?.id,
+      path,
+    });
     addNode(node);
     navigate(`/file/${notePath}`);
   };
 
-  const createFolder = async (path = ROOT_FOLDER) => {
-    const { path: filePath, name } = await createDir(path);
-    const node = {
-      id: uuid(),
-      parent: getNodeByPath(nodes, path)?.id ?? path,
-      droppable: true,
+  const createFolder = async (path?: string) => {
+    const { name } = await createDir(path);
+    const node = createNode({
       text: name!,
-      data: {
-        path: filePath.substring(0, filePath.lastIndexOf("/")),
-      },
-    } as NodeModel;
+      parent: getNodeByPath(nodes, path)?.id,
+      path,
+      droppable: true,
+    });
     addNode(node);
   };
 
   const copyFile = async (path: string) => {
-    const { path: filePath, name } = await copy(path);
-
-    const node = {
-      id: uuid(),
+    const { name } = await copy(path);
+    const node = createNode({
+      text: name!,
       parent: getNodeByPath(nodes, path)!.parent,
-      droppable: false,
-      text: name,
-      data: {
-        path: filePath.substring(0, filePath.lastIndexOf("/")),
-      },
-    } as NodeModel;
+      path: path.substring(0, path.lastIndexOf("/")),
+    });
     addNode(node);
   };
 

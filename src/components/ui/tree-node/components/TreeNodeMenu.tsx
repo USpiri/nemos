@@ -1,6 +1,7 @@
-import { useSidebarActions } from "@/hooks/useSidebarActions";
+import { useFiles } from "@/hooks/useFiles";
 import { NodeModel } from "@/models/tree-node.interface";
 import { getExtension } from "@/utils/fs";
+import { getPath } from "@/utils/tree-node";
 import { Copy, FileText, Folder, Trash2 } from "lucide-react";
 import { ReactNode } from "react";
 import {
@@ -10,7 +11,6 @@ import {
   ContextMenuTrigger,
 } from "../../context-menu";
 import { ContextMenuHoldingItem } from "../../context-menu-holding-item";
-import { getPath } from "@/utils/tree-node";
 
 interface Props {
   node: NodeModel;
@@ -28,7 +28,7 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
     copyFile,
     deleteFile: deleteFileAction,
     deleteFolder,
-  } = useSidebarActions();
+  } = useFiles();
   const creationPath = node.droppable ? getPath(node) : node.data!.path;
 
   const deleteNode = async (path: string) => {

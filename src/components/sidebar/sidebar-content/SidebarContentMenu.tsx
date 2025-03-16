@@ -4,7 +4,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useSidebarActions } from "@/hooks/useSidebarActions";
+import { useFiles } from "@/hooks/useFiles";
 import { FileText, Folder } from "lucide-react";
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const SidebarContentMenu = ({ children }: Props) => {
-  const { createFolder, createNote } = useSidebarActions();
+  const { createFolder, createNote } = useFiles();
   return (
     <ContextMenu>
       <ContextMenuTrigger className="w-full overflow-hidden overflow-y-auto">
