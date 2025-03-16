@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Nemos",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "identifier": "com.nemos.dev",
   "build": {
     "frontendDist": "../dist",
