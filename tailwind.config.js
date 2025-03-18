@@ -4,13 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        "background-primary": "var(--background-primary)",
         "background-primary-alt": "var(--background-primary-alt)",
         "background-primary-hover": "var(--background-primary-hover)",
         "background-secondary": "var(--background-secondary)",
         "background-secondary-alt": "var(--background-secondary-alt)",
         "background-secondary-hover": "var(--background-secondary-hover)",
-        "background-select": "var(--background-selection)",
+        "background-select": "var(--foreground-selection-bg)",
         foreground: "var(--foreground)",
         "foreground-muted": "var(--foreground-muted)",
         "foreground-faint": "var(--foreground-faint)",
@@ -80,5 +79,4 @@ export default {
       }),
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };

@@ -46,11 +46,11 @@ export const CodeBlock = ({
         />
       </pre>
       <div
-        className="absolute bottom-2 right-2 flex select-none flex-row items-center print:hidden"
+        className="absolute right-2 bottom-2 flex flex-row items-center select-none print:hidden"
         contentEditable={false}
       >
         <Button
-          className="z-40 p-1 text-sm text-foreground-faint transition-colors hover:bg-transparent hover:text-foreground-muted"
+          className="text-foreground-faint hover:text-foreground-muted z-40 p-1 text-sm transition-colors hover:bg-transparent"
           onClick={onCopy}
           tabIndex={-1}
         >
@@ -69,17 +69,18 @@ export const CodeBlock = ({
           ) && (
             <Select defaultValue={currentLanguage?.id} onValueChange={onChange}>
               <SelectTrigger
-                className="languages w-auto min-w-32 px-2 py-1 transition-colors hover:text-foreground-muted"
+                className="languages text-foreground-muted hover:text-foreground-faint w-auto min-w-32"
                 tabIndex={-1}
+                size="sm"
               >
                 {currentLanguage?.name}
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-64">
                 {supportedLanguages.map((lang) => (
                   <SelectItem
                     key={lang.id}
                     value={lang.id}
-                    className="languages-options py-1 pl-1.5"
+                    className="languages-options py-1 pl-2.5"
                   >
                     {lang.name}
                   </SelectItem>

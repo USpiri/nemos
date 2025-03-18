@@ -34,7 +34,7 @@ export const AppearanceConfig = () => {
       <div className="flex w-full items-center gap-5">
         <div>
           <h2 className="font-medium">Theme</h2>
-          <p className="text-sm text-foreground-muted">
+          <p className="text-foreground-muted text-sm">
             Choose the application's display mode: light, dark, or match the
             system's setting.
           </p>
@@ -44,13 +44,13 @@ export const AppearanceConfig = () => {
           defaultValue={theme}
           onValueChange={(theme) => setTheme(theme as ThemeType)}
         >
-          <SelectTrigger className="w-full max-w-56 rounded-xs border border-border text-foreground">
+          <SelectTrigger className="w-full max-w-56 border">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {themes.map((t) => (
               <SelectItem
-                className="cursor-pointer rounded-none hover:bg-background-primary-hover"
+                className="cursor-pointer"
                 value={t.value}
                 key={t.value}
               >
@@ -63,7 +63,7 @@ export const AppearanceConfig = () => {
       <div className="flex w-full items-center gap-5">
         <div>
           <h2 className="font-medium">Color Scheme</h2>
-          <p className="text-sm text-foreground-muted">
+          <p className="text-foreground-muted text-sm">
             Select from a variety of colors palettes to personalize the
             application's look.
           </p>
@@ -72,13 +72,13 @@ export const AppearanceConfig = () => {
           defaultValue={colorScheme || "default"}
           onValueChange={(scheme) => setColorScheme(scheme)}
         >
-          <SelectTrigger className="w-full max-w-56 rounded-xs border border-border text-foreground">
+          <SelectTrigger className="w-full max-w-56 border">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {colorSchemes.map((c) => (
               <SelectItem
-                className="cursor-pointer rounded-none hover:bg-background-primary-hover"
+                className="cursor-pointer"
                 value={c.value}
                 key={c.value}
               >

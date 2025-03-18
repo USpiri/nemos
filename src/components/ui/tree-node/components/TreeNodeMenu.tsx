@@ -58,7 +58,7 @@ export const TreeNodeMenu = ({ children, onOpenChange, node }: Props) => {
           label={node.droppable ? "Delete folder" : "Delete"}
           icon={<Trash2 className="mr-2 size-4" />}
           color="var(--destructive)"
-          time={1500}
+          time={1000}
           onCompleteHolding={async () => await deleteNode(getPath(node))}
         />
       </ContextMenuContent>

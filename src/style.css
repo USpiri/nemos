@@ -1,48 +1,98 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
 
 @config '../tailwind.config.js';
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--border);
   }
 }
 
+@theme {
+  --color-background-primary: var(--background-primary);
+}
+
 :root {
-  --background-primary: rgb(245 245 244);
-  --background-primary-alt: rgb(231 229 228);
-  --background-primary-hover: rgb(231 229 228);
-  --background-secondary: rgb(231 229 228);
-  --background-secondary-alt: rgb(214 211 209);
-  --background-secondary-hover: rgb(214 211 209);
-  --background-selection: rgb(18 18 18 / 70%);
+  /* Base */
+  --background-primary: var(--color-stone-50);
+  --background-primary-alt: var(--color-stone-200);
+  --background-primary-hover: var(--color-stone-200);
 
-  --foreground: rgb(18 18 18);
-  --foreground-muted: rgb(82 82 82);
-  --foreground-faint: rgb(163 163 163);
-  --foreground-selection: rgb(231 229 228);
+  --background-secondary: var(--color-stone-100);
+  --background-secondary-alt: var(--color-stone-200);
+  --background-secondary-hover: var(--color-stone-200);
 
+  --foreground: var(--color-neutral-900);
+  --foreground-muted: var(--color-neutral-500);
+  --foreground-faint: var(--color-neutral-400);
+
+  --foreground-selection: var(--color-stone-50);
+  --foreground-selection-bg: rgb(18 18 18 / 70%);
+  --foreground-selection-border: var(--foreground-selection);
+
+  /* - Colors */
   --destructive: rgb(254 202 202);
+  --destructive-foreground:; /* Warnings */
 
+  --success:; /* Éxito */
+  --success-foreground:;
+
+  --warning:; /* Advertencia */
+  --warning-foreground:;
+
+  --primary:;
+  --primary-foreground:;
+
+  --secondary:;
+  --secondary-foreground:;
+
+  --accent: rgb(4 120 87); /* Details */
+  --accent-foreground:; /* Details */
+
+  /* - Scrollbar */
   --scrollbar-color: rgb(163 163 163);
+  --scrollbar-background:;
+  --scrollbar-width:;
 
-  --code-bg: rgb(250 250 250);
-  --border-color: rgb(214 211 209);
-  --detail: rgb(4 120 87);
+  /* System */
 
   --topbar-height: 2.75rem;
+  --radius: 0.375rem;
+  --border: rgb(231 229 228); /* Border color */
+  --border-color: rgb(231 229 228); /* Border color */
+
+  --code-background: var(--color-zinc-100);
+
+  /* TODO: Remove --code-bg */
+  --code-bg: var(--code-background);
+  /* TODO: Remove --detail */
+  --detail: var(--accent);
+
+  /* Editor */
+  /* TODO: replace prose variables whit these */
+  --body: var(--foreground);
+  --headings: var(--foreground);
+  --lead: var(--foreground);
+  --links: var(--foreground);
+  --bold: var(--foreground);
+  --counters: var(--foreground-muted);
+  --bullets: var(--foreground-muted);
+  --hr: var(--foreground-faint);
+  --quotes: var(--foreground-muted);
+  --quote-border: var(--foreground-faint);
+  --captions: var(--foreground-muted);
+  --th-borders: var(--foreground-muted);
+  --td-borders: var(--foreground-muted);
+  --inline-code-foreground: var(--foreground);
+  --inline-code-background: var(--code-background);
+  --block-code-foreground: var(--foreground);
+  --block-background: var(--code-background);
 
   --prose-body: var(--foreground);
   --prose-headings: var(--foreground);
@@ -61,18 +111,33 @@
   --prose-pre-code: var(--foreground);
   --prose-pre-bg: var(--code-bg);
 
+  /* Codeblock */
+  --codeblock-higlight-1: #8839ef;
+  --codeblock-higlight-2: #d20f39;
+  --codeblock-higlight-3: #df8e1d;
+  --codeblock-higlight-4: #7287fd;
+  --codeblock-higlight-5: #179299;
+  --codeblock-higlight-6: #dd7878;
+  --codeblock-higlight-7: #fe640b;
+  --codeblock-higlight-8: #209fb5;
+  --codeblock-higlight-9: #40a02b;
+  --codeblock-higlight-10: #5c5f77;
+  --codeblock-higlight-11: #a3a3a3;
+
+  /* TODO: Remove prose and replace with above variables */
+
   /* Code Block colors  */
-  --prose-codeblock-higlight-1: #8839ef;
-  --prose-codeblock-higlight-2: #d20f39;
-  --prose-codeblock-higlight-3: #df8e1d;
-  --prose-codeblock-higlight-4: #7287fd;
-  --prose-codeblock-higlight-5: #179299;
-  --prose-codeblock-higlight-6: #dd7878;
-  --prose-codeblock-higlight-7: #fe640b;
-  --prose-codeblock-higlight-8: #209fb5;
-  --prose-codeblock-higlight-9: #40a02b;
-  --prose-codeblock-higlight-10: #5c5f77;
-  --prose-codeblock-higlight-11: #a3a3a3;
+  --prose-codeblock-higlight-1: var(--codeblock-higlight-1);
+  --prose-codeblock-higlight-2: var(--codeblock-higlight-2);
+  --prose-codeblock-higlight-3: var(--codeblock-higlight-3);
+  --prose-codeblock-higlight-4: var(--codeblock-higlight-4);
+  --prose-codeblock-higlight-5: var(--codeblock-higlight-5);
+  --prose-codeblock-higlight-6: var(--codeblock-higlight-6);
+  --prose-codeblock-higlight-7: var(--codeblock-higlight-7);
+  --prose-codeblock-higlight-8: var(--codeblock-higlight-8);
+  --prose-codeblock-higlight-9: var(--codeblock-higlight-9);
+  --prose-codeblock-higlight-10: var(--codeblock-higlight-10);
+  --prose-codeblock-higlight-11: var(--codeblock-higlight-11);
 }
 .dark {
   --background-primary: rgb(18 18 18);
@@ -81,12 +146,12 @@
   --background-secondary: rgb(23 23 23);
   --background-secondary-alt: rgb(35 35 35);
   --background-secondary-hover: rgb(35 35 35);
-  --background-selection: rgb(231 229 228 / 70%);
 
   --foreground: rgb(231 229 228);
   --foreground-muted: rgb(168 162 158);
   --foreground-faint: rgb(120 113 108);
   --foreground-selection: rgb(18 18 18);
+  --foreground-selection-bg: rgb(231 229 228 / 70%);
 
   --destructive: rgb(185 28 28 / 0.3);
 
@@ -127,6 +192,28 @@
   --prose-codeblock-higlight-11: #808080;
 }
 
+/* ShadCN variables */
+/* :root { */
+/*   --background: var(--background-primary); */
+/*   --card: var(--background-secondary); */
+/*   --card-foreground: var(--foreground); */
+/*   --popover: var(--background-primary); */
+/*   --popover-foreground: var(--foreground); */
+/*   --primary: oklch(0.205 0 0); */
+/*   --primary-foreground: oklch(0.985 0 0); */
+/*   --secondary: oklch(0.97 0 0); */
+/*   --secondary-foreground: oklch(0.205 0 0); */
+/*   --muted: oklch(0.97 0 0); */
+/*   --muted-foreground: oklch(0.556 0 0); */
+/*   --accent: oklch(0.97 0 0); */
+/*   --accent-foreground: oklch(0.205 0 0); */
+/*   --destructive: oklch(0.577 0.245 27.325); */
+/*   --destructive-foreground: oklch(0.577 0.245 27.325); */
+/*   --border: var(--border-color); */
+/*   --input: oklch(0.922 0 0); */
+/*   --ring: oklch(0.708 0 0); */
+/* } */
+
 [data-color-scheme="catppuccin"] {
   --background-primary: #eff1f5;
   --background-primary-alt: #e6e9ef;
@@ -142,6 +229,7 @@
   --foreground-muted: #6c6f85;
   --foreground-faint: #8c8fa1;
   --foreground-selection: #4c4f69;
+  --foreground-selection-bg: rgb(114 135 253 / 0.5);
 
   --scrollbar-color: #7c7f93;
 
@@ -156,7 +244,7 @@
     --background-secondary: #181825;
     --background-secondary-alt: #313244;
     --background-secondary-hover: #313244;
-    --background-selection: rgb(180 190 254 / 0.5);
+    --foreground-selection-bg: rgb(180 190 254 / 0.5);
 
     --destructive: rgb(210 15 57 / 0.5);
 
@@ -174,7 +262,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: calc(var(--spacing * 1.5));
+  width: 0.35rem;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -19,10 +19,7 @@ export const ConfigModal = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(state) => toggleConfig(state)}>
       <DialogTrigger className="sr-only" />
-      <DialogContent
-        className="h-[85vh] w-[calc(100%-2rem)] max-w-5xl"
-        hideClose
-      >
+      <DialogContent className="h-[85vh]" hideClose>
         <DialogTitle className="sr-only">App settings</DialogTitle>
         <DialogDescription className="sr-only">
           Set app settings
