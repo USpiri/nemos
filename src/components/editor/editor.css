@@ -129,7 +129,9 @@
   }
 
   .math-content {
-    @apply font-mono text-sm;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    font-family: var(--font-mono);
     color: var(--foreground-muted);
     background: var(--code-bg);
 

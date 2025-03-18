@@ -44,7 +44,7 @@ export const AppearanceConfig = () => {
           defaultValue={theme}
           onValueChange={(theme) => setTheme(theme as ThemeType)}
         >
-          <SelectTrigger className="w-full max-w-56 rounded-sm border border-border text-foreground">
+          <SelectTrigger className="w-full max-w-56 rounded-xs border border-border text-foreground">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -72,7 +72,7 @@ export const AppearanceConfig = () => {
           defaultValue={colorScheme || "default"}
           onValueChange={(scheme) => setColorScheme(scheme)}
         >
-          <SelectTrigger className="w-full max-w-56 rounded-sm border border-border text-foreground">
+          <SelectTrigger className="w-full max-w-56 rounded-xs border border-border text-foreground">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

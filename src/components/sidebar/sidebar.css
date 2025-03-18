@@ -5,9 +5,12 @@
       min-width 0.15s linear;
   }
   &.open {
-    @apply min-w-40 max-w-80 border-r border-border;
+    min-width: calc(var(--spacing) * 40);
+    max-width: calc(var(--spacing) * 80);
+    border-right-width: 1px;
+    border-right-color: var(--border-color);
   }
   &.close {
-    @apply min-w-0;
+    min-width: 0;
   }
 }

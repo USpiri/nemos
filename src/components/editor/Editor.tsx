@@ -15,7 +15,7 @@ interface Props {
 }
 
 const baseClasses =
-  "editor focus:outline-none prose prose-theme max-w-[unset] print:prose-neutral print:prose-sm";
+  "editor focus:outline-hidden prose prose-theme max-w-[unset] print:prose-neutral print:prose-sm";
 
 // TODO:
 // - Enable spellcheck and allow different languages

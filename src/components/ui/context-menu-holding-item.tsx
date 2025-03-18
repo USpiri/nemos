@@ -112,7 +112,7 @@ const ContextMenuHoldingItem = forwardRef<
           </p>
         </div>
         <div
-          className="absolute left-0 top-0 h-full rounded bg-destructive transition-all ease-out"
+          className="absolute left-0 top-0 h-full rounded-sm bg-destructive transition-all ease-out"
           style={{
             width: `${Math.round(counter)}%`,
             backgroundColor: color,

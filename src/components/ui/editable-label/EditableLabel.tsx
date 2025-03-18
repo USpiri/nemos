@@ -30,7 +30,7 @@ export const EditableLabel = ({
           value={text}
           autoFocus
           size={text.length || 1}
-          className="absolute right-0 top-0 inline-flex bg-transparent text-right outline-none"
+          className="absolute right-0 top-0 inline-flex bg-transparent text-right outline-hidden"
           onChange={(event) => {
             setText(event.target.value);
           }}

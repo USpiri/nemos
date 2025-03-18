@@ -68,7 +68,7 @@ export const SlashCommandList = ({ items, query, editor, range }: Props) => {
   return (
     <aside
       ref={listRef}
-      className="slash-menu max-h-72 min-w-56 overflow-auto rounded-sm border border-border bg-background-primary shadow-md"
+      className="slash-menu max-h-72 min-w-56 overflow-auto rounded-xs border border-border bg-background-primary shadow-md"
     >
       {filteredItems.length !== 0 &&
         filteredItems.map((item, index) => (

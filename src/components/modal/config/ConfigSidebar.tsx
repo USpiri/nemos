@@ -10,7 +10,7 @@ export const ConfigSidebarItem = ({ isActive, onClick, children }: Props) => {
   return (
     <button
       className={cn(
-        "inline-flex w-full items-center gap-2 rounded px-3 py-1.5 text-foreground-muted transition-all hover:bg-background-secondary-hover hover:text-foreground active:scale-95",
+        "inline-flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-foreground-muted transition-all hover:bg-background-secondary-hover hover:text-foreground active:scale-95",
         isActive &&
           "bg-background-secondary-alt text-foreground active:scale-100 active:text-foreground",
       )}

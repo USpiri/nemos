@@ -31,7 +31,7 @@ export const Updater = () => {
     >
       <DialogTrigger className="sr-only" />
       <DialogContent
-        className="max-w-2xl overflow-hidden outline-none"
+        className="max-w-2xl overflow-hidden outline-hidden"
         hideClose
       >
         <DialogTitle className="sr-only">Settings</DialogTitle>
@@ -49,8 +49,8 @@ export const Updater = () => {
               </Button>
             </DialogClose>
           </div>
-          <div className="prose-sm max-h-96 overflow-auto px-8 outline-none">
-            <Editor content={body} readonly className="pt-10 outline-none" />
+          <div className="prose-sm max-h-96 overflow-auto px-8 outline-hidden">
+            <Editor content={body} readonly className="pt-10 outline-hidden" />
           </div>
           <div className="relative flex items-center justify-end">
             {isDownloading && (

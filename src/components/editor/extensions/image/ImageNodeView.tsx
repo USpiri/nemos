@@ -69,8 +69,8 @@ export const ImageNodeView = ({
         <img
           {...node.attrs}
           className={cn(
-            selected && "outline outline-1 outline-foreground-select",
-            "m-0 print:outline-none",
+            selected && "outline-foreground-select outline",
+            "m-0 print:outline-hidden",
           )}
         />
         {editor.isEditable &&
@@ -90,7 +90,7 @@ export const ImageNodeView = ({
                   "w-0 cursor-grab active:cursor-grabbing print:hidden",
                 )}
               >
-                <GripVertical className="size-4 text-foreground-faint hover:text-foreground" />
+                <GripVertical className="text-foreground-faint hover:text-foreground size-4" />
               </div>
               <div
                 className="absolute bottom-full flex flex-row justify-center gap-1 print:hidden"
@@ -100,7 +100,7 @@ export const ImageNodeView = ({
                   <Button
                     key={e.value}
                     className={cn(
-                      "text-foreground-faint hover:bg-transparent hover:text-foreground",
+                      "text-foreground-faint hover:text-foreground hover:bg-transparent",
                       e.value === node.attrs.align && "text-foreground",
                     )}
                     onClick={() => editor.chain().setImageAlign(e.value).run()}

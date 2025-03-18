@@ -11,7 +11,7 @@ export const Button = ({
   return (
     <button
       className={cn(
-        "hover:text-foreground-darker rounded p-1.5 text-foreground-muted transition-all hover:bg-background-primary-hover active:scale-95 active:text-foreground",
+        "hover:text-foreground-darker text-foreground-muted hover:bg-background-primary-hover active:text-foreground cursor-pointer rounded-sm p-1.5 transition-all active:scale-95",
         className,
       )}
       {...props}
