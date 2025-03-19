@@ -69,8 +69,8 @@ export const ImageNodeView = ({
         <img
           {...node.attrs}
           className={cn(
-            selected && "outline-foreground-select outline",
-            "m-0 print:outline-hidden",
+            selected && "outline-selection-border outline",
+            "not-prose print:outline-hidden",
           )}
         />
         {editor.isEditable &&

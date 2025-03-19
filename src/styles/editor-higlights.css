@@ -1,14 +1,9 @@
-/* code.hljs { */
-/*   color: #c6d0f5; */
-/*   background: #303446; */
-/* } */
-
 code .hljs-keyword,
 code .hljs-variable,
 code .hljs-variable.language_,
 code .hljs-name,
 code .hljs-selector-attr {
-  color: var(--prose-codeblock-higlight-1);
+  color: var(--codeblock-higlight-1);
 }
 
 code .hljs-built_in,
@@ -17,20 +12,20 @@ code .hljs-deletion,
 code .hljs-strong,
 code .hljs-emphasis,
 code .hljs-tag {
-  color: var(--prose-codeblock-higlight-2);
+  color: var(--codeblock-higlight-2);
 }
 
 code .hljs-type,
 code .hljs-title.class_,
 code .hljs-selector-tag {
-  color: var(--prose-codeblock-higlight-3);
+  color: var(--codeblock-higlight-3);
 }
 code .hljs-title,
 code .hljs-title.function_,
 code .hljs-section,
 code .hljs-attr,
 code .hljs-selector-id {
-  color: var(--prose-codeblock-higlight-4);
+  color: var(--codeblock-higlight-4);
 }
 
 code .hljs-selector-class,
@@ -38,13 +33,13 @@ code .hljs-selector-pseudo,
 code .hljs-property,
 code .hljs-bullet,
 code .hljs-formula {
-  color: var(--prose-codeblock-higlight-5);
+  color: var(--codeblock-higlight-5);
 }
 
 code .hljs-template-tag,
 code .hljs-template-variable,
 code .hljs-symbol {
-  color: var(--prose-codeblock-higlight-6);
+  color: var(--codeblock-higlight-6);
 }
 
 code .hljs-literal,
@@ -52,13 +47,13 @@ code .hljs-number,
 code .hljs-variable.constant_,
 code .hljs-regexp,
 code .hljs-meta {
-  color: var(--prose-codeblock-higlight-7);
+  color: var(--codeblock-higlight-7);
 }
 
 code .hljs-operator,
 code .hljs-tag.hljs-string,
 code .hljs-link {
-  color: var(--prose-codeblock-higlight-8);
+  color: var(--codeblock-higlight-8);
 }
 
 code .hljs-string,
@@ -67,17 +62,17 @@ code .hljs-code,
 code .hljs-quote,
 code .hljs-addition,
 code .hljs-attribute {
-  color: var(--prose-codeblock-higlight-9);
+  color: var(--codeblock-higlight-9);
 }
 
 code .hljs-subst,
 code .hljs-params,
 code .hljs-punctuation {
-  color: var(--prose-codeblock-higlight-10);
+  color: var(--codeblock-higlight-10);
 }
 
 code .hljs-comment {
-  color: var(--prose-codeblock-higlight-11);
+  color: var(--codeblock-higlight-11);
 }
 
 code .hljs-strong {

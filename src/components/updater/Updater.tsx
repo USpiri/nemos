@@ -38,7 +38,7 @@ export const Updater = () => {
         <DialogDescription className="sr-only">
           Customize your settings here.
         </DialogDescription>
-        <div className="divide-y divide-border *:py-3">
+        <div className="divide-border divide-y *:py-3">
           <div className="flex items-center justify-between px-4">
             <h2 className="text-md font-mono">
               New version avaliable (v{version})
@@ -55,7 +55,7 @@ export const Updater = () => {
           <div className="relative flex items-center justify-end">
             {isDownloading && (
               <>
-                <div className="absolute bottom-0 h-1 w-full bg-background-primary-alt">
+                <div className="bg-background-primary-alt absolute bottom-0 h-1 w-full">
                   <div
                     className="h-1 bg-stone-200"
                     style={{
@@ -63,11 +63,11 @@ export const Updater = () => {
                     }}
                   />
                 </div>
-                <LoaderCircle className="size-4 animate-spin text-foreground-muted" />
+                <LoaderCircle className="text-foreground-muted size-4 animate-spin" />
               </>
             )}
             <Button
-              className="mx-4 bg-stone-200 px-4 text-sm text-stone-900 hover:bg-stone-100 active:text-stone-900"
+              className="bg-primary hover:bg-primary-hover text-primary-foreground active:text-primary-foreground mx-4 px-4 text-sm"
               onClick={onInstall}
               tabIndex={-1}
             >

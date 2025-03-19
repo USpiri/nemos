@@ -17,13 +17,13 @@ export const Sidebar = () => {
       ref={sidebarRef}
       style={{ width: isOpen ? width : 0 }}
     >
-      <div className="grid h-full w-full select-none grid-rows-[auto_1fr_auto] overflow-hidden">
+      <div className="grid h-full w-full grid-rows-[auto_1fr_auto] overflow-hidden select-none">
         <SidebarHeader />
         <SidebarContent />
         <SidebarFooter />
       </div>
       <div
-        className="absolute right-0 top-0 h-full w-1.5 border-r-[3px] border-transparent transition-colors hover:cursor-ew-resize active:border-detail"
+        className="active:border-accent absolute top-0 right-0 h-full w-1.5 border-r-[3px] border-transparent transition-colors hover:cursor-ew-resize"
         onMouseDown={startResizing}
       />
     </div>

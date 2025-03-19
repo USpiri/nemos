@@ -8,7 +8,7 @@
     min-width: calc(var(--spacing) * 40);
     max-width: calc(var(--spacing) * 80);
     border-right-width: 1px;
-    border-right-color: var(--border-color);
+    border-right-color: var(--border);
   }
   &.close {
     min-width: 0;

@@ -59,11 +59,11 @@
     th,
     td {
       padding: 0.5rem;
-      border-left: 1px solid var(--border-color);
+      border-left: 1px solid var(--border);
     }
 
     tr {
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border);
     }
 
     th {
@@ -71,7 +71,10 @@
     }
 
     .selectedCell {
-      border: 1px solid var(--detail);
+      border: 1px solid var(--selection-border);
+      ::selection {
+        color: var(--foreground);
+      }
     }
   }
 
@@ -79,7 +82,7 @@
   .smiles {
     border-radius: 0.125rem;
     border-width: 1px;
-    border-color: var(--border-color);
+    border-color: var(--border);
     margin-block: 0.75rem;
     pre {
       margin: 0;
@@ -101,7 +104,7 @@
   .math-display {
     border-radius: 0.125rem;
     border-width: 1px;
-    border-color: var(--border-color);
+    border-color: var(--border);
     margin-block: 0.75rem;
 
     .math-content {
@@ -120,7 +123,7 @@
       padding: 0.125rem 0.25rem;
       border-radius: 0.125rem;
       border-width: 1px;
-      border-color: var(--border-color);
+      border-color: var(--border);
     }
   }
 
@@ -133,7 +136,7 @@
     line-height: var(--text-sm--line-height);
     font-family: var(--font-mono);
     color: var(--foreground-muted);
-    background: var(--code-bg);
+    background: var(--code-background);
 
     &::before,
     &::after {
@@ -154,7 +157,7 @@
 }
 
 .dropcursor {
-  color: var(--detail);
+  color: var(--accent);
 }
 
 .drag-handle {
