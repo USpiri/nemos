@@ -1,15 +1,17 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { isInsideNode, hiddenStyle } from "@/utils/editor";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { draw } from "@/utils/smiles";
 
 export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
+  const elementRef = useRef<SVGSVGElement>(null);
   const id = `smiles_${uuid().replace(/-/g, "")}`;
 
   useEffect(() => {
-    draw(node.textContent.trim(), id);
-  }, [node.textContent.trim()]);
+    if (!elementRef.current) return;
+    draw(node.textContent.trim(), elementRef.current);
+  }, [node.textContent]);
 
   return (
     <NodeViewWrapper className="smiles">
@@ -28,10 +30,10 @@ export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
         <NodeViewContent className="smiles-source language-smiles" as="code" />
       </pre>
       <div
-        className="smiles-render select-none transition-all"
+        className="smiles-render transition-all select-none"
         contentEditable={false}
       >
-        <svg id={id} className="mx-auto max-w-sm" />
+        <svg id={id} ref={elementRef} className="mx-auto max-w-sm" />
       </div>
     </NodeViewWrapper>
   );

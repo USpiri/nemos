@@ -9,7 +9,7 @@ const options = {
 
 const drawer = new SvgDrawer(options);
 
-export const draw = (smiles: string, nodeId: string, theme?: string) => {
+export const draw = (smiles: string, node: SVGSVGElement, theme?: string) => {
   const docTheme = document.documentElement.classList.contains("dark")
     ? "dark"
     : "light";
@@ -20,7 +20,7 @@ export const draw = (smiles: string, nodeId: string, theme?: string) => {
     smiles,
     // eslint-disable-next-line
     (res: any) => {
-      drawer.draw(res, nodeId, theme ?? docTheme);
+      drawer.draw(res, node, theme ?? docTheme);
     },
     // eslint-disable-next-line
     (e: any) => console.error(e),
