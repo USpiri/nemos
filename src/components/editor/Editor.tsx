@@ -37,6 +37,7 @@ export const Editor = ({
       },
       content,
       editable: !readonly,
+      injectCSS: false,
       onUpdate: ({ editor }) => {
         if (onChange) onChange(editor);
       },

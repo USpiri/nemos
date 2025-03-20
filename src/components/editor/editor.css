@@ -1,3 +1,28 @@
+/* Required for TipTap */
+.ProseMirror {
+  position: relative;
+}
+
+.ProseMirror {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+}
+
+.ProseMirror [contenteditable="false"] {
+  white-space: normal;
+}
+
+.ProseMirror [contenteditable="false"] [contenteditable="true"],
+.ProseMirror pre {
+  white-space: pre-wrap;
+}
+
+.ProseMirror-hideselection * {
+  caret-color: transparent;
+}
+/* --- */
+
 .editor {
   p.is-empty::before {
     color: var(--foreground-faint);
@@ -146,8 +171,8 @@
     }
   }
 
+  /* Prevents text color change when dragging a node */
   &:not(.dragging) {
-    /* Prevents text color change when dragging a node */
     .ProseMirror-selectednode::selection,
     .ProseMirror-selectednode *::selection,
     .math[draggable="true"] .math-content::selection {
