@@ -13,6 +13,8 @@ dist-ssr
 *.local
 *.tsbuildinfo
 
+.tanstack/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
