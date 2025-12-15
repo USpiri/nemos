@@ -1,4 +1,4 @@
-import { ThemeProvider } from "./theme/ThemeProvider";
+import { SidebarProvider } from "../ui/sidebar";
 
 interface Props {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface Props {
 export const Providers = ({ children }: Props) => {
   return (
     <>
-      <ThemeProvider>{children}</ThemeProvider>
+      <SidebarProvider>{children}</SidebarProvider>
     </>
   );
 };
