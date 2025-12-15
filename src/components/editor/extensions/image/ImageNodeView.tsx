@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button/Button";
-import cn from "@/utils/cn";
+import cn from "@/lib/utils/cn";
 import { isNode } from "@/utils/editor";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import {

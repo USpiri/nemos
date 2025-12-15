@@ -4,7 +4,7 @@ import {
   Link as LinkPrimitive,
 } from "@tanstack/react-router";
 import { buttonVariants } from "./button";
-import cn from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 function Link({
   className,

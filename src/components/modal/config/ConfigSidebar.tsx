@@ -1,4 +1,4 @@
-import cn from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 interface Props {
   isActive: boolean;
@@ -10,9 +10,9 @@ export const ConfigSidebarItem = ({ isActive, onClick, children }: Props) => {
   return (
     <button
       className={cn(
-        "inline-flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-foreground-muted transition-all hover:bg-background-secondary-hover hover:text-foreground active:scale-95",
+        "text-foreground-muted hover:bg-background-secondary-hover hover:text-foreground inline-flex w-full items-center gap-2 rounded-sm px-3 py-1.5 transition-all active:scale-95",
         isActive &&
-          "bg-background-secondary-alt text-foreground active:scale-100 active:text-foreground",
+          "bg-background-secondary-alt text-foreground active:text-foreground active:scale-100",
       )}
       onClick={onClick}
     >
@@ -27,7 +27,7 @@ interface ConfigSidebarProps {
 
 export const ConfigSidebar = ({ children }: ConfigSidebarProps) => {
   return (
-    <div className="flex h-full w-64 flex-col gap-1 border-r border-border bg-background-secondary p-2 text-sm">
+    <div className="border-border bg-background-secondary flex h-full w-64 flex-col gap-1 border-r p-2 text-sm">
       {children}
     </div>
   );

@@ -1,5 +1,5 @@
 import { SuggestionItem } from "@/models/suggestion.interface";
-import cn from "@/utils/cn";
+import { cn } from "@/lib/utils";
 import { NodeViewRendererProps, Range } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -68,7 +68,7 @@ export const SlashCommandList = ({ items, query, editor, range }: Props) => {
   return (
     <aside
       ref={listRef}
-      className="slash-menu max-h-72 min-w-56 overflow-auto rounded-xs border border-border bg-background-primary shadow-md"
+      className="slash-menu border-border bg-background-primary max-h-72 min-w-56 overflow-auto rounded-xs border shadow-md"
     >
       {filteredItems.length !== 0 &&
         filteredItems.map((item, index) => (

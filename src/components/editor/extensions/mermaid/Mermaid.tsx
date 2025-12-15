@@ -1,4 +1,4 @@
-import cn from "@/utils/cn";
+import { cn } from "@/lib/utils";
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import mermaid, { RenderResult } from "mermaid";
 import { useCallback, useEffect, useState } from "react";
@@ -73,7 +73,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
       </pre>
       <div
         className={cn(
-          "mermaid-render select-none transition-all",
+          "mermaid-render transition-all select-none",
           error && "h-0 opacity-0",
         )}
         contentEditable={false}

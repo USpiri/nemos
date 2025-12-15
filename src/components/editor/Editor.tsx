@@ -1,4 +1,4 @@
-import cn from "@/utils/cn";
+import cn from "@/lib/utils/cn";
 import { EditorContent, Editor as EditorI, useEditor } from "@tiptap/react";
 import { useEffect } from "react";
 import { Extensions } from "./extensions";
