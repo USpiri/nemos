@@ -1,3 +1,4 @@
+import { linkOptions } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 import { Link } from "./ui/link";
 
@@ -22,10 +23,13 @@ export const WorkspaceTreeNode = ({
   const Component = isDroppable ? Button : Link;
   const props = isDroppable
     ? { onClick: onToggle }
-    : {
-        to: "/workspace/$workspaceId/notes/$noteId" as const,
+    : linkOptions({
+        to: "/workspace/$workspaceId/notes/$noteId",
         params: { workspaceId: workspace, noteId: note },
-      };
+        activeProps: {
+          className: "text-foreground!",
+        },
+      });
   return (
     <Component
       {...props}
