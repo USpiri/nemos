@@ -5,5 +5,10 @@ export const Route = createFileRoute("/workspace/$workspaceId/notes/$noteId")({
 });
 
 function NoteIdComponent() {
-  return <div>Hello "/workspace/$workspaceId/notes/$noteId"!</div>;
+  const { workspaceId, noteId } = Route.useParams();
+  return (
+    <div>
+      Hello "/workspace/{workspaceId}/notes/{noteId}"!
+    </div>
+  );
 }
