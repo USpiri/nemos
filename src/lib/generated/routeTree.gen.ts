@@ -9,65 +9,66 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../../routes/__root'
-import { Route as WorkspaceRouteRouteImport } from './../../routes/workspace/route'
 import { Route as IndexRouteImport } from './../../routes/index'
+import { Route as WorkspaceWorkspaceIdRouteRouteImport } from './../../routes/workspace/$workspaceId/route'
 import { Route as WorkspaceWorkspaceIdNotesNoteIdRouteImport } from './../../routes/workspace/$workspaceId/notes/$noteId'
 
-const WorkspaceRouteRoute = WorkspaceRouteRouteImport.update({
-  id: '/workspace',
-  path: '/workspace',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkspaceWorkspaceIdRouteRoute =
+  WorkspaceWorkspaceIdRouteRouteImport.update({
+    id: '/workspace/$workspaceId',
+    path: '/workspace/$workspaceId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const WorkspaceWorkspaceIdNotesNoteIdRoute =
   WorkspaceWorkspaceIdNotesNoteIdRouteImport.update({
-    id: '/$workspaceId/notes/$noteId',
-    path: '/$workspaceId/notes/$noteId',
-    getParentRoute: () => WorkspaceRouteRoute,
+    id: '/notes/$noteId',
+    path: '/notes/$noteId',
+    getParentRoute: () => WorkspaceWorkspaceIdRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/workspace': typeof WorkspaceRouteRouteWithChildren
+  '/workspace/$workspaceId': typeof WorkspaceWorkspaceIdRouteRouteWithChildren
   '/workspace/$workspaceId/notes/$noteId': typeof WorkspaceWorkspaceIdNotesNoteIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/workspace': typeof WorkspaceRouteRouteWithChildren
+  '/workspace/$workspaceId': typeof WorkspaceWorkspaceIdRouteRouteWithChildren
   '/workspace/$workspaceId/notes/$noteId': typeof WorkspaceWorkspaceIdNotesNoteIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/workspace': typeof WorkspaceRouteRouteWithChildren
+  '/workspace/$workspaceId': typeof WorkspaceWorkspaceIdRouteRouteWithChildren
   '/workspace/$workspaceId/notes/$noteId': typeof WorkspaceWorkspaceIdNotesNoteIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/workspace' | '/workspace/$workspaceId/notes/$noteId'
+  fullPaths:
+    | '/'
+    | '/workspace/$workspaceId'
+    | '/workspace/$workspaceId/notes/$noteId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/workspace' | '/workspace/$workspaceId/notes/$noteId'
-  id: '__root__' | '/' | '/workspace' | '/workspace/$workspaceId/notes/$noteId'
+  to: '/' | '/workspace/$workspaceId' | '/workspace/$workspaceId/notes/$noteId'
+  id:
+    | '__root__'
+    | '/'
+    | '/workspace/$workspaceId'
+    | '/workspace/$workspaceId/notes/$noteId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  WorkspaceRouteRoute: typeof WorkspaceRouteRouteWithChildren
+  WorkspaceWorkspaceIdRouteRoute: typeof WorkspaceWorkspaceIdRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/workspace': {
-      id: '/workspace'
-      path: '/workspace'
-      fullPath: '/workspace'
-      preLoaderRoute: typeof WorkspaceRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -75,31 +76,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/workspace/$workspaceId': {
+      id: '/workspace/$workspaceId'
+      path: '/workspace/$workspaceId'
+      fullPath: '/workspace/$workspaceId'
+      preLoaderRoute: typeof WorkspaceWorkspaceIdRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workspace/$workspaceId/notes/$noteId': {
       id: '/workspace/$workspaceId/notes/$noteId'
-      path: '/$workspaceId/notes/$noteId'
+      path: '/notes/$noteId'
       fullPath: '/workspace/$workspaceId/notes/$noteId'
       preLoaderRoute: typeof WorkspaceWorkspaceIdNotesNoteIdRouteImport
-      parentRoute: typeof WorkspaceRouteRoute
+      parentRoute: typeof WorkspaceWorkspaceIdRouteRoute
     }
   }
 }
 
-interface WorkspaceRouteRouteChildren {
+interface WorkspaceWorkspaceIdRouteRouteChildren {
   WorkspaceWorkspaceIdNotesNoteIdRoute: typeof WorkspaceWorkspaceIdNotesNoteIdRoute
 }
 
-const WorkspaceRouteRouteChildren: WorkspaceRouteRouteChildren = {
-  WorkspaceWorkspaceIdNotesNoteIdRoute: WorkspaceWorkspaceIdNotesNoteIdRoute,
-}
+const WorkspaceWorkspaceIdRouteRouteChildren: WorkspaceWorkspaceIdRouteRouteChildren =
+  {
+    WorkspaceWorkspaceIdNotesNoteIdRoute: WorkspaceWorkspaceIdNotesNoteIdRoute,
+  }
 
-const WorkspaceRouteRouteWithChildren = WorkspaceRouteRoute._addFileChildren(
-  WorkspaceRouteRouteChildren,
-)
+const WorkspaceWorkspaceIdRouteRouteWithChildren =
+  WorkspaceWorkspaceIdRouteRoute._addFileChildren(
+    WorkspaceWorkspaceIdRouteRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  WorkspaceRouteRoute: WorkspaceRouteRouteWithChildren,
+  WorkspaceWorkspaceIdRouteRoute: WorkspaceWorkspaceIdRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
