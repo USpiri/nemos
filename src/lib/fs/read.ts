@@ -11,8 +11,8 @@ export const read = async (path: string) => {
   });
 };
 
-export const readJson = async (path: string) => {
-  return read(path).then((data) => JSON.parse(data));
+export const readJson = async <T = unknown>(path: string) => {
+  return read(path).then((data) => JSON.parse(data) as T);
 };
 
 export const readDir = async (path: string) => {
