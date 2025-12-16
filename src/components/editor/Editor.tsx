@@ -12,21 +12,25 @@ import "./editor.css";
 interface Props {
   content?: string;
   className?: string;
+  onUpdate?: (content: string) => void;
 }
 
-export const Editor = ({ content, className }: Props) => {
+export const Editor = ({ content, className, onUpdate }: Props) => {
   const editor = useEditor(
     {
       extensions: [StarterKit, Selection, Focus, Placeholder],
       content,
+      injectCSS: false,
+      autofocus: true,
       editorProps: {
         attributes: {
           class: cn("typography focus:outline-none relative", className),
           spellcheck: "false",
         },
       },
-      injectCSS: false,
-      autofocus: true,
+      onUpdate: ({ editor }) => {
+        onUpdate?.(editor.getHTML());
+      },
     },
     [content],
   );
