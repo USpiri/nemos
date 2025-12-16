@@ -1,9 +1,8 @@
 import { readDirRecursive } from "@/lib/fs";
 import { mapWorkspaceTree } from "../utils";
-
-const root = "nemos-app";
+import { ROOT } from "@/lib/constants";
 
 export const getWorkspaceTree = async (workspace: string) => {
-  const tree = await readDirRecursive(`${root}/${workspace}`);
+  const tree = await readDirRecursive(`${ROOT}/${workspace}`);
   return mapWorkspaceTree(tree);
 };

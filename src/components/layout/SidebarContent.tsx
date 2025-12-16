@@ -1,8 +1,8 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { SidebarContent as SidebarContentBase } from "../ui/sidebar";
 import { WorkspaceTree } from "../WorkspaceTree";
+import { ROOT } from "@/lib/constants";
 
-const root = "nemos-app";
 const route = getRouteApi("/workspace/$workspaceId");
 
 export const SidebarContent = () => {
@@ -11,7 +11,7 @@ export const SidebarContent = () => {
 
   return (
     <SidebarContentBase>
-      <WorkspaceTree tree={tree} root={root} workspace={workspaceId} />
+      <WorkspaceTree tree={tree} root={ROOT} workspace={workspaceId} />
     </SidebarContentBase>
   );
 };
