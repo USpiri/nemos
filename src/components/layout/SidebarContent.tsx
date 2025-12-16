@@ -6,7 +6,7 @@ const root = "nemos-app";
 const route = getRouteApi("/workspace/$workspaceId");
 
 export const SidebarContent = () => {
-  const { tree } = route.useLoaderData();
+  const tree = route.useLoaderData();
   const { workspaceId } = route.useParams();
 
   return (

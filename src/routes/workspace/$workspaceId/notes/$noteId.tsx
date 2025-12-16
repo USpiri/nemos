@@ -1,5 +1,5 @@
 import { Editor } from "@/components/editor";
-import { readNote } from "@/lib/notes/service/read";
+import { readNote } from "@/lib/notes";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 

@@ -6,11 +6,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const Route = createFileRoute("/workspace/$workspaceId")({
   component: RouteComponent,
-  loader: async ({ params: { workspaceId } }) => {
-    return {
-      tree: await getWorkspaceTree(workspaceId),
-    };
-  },
+  loader: async ({ params: { workspaceId } }) =>
+    await getWorkspaceTree(workspaceId),
 });
 
 function RouteComponent() {
