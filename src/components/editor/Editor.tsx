@@ -1,59 +1,49 @@
-import cn from "@/lib/utils/cn";
-import { EditorContent, Editor as EditorI, useEditor } from "@tiptap/react";
-import { useEffect } from "react";
-import { Extensions } from "./extensions";
+import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
+import { useMemo } from "react";
+import { StarterKit } from "@tiptap/starter-kit";
+import { DragHandle } from "@tiptap/extension-drag-handle-react";
+import { Selection, Focus, Placeholder } from "@tiptap/extensions";
+import { Button } from "../ui/button";
+import { GripVertical } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-import "@/styles/editor-higlights.css";
-import "katex/dist/katex.min.css";
 import "./editor.css";
 
 interface Props {
-  className?: string;
-  onChange?: (editor: EditorI) => void;
   content?: string;
-  readonly?: boolean;
+  className?: string;
 }
 
-const baseClasses =
-  "editor focus:outline-hidden prose prose-theme max-w-[unset] print:prose-neutral print:prose-sm";
-
-// TODO:
-// - Enable spellcheck and allow different languages
-
-export const Editor = ({
-  className,
-  onChange,
-  content = "",
-  readonly = false,
-}: Props) => {
+export const Editor = ({ content, className }: Props) => {
   const editor = useEditor(
     {
-      extensions: [...Extensions],
+      extensions: [StarterKit, Selection, Focus, Placeholder],
+      content,
       editorProps: {
         attributes: {
-          class: cn(baseClasses, className),
+          class: cn("typography focus:outline-none relative", className),
           spellcheck: "false",
         },
       },
-      content,
-      editable: !readonly,
       injectCSS: false,
-      onUpdate: ({ editor }) => {
-        if (onChange) onChange(editor);
-      },
+      autofocus: true,
     },
     [content],
   );
 
-  //Keeps content unchanged and prevents reloading
-  //the editor
-  useEffect(() => {
-    if (editor) {
-      editor.setEditable(!readonly);
-    }
-  }, [readonly, editor]);
-
+  const providerValue = useMemo(() => ({ editor }), [editor]);
   if (!editor) return null;
 
-  return <EditorContent editor={editor} />;
+  return (
+    <>
+      <EditorContext.Provider value={providerValue}>
+        <DragHandle editor={editor}>
+          <Button variant="ghost" size="icon">
+            <GripVertical className="size-4" />
+          </Button>
+        </DragHandle>
+        <EditorContent editor={editor} />
+      </EditorContext.Provider>
+    </>
+  );
 };
