@@ -8,7 +8,7 @@ function RouteComponent() {
   return (
     <Navigate
       to="/workspace/$workspaceId/notes/$noteId"
-      params={{ workspaceId: "1", noteId: "1" }}
+      params={{ workspaceId: "workspace-2", noteId: "notes/index.note" }}
     />
   );
 }
