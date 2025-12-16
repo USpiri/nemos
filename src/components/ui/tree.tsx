@@ -7,6 +7,7 @@ import {
   NodeRender,
   Classes,
 } from "@minoru/react-dnd-treeview";
+import { useRef } from "react";
 import { DndProvider } from "react-dnd";
 
 interface TreeProps {
@@ -18,9 +19,14 @@ interface TreeProps {
 }
 
 export const Tree = ({ tree, rootId, onDrop, render, classes }: TreeProps) => {
+  const contextRef = useRef(null);
   return (
-    <>
-      <DndProvider backend={MultiBackend} options={getBackendOptions()}>
+    <div ref={contextRef}>
+      <DndProvider
+        backend={MultiBackend}
+        options={getBackendOptions()}
+        context={contextRef}
+      >
         <TreeView
           tree={tree}
           rootId={rootId}
@@ -29,6 +35,6 @@ export const Tree = ({ tree, rootId, onDrop, render, classes }: TreeProps) => {
           classes={classes}
         />
       </DndProvider>
-    </>
+    </div>
   );
 };
