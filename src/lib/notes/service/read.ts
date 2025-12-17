@@ -1,9 +1,9 @@
-import { ROOT } from "@/lib/constants";
 import { readJson } from "@/lib/fs";
 import { Note, NoteSchema } from "@/lib/notes";
+import { getNotePath } from "./path";
 
 export const readNote = async (path: string) => {
-  const note = await readJson<Note>(`${ROOT}/${path}`);
+  const note = await readJson<Note>(getNotePath(path));
   const parsed = NoteSchema.safeParse(note);
 
   if (!parsed.success) {
