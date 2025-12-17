@@ -1,4 +1,4 @@
-import { createSuggestionItems } from "@/utils/editor/sugesstion";
+import { CommandItem } from "@/types";
 import {
   ChartLine,
   Code,
@@ -18,11 +18,11 @@ import {
   Table,
 } from "lucide-react";
 
-export const suggestionItems = createSuggestionItems([
+export const suggestionItems: CommandItem[] = [
   {
     title: "Heading 1",
     description: "Big section heading.",
-    searchTerms: ["title", "big", "large"],
+    tags: ["title", "big", "large"],
     icon: Heading1,
     command: ({ editor, range }) => {
       editor
@@ -36,7 +36,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Heading 2",
     description: "Medium section heading.",
-    searchTerms: ["subtitle", "medium"],
+    tags: ["subtitle", "medium"],
     icon: Heading2,
     command: ({ editor, range }) => {
       editor
@@ -50,7 +50,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Heading 3",
     description: "Small section heading.",
-    searchTerms: ["small", "section"],
+    tags: ["small", "section"],
     icon: Heading3,
     command: ({ editor, range }) => {
       editor
@@ -64,7 +64,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Heading 4",
     description: "Small section heading.",
-    searchTerms: ["small", "section"],
+    tags: ["small", "section"],
     icon: Heading4,
     command: ({ editor, range }) => {
       editor
@@ -78,7 +78,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Heading 5",
     description: "Small section heading.",
-    searchTerms: ["small", "section"],
+    tags: ["small", "section"],
     icon: Heading5,
     command: ({ editor, range }) => {
       editor
@@ -92,7 +92,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Heading 6",
     description: "Small section heading.",
-    searchTerms: ["small", "section"],
+    tags: ["small", "section"],
     icon: Heading6,
     command: ({ editor, range }) => {
       editor
@@ -106,7 +106,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Bullet List",
     description: "Create a bullet list.",
-    searchTerms: ["list", "bullet", "unordered"],
+    tags: ["list", "bullet", "unordered"],
     icon: List,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run();
@@ -115,7 +115,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Numbered List",
     description: "Create a numbered list.",
-    searchTerms: ["list", "numbered", "ordered"],
+    tags: ["list", "numbered", "ordered"],
     icon: ListOrdered,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run();
@@ -124,7 +124,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Task List",
     description: "Create a task list.",
-    searchTerms: ["list", "todo", "checkbox"],
+    tags: ["list", "todo", "checkbox"],
     icon: ListTodo,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run();
@@ -133,7 +133,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Blockquote",
     description: "Add a blockquote.",
-    searchTerms: ["quote", "citation"],
+    tags: ["quote", "citation"],
     icon: Quote,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run();
@@ -142,7 +142,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Code Block",
     description: "Insert a code block.",
-    searchTerms: ["snippet"],
+    tags: ["snippet"],
     icon: Code,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run();
@@ -151,7 +151,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Math Block",
     description: "Insert a math block.",
-    searchTerms: ["math", "block", "formula"],
+    tags: ["math", "block", "formula"],
     icon: Sigma,
     command: ({ editor, range }) => {
       editor
@@ -165,7 +165,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Mermaid Diagram",
     description: "Insert a Mermaid diagram.",
-    searchTerms: ["chart", "pie"],
+    tags: ["chart", "pie"],
     icon: ChartLine,
     command: ({ editor, range }) => {
       editor
@@ -179,7 +179,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Chemical structure",
     description: "Insert a SMILES chemical structure.",
-    searchTerms: ["science", "molecule", "atoms"],
+    tags: ["science", "molecule", "atoms"],
     icon: FlaskConical,
     command: ({ editor, range }) => {
       editor
@@ -193,7 +193,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Horizontal Rule",
     description: "Insert a horizontal line.",
-    searchTerms: ["divider", "line", "hr"],
+    tags: ["divider", "line", "hr"],
     icon: Minus,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setHorizontalRule().run();
@@ -202,7 +202,7 @@ export const suggestionItems = createSuggestionItems([
   {
     title: "Table",
     description: "Insert Table",
-    searchTerms: [],
+    tags: [],
     icon: Table,
     command: ({ editor, range }) => {
       editor
@@ -213,4 +213,4 @@ export const suggestionItems = createSuggestionItems([
         .run();
     },
   },
-]);
+];
