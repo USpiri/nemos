@@ -1,14 +1,13 @@
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
-import { useMemo } from "react";
-import { StarterKit } from "@tiptap/starter-kit";
-import { DragHandle } from "@tiptap/extension-drag-handle-react";
-import { Selection, Focus, Placeholder } from "@tiptap/extensions";
-import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { Button } from "../ui/button";
-import { GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DragHandle } from "@tiptap/extension-drag-handle-react";
+import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
+import { GripVertical } from "lucide-react";
+import { useMemo } from "react";
+import { Button } from "../ui/button";
+import { Extensions } from "./extensions";
 
 import "./editor.css";
+import "./extensions/higlights.css";
 
 interface Props {
   content?: string;
@@ -19,25 +18,8 @@ interface Props {
 export const Editor = ({ content, className, onUpdate }: Props) => {
   const editor = useEditor(
     {
-      extensions: [
-        StarterKit.configure({
-          dropcursor: { class: "dropcursor" },
-        }),
-        Selection,
-        Focus,
-        Placeholder,
-        TaskList,
-        TaskItem,
-      ],
-      content: `<ul data-type="taskList">
-        <li data-type="taskItem" data-checked="true">flour</li>
-        <li data-type="taskItem" data-checked="true">baking powder</li>
-        <li data-type="taskItem" data-checked="true">salt</li>
-        <li data-type="taskItem" data-checked="false">sugar</li>
-        <li data-type="taskItem" data-checked="false">milk</li>
-        <li data-type="taskItem" data-checked="false">eggs</li>
-        <li data-type="taskItem" data-checked="false">butter</li>
-      </ul>`,
+      extensions: Extensions,
+      content,
       injectCSS: false,
       autofocus: true,
       editorProps: {
