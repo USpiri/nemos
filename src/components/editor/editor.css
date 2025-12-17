@@ -191,6 +191,31 @@
       }
     }
 
+    & ul[data-type="taskList"]:not(.not-typography ul[data-type="taskList"]) {
+      list-style: none;
+      margin-left: 0;
+      padding: 0;
+
+      & li:not(.not-typography li) {
+        align-items: center;
+        display: flex;
+
+        & > label:not(.not-typography label) {
+          flex: 0 0 auto;
+          margin-right: 0.5rem;
+          user-select: none;
+        }
+
+        & > div:not(.not-typography div) {
+          flex: 1 1 auto;
+        }
+      }
+
+      & input[type="checkbox"]:not(.not-typography input[type="checkbox"]) {
+        cursor: pointer;
+      }
+    }
+
     & ol:not(.not-typography ol) {
       margin-top: calc(var(--spacing) * 6);
       margin-left: calc(var(--spacing) * 6);

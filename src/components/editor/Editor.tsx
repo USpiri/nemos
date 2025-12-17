@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { DragHandle } from "@tiptap/extension-drag-handle-react";
 import { Selection, Focus, Placeholder } from "@tiptap/extensions";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { Button } from "../ui/button";
 import { GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,8 +19,25 @@ interface Props {
 export const Editor = ({ content, className, onUpdate }: Props) => {
   const editor = useEditor(
     {
-      extensions: [StarterKit, Selection, Focus, Placeholder],
-      content,
+      extensions: [
+        StarterKit.configure({
+          dropcursor: { class: "dropcursor" },
+        }),
+        Selection,
+        Focus,
+        Placeholder,
+        TaskList,
+        TaskItem,
+      ],
+      content: `<ul data-type="taskList">
+        <li data-type="taskItem" data-checked="true">flour</li>
+        <li data-type="taskItem" data-checked="true">baking powder</li>
+        <li data-type="taskItem" data-checked="true">salt</li>
+        <li data-type="taskItem" data-checked="false">sugar</li>
+        <li data-type="taskItem" data-checked="false">milk</li>
+        <li data-type="taskItem" data-checked="false">eggs</li>
+        <li data-type="taskItem" data-checked="false">butter</li>
+      </ul>`,
       injectCSS: false,
       autofocus: true,
       editorProps: {
@@ -42,7 +60,11 @@ export const Editor = ({ content, className, onUpdate }: Props) => {
     <>
       <EditorContext.Provider value={providerValue}>
         <DragHandle editor={editor}>
-          <Button variant="ghost" size="icon">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground cursor-grab"
+          >
             <GripVertical className="size-4" />
           </Button>
         </DragHandle>
