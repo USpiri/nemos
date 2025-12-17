@@ -1,6 +1,7 @@
 @layer base {
   .typography {
     color: var(--color-foreground);
+    white-space: pre-wrap;
 
     & h1:not(.not-typography h1) {
       scroll-margin: calc(var(--spacing) * 20);
@@ -233,8 +234,9 @@
     }
 
     & pre:not(.not-typography pre) {
-      background-color: var(--color-muted);
-      border-radius: calc(var(--radius) - 2px);
+      background-color: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
       padding: calc(var(--spacing) * 4);
       margin-top: calc(var(--spacing) * 6);
       margin-bottom: calc(var(--spacing) * 6);
@@ -245,13 +247,16 @@
 
     & code:not(pre code):not(.not-typography code) {
       position: relative;
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       background-color: var(--color-muted);
       padding: calc(var(--spacing) * 0.8) calc(var(--spacing) * 1.2);
       font-family: var(--font-mono);
-      /* font-size: var(--text-sm); */
       line-height: var(--text-sm--line-height);
-      font-weight: 600;
+
+      &:is(p > code) {
+        font-size: var(--text-sm);
+      }
     }
 
     & .lead:not(.not-typography .lead) {
