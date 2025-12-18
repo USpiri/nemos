@@ -21,14 +21,15 @@ export const LanguageSelector = ({ value, onChange }: Props) => {
   return (
     <Select defaultValue={value} onValueChange={(value) => onChange(value!)}>
       <SelectTrigger size="sm" tabIndex={-1} className="w-32">
-        <SelectValue>{currentLanguage?.name}</SelectValue>
+        <SelectValue tabIndex={-1}>{currentLanguage?.name}</SelectValue>
       </SelectTrigger>
-      <SelectContent className="max-h-64 rounded-sm py-2">
+      <SelectContent className="max-h-64 rounded-sm py-2" tabIndex={-1}>
         {supportedLanguages.map((lang) => (
           <SelectItem
             key={lang.id}
             value={lang.id}
             className="languages-options rounded-none"
+            tabIndex={-1}
           >
             {lang.name}
           </SelectItem>

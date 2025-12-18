@@ -12,20 +12,18 @@ export const CodeBlock = ({ node, updateAttributes }: NodeViewProps) => {
   );
 
   return (
-    <NodeViewWrapper>
-      <div className="codeblock relative">
-        <pre>
-          <code className={`language-${node.attrs.language}`}>
-            <NodeViewContent />
-          </code>
-        </pre>
-        <div className="absolute right-2 bottom-2 flex flex-row items-center gap-2">
-          <CopyButton content={node.textContent} variant="ghost" />
-          <LanguageSelector
-            value={node.attrs.language}
-            onChange={handleLanguageChange}
-          />
-        </div>
+    <NodeViewWrapper className="codeblock relative w-full overflow-hidden">
+      <pre>
+        <NodeViewContent
+          className={`language-${node.attrs.language} whitespace-pre!`}
+        />
+      </pre>
+      <div className="absolute right-2 bottom-8 flex flex-row items-center gap-2">
+        <CopyButton content={node.textContent} variant="ghost" tabIndex={-1} />
+        <LanguageSelector
+          value={node.attrs.language}
+          onChange={handleLanguageChange}
+        />
       </div>
     </NodeViewWrapper>
   );
