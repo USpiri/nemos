@@ -3,7 +3,6 @@ import { computePosition, flip, shift } from "@floating-ui/dom";
 import { Editor, posToDOMRect } from "@tiptap/react";
 
 export const filterCommandItems = (query: string, items: CommandItem[]) => {
-  console.log("filterCommandItems", query, items);
   const normalizedQuery = query.toLowerCase().trim();
   if (normalizedQuery.length === 0) return items;
   return items.filter((item) => {
