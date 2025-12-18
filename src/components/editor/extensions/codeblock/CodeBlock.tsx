@@ -6,9 +6,10 @@ import { LanguageSelector } from "./LanguageSelector";
 export const CodeBlock = ({ node, updateAttributes }: NodeViewProps) => {
   const handleLanguageChange = useCallback(
     (value: string) => {
+      if (value === node.attrs.language) return;
       updateAttributes({ language: value });
     },
-    [updateAttributes],
+    [updateAttributes, node.attrs.language],
   );
 
   return (
