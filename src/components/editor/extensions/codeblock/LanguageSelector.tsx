@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export const LanguageSelector = ({ value, onChange }: Props) => {
+  console.log(value);
   const currentLanguage = useMemo(() => {
     return supportedLanguages.find((lang) => lang.match.includes(value));
   }, [value]);
@@ -23,17 +25,23 @@ export const LanguageSelector = ({ value, onChange }: Props) => {
       <SelectTrigger size="sm" tabIndex={-1} className="w-32">
         <SelectValue tabIndex={-1}>{currentLanguage?.name}</SelectValue>
       </SelectTrigger>
-      <SelectContent className="max-h-64 rounded-sm py-2" tabIndex={-1}>
-        {supportedLanguages.map((lang) => (
-          <SelectItem
-            key={lang.id}
-            value={lang.id}
-            className="languages-options rounded-none"
-            tabIndex={-1}
-          >
-            {lang.name}
-          </SelectItem>
-        ))}
+      <SelectContent
+        className="rounded-sm py-2"
+        tabIndex={-1}
+        alignItemWithTrigger={false}
+      >
+        <ScrollArea className="h-64">
+          {supportedLanguages.map((lang) => (
+            <SelectItem
+              key={lang.id}
+              value={lang.id}
+              className="languages-options rounded-none"
+              tabIndex={-1}
+            >
+              {lang.name}
+            </SelectItem>
+          ))}
+        </ScrollArea>
       </SelectContent>
     </Select>
   );
