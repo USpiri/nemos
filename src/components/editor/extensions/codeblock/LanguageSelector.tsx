@@ -15,7 +15,6 @@ interface Props {
 }
 
 export const LanguageSelector = ({ value, onChange }: Props) => {
-  console.log(value);
   const currentLanguage = useMemo(() => {
     return supportedLanguages.find((lang) => lang.match.includes(value));
   }, [value]);
