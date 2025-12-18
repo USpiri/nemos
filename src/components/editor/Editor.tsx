@@ -8,6 +8,7 @@ import { Extensions } from "./extensions";
 
 import "./editor.css";
 import "./extensions/higlights.css";
+import "katex/dist/katex.min.css";
 
 interface Props {
   content?: string;

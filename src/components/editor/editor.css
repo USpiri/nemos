@@ -364,3 +364,58 @@
 .dropcursor {
   color: var(--color-primary);
 }
+
+.math {
+  cursor: pointer;
+  overflow: hidden;
+
+  &.math-display {
+    border-radius: var(--radius-md);
+    border-color: var(--border);
+    background-color: var(--color-card);
+    border-width: 1px;
+    margin-block: 0.75rem;
+
+    .math-content {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      padding: 0.5rem;
+      background-color: var(--color-sidebar);
+      border-bottom: 2px solid var(--color-border);
+
+      &::before,
+      &::after {
+        content: "$$";
+        display: block;
+        font-size: var(--text-xs);
+        color: var(--color-muted-foreground);
+      }
+    }
+  }
+
+  &.math-inline {
+    .math-content {
+      border-radius: var(--radius-md);
+      border-color: var(--border);
+      background-color: var(--color-muted);
+      border-width: 1px;
+      margin-block: 0.75rem;
+      padding: calc(var(--spacing) * 0.8) calc(var(--spacing) * 1.2);
+      font-family: var(--font-mono);
+      line-height: var(--text-sm--line-height);
+      font-size: var(--text-sm);
+
+      &::before,
+      &::after {
+        content: "$";
+        display: inline;
+        margin-inline: 0.25rem;
+        color: var(--color-muted-foreground);
+      }
+    }
+  }
+
+  &.math-selected {
+    cursor: text;
+  }
+}

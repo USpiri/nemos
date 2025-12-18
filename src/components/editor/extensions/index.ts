@@ -4,6 +4,7 @@ import { CodeBlock } from "./codeblock";
 import { StarterKit } from "@tiptap/starter-kit";
 import { SlashCommands, filterCommandItems } from "./commands";
 import { suggestionItems } from "@/config/suggestion-menu";
+import { Math } from "./math";
 
 export const Extensions = [
   StarterKit.configure({
@@ -25,4 +26,5 @@ export const Extensions = [
         filterCommandItems(query, suggestionItems),
     },
   }),
+  Math,
 ];
