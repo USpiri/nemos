@@ -15,9 +15,7 @@ export const CodeBlock = ({ node, updateAttributes }: NodeViewProps) => {
   return (
     <NodeViewWrapper className="codeblock relative w-full overflow-hidden">
       <pre>
-        <NodeViewContent
-          className={`language-${node.attrs.language} whitespace-pre!`}
-        />
+        <NodeViewContent className={`language-${node.attrs.language}`} />
       </pre>
       <div className="absolute right-2 bottom-8 flex flex-row items-center gap-2">
         <CopyButton content={node.textContent} variant="ghost" tabIndex={-1} />
