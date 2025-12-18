@@ -163,4 +163,19 @@
   body {
     @apply h-full overflow-hidden;
   }
+
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    5% {
+      transform: scale(0.25);
+    }
+    50% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 }
