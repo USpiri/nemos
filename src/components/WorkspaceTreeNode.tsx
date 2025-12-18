@@ -29,6 +29,7 @@ export const WorkspaceTreeNode = ({
         activeProps: {
           className: "text-foreground!",
         },
+        preload: "intent",
       });
   return (
     <Component
