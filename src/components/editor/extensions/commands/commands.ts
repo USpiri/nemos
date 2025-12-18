@@ -27,7 +27,6 @@ export const SlashCommands = Extension.create({
         },
 
         items: ({ query }: { query: string }) => {
-          console.log("items", this.parent?.());
           return filterCommandItems(
             query || "",
             this.parent?.()?.commandItems || [],
