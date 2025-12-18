@@ -419,3 +419,24 @@
     cursor: text;
   }
 }
+
+.mermaid {
+  &:has(.mermaid-error) {
+    & > pre {
+      margin-bottom: 0;
+    }
+  }
+
+  .mermaid-error {
+    margin: 0;
+    color: var(--color-destructive);
+    font-size: var(--text-sm);
+  }
+
+  .mermaid-render {
+    padding: 0.5rem;
+    svg {
+      margin-inline: auto;
+    }
+  }
+}
