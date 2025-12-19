@@ -8,6 +8,7 @@ import { Math } from "./math";
 import { FileHandler } from "./file-handler";
 import { Image } from "./image";
 import { Link } from "./link";
+import { Table } from "./table";
 
 export const Extensions = [
   StarterKit.configure({
@@ -34,4 +35,5 @@ export const Extensions = [
   Math,
   Image,
   Link,
+  Table,
 ];
