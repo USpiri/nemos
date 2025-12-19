@@ -5,6 +5,8 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { SlashCommands, filterCommandItems } from "./commands";
 import { suggestionItems } from "@/config/suggestion-menu";
 import { Math } from "./math";
+import { FileHandler } from "./file-handler";
+import { Image } from "./image";
 
 export const Extensions = [
   StarterKit.configure({
@@ -13,12 +15,7 @@ export const Extensions = [
   }),
   Selection,
   Focus,
-  Placeholder.configure({
-    placeholder: 'Write something or type "/" for commands...',
-  }),
-  TaskList,
-  TaskItem,
-  CodeBlock,
+  FileHandler,
   SlashCommands.configure({
     commandItems: suggestionItems,
     suggestion: {
@@ -26,5 +23,12 @@ export const Extensions = [
         filterCommandItems(query, suggestionItems),
     },
   }),
+  Placeholder.configure({
+    placeholder: 'Write something or type "/" for commands...',
+  }),
+  TaskList,
+  TaskItem,
+  CodeBlock,
   Math,
+  Image,
 ];
