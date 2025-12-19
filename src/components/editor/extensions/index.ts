@@ -7,10 +7,12 @@ import { suggestionItems } from "@/config/suggestion-menu";
 import { Math } from "./math";
 import { FileHandler } from "./file-handler";
 import { Image } from "./image";
+import { Link } from "./link";
 
 export const Extensions = [
   StarterKit.configure({
     codeBlock: false,
+    link: false,
     dropcursor: { class: "dropcursor" },
   }),
   Selection,
@@ -31,4 +33,5 @@ export const Extensions = [
   CodeBlock,
   Math,
   Image,
+  Link,
 ];
