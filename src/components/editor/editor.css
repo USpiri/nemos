@@ -440,3 +440,10 @@
     }
   }
 }
+
+.smiles {
+  .smiles-render svg {
+    margin-inline: auto;
+    max-width: var(--container-sm);
+  }
+}
