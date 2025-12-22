@@ -6,6 +6,15 @@ import { routeTree } from "@/lib/generated/routeTree.gen";
 import "./index.css";
 
 const router = createRouter({ routeTree, defaultPendingMinMs: 0 });
+router.subscribe("onLoad", (context) => {
+  if (context.toLocation.pathname === "/")
+    localStorage.removeItem("router-history");
+
+  localStorage.setItem(
+    "router-history",
+    JSON.stringify(context.toLocation.pathname),
+  );
+});
 
 declare module "@tanstack/react-router" {
   interface Register {

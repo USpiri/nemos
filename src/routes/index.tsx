@@ -5,10 +5,11 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  return (
-    <Navigate
-      to="/workspace/$workspaceId/notes/$noteId"
-      params={{ workspaceId: "workspace-2", noteId: "notes/index.note" }}
-    />
-  );
+  const routerHistory = localStorage.getItem("router-history");
+  if (routerHistory) {
+    return <Navigate to={routerHistory} />;
+  }
+
+  // TODO: Create a welcome page
+  return <div>Index Route</div>;
 }
