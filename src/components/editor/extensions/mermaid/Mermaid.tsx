@@ -2,7 +2,7 @@ import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import mermaid from "mermaid";
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { hiddenStyle, isInsideNode } from "@/utils/editor";
+import { hiddenStyle, isInsideNode } from "@/lib/editor/utils";
 import { LoaderCircle } from "lucide-react";
 
 mermaid.initialize({

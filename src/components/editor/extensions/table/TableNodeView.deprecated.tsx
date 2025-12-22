@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { isInsideNode } from "@/utils/editor";
+import { isInsideNode } from "@/lib/editor/utils";
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { Plus } from "lucide-react";
 import { useCallback } from "react";

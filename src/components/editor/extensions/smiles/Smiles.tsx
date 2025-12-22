@@ -1,4 +1,4 @@
-import { hiddenStyle, isInsideNode } from "@/utils/editor";
+import { hiddenStyle, isInsideNode } from "@/lib/editor/utils";
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { useEffect, useMemo, useRef } from "react";
 import SmilesDrawer from "smiles-drawer";
