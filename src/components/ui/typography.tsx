@@ -11,17 +11,21 @@ const h1Variants = cva(
         lg: "text-4xl",
       },
     },
+    defaultVariants: {
+      size: "default",
+    },
   },
 );
 
 export const H1 = ({
   children,
   size = "default",
+  className,
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement> &
   VariantProps<typeof h1Variants>) => {
   return (
-    <h1 className={cn(h1Variants({ size }), props.className)} {...props}>
+    <h1 className={cn(h1Variants({ size, className }))} {...props}>
       {children}
     </h1>
   );
@@ -91,20 +95,22 @@ const textVariants = cva("leading-7 not-first:mt-6", {
       lg: "text-lg",
     },
   },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
 });
 
 export const P = ({
   children,
   variant = "default",
   size = "default",
+  className,
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement> &
   VariantProps<typeof textVariants>) => {
   return (
-    <p
-      className={cn(textVariants({ variant, size }), props.className)}
-      {...props}
-    >
+    <p className={cn(textVariants({ variant, size, className }))} {...props}>
       {children}
     </p>
   );
