@@ -1,11 +1,16 @@
+import { Settings } from "lucide-react";
 import { SidebarFooter as SidebarFooterBase } from "../ui/sidebar";
 import { WorkspaceSelector } from "../WorkspaceSelector";
+import { Link } from "../ui/link";
 
-// TODO: Add workspace switcher
+// TODO: Improve settings link
 export const SidebarFooter = () => {
   return (
-    <SidebarFooterBase className="border-border h-12 border-t p-2">
+    <SidebarFooterBase className="border-border flex h-12 flex-row items-center justify-between border-t p-2">
       <WorkspaceSelector />
+      <Link to="/workspace" variant="ghost" size="icon">
+        <Settings className="text-muted-foreground" />
+      </Link>
     </SidebarFooterBase>
   );
 };
