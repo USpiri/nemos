@@ -6,10 +6,19 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const routerHistory = localStorage.getItem("router-history");
+  let lastLocation: string | null = null;
+
   if (routerHistory) {
-    return <Navigate to={routerHistory} />;
+    try {
+      lastLocation = JSON.parse(routerHistory);
+    } catch {
+      lastLocation = routerHistory;
+    }
   }
 
-  // TODO: Create a welcome page
-  return <div>Index Route</div>;
+  if (lastLocation) {
+    return <Navigate to={lastLocation} />;
+  }
+
+  return <Navigate to="/workspace" />;
 }
