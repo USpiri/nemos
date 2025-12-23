@@ -21,7 +21,7 @@ type Props = {
 
 export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
