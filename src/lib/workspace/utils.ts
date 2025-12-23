@@ -1,3 +1,4 @@
+import { FILE_EXTENSION } from "@/config/constants";
 import { getWorkspacePath } from "./service/path";
 import { WorkspaceEntry } from "./workspace.type";
 
@@ -11,7 +12,7 @@ export const mapWorkspaceTree = (tree: WorkspaceEntry[]) => {
 };
 
 export const isValidWorkspaceTreeEntry = (entry: WorkspaceEntry) => {
-  if (entry.isFile && !entry.name.endsWith(".note")) return false;
+  if (entry.isFile && !entry.name.endsWith(FILE_EXTENSION)) return false;
   if (hasHiddenParent(entry.path)) return false;
   return true;
 };
@@ -25,7 +26,7 @@ export const isValidWorkspaceDirectory = (entry: WorkspaceEntry) => {
 };
 
 export const isNoteFile = (entry: WorkspaceEntry) => {
-  return entry.isFile && entry.name.endsWith(".note");
+  return entry.isFile && entry.name.endsWith(FILE_EXTENSION);
 };
 
 export const getNoteRelativeDir = (path: string, workspaceId: string) => {
