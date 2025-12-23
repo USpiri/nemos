@@ -60,16 +60,17 @@ const NoteErrorSwitch = ({
             description="The note you're looking for has an invalid content. You can try reloading the page or create a new note."
           >
             <div className="flex flex-col items-center gap-4">
+              <Link
+                to="/workspace/$workspaceId"
+                params={{ workspaceId }}
+                variant="outline"
+              >
+                <ArrowLeft />
+                Go back to workspace
+              </Link>
               <div className="flex flex-row items-center gap-4">
+                <Button variant={"destructive"}>Delete note</Button>
                 <Button onClick={reset}>Reload page</Button>
-                <Link
-                  to="/workspace/$workspaceId"
-                  params={{ workspaceId }}
-                  variant="outline"
-                >
-                  <ArrowLeft />
-                  Go back to workspace
-                </Link>
               </div>
               {error.message && <Code>{error.message}</Code>}
             </div>
