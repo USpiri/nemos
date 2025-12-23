@@ -7,11 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { type Workspace } from "@/lib/workspace";
+import { type WorkspaceEntry } from "@/lib/workspace";
 import { Code } from "@/components/ui/typography";
 
 type Props = {
-  workspaces: Workspace[];
+  workspaces: WorkspaceEntry[];
 };
 
 export const WorkspaceList = ({ workspaces }: Props) => {
