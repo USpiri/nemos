@@ -9,7 +9,9 @@ export const mapWorkspaceTree = (tree: (DirEntry & { path: string })[]) => {
   }));
 };
 
-export const isValidWorkspaceEntry = (entry: DirEntry & { path: string }) => {
+export const isValidWorkspaceTreeEntry = (
+  entry: DirEntry & { path: string },
+) => {
   if (entry.isFile && !entry.name.endsWith(".note")) return false;
   if (hasHiddenParent(entry.path)) return false;
   return true;
@@ -17,4 +19,8 @@ export const isValidWorkspaceEntry = (entry: DirEntry & { path: string }) => {
 
 export const hasHiddenParent = (path: string) => {
   return path.split("/").some((part) => part.startsWith("."));
+};
+
+export const isValidWorkspace = (entry: DirEntry & { path: string }) => {
+  return entry.isDirectory && !entry.name.startsWith(".");
 };
