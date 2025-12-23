@@ -1,7 +1,7 @@
 import { ROOT } from "@/config/constants";
 import { readDir } from "@/lib/fs";
 import { getWorkspacePath } from "./path";
-import { isValidWorkspace } from "../utils";
+import { isValidWorkspaceDirectory } from "../utils";
 
 export const getWorkspaces = async () => {
   const entries = await readDir(ROOT);
@@ -10,7 +10,7 @@ export const getWorkspaces = async () => {
     path: getWorkspacePath(entry.name),
   }));
 
-  const workspaces = entriesWithPath.filter(isValidWorkspace);
+  const workspaces = entriesWithPath.filter(isValidWorkspaceDirectory);
 
   return workspaces;
 };

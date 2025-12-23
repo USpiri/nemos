@@ -1,6 +1,7 @@
-import { DirEntry } from "@tauri-apps/plugin-fs";
+import { getWorkspacePath } from "./service/path";
+import { WorkspaceEntry } from "./workspace.type";
 
-export const mapWorkspaceTree = (tree: (DirEntry & { path: string })[]) => {
+export const mapWorkspaceTree = (tree: WorkspaceEntry[]) => {
   return tree.map((item) => ({
     id: item.path,
     parent: item.path.split("/").slice(0, -1).join("/"),
@@ -9,9 +10,7 @@ export const mapWorkspaceTree = (tree: (DirEntry & { path: string })[]) => {
   }));
 };
 
-export const isValidWorkspaceTreeEntry = (
-  entry: DirEntry & { path: string },
-) => {
+export const isValidWorkspaceTreeEntry = (entry: WorkspaceEntry) => {
   if (entry.isFile && !entry.name.endsWith(".note")) return false;
   if (hasHiddenParent(entry.path)) return false;
   return true;
@@ -21,6 +20,17 @@ export const hasHiddenParent = (path: string) => {
   return path.split("/").some((part) => part.startsWith("."));
 };
 
-export const isValidWorkspace = (entry: DirEntry & { path: string }) => {
+export const isValidWorkspaceDirectory = (entry: WorkspaceEntry) => {
   return entry.isDirectory && !entry.name.startsWith(".");
+};
+
+export const isNoteFile = (entry: WorkspaceEntry) => {
+  return entry.isFile && entry.name.endsWith(".note");
+};
+
+export const getNoteRelativeDir = (path: string, workspaceId: string) => {
+  const workspaceRoot = `${getWorkspacePath(workspaceId)}/`;
+  const relative = path.replace(workspaceRoot, "");
+  const parts = relative.split("/");
+  return parts.length === 1 ? "/" : `/${parts.slice(0, -1).join("/")}`;
 };
