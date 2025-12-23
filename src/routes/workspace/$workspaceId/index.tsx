@@ -5,17 +5,21 @@ import {
   WorkspaceHeader,
   WorkspaceActions,
   RecentNotesTable,
+  RecentNotesEmpty,
+  WorkspacePending,
+  WorkspaceError,
 } from "./-components";
-
-const RECENT_NOTES_LIMIT = 10;
+import { RECENT_NOTES_LIMIT } from "@/config/constants";
 
 export const Route = createFileRoute("/workspace/$workspaceId/")({
-  component: RouteComponent,
+  component: WorkspaceIdIndex,
+  pendingComponent: WorkspacePending,
+  errorComponent: WorkspaceError,
   loader: async ({ params: { workspaceId } }) =>
     await getWorkspaceSummary(workspaceId, RECENT_NOTES_LIMIT),
 });
 
-function RouteComponent() {
+function WorkspaceIdIndex() {
   const { notes, count } = Route.useLoaderData();
   const { workspaceId } = Route.useParams();
 
@@ -24,7 +28,11 @@ function RouteComponent() {
       <WorkspaceHeader workspace={workspaceId} count={count} />
       <WorkspaceActions />
       <Separator />
-      <RecentNotesTable notes={notes} workspaceId={workspaceId} />
+      {notes.length ? (
+        <RecentNotesTable notes={notes} workspaceId={workspaceId} />
+      ) : (
+        <RecentNotesEmpty />
+      )}
     </main>
   );
 }

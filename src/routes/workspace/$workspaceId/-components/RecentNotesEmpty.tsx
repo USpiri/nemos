@@ -1,0 +1,24 @@
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { FileText } from "lucide-react";
+
+export const RecentNotesEmpty = () => {
+  return (
+    <Empty className="max-h-96 border border-dashed">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <FileText className="text-muted-foreground" />
+        </EmptyMedia>
+        <EmptyTitle>No notes yet</EmptyTitle>
+        <EmptyDescription>
+          Create a new note by clicking the button below.
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
+};
