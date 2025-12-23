@@ -1,5 +1,5 @@
 import { useDebouncedCallback } from "use-debounce";
-import { Note, writeNote } from "@/lib/notes";
+import { Note, NoteError, writeNote } from "@/lib/notes";
 import { useCallback, useRef } from "react";
 import { toast } from "sonner";
 
@@ -20,8 +20,17 @@ export const useNoteEditor = ({
         await writeNote(path, note);
         lastSaved.current = note;
       } catch (error) {
-        console.error(error);
-        toast.error("Failed to save note");
+        if (error instanceof NoteError) {
+          switch (error.code) {
+            case "INVALID_CONTENT":
+              toast.error("Invalid note content");
+              break;
+            default:
+              toast.error("Failed to save note");
+          }
+        } else {
+          toast.error("Failed to save note");
+        }
       }
     },
     [path],
