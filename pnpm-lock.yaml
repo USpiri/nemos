@@ -14,6 +14,9 @@ importers:
       '@floating-ui/dom':
         specifier: ^1.7.4
         version: 1.7.4
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.69.0(react@19.2.3))
       '@minoru/react-dnd-treeview':
         specifier: ^3.5.3
         version: 3.5.3(@emotion/is-prop-valid@0.8.8)(dnd-core@16.0.1)(react-dnd@16.0.1(@types/node@25.0.2)(@types/react@19.2.7)(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -110,6 +113,9 @@ importers:
       react-dom:
         specifier: ^19.2.3
         version: 19.2.3(react@19.2.3)
+      react-hook-form:
+        specifier: ^7.69.0
+        version: 7.69.0(react@19.2.3)
       react-resizable-panels:
         specifier: ^3.0.6
         version: 3.0.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -603,6 +609,11 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -875,6 +886,9 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@swc/core-darwin-arm64@1.15.4':
     resolution: {integrity: sha512-NU/Of+ShFGG/i0lXKsF6GaGeTBNsr9iD8uUzdXxFfGbEjTeuKNXc5CWn3/Uo4Gr4LMAGD3hsRwG2Jq5iBDMalw==}
@@ -3288,6 +3302,12 @@ packages:
     peerDependencies:
       react: ^19.2.3
 
+  react-hook-form@7.69.0:
+    resolution: {integrity: sha512-yt6ZGME9f4F6WHwevrvpAjh42HMvocuSnSIHUGycBqXIJdhqGSPQzTpGF+1NLREk/58IdPxEMfPcFCjlMhclGw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -4310,6 +4330,11 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
+  '@hookform/resolvers@5.2.2(react-hook-form@7.69.0(react@19.2.3))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.69.0(react@19.2.3)
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -4539,6 +4564,8 @@ snapshots:
   '@sec-ant/readable-stream@0.4.1': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@swc/core-darwin-arm64@1.15.4':
     optional: true
@@ -6950,6 +6977,10 @@ snapshots:
     dependencies:
       react: 19.2.3
       scheduler: 0.27.0
+
+  react-hook-form@7.69.0(react@19.2.3):
+    dependencies:
+      react: 19.2.3
 
   react-is@16.13.1: {}
 
