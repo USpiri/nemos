@@ -1,4 +1,8 @@
-export type NoteErrorCode = "NOT_FOUND" | "INVALID_CONTENT" | "READ_FAILED";
+export type NoteErrorCode =
+  | "NOT_FOUND"
+  | "INVALID_CONTENT"
+  | "READ_FAILED"
+  | "CREATE_FAILED";
 
 export class NoteError extends Error {
   readonly code: NoteErrorCode;
