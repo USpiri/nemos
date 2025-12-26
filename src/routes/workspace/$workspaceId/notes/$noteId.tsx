@@ -17,7 +17,7 @@ function NoteIdComponent() {
   const { workspaceId, noteId } = Route.useParams();
   const note = Route.useLoaderData();
 
-  const content = useMemo(() => note.content, [note]);
+  const content = useMemo(() => note.content, [note, noteId]);
 
   const { save } = useNoteEditor({
     path: `${workspaceId}/${noteId}`,
