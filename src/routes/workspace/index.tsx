@@ -10,6 +10,7 @@ import {
   WorkspaceEmpty,
   WorkspaceError,
 } from "./-components";
+import { useDialog } from "@/hooks/use-dialog";
 
 export const Route = createFileRoute("/workspace/")({
   loader: async () => {
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/workspace/")({
 function WorkspaceIndex() {
   const { workspaces } = Route.useLoaderData();
   const router = useRouter();
+  const { open } = useDialog();
 
   const handleRefresh = () => {
     void router.invalidate();
@@ -49,7 +51,7 @@ function WorkspaceIndex() {
         )}
       </section>
 
-      <Button variant="outline">
+      <Button variant="outline" onClick={() => open("workspace")}>
         <FolderPlus /> Create a new workspace
       </Button>
     </div>
