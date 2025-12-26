@@ -3,6 +3,7 @@ export * from "./create";
 export * from "./ensure-dir";
 export * from "./exists";
 export * from "./fs.schema";
+export * from "./get-unique-path";
 export * from "./read";
 export * from "./remove";
 export * from "./rename";
