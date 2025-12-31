@@ -1,6 +1,7 @@
 import { linkOptions } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 import { Link } from "./ui/link";
+import { TreeNodeContextMenu } from "./TreeNodeContextMenu";
 
 interface Props {
   depth: number;
@@ -31,13 +32,19 @@ export const WorkspaceTreeNode = ({
         },
       });
   return (
-    <Component
-      {...props}
-      className="text-muted-foreground w-full justify-start rounded-none"
-      variant="ghost"
-      style={{ paddingInlineStart: depth * 10 + 8 }}
+    <TreeNodeContextMenu
+      isFolder={isDroppable}
+      workspace={workspace}
+      note={note}
     >
-      {children}
-    </Component>
+      <Component
+        {...props}
+        className="text-muted-foreground w-full justify-start rounded-none"
+        variant="ghost"
+        style={{ paddingInlineStart: depth * 10 + 8 }}
+      >
+        {children}
+      </Component>
+    </TreeNodeContextMenu>
   );
 };
