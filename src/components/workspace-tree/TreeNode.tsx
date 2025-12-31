@@ -1,6 +1,6 @@
 import { linkOptions } from "@tanstack/react-router";
-import { Button } from "./ui/button";
-import { Link } from "./ui/link";
+import { Button } from "../ui/button";
+import { Link } from "../ui/link";
 import { TreeNodeContextMenu } from "./TreeNodeContextMenu";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const WorkspaceTreeNode = ({
+export const TreeNode = ({
   depth,
   onToggle,
   isDroppable,

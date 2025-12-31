@@ -4,7 +4,7 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from "./ui/context-menu";
+} from "../ui/context-menu";
 import { FolderPlus, FilePlus, FolderOpen, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 

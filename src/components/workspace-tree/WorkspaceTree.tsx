@@ -1,6 +1,6 @@
 import { NodeModel } from "@minoru/react-dnd-treeview";
-import { Tree } from "./ui/tree";
-import { WorkspaceTreeNode } from "./WorkspaceTreeNode";
+import { Tree } from "../ui/tree";
+import { TreeNode } from "./TreeNode";
 import { TreeContextMenu } from "./TreeContextMenu";
 import { ChevronDown, ChevronRight, FileText } from "lucide-react";
 
@@ -17,7 +17,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
         tree={tree}
         rootId={`${root}/${workspace}`}
         render={(node, { depth, isOpen, onToggle }) => (
-          <WorkspaceTreeNode
+          <TreeNode
             depth={depth}
             isOpen={isOpen}
             isDroppable={!!node.droppable}
@@ -31,7 +31,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
               <FileText />
             )}
             {node.text}
-          </WorkspaceTreeNode>
+          </TreeNode>
         )}
         onDrop={console.log}
       />

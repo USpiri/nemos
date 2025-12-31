@@ -1,6 +1,6 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { SidebarContent as SidebarContentBase } from "../ui/sidebar";
-import { WorkspaceTree } from "../WorkspaceTree";
+import { WorkspaceTree } from "../workspace-tree";
 import { ROOT } from "@/config/constants";
 
 const route = getRouteApi("/workspace/$workspaceId");
