@@ -58,7 +58,7 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
               <TableCell className="text-right">
                 <LinkComponent
                   to="/workspace/$workspaceId/notes/$noteId"
-                  params={{ workspaceId, noteId: note.path }}
+                  params={{ workspaceId, noteId: getNoteIdFromPath(note.path) }}
                   size="sm"
                   variant="ghost"
                 >
