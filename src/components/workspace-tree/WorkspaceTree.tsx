@@ -3,6 +3,7 @@ import { Tree } from "../ui/tree";
 import { TreeNode } from "./TreeNode";
 import { TreeContextMenu } from "./TreeContextMenu";
 import { ChevronDown, ChevronRight, FileText } from "lucide-react";
+import { getNoteIdFromPath } from "@/lib/notes";
 
 interface Props {
   tree: NodeModel[];
@@ -22,7 +23,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
             isOpen={isOpen}
             isDroppable={!!node.droppable}
             workspace={workspace}
-            note={node.id.toString().split("/").slice(2).join("/")}
+            note={getNoteIdFromPath(node.id.toString())}
             onToggle={onToggle}
           >
             {node.droppable ? (
