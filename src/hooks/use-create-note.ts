@@ -20,7 +20,7 @@ export const useCreateNote = () => {
       try {
         const notePath = await createNoteFn({
           workspace,
-          path: `${noteName}.${FILE_EXTENSION}`,
+          path: `${noteName}${FILE_EXTENSION}`,
         });
         onSuccess?.(notePath);
       } catch (error) {
