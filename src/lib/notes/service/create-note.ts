@@ -21,6 +21,10 @@ export const createNote = async ({ workspace, path, content }: Props) => {
     await write(uniquePath, JSON.stringify(note, null, 2));
     return uniquePath;
   } catch (error) {
-    throw new NoteError("CREATE_FAILED", `Failed to create note: ${notePath}`);
+    throw new NoteError(
+      "CREATE_FAILED",
+      `Failed to create note: ${notePath}\n` +
+        `Cause: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
   }
 };
