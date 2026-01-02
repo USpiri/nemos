@@ -8,10 +8,14 @@ interface Props {
 
 export const useCreateFolder = ({ workspace }: Props) => {
   const createFolder = useCallback(
-    async (folderName: string, onSuccess?: () => void) => {
+    async (folderName: string, onSuccess?: (folderPath: string) => void) => {
       try {
-        await createFolderFn({ workspace, path: folderName });
-        onSuccess?.();
+        const folderPath = await createFolderFn({
+          workspace,
+          path: folderName,
+        });
+        onSuccess?.(folderPath);
+        return folderPath;
       } catch (error) {
         if (error instanceof NoteError) {
           switch (error.code) {

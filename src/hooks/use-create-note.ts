@@ -17,6 +17,7 @@ export const useCreateNote = ({ workspace }: Props) => {
           path: `${noteName}${FILE_EXTENSION}`,
         });
         onSuccess?.(notePath);
+        return notePath;
       } catch (error) {
         if (error instanceof NoteError) {
           switch (error.code) {
