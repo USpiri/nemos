@@ -9,11 +9,12 @@ import { useCallback } from "react";
 const route = getRouteApi("/workspace/$workspaceId");
 
 export const WorkspaceActions = () => {
-  const { createNote } = useCreateNote();
-  const { createFolder } = useCreateFolder();
   const { workspaceId } = route.useParams();
   const router = useRouter();
   const navigate = useNavigate();
+
+  const { createNote } = useCreateNote({ workspace: workspaceId });
+  const { createFolder } = useCreateFolder({ workspace: workspaceId });
 
   const handleCreateNote = useCallback(() => {
     createNote("new-note", (notePath) => {

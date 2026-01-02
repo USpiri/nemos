@@ -1,20 +1,14 @@
 import { toast } from "sonner";
 import { useCallback } from "react";
 import { createFolder as createFolderFn, NoteError } from "@/lib/notes";
-import { getRouteApi } from "@tanstack/react-router";
 
-const route = getRouteApi("/workspace/$workspaceId");
+interface Props {
+  workspace: string;
+}
 
-export const useCreateFolder = () => {
-  const { workspaceId: workspace } = route.useParams();
-
+export const useCreateFolder = ({ workspace }: Props) => {
   const createFolder = useCallback(
     async (folderName: string, onSuccess?: () => void) => {
-      if (!workspace) {
-        toast.error("Workspace not found");
-        return;
-      }
-
       try {
         await createFolderFn({ workspace, path: folderName });
         onSuccess?.();

@@ -1,20 +1,14 @@
 import { toast } from "sonner";
 import { useCallback } from "react";
 import { copyNote as copyNoteFn } from "@/lib/notes";
-import { getRouteApi } from "@tanstack/react-router";
 
-const route = getRouteApi("/workspace/$workspaceId");
+interface Props {
+  workspace: string;
+}
 
-export const useCopyNote = () => {
-  const { workspaceId: workspace } = route.useParams();
-
+export const useCopyNote = ({ workspace }: Props) => {
   const copyNote = useCallback(
     async (noteName: string, onSuccess?: (notePath: string) => void) => {
-      if (!workspace) {
-        toast.error("Workspace not found");
-        return;
-      }
-
       if (!noteName) {
         toast.error("Note name is required");
         return;

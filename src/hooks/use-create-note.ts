@@ -2,21 +2,15 @@ import { NoteError } from "@/lib/notes";
 import { toast } from "sonner";
 import { useCallback } from "react";
 import { createNote as createNoteFn } from "@/lib/notes";
-import { getRouteApi } from "@tanstack/react-router";
 import { FILE_EXTENSION } from "@/config/constants";
 
-const route = getRouteApi("/workspace/$workspaceId");
+interface Props {
+  workspace: string;
+}
 
-export const useCreateNote = () => {
-  const { workspaceId: workspace } = route.useParams();
-
+export const useCreateNote = ({ workspace }: Props) => {
   const createNote = useCallback(
     async (noteName: string, onSuccess?: (notePath: string) => void) => {
-      if (!workspace) {
-        toast.error("Workspace not found");
-        return;
-      }
-
       try {
         const notePath = await createNoteFn({
           workspace,

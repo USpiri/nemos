@@ -17,8 +17,8 @@ export const SidebarHeader = () => {
   const router = useRouter();
   const navigate = useNavigate();
 
-  const { createNote } = useCreateNote();
-  const { createFolder } = useCreateFolder();
+  const { createNote } = useCreateNote({ workspace: workspaceId });
+  const { createFolder } = useCreateFolder({ workspace: workspaceId });
 
   const handleCreateNote = useCallback(() => {
     createNote("new-note", (notePath) => {
