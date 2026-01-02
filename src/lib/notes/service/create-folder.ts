@@ -13,6 +13,7 @@ export const createFolder = async ({ workspace, path }: Props) => {
   try {
     const uniquePath = await getUniquePath(folderPath);
     await createDir(uniquePath);
+    return uniquePath;
   } catch (error) {
     throw new NoteError(
       "CREATE_FAILED",
