@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useCreateFolder } from "@/hooks/use-create-folder";
 import { useCreateNote } from "@/hooks/use-create-note";
-import { getNoteIdFromPath } from "@/lib/notes/utils";
+import { getNoteIdFromPath } from "@/lib/notes";
 import { getRouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { Download, FolderPlus, Plus } from "lucide-react";
 import { useCallback } from "react";

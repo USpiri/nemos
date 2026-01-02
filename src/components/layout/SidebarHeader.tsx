@@ -8,7 +8,7 @@ import { SquarePen, FolderPlus, Settings } from "lucide-react";
 import { useCreateFolder } from "@/hooks/use-create-folder";
 import { getRouteApi, useNavigate, useRouter } from "@tanstack/react-router";
 import { useCallback } from "react";
-import { getNoteIdFromPath } from "@/lib/notes/utils";
+import { getNoteIdFromPath } from "@/lib/notes";
 
 const route = getRouteApi("/workspace/$workspaceId");
 
