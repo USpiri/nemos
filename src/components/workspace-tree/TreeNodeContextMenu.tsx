@@ -23,6 +23,7 @@ interface Props {
   note: string;
 }
 
+// TODO: implement a dialog for rename note and folder
 export const TreeNodeContextMenu = ({
   children,
   isFolder,
@@ -32,13 +33,13 @@ export const TreeNodeContextMenu = ({
   const {
     createNoteAndNavigate,
     createFolderAndRefresh,
+    renameNoteAndRefresh,
+    renameFolderAndRefresh,
     copyNote,
     navigateToNote,
     revealInExplorer,
     deleteNote,
     deleteFolder,
-    renameNote,
-    renameFolder,
   } = useWorkspaceActions({
     workspace,
   });
@@ -51,7 +52,7 @@ export const TreeNodeContextMenu = ({
           <>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => renameFolder(note)}
+              onClick={() => renameFolderAndRefresh(note, "new-folder-name")}
             >
               <Pencil className="text-foreground" />
               Rename
@@ -98,7 +99,7 @@ export const TreeNodeContextMenu = ({
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => renameNote(note)}
+              onClick={() => renameNoteAndRefresh(note, "new-name")}
             >
               <Pencil className="text-foreground" />
               Rename

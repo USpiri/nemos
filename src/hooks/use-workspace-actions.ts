@@ -9,11 +9,14 @@ import { useCallback } from "react";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useCopyNote } from "@/hooks/use-copy-note";
 import { toast } from "sonner";
+import { useRenameNote } from "./use-rename-note";
+import { useRenameFolder } from "./use-rename-folder";
 
 interface Props {
   workspace: string;
 }
 
+// TODO: Update useCallback dependencies
 export const useWorkspaceActions = ({ workspace }: Props) => {
   const navigate = useNavigate();
   const router = useRouter();
@@ -21,6 +24,8 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
   const { createNote: createNoteFn } = useCreateNote({ workspace });
   const { createFolder: createFolderFn } = useCreateFolder({ workspace });
   const { copyNote: copyNoteFn } = useCopyNote({ workspace });
+  const { renameNote: renameNoteFn } = useRenameNote({ workspace });
+  const { renameFolder: renameFolderFn } = useRenameFolder({ workspace });
 
   const createNote = useCallback(async (note = "") => {
     const path = getNewNotePath(note);
@@ -42,14 +47,16 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     });
   }, []);
 
-  const renameNote = useCallback(async (note: string) => {
-    console.log("Rename note:", note);
-    toast.info("Rename note feature coming soon");
+  const renameNote = useCallback(async (note: string, newName: string) => {
+    const notePath = await renameNoteFn(note, newName);
+    if (!notePath) return;
+    return getNoteIdFromPath(notePath);
   }, []);
 
-  const renameFolder = useCallback(async (folder: string) => {
-    console.log("Rename folder:", folder);
-    toast.info("Rename folder feature coming soon");
+  const renameFolder = useCallback(async (folder: string, newName: string) => {
+    const folderPath = await renameFolderFn(folder, newName);
+    if (!folderPath) return;
+    return getNoteIdFromPath(folderPath);
   }, []);
 
   const deleteNote = useCallback(async (note: string) => {
@@ -92,6 +99,24 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     refreshWorkspace();
   }, []);
 
+  const renameNoteAndRefresh = useCallback(
+    async (note: string, newName: string) => {
+      const notePath = await renameNote(note, newName);
+      if (!notePath) return;
+      refreshWorkspace();
+    },
+    [],
+  );
+
+  const renameFolderAndRefresh = useCallback(
+    async (folder: string, newName: string) => {
+      const folderPath = await renameFolder(folder, newName);
+      if (!folderPath) return;
+      refreshWorkspace();
+    },
+    [],
+  );
+
   return {
     createNote,
     createFolder,
@@ -105,5 +130,7 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     revealInExplorer,
     createNoteAndNavigate,
     createFolderAndRefresh,
+    renameNoteAndRefresh,
+    renameFolderAndRefresh,
   };
 };
