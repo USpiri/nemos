@@ -4,3 +4,4 @@ export * from "./copy";
 export * from "./path";
 export * from "./read";
 export * from "./write";
+export * from "./rename";

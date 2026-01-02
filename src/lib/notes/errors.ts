@@ -3,7 +3,8 @@ export type NoteErrorCode =
   | "INVALID_CONTENT"
   | "READ_FAILED"
   | "CREATE_FAILED"
-  | "COPY_FAILED";
+  | "COPY_FAILED"
+  | "RENAME_FAILED";
 
 export class NoteError extends Error {
   readonly code: NoteErrorCode;

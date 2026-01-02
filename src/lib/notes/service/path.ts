@@ -5,6 +5,7 @@ import {
   ROOT,
 } from "@/config/constants";
 
+// TODO: rename to getPath ot getWorkspacePath
 export const getNotePath = (path: string, root = ROOT) => {
   return `${root}/${path}`;
 };
@@ -12,6 +13,10 @@ export const getNotePath = (path: string, root = ROOT) => {
 export const getNoteFolderPath = (path: string) => {
   const isFolder = !path.endsWith(FILE_EXTENSION);
   return isFolder ? path : path.split("/").slice(0, -1).join("/");
+};
+
+export const getFolderParentPath = (path: string) => {
+  return path.split("/").slice(0, -1).join("/");
 };
 
 export function getNewNotePath(parentPath?: string) {
