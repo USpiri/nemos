@@ -24,6 +24,7 @@ interface Props {
 }
 
 // TODO: implement a dialog for rename note and folder
+// TODO: implement a confirmation dialog or "hold to execute" for delete note and folder
 export const TreeNodeContextMenu = ({
   children,
   isFolder,
@@ -35,11 +36,11 @@ export const TreeNodeContextMenu = ({
     createFolderAndRefresh,
     renameNoteAndRefresh,
     renameFolderAndRefresh,
+    deleteNoteAndRefresh,
+    deleteFolderAndRefresh,
     copyNote,
     navigateToNote,
     revealInExplorer,
-    deleteNote,
-    deleteFolder,
   } = useWorkspaceActions({
     workspace,
   });
@@ -81,7 +82,7 @@ export const TreeNodeContextMenu = ({
             <ContextMenuSeparator />
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-xs"
-              onClick={() => deleteFolder(note)}
+              onClick={() => deleteFolderAndRefresh(note)}
               variant="destructive"
             >
               <Trash2 />
@@ -135,7 +136,7 @@ export const TreeNodeContextMenu = ({
             <ContextMenuSeparator />
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-xs"
-              onClick={() => deleteNote(note)}
+              onClick={() => deleteNoteAndRefresh(note)}
               variant="destructive"
             >
               <Trash2 />

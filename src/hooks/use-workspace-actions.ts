@@ -11,6 +11,8 @@ import { useCopyNote } from "@/hooks/use-copy-note";
 import { toast } from "sonner";
 import { useRenameNote } from "./use-rename-note";
 import { useRenameFolder } from "./use-rename-folder";
+import { useDeleteFolder } from "./use-delete-folder";
+import { useDeleteNote } from "./use-delete-note";
 
 interface Props {
   workspace: string;
@@ -26,6 +28,8 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
   const { copyNote: copyNoteFn } = useCopyNote({ workspace });
   const { renameNote: renameNoteFn } = useRenameNote({ workspace });
   const { renameFolder: renameFolderFn } = useRenameFolder({ workspace });
+  const { deleteNote: deleteNoteFn } = useDeleteNote({ workspace });
+  const { deleteFolder: deleteFolderFn } = useDeleteFolder({ workspace });
 
   const createNote = useCallback(async (note = "") => {
     const path = getNewNotePath(note);
@@ -60,13 +64,11 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
   }, []);
 
   const deleteNote = useCallback(async (note: string) => {
-    console.log("Delete note:", note);
-    toast.info("Delete note feature coming soon");
+    await deleteNoteFn(note);
   }, []);
 
   const deleteFolder = useCallback(async (folder: string) => {
-    console.log("Delete folder:", folder);
-    toast.info("Delete folder feature coming soon");
+    await deleteFolderFn(folder);
   }, []);
 
   const revealInExplorer = useCallback(() => {
@@ -117,6 +119,16 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     [],
   );
 
+  const deleteNoteAndRefresh = useCallback(async (note: string) => {
+    await deleteNote(note);
+    refreshWorkspace();
+  }, []);
+
+  const deleteFolderAndRefresh = useCallback(async (folder: string) => {
+    await deleteFolder(folder);
+    refreshWorkspace();
+  }, []);
+
   return {
     createNote,
     createFolder,
@@ -132,5 +144,7 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     createFolderAndRefresh,
     renameNoteAndRefresh,
     renameFolderAndRefresh,
+    deleteNoteAndRefresh,
+    deleteFolderAndRefresh,
   };
 };
