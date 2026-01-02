@@ -14,7 +14,7 @@ import {
   FolderOpen,
   ArrowUpRight,
 } from "lucide-react";
-import { toast } from "sonner";
+import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
 
 interface Props {
   children: React.ReactNode;
@@ -29,30 +29,19 @@ export const TreeNodeContextMenu = ({
   workspace,
   note,
 }: Props) => {
-  const handleCreateNote = async () => {
-    console.log("Create note:", note, "workspace:", workspace);
-    toast.info("Create note feature coming soon");
-  };
-
-  const handleCreateFolder = async () => {
-    console.log("Create folder:", note);
-    toast.info("Create folder feature coming soon");
-  };
-
-  const handleCopyNote = async () => {
-    console.log("Copy note:", note);
-    toast.info("Copy note feature coming soon");
-  };
-
-  const handleDeleteNote = async () => {
-    console.log("Delete note:", note);
-    toast.info("Delete note feature coming soon");
-  };
-
-  const handleDeleteFolder = async () => {
-    console.log("Delete folder:", note);
-    toast.info("Delete folder feature coming soon");
-  };
+  const {
+    createNoteAndNavigate,
+    createFolderAndRefresh,
+    copyNote,
+    navigateToNote,
+    revealInExplorer,
+    deleteNote,
+    deleteFolder,
+    renameNote,
+    renameFolder,
+  } = useWorkspaceActions({
+    workspace,
+  });
 
   return (
     <ContextMenu>
@@ -62,28 +51,28 @@ export const TreeNodeContextMenu = ({
           <>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => console.log("Rename folder")}
+              onClick={() => renameFolder(note)}
             >
               <Pencil className="text-foreground" />
               Rename
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={handleCreateNote}
+              onClick={() => createNoteAndNavigate(note)}
             >
               <FilePlus className="text-foreground" />
               New Note
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={handleCreateFolder}
+              onClick={() => createFolderAndRefresh(note)}
             >
               <FolderPlus className="text-foreground" />
               New Folder
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => console.log("Reveal in File Explorer")}
+              onClick={() => revealInExplorer()}
             >
               <FolderOpen className="text-foreground" />
               Reveal in File Explorer
@@ -91,7 +80,7 @@ export const TreeNodeContextMenu = ({
             <ContextMenuSeparator />
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-xs"
-              onClick={handleDeleteFolder}
+              onClick={() => deleteFolder(note)}
               variant="destructive"
             >
               <Trash2 />
@@ -102,42 +91,42 @@ export const TreeNodeContextMenu = ({
           <>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => console.log("Open note")}
+              onClick={() => navigateToNote(note)}
             >
               <ArrowUpRight className="text-foreground" />
               Open
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => console.log("Rename note")}
+              onClick={() => renameNote(note)}
             >
               <Pencil className="text-foreground" />
               Rename
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={handleCopyNote}
+              onClick={() => copyNote(note)}
             >
               <Copy className="text-foreground" />
               Duplicate
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={handleCreateNote}
+              onClick={() => createNoteAndNavigate(note)}
             >
               <FilePlus className="text-foreground" />
               New Note
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={handleCreateFolder}
+              onClick={() => createFolderAndRefresh(note)}
             >
               <FolderPlus className="text-foreground" />
               New Folder
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => console.log("Reveal in File Explorer")}
+              onClick={() => revealInExplorer()}
             >
               <FolderOpen className="text-foreground" />
               Reveal in File Explorer
@@ -145,7 +134,7 @@ export const TreeNodeContextMenu = ({
             <ContextMenuSeparator />
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-xs"
-              onClick={handleDeleteNote}
+              onClick={() => deleteNote(note)}
               variant="destructive"
             >
               <Trash2 />

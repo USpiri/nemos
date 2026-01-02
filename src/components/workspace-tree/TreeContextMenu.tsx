@@ -6,7 +6,7 @@ import {
   ContextMenuTrigger,
 } from "../ui/context-menu";
 import { FolderPlus, FilePlus, FolderOpen, RefreshCw } from "lucide-react";
-import { toast } from "sonner";
+import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
 
 interface Props {
   children: React.ReactNode;
@@ -14,25 +14,14 @@ interface Props {
 }
 
 export const TreeContextMenu = ({ children, workspace }: Props) => {
-  const handleCreateNote = async () => {
-    console.log("Create note:", workspace);
-    toast.info("Create note feature coming soon");
-  };
-
-  const handleCreateFolder = async () => {
-    console.log("Create folder:", workspace);
-    toast.info("Create folder feature coming soon");
-  };
-
-  const handleRefresh = () => {
-    console.log("Refresh tree");
-    toast.info("Refresh feature coming soon");
-  };
-
-  const handleRevealInExplorer = () => {
-    console.log("Reveal workspace in File Explorer");
-    toast.info("Reveal in File Explorer feature coming soon");
-  };
+  const {
+    createNoteAndNavigate,
+    createFolderAndRefresh,
+    refreshWorkspace,
+    revealInExplorer,
+  } = useWorkspaceActions({
+    workspace,
+  });
 
   return (
     <ContextMenu>
@@ -40,14 +29,14 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
       <ContextMenuContent className="w-48 p-0">
         <ContextMenuItem
           className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-          onClick={handleCreateNote}
+          onClick={() => createNoteAndNavigate()}
         >
           <FilePlus className="text-foreground" />
           New Note
         </ContextMenuItem>
         <ContextMenuItem
           className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-          onClick={handleCreateFolder}
+          onClick={() => createFolderAndRefresh()}
         >
           <FolderPlus className="text-foreground" />
           New Folder
@@ -55,14 +44,14 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
         <ContextMenuSeparator />
         <ContextMenuItem
           className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-          onClick={handleRevealInExplorer}
+          onClick={() => revealInExplorer()}
         >
           <FolderOpen className="text-foreground" />
           Reveal in File Explorer
         </ContextMenuItem>
         <ContextMenuItem
           className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-          onClick={handleRefresh}
+          onClick={() => refreshWorkspace()}
         >
           <RefreshCw className="text-foreground" />
           Refresh
