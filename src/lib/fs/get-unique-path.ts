@@ -11,12 +11,12 @@ export const getUniquePath = async (path: string, options?: Options) => {
   if (!(await exists(path))) return path;
 
   const lastSlashIndex = path.lastIndexOf("/");
-  const directory = path.substring(0, lastSlashIndex + 1); // /root/workspace/notes/
-  const filename = path.substring(lastSlashIndex + 1); // file.ext
+  const directory = path.substring(0, lastSlashIndex + 1);
+  const filename = path.substring(lastSlashIndex + 1);
 
   const lastDotIndex = filename.lastIndexOf(".");
   const basename =
-    lastDotIndex > 0 ? filename.substring(0, lastDotIndex - 1) : filename;
+    lastDotIndex > 0 ? filename.substring(0, lastDotIndex) : filename;
   const extension = lastDotIndex > 0 ? filename.substring(lastDotIndex) : "";
 
   let counter = startAt;
