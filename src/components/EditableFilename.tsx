@@ -17,6 +17,7 @@ interface Props {
   suffix?: string;
   className?: string;
   isFolder?: boolean;
+  context?: string;
 }
 
 export const EditableFilename = ({
@@ -25,6 +26,7 @@ export const EditableFilename = ({
   suffix,
   className,
   isFolder = false,
+  context,
 }: Props) => {
   const { isRenaming, setRenamingPath } = useRenameStore();
   const { workspaceId } = useParams({ strict: false });
@@ -35,7 +37,7 @@ export const EditableFilename = ({
   );
 
   const noteId = getNoteIdFromPath(path);
-  const shouldEdit = isRenaming(noteId);
+  const shouldEdit = isRenaming(noteId, context);
 
   const handleSubmit = (value: string) => {
     if (isFolder) {

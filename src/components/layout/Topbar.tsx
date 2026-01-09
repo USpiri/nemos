@@ -26,6 +26,7 @@ export const Topbar = () => {
         suffix={FILE_EXTENSION}
         className="p-0"
         isFolder={false}
+        context="topbar"
       />
     </div>
   );
