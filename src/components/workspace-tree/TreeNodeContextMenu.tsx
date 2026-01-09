@@ -15,6 +15,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
+import { useRenameStore } from "@/store/rename.store";
 
 interface Props {
   children: React.ReactNode;
@@ -23,7 +24,6 @@ interface Props {
   note: string;
 }
 
-// TODO: implement a dialog for rename note and folder
 // TODO: implement a confirmation dialog or "hold to execute" for delete note and folder
 export const TreeNodeContextMenu = ({
   children,
@@ -34,8 +34,6 @@ export const TreeNodeContextMenu = ({
   const {
     createNoteAndNavigate,
     createFolderAndRefresh,
-    renameNoteAndRefresh,
-    renameFolderAndRefresh,
     deleteNoteAndRefresh,
     deleteFolderAndRefresh,
     copyNote,
@@ -44,6 +42,7 @@ export const TreeNodeContextMenu = ({
   } = useWorkspaceActions({
     workspace,
   });
+  const setRenamingPath = useRenameStore((state) => state.setRenamingPath);
 
   return (
     <ContextMenu>
@@ -53,7 +52,7 @@ export const TreeNodeContextMenu = ({
           <>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => renameFolderAndRefresh(note, "new-folder-name")}
+              onClick={() => setRenamingPath(note)}
             >
               <Pencil className="text-foreground" />
               Rename
@@ -100,7 +99,7 @@ export const TreeNodeContextMenu = ({
             </ContextMenuItem>
             <ContextMenuItem
               className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
-              onClick={() => renameNoteAndRefresh(note, "new-name")}
+              onClick={() => setRenamingPath(note)}
             >
               <Pencil className="text-foreground" />
               Rename
