@@ -9,12 +9,14 @@ import {
 } from "./ui/editable-text";
 import { useParams } from "@tanstack/react-router";
 import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
+import { useRenameStore } from "@/store/rename.store";
 
 interface Props {
   display: string;
   path: string;
   suffix?: string;
   className?: string;
+  isFolder?: boolean;
 }
 
 export const EditableFilename = ({
@@ -22,18 +24,40 @@ export const EditableFilename = ({
   path,
   suffix,
   className,
+  isFolder = false,
 }: Props) => {
   const { workspaceId } = useParams({ strict: false });
-  const { renameNoteAndNavigate } = useWorkspaceActions({
-    workspace: workspaceId!,
-  });
+  const isRenaming = useRenameStore((state) => state.isRenaming);
+  const setRenamingPath = useRenameStore((state) => state.setRenamingPath);
+  const { renameNoteAndNavigate, renameFolderAndRefresh } = useWorkspaceActions(
+    {
+      workspace: workspaceId!,
+    },
+  );
+
+  const noteId = getNoteIdFromPath(path);
+  const shouldEdit = isRenaming(noteId);
 
   const handleSubmit = (value: string) => {
-    renameNoteAndNavigate(getNoteIdFromPath(path), value);
+    if (isFolder) {
+      renameFolderAndRefresh(noteId, value);
+    } else {
+      renameNoteAndNavigate(noteId, value);
+    }
+    setRenamingPath(null);
+  };
+
+  const handleCancel = () => {
+    setRenamingPath(null);
   };
 
   return (
-    <Editable defaultValue={display} onSubmit={handleSubmit}>
+    <Editable
+      defaultValue={display}
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+      isEditing={shouldEdit}
+    >
       <EditablePreview
         className={className}
         suffix={
