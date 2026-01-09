@@ -1,5 +1,4 @@
 import { linkOptions } from "@tanstack/react-router";
-import { Button } from "../ui/button";
 import { Link } from "../ui/link";
 import { TreeNodeContextMenu } from "./TreeNodeContextMenu";
 
@@ -21,7 +20,6 @@ export const TreeNode = ({
   note,
   children,
 }: Props) => {
-  const Component = isDroppable ? Button : Link;
   const props = isDroppable
     ? { onClick: onToggle }
     : linkOptions({
@@ -37,14 +35,14 @@ export const TreeNode = ({
       workspace={workspace}
       note={note}
     >
-      <Component
+      <Link
         {...props}
         className="text-muted-foreground w-full justify-start rounded-none"
         variant="ghost"
         style={{ paddingInlineStart: depth * 10 + 8 }}
       >
         {children}
-      </Component>
+      </Link>
     </TreeNodeContextMenu>
   );
 };
