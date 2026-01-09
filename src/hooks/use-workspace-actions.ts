@@ -103,9 +103,21 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
 
   const renameNoteAndRefresh = useCallback(
     async (note: string, newName: string) => {
+      try {
+        const notePath = await renameNote(note, newName);
+        if (!notePath) return;
+      } finally {
+        refreshWorkspace();
+      }
+    },
+    [],
+  );
+
+  const renameNoteAndNavigate = useCallback(
+    async (note: string, newName: string) => {
       const notePath = await renameNote(note, newName);
       if (!notePath) return;
-      refreshWorkspace();
+      navigateToNote(notePath);
     },
     [],
   );
@@ -143,6 +155,7 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     createNoteAndNavigate,
     createFolderAndRefresh,
     renameNoteAndRefresh,
+    renameNoteAndNavigate,
     renameFolderAndRefresh,
     deleteNoteAndRefresh,
     deleteFolderAndRefresh,
