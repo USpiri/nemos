@@ -1,5 +1,6 @@
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
+import { UpdateChecker } from "@/components/UpdateChecker";
 import { getWorkspaces } from "@/lib/workspace";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
@@ -21,6 +22,7 @@ function RootComponent() {
       <Providers>
         <Outlet />
       </Providers>
+      <UpdateChecker />
       <GlobalDialogs />
       <Toaster />
       <TanStackRouterDevtools position="bottom-right" />
