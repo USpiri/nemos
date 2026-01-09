@@ -40,6 +40,7 @@ interface EditableProps extends Omit<
   value?: string;
   disabled?: boolean;
   autoFocus?: boolean;
+  isEditing?: boolean;
   onSubmit?: (value: string) => void;
   onChange?: (value: string) => void;
   onCancel?: () => void;
@@ -52,12 +53,13 @@ function Editable({
   value: controlledValue,
   disabled = false,
   autoFocus = true,
+  isEditing: isEditingProp = false,
   onSubmit: onSubmitProp,
   onChange: onChangeProp,
   onCancel: onCancelProp,
   ...props
 }: EditableProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isEditingProp);
   const [internalValue, setInternalValue] = useState(defaultValue);
 
   const isControlled = controlledValue !== undefined;
@@ -107,6 +109,10 @@ function Editable({
   useEffect(() => {
     setInternalValue(defaultValue);
   }, [defaultValue]);
+
+  useEffect(() => {
+    setIsEditing(isEditingProp);
+  }, [isEditingProp]);
 
   return (
     <EditableContext.Provider
