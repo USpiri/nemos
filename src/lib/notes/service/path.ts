@@ -41,3 +41,8 @@ export function getNewFolderPath(parentPath?: string) {
 
 export const getNoteIdFromPath = (path: string) =>
   path.split("/").slice(2).join("/");
+
+export const getNoteNameFromPath = (path: string) => path.split("/").pop();
+
+export const getNoteNameWithoutExtension = (path: string) =>
+  getNoteNameFromPath(path)?.split(".").slice(0, -1).join(".");
