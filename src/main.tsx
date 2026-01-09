@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "@/lib/generated/routeTree.gen";
-import { initialize } from "./lib/app";
+import { initialize } from "@/lib/app";
 
 import "./index.css";
 
