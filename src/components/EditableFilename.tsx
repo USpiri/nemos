@@ -26,9 +26,8 @@ export const EditableFilename = ({
   className,
   isFolder = false,
 }: Props) => {
+  const { isRenaming, setRenamingPath } = useRenameStore();
   const { workspaceId } = useParams({ strict: false });
-  const isRenaming = useRenameStore((state) => state.isRenaming);
-  const setRenamingPath = useRenameStore((state) => state.setRenamingPath);
   const { renameNoteAndNavigate, renameFolderAndRefresh } = useWorkspaceActions(
     {
       workspace: workspaceId!,
