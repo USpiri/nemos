@@ -1,5 +1,14 @@
-import { ensureRoot } from "./ensure-root";
+import { ensureRoot } from "./service/ensure-root";
+import { AppError } from "./errors";
 
 export const initialize = async () => {
-  await ensureRoot();
+  try {
+    await ensureRoot();
+  } catch (error) {
+    throw new AppError(
+      "INIT_FAILED",
+      `Failed to initialize application\n` +
+        `Cause: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
+  }
 };
