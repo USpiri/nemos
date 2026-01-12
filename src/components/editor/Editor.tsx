@@ -15,15 +15,22 @@ interface Props {
   content?: string;
   className?: string;
   onUpdate?: (content: string) => void;
+  editable?: boolean;
 }
 
-export const Editor = ({ content, className, onUpdate }: Props) => {
+export const Editor = ({
+  content,
+  className,
+  onUpdate,
+  editable = true,
+}: Props) => {
   const editor = useEditor(
     {
       extensions: Extensions,
       content,
       injectCSS: false,
       autofocus: true,
+      editable,
       editorProps: {
         attributes: {
           class: cn("typography focus:outline-none relative", className),
