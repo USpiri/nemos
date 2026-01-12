@@ -11,7 +11,7 @@ import {
   type DownloadProgress,
   type Updater,
 } from "@/lib/updater";
-import { useUpdateStore } from "@/store";
+import { useDialogStore, useUpdateStore } from "@/store";
 
 interface UseUpdateReturn {
   available: boolean;
@@ -20,6 +20,9 @@ interface UseUpdateReturn {
   progress: DownloadProgress;
   isChecking: boolean;
   isDownloading: boolean;
+  isDialogOpen: boolean;
+  openDialog: () => void;
+  closeDialog: () => void;
   check: () => Promise<void>;
   downloadAndInstall: () => Promise<void>;
   download: () => Promise<void>;
@@ -39,6 +42,12 @@ export const useUpdate = (): UseUpdateReturn => {
   const setIsDownloading = useUpdateStore((state) => state.setIsDownloading);
   const reset = useUpdateStore((state) => state.reset);
 
+  const {
+    open: openDialog,
+    isOpen: isDialogOpen,
+    close: closeDialog,
+  } = useDialogStore();
+
   const check = useCallback(async () => {
     if (isChecking || updateInfo) return;
 
@@ -49,8 +58,21 @@ export const useUpdate = (): UseUpdateReturn => {
         setUpdateInfo(update);
         toast.success(`Update available: v${update.version}`, {
           action: {
-            label: "Download",
+            label: "Download & Install",
             onClick: () => downloadAndInstallFn(update.updater),
+          },
+          cancel: {
+            label: "View Changes",
+            onClick: () => {
+              if (!isDialogOpen("update")) openDialog("update");
+            },
+          },
+          className: "flex gap-4 flex-wrap",
+          classNames: {
+            icon: " mb-2",
+            content: "w-10/12 mb-2",
+            actionButton: "flex-1",
+            cancelButton: "flex-1",
           },
         });
       }
@@ -85,8 +107,13 @@ export const useUpdate = (): UseUpdateReturn => {
 
   const download = useCallback(async () => {
     if (!updateInfo?.updater) return;
+
+    setIsDownloading(true);
     try {
-      await downloadFn(updateInfo.updater, setProgress);
+      await downloadFn(updateInfo.updater, (progress) => {
+        console.log("download progress", progress);
+        setProgress(progress);
+      });
       toast.success("Update downloaded successfully", {
         description:
           "The application will restart to complete the installation",
@@ -96,7 +123,8 @@ export const useUpdate = (): UseUpdateReturn => {
       toast.error("Failed to download update", {
         description: error instanceof Error ? error.message : undefined,
       });
-      console.error("Failed to download update", error);
+    } finally {
+      setIsDownloading(false);
     }
   }, [updateInfo]);
 
@@ -134,6 +162,9 @@ export const useUpdate = (): UseUpdateReturn => {
     progress,
     isChecking,
     isDownloading,
+    isDialogOpen: isDialogOpen("update"),
+    openDialog: () => openDialog("update"),
+    closeDialog: () => closeDialog(),
     check,
     downloadAndInstall,
     download,

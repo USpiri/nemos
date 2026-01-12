@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type DialogType = "workspace";
+export type DialogType = "workspace" | "update";
 
 interface DialogState {
   dialog: DialogType | null;
