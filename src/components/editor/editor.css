@@ -1,11 +1,14 @@
 @layer base {
+  :root {
+    --font-size-multiplier: 1;
+  }
   .typography {
     color: var(--color-foreground);
     white-space: pre-wrap;
 
     & h1:not(.not-typography h1) {
       scroll-margin: calc(var(--spacing) * 20);
-      font-size: calc(var(--text-3xl) * 1.1);
+      font-size: calc(var(--text-3xl) * 1.1 * var(--font-size-multiplier));
       line-height: var(--text-4xl--line-height);
       font-weight: 700;
       letter-spacing: var(--tracking-tight);
@@ -20,7 +23,7 @@
       scroll-margin: calc(var(--spacing) * 20);
       border-bottom: 1px solid var(--color-border);
       padding-bottom: calc(var(--spacing) * 2);
-      font-size: var(--text-3xl);
+      font-size: calc(var(--text-3xl) * var(--font-size-multiplier));
       line-height: var(--text-3xl--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
@@ -33,7 +36,7 @@
 
     & h3:not(.not-typography h3) {
       scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-2xl);
+      font-size: calc(var(--text-2xl) * var(--font-size-multiplier));
       line-height: var(--text-2xl--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
@@ -46,7 +49,7 @@
 
     & h4:not(.not-typography h4) {
       scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-xl);
+      font-size: calc(var(--text-xl) * var(--font-size-multiplier));
       line-height: var(--text-xl--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
@@ -59,7 +62,7 @@
 
     & h5:not(.not-typography h5) {
       scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-lg);
+      font-size: calc(var(--text-lg) * var(--font-size-multiplier));
       line-height: var(--text-lg--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
@@ -72,7 +75,7 @@
 
     & h6:not(.not-typography h6) {
       scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-base);
+      font-size: calc(var(--text-base) * var(--font-size-multiplier));
       line-height: var(--text-base--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
@@ -96,6 +99,7 @@
 
     & p:not(.not-typography p) {
       line-height: 1.75;
+      font-size: calc(var(--text-base) * var(--font-size-multiplier));
 
       &:not(:first-child) {
         margin-top: calc(var(--spacing) * 6);
@@ -245,7 +249,7 @@
       padding: calc(var(--spacing) * 4);
       margin-top: calc(var(--spacing) * 6);
       margin-bottom: calc(var(--spacing) * 6);
-      font-size: var(--text-sm);
+      font-size: calc(var(--text-sm) * var(--font-size-multiplier));
       line-height: var(--text-sm--line-height);
       overflow-y: auto;
     }
@@ -260,31 +264,31 @@
       line-height: var(--text-sm--line-height);
 
       &:is(p > code) {
-        font-size: var(--text-sm);
+        font-size: calc(var(--text-sm) * var(--font-size-multiplier));
       }
     }
 
     & .lead:not(.not-typography .lead) {
-      font-size: var(--text-xl);
+      font-size: calc(var(--text-xl) * var(--font-size-multiplier));
       line-height: var(--text-xl--line-height);
       color: var(--color-muted-foreground);
     }
 
     & .large:not(.not-typography .large) {
-      font-size: var(--text-lg);
+      font-size: calc(var(--text-lg) * var(--font-size-multiplier));
       line-height: var(--text-lg--line-height);
       font-weight: 600;
     }
 
     & .small:not(.not-typography .small) {
-      font-size: var(--text-sm);
+      font-size: calc(var(--text-sm) * var(--font-size-multiplier));
       line-height: var(--text-sm--line-height);
       font-weight: 500;
       line-height: 1;
     }
 
     & .muted:not(.not-typography .muted) {
-      font-size: var(--text-sm);
+      font-size: calc(var(--text-sm) * var(--font-size-multiplier));
       line-height: var(--text-sm--line-height);
       color: var(--color-muted-foreground);
     }
@@ -305,7 +309,7 @@
       border-radius: calc(var(--radius) - 2px);
       background-color: var(--color-muted);
       padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
-      font-size: var(--text-xs);
+      font-size: calc(var(--text-xs) * var(--font-size-multiplier));
       line-height: var(--text-xs--line-height);
       font-weight: 600;
     }
@@ -352,7 +356,7 @@
     }
 
     & small:not(.not-typography small) {
-      font-size: var(--text-xs);
+      font-size: calc(var(--text-xs) * var(--font-size-multiplier));
       line-height: var(--text-xs--line-height);
       line-height: 1;
     }
@@ -383,7 +387,7 @@
 
     .math-content {
       font-family: var(--font-mono);
-      font-size: var(--text-sm);
+      font-size: calc(var(--text-sm) * var(--font-size-multiplier));
       padding: 0.5rem;
       background-color: var(--color-sidebar);
       border-bottom: 2px solid var(--color-border);
@@ -392,7 +396,7 @@
       &::after {
         content: "$$";
         display: block;
-        font-size: var(--text-xs);
+        font-size: calc(var(--text-xs) * var(--font-size-multiplier));
         color: var(--color-muted-foreground);
       }
     }
@@ -408,7 +412,7 @@
       padding: calc(var(--spacing) * 0.8) calc(var(--spacing) * 1.2);
       font-family: var(--font-mono);
       line-height: var(--text-sm--line-height);
-      font-size: var(--text-sm);
+      font-size: calc(var(--text-sm) * var(--font-size-multiplier));
 
       &::before,
       &::after {
@@ -435,7 +439,7 @@
   .mermaid-error {
     margin: 0;
     color: var(--color-destructive);
-    font-size: var(--text-sm);
+    font-size: calc(var(--text-sm) * var(--font-size-multiplier));
   }
 
   .mermaid-render {
