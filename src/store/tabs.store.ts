@@ -10,6 +10,7 @@ interface TabsState {
 interface TabsActions {
   // Core
   openTab: (tab: Tab) => Tab
+  openNewTab: (tab: Tab) => Tab
   closeTab: (tabId: string) => void
   activateTab: (tabId: string) => void
   isTabActive: (tabId: string) => boolean
@@ -55,10 +56,29 @@ export const useTabsStore = create<TabsState & TabsActions>()(
           return existing
         }
 
+        // Replace the existing tab with the new one
+        const tabs = state.tabs.map((t) =>
+          t.id === state.activeTabId ? tabData : t,
+        )
+
         set({
-          tabs: [...state.tabs, tabData],
+          tabs,
           activeTabId: tabData.id,
         })
+        return tabData
+      },
+
+      openNewTab: (tabData) => {
+        const state = get()
+        const existing = state.tabs.find((t) => t.id === tabData.id)
+
+        if (existing) {
+          get().activateTab(existing.id)
+          return existing
+        }
+
+        const tabs = [...state.tabs, tabData]
+        set({ tabs, activeTabId: tabData.id })
         return tabData
       },
 
