@@ -1,23 +1,19 @@
+import { getNoteNameWithoutExtension } from '../notes'
 import type { NoteTab } from './tab.type'
 
 export const createNoteTab = ({
-  id,
-  title,
-  path,
   workspaceId,
   noteId,
 }: {
-  id: string
-  title: string
-  path: string
   workspaceId: string
   noteId: string
 }): NoteTab => {
   return {
-    id,
+    id: noteId,
     type: 'note',
-    title,
-    path,
+    title:
+      getNoteNameWithoutExtension(`${workspaceId}/${noteId}`) || 'Untitled',
+    path: `workspace/${workspaceId}/notes/${noteId}`,
     dirty: false,
     payload: { workspaceId, noteId },
   }
