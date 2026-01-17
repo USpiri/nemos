@@ -1,16 +1,19 @@
-import { Topbar } from "@/components/layout/Topbar";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { getWorkspaceTree } from "@/lib/workspace";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { Topbar } from '@/components/layout/Topbar'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { useTabShortcuts } from '@/hooks/use-tab-shortcuts'
+import { getWorkspaceTree } from '@/lib/workspace'
 
-export const Route = createFileRoute("/workspace/$workspaceId")({
+export const Route = createFileRoute('/workspace/$workspaceId')({
   component: RouteComponent,
   loader: async ({ params: { workspaceId } }) =>
     await getWorkspaceTree(workspaceId),
-});
+})
 
 function RouteComponent() {
+  useTabShortcuts()
+
   return (
     <>
       <Sidebar />
@@ -21,5 +24,5 @@ function RouteComponent() {
         </ScrollArea>
       </div>
     </>
-  );
+  )
 }
