@@ -17,7 +17,12 @@
   },
   "linter": {
     "enabled": true,
-    "rules": { "recommended": false },
+    "rules": {
+      "recommended": false,
+      "nursery": {
+        "useSortedClasses": "warn"
+      }
+    },
     "includes": ["**", "!dist"]
   },
   "javascript": {
