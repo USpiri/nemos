@@ -28,9 +28,7 @@ export const Tab = ({ tab, isActive }: Props) => {
       closeTab(tab.id)
       // Navigate to the new active tab after closing
       const activeTab = useTabsStore.getState().getActiveTab()
-      if (activeTab) {
-        navigate({ to: activeTab.path })
-      }
+      if (activeTab) navigate(buildNavigationFromTab(activeTab))
     },
     [closeTab, tab.id, navigate],
   )
@@ -39,15 +37,10 @@ export const Tab = ({ tab, isActive }: Props) => {
     (e: React.MouseEvent) => {
       if (e.button === 1) {
         e.preventDefault()
-        closeTab(tab.id)
-        // Navigate to the new active tab after closing
-        const activeTab = useTabsStore.getState().getActiveTab()
-        if (activeTab) {
-          navigate({ to: activeTab.path })
-        }
+        handleClose(e)
       }
     },
-    [closeTab, tab.id, navigate],
+    [handleClose],
   )
 
   return (
