@@ -1,9 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useCallback } from 'react'
-import type { Tab as TabType } from '@/lib/tabs'
+import { buildNavigationFromTab, type Tab as TabType } from '@/lib/tabs'
 import { cn } from '@/lib/utils'
 import { useTabsStore } from '@/store'
+import { Button } from '../ui/button'
 import { TabContextMenu } from './TabContextMenu'
 
 interface Props {
@@ -18,8 +19,8 @@ export const Tab = ({ tab, isActive }: Props) => {
 
   const handleClick = useCallback(() => {
     activateTab(tab.id)
-    navigate({ to: tab.path })
-  }, [activateTab, tab.id, tab.path, navigate])
+    navigate(buildNavigationFromTab(tab))
+  }, [activateTab, tab, navigate])
 
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
@@ -72,16 +73,15 @@ export const Tab = ({ tab, isActive }: Props) => {
           {tab.dirty && <span className="mr-0.5">*</span>}
           {tab.title}
         </span>
-        <button
+        <Button
           onClick={handleClose}
           className={cn(
-            'shrink-0 rounded p-0.5',
-            'opacity-0 hover:bg-accent group-hover:opacity-100',
-            isActive && 'opacity-100',
+            'size-5 bg-transparent p-0.5 opacity-0 hover:bg-accent group-hover:opacity-100',
           )}
+          variant="secondary"
         >
           <X className="size-3" />
-        </button>
+        </Button>
       </div>
     </TabContextMenu>
   )
