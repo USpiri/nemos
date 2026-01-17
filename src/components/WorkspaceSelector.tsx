@@ -1,24 +1,24 @@
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useNavigate } from '@tanstack/react-router'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from './ui/select'
 
-const route = getRouteApi("__root__");
-const workspaceRoute = getRouteApi("/workspace/$workspaceId");
+const route = getRouteApi('__root__')
+const workspaceRoute = getRouteApi('/workspace/$workspaceId')
 
 export const WorkspaceSelector = () => {
-  const { workspaceId } = workspaceRoute.useParams();
-  const { workspaces } = route.useLoaderData();
-  const navigate = useNavigate();
+  const { workspaceId } = workspaceRoute.useParams()
+  const { workspaces } = route.useLoaderData()
+  const navigate = useNavigate()
 
   const handleWorkspaceChange = (workspaceId: string | null) => {
-    if (!workspaceId) return;
-    navigate({ to: "/workspace/$workspaceId", params: { workspaceId } });
-  };
+    if (!workspaceId) return
+    navigate({ to: '/workspace/$workspaceId', params: { workspaceId } })
+  }
 
   return (
     <Select value={workspaceId} onValueChange={handleWorkspaceChange}>
@@ -33,5 +33,5 @@ export const WorkspaceSelector = () => {
         ))}
       </SelectContent>
     </Select>
-  );
-};
+  )
+}

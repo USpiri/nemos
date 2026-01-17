@@ -1,40 +1,40 @@
+import { ErrorComponentProps, getRouteApi } from '@tanstack/react-router'
+import { AlertCircle, ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Empty,
-  EmptyMedia,
-  EmptyHeader,
-  EmptyTitle,
-  EmptyDescription,
   EmptyContent,
-} from "@/components/ui/empty";
-import { ErrorComponentProps, getRouteApi } from "@tanstack/react-router";
-import { AlertCircle, ArrowLeft } from "lucide-react";
-import { NoteError as NoteErrorClass } from "@/lib/notes";
-import { Code } from "@/components/ui/typography";
-import { Link } from "@/components/ui/link";
-import { Button } from "@/components/ui/button";
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty'
+import { Link } from '@/components/ui/link'
+import { Code } from '@/components/ui/typography'
+import { NoteError as NoteErrorClass } from '@/lib/notes'
 
-const route = getRouteApi("/workspace/$workspaceId/notes/$noteId");
+const route = getRouteApi('/workspace/$workspaceId/notes/$noteId')
 
 export const NoteError = ({ error, reset }: ErrorComponentProps) => {
   return (
     <main className="flex h-full items-center justify-center p-6">
       <NoteErrorSwitch error={error} reset={reset} />
     </main>
-  );
-};
+  )
+}
 
 const NoteErrorSwitch = ({
   error,
   reset,
 }: {
-  error: Error;
-  reset: () => void;
+  error: Error
+  reset: () => void
 }) => {
-  const { workspaceId } = route.useParams();
+  const { workspaceId } = route.useParams()
 
   if (error instanceof NoteErrorClass) {
     switch (error.code) {
-      case "NOT_FOUND":
+      case 'NOT_FOUND':
         return (
           <ErrorContent
             title="Note not found"
@@ -52,8 +52,8 @@ const NoteErrorSwitch = ({
               {error.message && <Code>{error.message}</Code>}
             </div>
           </ErrorContent>
-        );
-      case "INVALID_CONTENT":
+        )
+      case 'INVALID_CONTENT':
         return (
           <ErrorContent
             title="Invalid note content"
@@ -69,20 +69,20 @@ const NoteErrorSwitch = ({
                 Go back to workspace
               </Link>
               <div className="flex flex-row items-center gap-4">
-                <Button variant={"destructive"}>Delete note</Button>
+                <Button variant={'destructive'}>Delete note</Button>
                 <Button onClick={reset}>Reload page</Button>
               </div>
               {error.message && <Code>{error.message}</Code>}
             </div>
           </ErrorContent>
-        );
-      case "READ_FAILED":
+        )
+      case 'READ_FAILED':
         return (
           <ErrorContent
             title="Failed to read note"
             description="An unexpected error occurred while reading the note."
           />
-        );
+        )
     }
   }
 
@@ -91,17 +91,17 @@ const NoteErrorSwitch = ({
       title="Something went wrong"
       description="An unexpected error occurred."
     />
-  );
-};
+  )
+}
 
 const ErrorContent = ({
   title,
   description,
   children,
 }: {
-  title: string;
-  description: string;
-  children?: React.ReactNode;
+  title: string
+  description: string
+  children?: React.ReactNode
 }) => {
   return (
     <Empty>
@@ -114,5 +114,5 @@ const ErrorContent = ({
       </EmptyHeader>
       {children && <EmptyContent>{children}</EmptyContent>}
     </Empty>
-  );
-};
+  )
+}

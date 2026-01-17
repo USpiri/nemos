@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { isInsideNode } from "@/lib/editor/utils";
-import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import { Plus } from "lucide-react";
-import { useCallback } from "react";
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
+import { Plus } from 'lucide-react'
+import { useCallback } from 'react'
+import { Button } from '@/components/ui/button'
+import { isInsideNode } from '@/lib/editor/utils'
 
+// TODO: Reimplement this
 export const TableNodeView = ({ getPos, editor, node }: NodeViewProps) => {
   const addColumn = useCallback(() => {
     editor
@@ -11,8 +12,8 @@ export const TableNodeView = ({ getPos, editor, node }: NodeViewProps) => {
       .focus((getPos() ?? 0) + node.nodeSize)
       .addColumnAfter()
       .goToNextCell()
-      .run();
-  }, [editor, getPos, node.nodeSize]);
+      .run()
+  }, [editor, getPos, node.nodeSize])
   const addRow = useCallback(() => {
     editor
       .chain()
@@ -20,8 +21,8 @@ export const TableNodeView = ({ getPos, editor, node }: NodeViewProps) => {
       .addRowAfter()
       .fixTables()
       .focus(getPos() ?? 0 + node.nodeSize - 1)
-      .run();
-  }, [editor, getPos, node.nodeSize]);
+      .run()
+  }, [editor, getPos, node.nodeSize])
 
   return (
     <NodeViewWrapper className="relative">
@@ -51,5 +52,5 @@ export const TableNodeView = ({ getPos, editor, node }: NodeViewProps) => {
           </>
         )}
     </NodeViewWrapper>
-  );
-};
+  )
+}

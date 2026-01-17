@@ -1,22 +1,22 @@
+import { getRouteApi } from '@tanstack/react-router'
+import { FolderPlus, Settings, SquarePen } from 'lucide-react'
+import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import {
   SidebarHeader as SidebarHeaderBase,
   SidebarMenu,
   SidebarMenuButton,
-} from "../ui/sidebar";
-import { SquarePen, FolderPlus, Settings } from "lucide-react";
-import { getRouteApi } from "@tanstack/react-router";
-import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
+} from '../ui/sidebar'
 
-const route = getRouteApi("/workspace/$workspaceId");
+const route = getRouteApi('/workspace/$workspaceId')
 
 export const SidebarHeader = () => {
-  const { workspaceId } = route.useParams();
+  const { workspaceId } = route.useParams()
 
   const { createNoteAndNavigate, createFolderAndRefresh } = useWorkspaceActions(
     {
       workspace: workspaceId,
     },
-  );
+  )
 
   return (
     <SidebarHeaderBase className="border-border border-b">
@@ -38,5 +38,5 @@ export const SidebarHeader = () => {
         </SidebarMenuButton>
       </SidebarMenu>
     </SidebarHeaderBase>
-  );
-};
+  )
+}

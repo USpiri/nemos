@@ -1,4 +1,4 @@
-import { createFolderSchema, CreateFolderInput } from "../fs";
+import { CreateFolderInput, createFolderSchema } from '../fs'
 
-export const createWorkspaceSchema = createFolderSchema;
-export type CreateWorkspaceInput = CreateFolderInput;
+export const createWorkspaceSchema = createFolderSchema
+export type CreateWorkspaceInput = CreateFolderInput

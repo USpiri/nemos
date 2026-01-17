@@ -1,23 +1,23 @@
-import { hiddenStyle, isInsideNode } from "@/lib/editor/utils";
-import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import { useEffect, useMemo, useRef } from "react";
-import SmilesDrawer from "smiles-drawer";
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
+import { useEffect, useMemo, useRef } from 'react'
+import SmilesDrawer from 'smiles-drawer'
+import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 
 // TODO: Add theme support
 export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const drawer = useMemo(() => new SmilesDrawer.SvgDrawer({}), []);
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const drawer = useMemo(() => new SmilesDrawer.SvgDrawer({}), [])
 
   useEffect(() => {
-    if (!svgRef.current) return;
-    const smiles = SmilesDrawer.clean(node.textContent.trim());
+    if (!svgRef.current) return
+    const smiles = SmilesDrawer.clean(node.textContent.trim())
 
     SmilesDrawer.parse(
       smiles,
-      (tree: unknown) => drawer.draw(tree, svgRef.current, "dark"),
+      (tree: unknown) => drawer.draw(tree, svgRef.current, 'dark'),
       (err: unknown) => console.error(err),
-    );
-  }, [node.textContent, drawer]);
+    )
+  }, [node.textContent, drawer])
 
   return (
     <NodeViewWrapper className="smiles">
@@ -42,5 +42,5 @@ export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
         <svg ref={svgRef} />
       </div>
     </NodeViewWrapper>
-  );
-};
+  )
+}

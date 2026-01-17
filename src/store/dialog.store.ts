@@ -1,15 +1,15 @@
-import { create } from "zustand";
+import { create } from 'zustand'
 
-export type DialogType = "workspace" | "update";
+export type DialogType = 'workspace' | 'update'
 
 interface DialogState {
-  dialog: DialogType | null;
-  data: Record<string, unknown> | null;
+  dialog: DialogType | null
+  data: Record<string, unknown> | null
 
-  open: (dialog: DialogType, data?: Record<string, any>) => void;
-  close: () => void;
-  isOpen: (dialog: DialogType) => boolean;
-  getData: () => Record<string, unknown> | null;
+  open: (dialog: DialogType, data?: Record<string, any>) => void
+  close: () => void
+  isOpen: (dialog: DialogType) => boolean
+  getData: () => Record<string, unknown> | null
 }
 
 export const useDialogStore = create<DialogState>((set, get) => ({
@@ -19,4 +19,4 @@ export const useDialogStore = create<DialogState>((set, get) => ({
   close: () => set({ dialog: null, data: null }),
   isOpen: (dialog) => dialog === get().dialog,
   getData: () => get().data ?? null,
-}));
+}))

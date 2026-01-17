@@ -1,31 +1,31 @@
-import { NoteError, deleteNote as deleteNoteFn } from "@/lib/notes";
-import { useCallback } from "react";
-import { toast } from "sonner";
+import { useCallback } from 'react'
+import { toast } from 'sonner'
+import { deleteNote as deleteNoteFn, NoteError } from '@/lib/notes'
 
 interface Props {
-  workspace: string;
+  workspace: string
 }
 
 export const useDeleteNote = ({ workspace }: Props) => {
   const deleteNote = useCallback(
     async (note: string) => {
       try {
-        await deleteNoteFn({ workspace, note });
+        await deleteNoteFn({ workspace, note })
       } catch (error) {
         if (error instanceof NoteError) {
           switch (error.code) {
-            case "DELETE_FAILED":
-              toast.error("Failed to delete note", {
+            case 'DELETE_FAILED':
+              toast.error('Failed to delete note', {
                 description: error.message,
-              });
-              break;
+              })
+              break
           }
         } else {
-          toast.error("Failed to delete note");
+          toast.error('Failed to delete note')
         }
       }
     },
     [workspace],
-  );
-  return { deleteNote };
-};
+  )
+  return { deleteNote }
+}

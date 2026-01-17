@@ -1,21 +1,21 @@
-import { cn } from "@/lib/utils";
-import { DragHandle } from "@tiptap/extension-drag-handle-react";
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
-import { GripVertical } from "lucide-react";
-import { useMemo } from "react";
-import { Button } from "../ui/button";
-import { Extensions } from "./extensions";
+import { DragHandle } from '@tiptap/extension-drag-handle-react'
+import { EditorContent, EditorContext, useEditor } from '@tiptap/react'
+import { GripVertical } from 'lucide-react'
+import { useMemo } from 'react'
+import { cn } from '@/lib/utils'
+import { Button } from '../ui/button'
+import { Extensions } from './extensions'
 
-import "./editor.css";
-import "./extensions/higlights.css";
-import "./extensions/mermaid.css";
-import "katex/dist/katex.min.css";
+import './editor.css'
+import './extensions/higlights.css'
+import './extensions/mermaid.css'
+import 'katex/dist/katex.min.css'
 
 interface Props {
-  content?: string;
-  className?: string;
-  onUpdate?: (content: string) => void;
-  editable?: boolean;
+  content?: string
+  className?: string
+  onUpdate?: (content: string) => void
+  editable?: boolean
 }
 
 export const Editor = ({
@@ -33,19 +33,19 @@ export const Editor = ({
       editable,
       editorProps: {
         attributes: {
-          class: cn("typography focus:outline-none relative", className),
-          spellcheck: "false",
+          class: cn('typography focus:outline-none relative', className),
+          spellcheck: 'false',
         },
       },
       onUpdate: ({ editor }) => {
-        onUpdate?.(editor.getHTML());
+        onUpdate?.(editor.getHTML())
       },
     },
     [content],
-  );
+  )
 
-  const providerValue = useMemo(() => ({ editor }), [editor]);
-  if (!editor) return null;
+  const providerValue = useMemo(() => ({ editor }), [editor])
+  if (!editor) return null
 
   return (
     <>
@@ -62,5 +62,5 @@ export const Editor = ({
         <EditorContent editor={editor} />
       </EditorContext.Provider>
     </>
-  );
-};
+  )
+}

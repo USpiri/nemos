@@ -1,7 +1,7 @@
-import { Sidebar as SidebarBase } from "../ui/sidebar";
-import { SidebarHeader } from "./SidebarHeader";
-import { SidebarFooter } from "./SidebarFooter";
-import { SidebarContent } from "./SidebarContent";
+import { Sidebar as SidebarBase } from '../ui/sidebar'
+import { SidebarContent } from './SidebarContent'
+import { SidebarFooter } from './SidebarFooter'
+import { SidebarHeader } from './SidebarHeader'
 
 export const Sidebar = () => {
   return (
@@ -10,5 +10,5 @@ export const Sidebar = () => {
       <SidebarContent />
       <SidebarFooter />
     </SidebarBase>
-  );
-};
+  )
+}

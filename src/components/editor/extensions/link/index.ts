@@ -3,28 +3,25 @@
  * Original source: https://github.com/Doist/typist/blob/main/src/extensions/rich-text/rich-text-link.ts
  */
 
-import { openUrl } from "@tauri-apps/plugin-opener";
-import {
-  Link as LinkExtension,
-  type LinkOptions,
-} from "@tiptap/extension-link";
-import { Plugin } from "@tiptap/pm/state";
-import { InputRule, markInputRule } from "@tiptap/react";
+import { openUrl } from '@tauri-apps/plugin-opener'
+import { Link as LinkExtension, type LinkOptions } from '@tiptap/extension-link'
+import { Plugin } from '@tiptap/pm/state'
+import { InputRule, markInputRule } from '@tiptap/react'
 
 function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
-  const defaultMarkInputRule = markInputRule(config);
+  const defaultMarkInputRule = markInputRule(config)
 
   return new InputRule({
     find: config.find,
     handler(props) {
-      const { tr } = props.state;
+      const { tr } = props.state
 
-      defaultMarkInputRule.handler(props);
-      tr.setMeta("preventAutolink", true);
+      defaultMarkInputRule.handler(props)
+      tr.setMeta('preventAutolink', true)
     },
-  });
+  })
 }
-const inputRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)$/i;
+const inputRegex = /(?:^|\s)\[([^\]]*)?\]\((\S+)(?: ["“](.+)["”])?\)$/i
 
 export const Link = LinkExtension.extend<LinkOptions>({
   inclusive: false,
@@ -32,8 +29,8 @@ export const Link = LinkExtension.extend<LinkOptions>({
   addOptions() {
     return {
       ...(this.parent?.() as LinkOptions),
-      openOnClick: "whenNotEditable",
-    };
+      openOnClick: 'whenNotEditable',
+    }
   },
 
   addAttributes() {
@@ -42,7 +39,7 @@ export const Link = LinkExtension.extend<LinkOptions>({
       title: {
         default: null,
       },
-    };
+    }
   },
 
   addInputRules() {
@@ -54,14 +51,14 @@ export const Link = LinkExtension.extend<LinkOptions>({
           return {
             title: match.pop()?.trim(),
             href: match.pop()?.trim(),
-          };
+          }
         },
       }),
-    ];
+    ]
   },
 
   addProseMirrorPlugins() {
-    let hoveredElement: HTMLElement | null = null;
+    let hoveredElement: HTMLElement | null = null
     return [
       new Plugin({
         props: {
@@ -70,18 +67,18 @@ export const Link = LinkExtension.extend<LinkOptions>({
            * Click to open on read-only mode
            * */
           handleClick(view, _pos, event) {
-            if (!view.editable) return false;
-            if (!event.ctrlKey) return false;
+            if (!view.editable) return false
+            if (!event.ctrlKey) return false
 
-            const element = event.target as HTMLElement;
+            const element = event.target as HTMLElement
             const target = (
-              element.matches("a") ? event.target : element.parentElement
-            ) as HTMLAnchorElement;
-            if (target.tagName !== "A" && !target.hasAttribute("href"))
-              return false;
+              element.matches('a') ? event.target : element.parentElement
+            ) as HTMLAnchorElement
+            if (target.tagName !== 'A' && !target.hasAttribute('href'))
+              return false
 
-            const url = target.href;
-            openUrl(url);
+            const url = target.href
+            openUrl(url)
           },
 
           handleDOMEvents: {
@@ -90,15 +87,15 @@ export const Link = LinkExtension.extend<LinkOptions>({
              * https://github.com/tauri-apps/tauri/issues/2791
              * */
             click: (view, event) => {
-              if (!view.editable) return;
+              if (!view.editable) return
 
-              const element = event.target as HTMLElement;
+              const element = event.target as HTMLElement
               const target = (
-                element.matches("a") ? event.target : element.parentElement
-              ) as HTMLAnchorElement;
-              if (target.tagName === "A" && target.hasAttribute("href")) {
-                event.preventDefault();
-                event.stopPropagation();
+                element.matches('a') ? event.target : element.parentElement
+              ) as HTMLAnchorElement
+              if (target.tagName === 'A' && target.hasAttribute('href')) {
+                event.preventDefault()
+                event.stopPropagation()
               }
             },
 
@@ -106,38 +103,38 @@ export const Link = LinkExtension.extend<LinkOptions>({
              * cursor-pointer on ctrl + key + hover
              * */
             mouseover: (_, event) => {
-              const element = event.target as HTMLElement;
+              const element = event.target as HTMLElement
               const target = (
-                element.matches("a") ? event.target : element.parentElement
-              ) as HTMLAnchorElement;
-              if (target.tagName === "A" && target.hasAttribute("href")) {
-                hoveredElement = target;
-                if (event.ctrlKey) target.classList.add("cursor-pointer");
+                element.matches('a') ? event.target : element.parentElement
+              ) as HTMLAnchorElement
+              if (target.tagName === 'A' && target.hasAttribute('href')) {
+                hoveredElement = target
+                if (event.ctrlKey) target.classList.add('cursor-pointer')
               }
             },
             mouseout: (_, event) => {
-              const element = event.target as HTMLElement;
+              const element = event.target as HTMLElement
               const target = (
-                element.matches("a") ? event.target : element.parentElement
-              ) as HTMLAnchorElement;
-              if (target.tagName === "A" && target.hasAttribute("href")) {
-                target.classList.remove("cursor-pointer");
-                hoveredElement = null;
+                element.matches('a') ? event.target : element.parentElement
+              ) as HTMLAnchorElement
+              if (target.tagName === 'A' && target.hasAttribute('href')) {
+                target.classList.remove('cursor-pointer')
+                hoveredElement = null
               }
             },
             keydown: (_, event) => {
-              if (event.key === "Control" && hoveredElement) {
-                hoveredElement.classList.add("cursor-pointer");
+              if (event.key === 'Control' && hoveredElement) {
+                hoveredElement.classList.add('cursor-pointer')
               }
             },
             keyup: (_, event) => {
-              if (event.key === "Control" && hoveredElement) {
-                hoveredElement.classList.remove("cursor-pointer");
+              if (event.key === 'Control' && hoveredElement) {
+                hoveredElement.classList.remove('cursor-pointer')
               }
             },
           },
         },
       }),
-    ];
+    ]
   },
-});
+})

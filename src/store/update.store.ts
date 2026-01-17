@@ -1,20 +1,20 @@
-import { create } from "zustand";
+import { create } from 'zustand'
 import {
+  type DownloadProgress,
   initialProgress,
   type UpdateInfo,
-  type DownloadProgress,
-} from "@/lib/updater";
+} from '@/lib/updater'
 
 interface UpdateStore {
-  updateInfo: UpdateInfo | null;
-  progress: DownloadProgress;
-  isChecking: boolean;
-  isDownloading: boolean;
-  setUpdateInfo: (info: UpdateInfo | null) => void;
-  setProgress: (progress: DownloadProgress) => void;
-  setIsChecking: (isChecking: boolean) => void;
-  setIsDownloading: (isDownloading: boolean) => void;
-  reset: () => void;
+  updateInfo: UpdateInfo | null
+  progress: DownloadProgress
+  isChecking: boolean
+  isDownloading: boolean
+  setUpdateInfo: (info: UpdateInfo | null) => void
+  setProgress: (progress: DownloadProgress) => void
+  setIsChecking: (isChecking: boolean) => void
+  setIsDownloading: (isDownloading: boolean) => void
+  reset: () => void
 }
 
 /**
@@ -37,4 +37,4 @@ export const useUpdateStore = create<UpdateStore>((set) => ({
       isChecking: false,
       isDownloading: false,
     }),
-}));
+}))

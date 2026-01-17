@@ -1,17 +1,17 @@
 export type NoteErrorCode =
-  | "NOT_FOUND"
-  | "INVALID_CONTENT"
-  | "READ_FAILED"
-  | "CREATE_FAILED"
-  | "COPY_FAILED"
-  | "RENAME_FAILED"
-  | "DELETE_FAILED";
+  | 'NOT_FOUND'
+  | 'INVALID_CONTENT'
+  | 'READ_FAILED'
+  | 'CREATE_FAILED'
+  | 'COPY_FAILED'
+  | 'RENAME_FAILED'
+  | 'DELETE_FAILED'
 
 export class NoteError extends Error {
-  readonly code: NoteErrorCode;
+  readonly code: NoteErrorCode
 
   constructor(code: NoteErrorCode, message?: string) {
-    super(message);
-    this.code = code;
+    super(message)
+    this.code = code
   }
 }

@@ -1,22 +1,22 @@
+import { useMemo } from 'react'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { supportedLanguages } from "@/config/code-languages";
-import { useMemo } from "react";
+} from '@/components/ui/select'
+import { supportedLanguages } from '@/config/code-languages'
 
 interface Props {
-  value: string;
-  onChange: (value: string) => void;
+  value: string
+  onChange: (value: string) => void
 }
 
 export const LanguageSelector = ({ value, onChange }: Props) => {
   const currentLanguage = useMemo(() => {
-    return supportedLanguages.find((lang) => lang.match.includes(value));
-  }, [value]);
+    return supportedLanguages.find((lang) => lang.match.includes(value))
+  }, [value])
 
   return (
     <Select defaultValue={value} onValueChange={(value) => onChange(value!)}>
@@ -36,5 +36,5 @@ export const LanguageSelector = ({ value, onChange }: Props) => {
         ))}
       </SelectContent>
     </Select>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { TableKit } from "@tiptap/extension-table";
+import { TableKit } from '@tiptap/extension-table'
 
 // TODO:
 // - Delete column/row by pressing backspace when empty row/column is selected
@@ -14,16 +14,16 @@ export const Table = TableKit.configure({
   addKeyboardShortcuts() {
     return {
       ...this.parent?.(),
-      "Shift-Control-Enter": () => this.editor.commands.addRowBefore(),
-      "Control-Enter": () => this.editor.commands.addRowAfter(),
-      "Shift-Control-Tab": () =>
+      'Shift-Control-Enter': () => this.editor.commands.addRowBefore(),
+      'Control-Enter': () => this.editor.commands.addRowAfter(),
+      'Shift-Control-Tab': () =>
         this.editor.chain().addColumnBefore().goToPreviousCell().run(),
-      "Control-Tab": () => {
-        return this.editor.chain().addColumnAfter().goToNextCell().run();
+      'Control-Tab': () => {
+        return this.editor.chain().addColumnAfter().goToNextCell().run()
       },
-    };
+    }
   },
   onUpdate() {
-    this.editor.commands.fixTables();
+    this.editor.commands.fixTables()
   },
-});
+})

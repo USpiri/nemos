@@ -1,25 +1,25 @@
 import {
+  Classes,
   DropOptions,
   getBackendOptions,
   MultiBackend,
   NodeModel,
-  Tree as TreeView,
   NodeRender,
-  Classes,
-} from "@minoru/react-dnd-treeview";
-import { useRef } from "react";
-import { DndProvider } from "react-dnd";
+  Tree as TreeView,
+} from '@minoru/react-dnd-treeview'
+import { useRef } from 'react'
+import { DndProvider } from 'react-dnd'
 
 interface TreeProps {
-  tree: NodeModel[];
-  rootId: string;
-  onDrop: (tree: NodeModel<unknown>[], options: DropOptions<unknown>) => void;
-  render: NodeRender<unknown>;
-  classes?: Classes;
+  tree: NodeModel[]
+  rootId: string
+  onDrop: (tree: NodeModel<unknown>[], options: DropOptions<unknown>) => void
+  render: NodeRender<unknown>
+  classes?: Classes
 }
 
 export const Tree = ({ tree, rootId, onDrop, render, classes }: TreeProps) => {
-  const contextRef = useRef(null);
+  const contextRef = useRef(null)
   return (
     <div ref={contextRef}>
       <DndProvider
@@ -36,5 +36,5 @@ export const Tree = ({ tree, rootId, onDrop, render, classes }: TreeProps) => {
         />
       </DndProvider>
     </div>
-  );
-};
+  )
+}

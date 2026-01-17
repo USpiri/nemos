@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const WorkspacePending = () => {
   return (
@@ -16,5 +16,5 @@ export const WorkspacePending = () => {
         <Skeleton className="h-8 w-24" />
       </div>
     </div>
-  );
-};
+  )
+}

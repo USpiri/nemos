@@ -1,6 +1,5 @@
-import { Card, CardHeader } from "@/components/ui/card";
-import { CardFooter } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardFooter, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const WorkspacePending = () => {
   return (
@@ -24,5 +23,5 @@ export const WorkspacePending = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

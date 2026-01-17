@@ -1,10 +1,10 @@
-import { Extension } from "@tiptap/react";
-import { MathDisplay } from "./math-display";
-import { MathInline } from "./math-inline";
+import { Extension } from '@tiptap/react'
+import { MathDisplay } from './math-display'
+import { MathInline } from './math-inline'
 
 export const Math = Extension.create({
-  name: "math",
+  name: 'math',
   addExtensions() {
-    return [MathDisplay, MathInline];
+    return [MathDisplay, MathInline]
   },
-});
+})

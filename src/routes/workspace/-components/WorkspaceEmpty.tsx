@@ -1,17 +1,17 @@
-import { ROOT } from "@/config/constants";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { Code } from "@/components/ui/typography";
+} from '@/components/ui/empty'
+import { Code } from '@/components/ui/typography'
+import { ROOT } from '@/config/constants'
 
 type Props = {
-  onRefresh?: () => void;
-};
+  onRefresh?: () => void
+}
 
 export const WorkspaceEmpty = ({ onRefresh }: Props) => {
   return (
@@ -29,5 +29,5 @@ export const WorkspaceEmpty = ({ onRefresh }: Props) => {
         <Button variant="outline">Create a new workspace</Button>
       </EmptyContent>
     </Empty>
-  );
-};
+  )
+}

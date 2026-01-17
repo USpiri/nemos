@@ -1,10 +1,10 @@
-import { H1, P } from "@/components/ui/typography";
-import { Sparkles } from "lucide-react";
+import { Sparkles } from 'lucide-react'
+import { H1, P } from '@/components/ui/typography'
 
 type Props = {
-  workspace: string;
-  count: number;
-};
+  workspace: string
+  count: number
+}
 
 export const WorkspaceHeader = ({ workspace, count }: Props) => {
   return (
@@ -16,10 +16,10 @@ export const WorkspaceHeader = ({ workspace, count }: Props) => {
         <H1 size="sm">{workspace}</H1>
         <P variant="muted" size="sm" className="not-first:mt-0">
           {count === 0
-            ? "No notes yet"
-            : `${count} ${count === 1 ? "note" : "notes"} created`}
+            ? 'No notes yet'
+            : `${count} ${count === 1 ? 'note' : 'notes'} created`}
         </P>
       </div>
     </header>
-  );
-};
+  )
+}

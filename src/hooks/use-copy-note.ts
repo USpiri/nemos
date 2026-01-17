@@ -1,31 +1,31 @@
-import { toast } from "sonner";
-import { useCallback } from "react";
-import { copyNote as copyNoteFn } from "@/lib/notes";
+import { useCallback } from 'react'
+import { toast } from 'sonner'
+import { copyNote as copyNoteFn } from '@/lib/notes'
 
 interface Props {
-  workspace: string;
+  workspace: string
 }
 
 export const useCopyNote = ({ workspace }: Props) => {
   const copyNote = useCallback(
     async (noteName: string, onSuccess?: (notePath: string) => void) => {
       if (!noteName) {
-        toast.error("Note name is required");
-        return;
+        toast.error('Note name is required')
+        return
       }
 
       try {
         const notePath = await copyNoteFn({
           workspace,
           path: noteName,
-        });
-        onSuccess?.(notePath);
+        })
+        onSuccess?.(notePath)
       } catch (error) {
-        toast.error("Failed to copy note");
+        toast.error('Failed to copy note')
       }
     },
     [workspace],
-  );
+  )
 
-  return { copyNote };
-};
+  return { copyNote }
+}

@@ -1,159 +1,159 @@
-import { useCallback } from "react";
-import { toast } from "sonner";
+import { useCallback } from 'react'
+import { toast } from 'sonner'
 import {
-  initialProgress,
   checkForUpdate,
-  downloadAndInstall as downloadAndInstallFn,
   close as closeFn,
-  install as installFn,
-  download as downloadFn,
-  type UpdateInfo,
   type DownloadProgress,
+  downloadAndInstall as downloadAndInstallFn,
+  download as downloadFn,
+  initialProgress,
+  install as installFn,
+  type UpdateInfo,
   type Updater,
-} from "@/lib/updater";
-import { useDialogStore, useUpdateStore } from "@/store";
+} from '@/lib/updater'
+import { useDialogStore, useUpdateStore } from '@/store'
 
 interface UseUpdateReturn {
-  available: boolean;
-  updateInfo: UpdateInfo | null;
-  updater: Updater | undefined;
-  progress: DownloadProgress;
-  isChecking: boolean;
-  isDownloading: boolean;
-  isDialogOpen: boolean;
-  openDialog: () => void;
-  closeDialog: () => void;
-  check: () => Promise<void>;
-  downloadAndInstall: () => Promise<void>;
-  download: () => Promise<void>;
-  install: () => Promise<void>;
-  dismiss: () => Promise<void>;
-  reset: () => void;
+  available: boolean
+  updateInfo: UpdateInfo | null
+  updater: Updater | undefined
+  progress: DownloadProgress
+  isChecking: boolean
+  isDownloading: boolean
+  isDialogOpen: boolean
+  openDialog: () => void
+  closeDialog: () => void
+  check: () => Promise<void>
+  downloadAndInstall: () => Promise<void>
+  download: () => Promise<void>
+  install: () => Promise<void>
+  dismiss: () => Promise<void>
+  reset: () => void
 }
 
 export const useUpdate = (): UseUpdateReturn => {
-  const updateInfo = useUpdateStore((state) => state.updateInfo);
-  const progress = useUpdateStore((state) => state.progress);
-  const isChecking = useUpdateStore((state) => state.isChecking);
-  const isDownloading = useUpdateStore((state) => state.isDownloading);
-  const setUpdateInfo = useUpdateStore((state) => state.setUpdateInfo);
-  const setProgress = useUpdateStore((state) => state.setProgress);
-  const setIsChecking = useUpdateStore((state) => state.setIsChecking);
-  const setIsDownloading = useUpdateStore((state) => state.setIsDownloading);
-  const reset = useUpdateStore((state) => state.reset);
+  const updateInfo = useUpdateStore((state) => state.updateInfo)
+  const progress = useUpdateStore((state) => state.progress)
+  const isChecking = useUpdateStore((state) => state.isChecking)
+  const isDownloading = useUpdateStore((state) => state.isDownloading)
+  const setUpdateInfo = useUpdateStore((state) => state.setUpdateInfo)
+  const setProgress = useUpdateStore((state) => state.setProgress)
+  const setIsChecking = useUpdateStore((state) => state.setIsChecking)
+  const setIsDownloading = useUpdateStore((state) => state.setIsDownloading)
+  const reset = useUpdateStore((state) => state.reset)
 
   const {
     open: openDialog,
     isOpen: isDialogOpen,
     close: closeDialog,
-  } = useDialogStore();
+  } = useDialogStore()
 
   const check = useCallback(async () => {
-    if (isChecking || updateInfo) return;
+    if (isChecking || updateInfo) return
 
-    setIsChecking(true);
+    setIsChecking(true)
     try {
-      const update = await checkForUpdate();
+      const update = await checkForUpdate()
       if (update) {
-        setUpdateInfo(update);
+        setUpdateInfo(update)
         toast.success(`Update available: v${update.version}`, {
           action: {
-            label: "Download & Install",
+            label: 'Download & Install',
             onClick: () => downloadAndInstallFn(update.updater),
           },
           cancel: {
-            label: "View Changes",
+            label: 'View Changes',
             onClick: () => {
-              if (!isDialogOpen("update")) openDialog("update");
+              if (!isDialogOpen('update')) openDialog('update')
             },
           },
-          className: "flex gap-4 flex-wrap",
+          className: 'flex gap-4 flex-wrap',
           classNames: {
-            icon: " mb-2",
-            content: "w-10/12 mb-2",
-            actionButton: "flex-1",
-            cancelButton: "flex-1",
+            icon: ' mb-2',
+            content: 'w-10/12 mb-2',
+            actionButton: 'flex-1',
+            cancelButton: 'flex-1',
           },
-        });
+        })
       }
     } catch (error) {
       // Don't show toast error, just log it
-      console.error("Failed to check for updates", error);
+      console.error('Failed to check for updates', error)
     } finally {
-      setIsChecking(false);
+      setIsChecking(false)
     }
-  }, [isChecking, updateInfo, setUpdateInfo, setIsChecking]);
+  }, [isChecking, updateInfo, setUpdateInfo, setIsChecking])
 
   const downloadAndInstall = useCallback(async () => {
-    if (!updateInfo?.updater || isDownloading) return;
+    if (!updateInfo?.updater || isDownloading) return
 
-    setIsDownloading(true);
+    setIsDownloading(true)
     try {
-      await downloadAndInstallFn(updateInfo.updater, setProgress);
+      await downloadAndInstallFn(updateInfo.updater, setProgress)
 
-      toast.success("Update downloaded successfully", {
+      toast.success('Update downloaded successfully', {
         description:
-          "The application will restart to complete the installation",
-      });
+          'The application will restart to complete the installation',
+      })
     } catch (error) {
-      setProgress({ ...initialProgress, status: "error" });
-      toast.error("Failed to download and install update", {
+      setProgress({ ...initialProgress, status: 'error' })
+      toast.error('Failed to download and install update', {
         description: error instanceof Error ? error.message : undefined,
-      });
+      })
     } finally {
-      setIsDownloading(false);
+      setIsDownloading(false)
     }
-  }, [updateInfo, isDownloading, setProgress, setIsDownloading]);
+  }, [updateInfo, isDownloading, setProgress, setIsDownloading])
 
   const download = useCallback(async () => {
-    if (!updateInfo?.updater) return;
+    if (!updateInfo?.updater) return
 
-    setIsDownloading(true);
+    setIsDownloading(true)
     try {
       await downloadFn(updateInfo.updater, (progress) => {
-        console.log("download progress", progress);
-        setProgress(progress);
-      });
-      toast.success("Update downloaded successfully", {
+        console.log('download progress', progress)
+        setProgress(progress)
+      })
+      toast.success('Update downloaded successfully', {
         description:
-          "The application will restart to complete the installation",
-      });
+          'The application will restart to complete the installation',
+      })
     } catch (error) {
-      setProgress({ ...initialProgress, status: "error" });
-      toast.error("Failed to download update", {
+      setProgress({ ...initialProgress, status: 'error' })
+      toast.error('Failed to download update', {
         description: error instanceof Error ? error.message : undefined,
-      });
+      })
     } finally {
-      setIsDownloading(false);
+      setIsDownloading(false)
     }
-  }, [updateInfo]);
+  }, [updateInfo])
 
   const install = useCallback(async () => {
-    if (!updateInfo?.updater) return;
+    if (!updateInfo?.updater) return
     try {
-      await installFn(updateInfo.updater);
-      toast.success("Update installed successfully", {
+      await installFn(updateInfo.updater)
+      toast.success('Update installed successfully', {
         description:
-          "The application will restart to complete the installation",
-      });
+          'The application will restart to complete the installation',
+      })
     } catch (error) {
-      setProgress({ ...initialProgress, status: "error" });
-      toast.error("Failed to install update", {
+      setProgress({ ...initialProgress, status: 'error' })
+      toast.error('Failed to install update', {
         description: error instanceof Error ? error.message : undefined,
-      });
-      console.error("Failed to install update", error);
+      })
+      console.error('Failed to install update', error)
     }
-  }, [updateInfo]);
+  }, [updateInfo])
 
   const dismiss = useCallback(async () => {
-    if (!updateInfo?.updater) return;
+    if (!updateInfo?.updater) return
     try {
-      await closeFn(updateInfo.updater);
-      reset();
+      await closeFn(updateInfo.updater)
+      reset()
     } catch (error) {
-      console.error("Failed to dismiss update", error);
+      console.error('Failed to dismiss update', error)
     }
-  }, [updateInfo]);
+  }, [updateInfo])
 
   return {
     available: !!updateInfo,
@@ -162,8 +162,8 @@ export const useUpdate = (): UseUpdateReturn => {
     progress,
     isChecking,
     isDownloading,
-    isDialogOpen: isDialogOpen("update"),
-    openDialog: () => openDialog("update"),
+    isDialogOpen: isDialogOpen('update'),
+    openDialog: () => openDialog('update'),
     closeDialog: () => closeDialog(),
     check,
     downloadAndInstall,
@@ -171,5 +171,5 @@ export const useUpdate = (): UseUpdateReturn => {
     install,
     dismiss,
     reset,
-  };
-};
+  }
+}

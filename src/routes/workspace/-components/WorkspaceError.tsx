@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { type ErrorComponentProps } from '@tanstack/react-router'
+import { AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Empty,
-  EmptyTitle,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
-} from "@/components/ui/empty";
-import { AlertCircle } from "lucide-react";
-import { type ErrorComponentProps } from "@tanstack/react-router";
+  EmptyTitle,
+} from '@/components/ui/empty'
 
 export const WorkspaceError = ({ error, reset }: ErrorComponentProps) => {
   return (
@@ -26,5 +26,5 @@ export const WorkspaceError = ({ error, reset }: ErrorComponentProps) => {
         </EmptyContent>
       </Empty>
     </main>
-  );
-};
+  )
+}

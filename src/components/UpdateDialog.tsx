@@ -1,4 +1,6 @@
-import { useUpdate } from "@/hooks/use-update";
+import { CheckIcon, DownloadIcon, XIcon } from 'lucide-react'
+import { CSSProperties } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -6,15 +8,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { DownloadIcon, XIcon, CheckIcon } from "lucide-react";
-import { Progress } from "./ui/progress";
-import { cn } from "@/lib/utils";
-import { Editor } from "./editor";
-import { CSSProperties } from "react";
-import { ScrollArea } from "./ui/scroll-area";
-import { Badge } from "./ui/badge";
+} from '@/components/ui/dialog'
+import { useUpdate } from '@/hooks/use-update'
+import { cn } from '@/lib/utils'
+import { Editor } from './editor'
+import { Badge } from './ui/badge'
+import { Progress } from './ui/progress'
+import { ScrollArea } from './ui/scroll-area'
 
 /**
  * Dialog that displays update information and allows users to download and install
@@ -28,16 +28,16 @@ export const UpdateDialog = () => {
     closeDialog,
     download,
     dismiss,
-  } = useUpdate();
+  } = useUpdate()
 
-  if (!updateInfo) return null;
+  if (!updateInfo) return null
 
   const handleInstall = async () => {
-    await download();
-  };
+    await download()
+  }
 
-  const isDownloadComplete = progress.status === "finished";
-  const hasError = progress.status === "error";
+  const isDownloadComplete = progress.status === 'finished'
+  const hasError = progress.status === 'error'
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={(open) => !open && closeDialog()}>
@@ -60,7 +60,7 @@ export const UpdateDialog = () => {
         {/* Release Notes */}
         {updateInfo.body && (
           <div
-            style={{ "--font-size-multiplier": "0.8" } as CSSProperties}
+            style={{ '--font-size-multiplier': '0.8' } as CSSProperties}
             className="bg-muted/50 rounded-lg border p-1"
           >
             <ScrollArea className="max-h-80 w-full p-4">
@@ -80,10 +80,10 @@ export const UpdateDialog = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">
-                  {progress.status === "started" && "Starting download..."}
-                  {progress.status === "progress" && "Downloading..."}
-                  {progress.status === "finished" && "Download complete"}
-                  {progress.status === "error" && "Download failed"}
+                  {progress.status === 'started' && 'Starting download...'}
+                  {progress.status === 'progress' && 'Downloading...'}
+                  {progress.status === 'finished' && 'Download complete'}
+                  {progress.status === 'error' && 'Download failed'}
                 </span>
                 {progress.percentage > 0 && (
                   <span className="font-medium">{progress.percentage}%</span>
@@ -92,7 +92,7 @@ export const UpdateDialog = () => {
               <div className="flex items-center gap-1">
                 <Progress
                   value={progress.percentage}
-                  className={cn("h-2 w-full", hasError && "bg-destructive")}
+                  className={cn('h-2 w-full', hasError && 'bg-destructive')}
                 />
                 <Button variant="ghost" size="icon" onClick={() => dismiss()}>
                   <XIcon className="text-destructive" />
@@ -123,12 +123,12 @@ export const UpdateDialog = () => {
             ) : (
               <>
                 <DownloadIcon />
-                {isDownloading ? "Downloading..." : "Download & Install"}
+                {isDownloading ? 'Downloading...' : 'Download & Install'}
               </>
             )}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

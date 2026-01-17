@@ -1,37 +1,37 @@
-import { ROOT } from "@/config/constants";
-import { getWorkspaces } from "@/lib/workspace";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { Code, H1, P } from "@/components/ui/typography";
-import { Button } from "@/components/ui/button";
-import { FolderPlus } from "lucide-react";
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { FolderPlus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Code, H1, P } from '@/components/ui/typography'
+import { ROOT } from '@/config/constants'
+import { useDialog } from '@/hooks/use-dialog'
+import { getWorkspaces } from '@/lib/workspace'
 import {
-  WorkspacePending,
-  WorkspaceList,
   WorkspaceEmpty,
   WorkspaceError,
-} from "./-components";
-import { useDialog } from "@/hooks/use-dialog";
+  WorkspaceList,
+  WorkspacePending,
+} from './-components'
 
-export const Route = createFileRoute("/workspace/")({
+export const Route = createFileRoute('/workspace/')({
   loader: async () => {
-    const workspaces = await getWorkspaces();
-    return { workspaces };
+    const workspaces = await getWorkspaces()
+    return { workspaces }
   },
   pendingComponent: WorkspacePending,
   errorComponent: WorkspaceError,
   component: WorkspaceIndex,
-});
+})
 
 function WorkspaceIndex() {
-  const { workspaces } = Route.useLoaderData();
-  const router = useRouter();
-  const { open } = useDialog();
+  const { workspaces } = Route.useLoaderData()
+  const router = useRouter()
+  const { open } = useDialog()
 
   const handleRefresh = () => {
-    void router.invalidate();
-  };
+    void router.invalidate()
+  }
 
-  const length = workspaces.length;
+  const length = workspaces.length
 
   return (
     <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-10 py-32">
@@ -51,9 +51,9 @@ function WorkspaceIndex() {
         )}
       </section>
 
-      <Button variant="outline" onClick={() => open("workspace")}>
+      <Button variant="outline" onClick={() => open('workspace')}>
         <FolderPlus /> Create a new workspace
       </Button>
     </div>
-  );
+  )
 }

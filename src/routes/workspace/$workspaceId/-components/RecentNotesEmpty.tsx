@@ -1,11 +1,11 @@
+import { FileText } from 'lucide-react'
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { FileText } from "lucide-react";
+} from '@/components/ui/empty'
 
 export const RecentNotesEmpty = () => {
   return (
@@ -20,5 +20,5 @@ export const RecentNotesEmpty = () => {
         </EmptyDescription>
       </EmptyHeader>
     </Empty>
-  );
-};
+  )
+}

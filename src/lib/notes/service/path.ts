@@ -3,46 +3,46 @@ import {
   DEFAULT_NOTE_NAME,
   FILE_EXTENSION,
   ROOT,
-} from "@/config/constants";
+} from '@/config/constants'
 
 // TODO: rename to getPath ot getWorkspacePath
 export const getNotePath = (path: string, root = ROOT) => {
-  return `${root}/${path}`;
-};
+  return `${root}/${path}`
+}
 
 export const getNoteFolderPath = (path: string) => {
-  const isFolder = !path.endsWith(FILE_EXTENSION);
-  return isFolder ? path : path.split("/").slice(0, -1).join("/");
-};
+  const isFolder = !path.endsWith(FILE_EXTENSION)
+  return isFolder ? path : path.split('/').slice(0, -1).join('/')
+}
 
 export const getFolderParentPath = (path: string) => {
-  return path.split("/").slice(0, -1).join("/");
-};
+  return path.split('/').slice(0, -1).join('/')
+}
 
 export function getNewNotePath(parentPath?: string) {
-  if (!parentPath) return DEFAULT_NOTE_NAME;
+  if (!parentPath) return DEFAULT_NOTE_NAME
   if (parentPath.endsWith(FILE_EXTENSION)) {
-    return getNoteFolderPath(parentPath) + "/" + DEFAULT_NOTE_NAME;
+    return getNoteFolderPath(parentPath) + '/' + DEFAULT_NOTE_NAME
   }
-  return `${parentPath}/${DEFAULT_NOTE_NAME}`;
+  return `${parentPath}/${DEFAULT_NOTE_NAME}`
 }
 
 export function getNewFolderPath(parentPath?: string) {
-  if (!parentPath) return DEFAULT_FOLDER_NAME;
+  if (!parentPath) return DEFAULT_FOLDER_NAME
 
   // Parent is a file → use its folder
   if (parentPath.endsWith(FILE_EXTENSION)) {
-    return `${getNoteFolderPath(parentPath)}/${DEFAULT_FOLDER_NAME}`;
+    return `${getNoteFolderPath(parentPath)}/${DEFAULT_FOLDER_NAME}`
   }
 
   // Parent is a folder
-  return `${parentPath}/${DEFAULT_FOLDER_NAME}`;
+  return `${parentPath}/${DEFAULT_FOLDER_NAME}`
 }
 
 export const getNoteIdFromPath = (path: string) =>
-  path.split("/").slice(2).join("/");
+  path.split('/').slice(2).join('/')
 
-export const getNoteNameFromPath = (path: string) => path.split("/").pop();
+export const getNoteNameFromPath = (path: string) => path.split('/').pop()
 
 export const getNoteNameWithoutExtension = (path: string) =>
-  getNoteNameFromPath(path)?.split(".").slice(0, -1).join(".");
+  getNoteNameFromPath(path)?.split('.').slice(0, -1).join('.')

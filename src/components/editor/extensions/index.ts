@@ -1,20 +1,20 @@
-import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { Focus, Placeholder, Selection } from "@tiptap/extensions";
-import { CodeBlock } from "./codeblock";
-import { StarterKit } from "@tiptap/starter-kit";
-import { SlashCommands, filterCommandItems } from "./commands";
-import { suggestionItems } from "@/config/suggestion-menu";
-import { Math } from "./math";
-import { FileHandler } from "./file-handler";
-import { Image } from "./image";
-import { Link } from "./link";
-import { Table } from "./table";
+import { TaskItem, TaskList } from '@tiptap/extension-list'
+import { Focus, Placeholder, Selection } from '@tiptap/extensions'
+import { StarterKit } from '@tiptap/starter-kit'
+import { suggestionItems } from '@/config/suggestion-menu'
+import { CodeBlock } from './codeblock'
+import { filterCommandItems, SlashCommands } from './commands'
+import { FileHandler } from './file-handler'
+import { Image } from './image'
+import { Link } from './link'
+import { Math } from './math'
+import { Table } from './table'
 
 export const Extensions = [
   StarterKit.configure({
     codeBlock: false,
     link: false,
-    dropcursor: { class: "dropcursor" },
+    dropcursor: { class: 'dropcursor' },
   }),
   Selection,
   Focus,
@@ -36,4 +36,4 @@ export const Extensions = [
   Image,
   Link,
   Table,
-];
+]

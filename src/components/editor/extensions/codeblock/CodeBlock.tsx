@@ -1,16 +1,16 @@
-import { CopyButton } from "@/components/ui/copy-button";
-import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import { useCallback } from "react";
-import { LanguageSelector } from "./LanguageSelector";
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
+import { useCallback } from 'react'
+import { CopyButton } from '@/components/ui/copy-button'
+import { LanguageSelector } from './LanguageSelector'
 
 export const CodeBlock = ({ node, updateAttributes }: NodeViewProps) => {
   const handleLanguageChange = useCallback(
     (value: string) => {
-      if (value === node.attrs.language) return;
-      updateAttributes({ language: value });
+      if (value === node.attrs.language) return
+      updateAttributes({ language: value })
     },
     [updateAttributes, node.attrs.language],
-  );
+  )
 
   return (
     <NodeViewWrapper className="codeblock relative w-full overflow-hidden">
@@ -25,5 +25,5 @@ export const CodeBlock = ({ node, updateAttributes }: NodeViewProps) => {
         />
       </div>
     </NodeViewWrapper>
-  );
-};
+  )
+}

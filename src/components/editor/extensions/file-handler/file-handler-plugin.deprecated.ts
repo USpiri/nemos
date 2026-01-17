@@ -1,12 +1,12 @@
-import { Plugin, PluginKey } from "@tiptap/pm/state";
-import { Editor } from "@tiptap/react";
+import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { Editor } from '@tiptap/react'
 
 interface FileHandlerPluginOptions {
-  key: PluginKey;
-  editor: Editor;
-  onPaste?: (editor: Editor, files: File[], htmlData: string) => void;
-  onDrop?: (editor: Editor, files: File[], position: number) => void;
-  allowedMimeTypes?: string[];
+  key: PluginKey
+  editor: Editor
+  onPaste?: (editor: Editor, files: File[], htmlData: string) => void
+  onDrop?: (editor: Editor, files: File[], position: number) => void
+  allowedMimeTypes?: string[]
 }
 
 export const createFileHandlerPlugin = ({
@@ -20,41 +20,41 @@ export const createFileHandlerPlugin = ({
     key: key,
     props: {
       handleDrop(view, event) {
-        if (!onDrop) return false;
-        if (!event.dataTransfer?.files.length) return false;
+        if (!onDrop) return false
+        if (!event.dataTransfer?.files.length) return false
 
         const pos = view.posAtCoords({
           left: event.clientX,
           top: event.clientY,
-        });
-        let files = Array.from(event.dataTransfer.files);
+        })
+        let files = Array.from(event.dataTransfer.files)
 
         if (allowedMimeTypes)
-          files = files.filter((file) => allowedMimeTypes.includes(file.type));
-        if (files.length === 0) return false;
+          files = files.filter((file) => allowedMimeTypes.includes(file.type))
+        if (files.length === 0) return false
 
-        event.stopPropagation();
-        event.preventDefault();
-        onDrop(editor, files, pos?.pos || 0);
+        event.stopPropagation()
+        event.preventDefault()
+        onDrop(editor, files, pos?.pos || 0)
 
-        return true;
+        return true
       },
       handlePaste(_, event) {
-        if (!onPaste) return false;
-        if (!event.clipboardData?.files.length) return false;
+        if (!onPaste) return false
+        if (!event.clipboardData?.files.length) return false
 
-        let files = Array.from(event.clipboardData.files);
-        const htmlData = event.clipboardData.getData("text/html");
+        let files = Array.from(event.clipboardData.files)
+        const htmlData = event.clipboardData.getData('text/html')
 
         if (allowedMimeTypes)
-          files = files.filter((file) => allowedMimeTypes.includes(file.type));
-        if (files.length === 0) return false;
+          files = files.filter((file) => allowedMimeTypes.includes(file.type))
+        if (files.length === 0) return false
 
-        event.preventDefault();
-        event.stopPropagation();
-        onPaste(editor, files, htmlData);
+        event.preventDefault()
+        event.stopPropagation()
+        onPaste(editor, files, htmlData)
 
-        return htmlData.length === 0;
+        return htmlData.length === 0
       },
     },
-  });
+  })

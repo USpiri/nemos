@@ -1,2 +1,2 @@
-export * from "./ensure-root";
-export * from "./relaunch";
+export * from './ensure-root'
+export * from './relaunch'

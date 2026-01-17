@@ -1,50 +1,50 @@
-import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import mermaid from "mermaid";
-import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { hiddenStyle, isInsideNode } from "@/lib/editor/utils";
-import { LoaderCircle } from "lucide-react";
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
+import { LoaderCircle } from 'lucide-react'
+import mermaid from 'mermaid'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
+import { cn } from '@/lib/utils'
 
 mermaid.initialize({
   startOnLoad: false,
   suppressErrorRendering: true,
-  theme: "default",
-  securityLevel: "loose",
-});
+  theme: 'default',
+  securityLevel: 'loose',
+})
 
 export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
-  const renderRef = useRef<HTMLDivElement | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const renderRef = useRef<HTMLDivElement | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
   const renderDiagram = useCallback(async () => {
-    const source = node.textContent.trim();
+    const source = node.textContent.trim()
 
     if (!source || !renderRef.current) {
-      setError(null);
-      return;
+      setError(null)
+      return
     }
 
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      const id = `mermaid-${Math.random().toString(36).slice(2)}`;
+      const id = `mermaid-${Math.random().toString(36).slice(2)}`
 
-      const { svg } = await mermaid.render(id, source);
-      renderRef.current.innerHTML = svg;
+      const { svg } = await mermaid.render(id, source)
+      renderRef.current.innerHTML = svg
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to render diagram");
-      renderRef.current.innerHTML = "";
+      setError(err instanceof Error ? err.message : 'Failed to render diagram')
+      renderRef.current.innerHTML = ''
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [node.textContent]);
+  }, [node.textContent])
 
   // Re-render on content change
   useEffect(() => {
-    renderDiagram();
-  }, [renderDiagram]);
+    renderDiagram()
+  }, [renderDiagram])
 
   return (
     <NodeViewWrapper className="mermaid relative">
@@ -64,8 +64,8 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
       </pre>
       <div
         className={cn(
-          "mermaid-render transition-all select-none",
-          error && "h-0 opacity-0",
+          'mermaid-render transition-all select-none',
+          error && 'h-0 opacity-0',
         )}
         contentEditable={false}
         ref={renderRef}
@@ -86,5 +86,5 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
         </div>
       )}
     </NodeViewWrapper>
-  );
-};
+  )
+}

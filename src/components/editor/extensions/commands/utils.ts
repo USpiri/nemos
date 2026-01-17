@@ -1,18 +1,18 @@
-import { CommandItem } from "@/types";
-import { computePosition, flip, shift } from "@floating-ui/dom";
-import { Editor, posToDOMRect } from "@tiptap/react";
+import { computePosition, flip, shift } from '@floating-ui/dom'
+import { Editor, posToDOMRect } from '@tiptap/react'
+import { CommandItem } from '@/types'
 
 export const filterCommandItems = (query: string, items: CommandItem[]) => {
-  const normalizedQuery = query.toLowerCase().trim();
-  if (normalizedQuery.length === 0) return items;
+  const normalizedQuery = query.toLowerCase().trim()
+  if (normalizedQuery.length === 0) return items
   return items.filter((item) => {
     return (
       item.title.toLowerCase().includes(normalizedQuery) ||
       item.tags?.some((tag) => tag.toLowerCase().includes(normalizedQuery)) ||
       item.description?.toLowerCase().includes(normalizedQuery)
-    );
-  });
-};
+    )
+  })
+}
 
 export const updatePosition = (editor: Editor, element: HTMLElement) => {
   const virtualElement = {
@@ -22,16 +22,16 @@ export const updatePosition = (editor: Editor, element: HTMLElement) => {
         editor.state.selection.from,
         editor.state.selection.to,
       ),
-  };
+  }
 
   computePosition(virtualElement, element, {
-    placement: "bottom-start",
-    strategy: "absolute",
+    placement: 'bottom-start',
+    strategy: 'absolute',
     middleware: [shift(), flip()],
   }).then(({ x, y, strategy }) => {
-    element.style.width = "max-content";
-    element.style.position = strategy;
-    element.style.left = `${x}px`;
-    element.style.top = `${y}px`;
-  });
-};
+    element.style.width = 'max-content'
+    element.style.position = strategy
+    element.style.left = `${x}px`
+    element.style.top = `${y}px`
+  })
+}

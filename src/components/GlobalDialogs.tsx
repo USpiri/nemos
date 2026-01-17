@@ -1,4 +1,4 @@
-import { WorkspaceFormDialog } from "./WorkspaceFormDialog";
+import { WorkspaceFormDialog } from './WorkspaceFormDialog'
 
 /**
  * GlobalDialogs component
@@ -10,5 +10,5 @@ export const GlobalDialogs = () => {
     <>
       <WorkspaceFormDialog />
     </>
-  );
-};
+  )
+}

@@ -1,3 +1,6 @@
+import { Link } from '@tanstack/react-router'
+import { FileText } from 'lucide-react'
+import { Link as LinkComponent } from '@/components/ui/link'
 import {
   Table,
   TableBody,
@@ -5,19 +8,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { getNoteIdFromPath } from "@/lib/notes";
-import { Link as LinkComponent } from "@/components/ui/link";
-import { Link } from "@tanstack/react-router";
-import { DetailedWorkspaceEntry } from "@/lib/workspace";
-import { FileText } from "lucide-react";
-import { Code, P } from "@/components/ui/typography";
-import { getNoteRelativeDir } from "@/lib/workspace/utils";
+} from '@/components/ui/table'
+import { Code, P } from '@/components/ui/typography'
+import { getNoteIdFromPath } from '@/lib/notes'
+import { DetailedWorkspaceEntry } from '@/lib/workspace'
+import { getNoteRelativeDir } from '@/lib/workspace/utils'
 
 type Props = {
-  notes: DetailedWorkspaceEntry[];
-  workspaceId: string;
-};
+  notes: DetailedWorkspaceEntry[]
+  workspaceId: string
+}
 
 export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
   return (
@@ -70,5 +70,5 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
         </TableBody>
       </Table>
     </div>
-  );
-};
+  )
+}

@@ -1,23 +1,23 @@
-import { getNoteIdFromPath } from "@/lib/notes";
+import { useParams } from '@tanstack/react-router'
+import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { getNoteIdFromPath } from '@/lib/notes'
+import { useRenameStore } from '@/store/rename.store'
 import {
   Editable,
-  EditablePreview,
-  EditableInput,
-  EditableSubmit,
   EditableCancel,
+  EditableInput,
+  EditablePreview,
+  EditableSubmit,
   EditableToolbar,
-} from "./ui/editable-text";
-import { useParams } from "@tanstack/react-router";
-import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
-import { useRenameStore } from "@/store/rename.store";
+} from './ui/editable-text'
 
 interface Props {
-  display: string;
-  path: string;
-  suffix?: string;
-  className?: string;
-  isFolder?: boolean;
-  context?: string;
+  display: string
+  path: string
+  suffix?: string
+  className?: string
+  isFolder?: boolean
+  context?: string
 }
 
 export const EditableFilename = ({
@@ -28,29 +28,29 @@ export const EditableFilename = ({
   isFolder = false,
   context,
 }: Props) => {
-  const { isRenaming, setRenamingPath } = useRenameStore();
-  const { workspaceId } = useParams({ strict: false });
+  const { isRenaming, setRenamingPath } = useRenameStore()
+  const { workspaceId } = useParams({ strict: false })
   const { renameNoteAndNavigate, renameFolderAndRefresh } = useWorkspaceActions(
     {
       workspace: workspaceId!,
     },
-  );
+  )
 
-  const noteId = getNoteIdFromPath(path);
-  const shouldEdit = isRenaming(noteId, context);
+  const noteId = getNoteIdFromPath(path)
+  const shouldEdit = isRenaming(noteId, context)
 
   const handleSubmit = (value: string) => {
     if (isFolder) {
-      renameFolderAndRefresh(noteId, value);
+      renameFolderAndRefresh(noteId, value)
     } else {
-      renameNoteAndNavigate(noteId, value);
+      renameNoteAndNavigate(noteId, value)
     }
-    setRenamingPath(null);
-  };
+    setRenamingPath(null)
+  }
 
   const handleCancel = () => {
-    setRenamingPath(null);
-  };
+    setRenamingPath(null)
+  }
 
   return (
     <Editable
@@ -73,5 +73,5 @@ export const EditableFilename = ({
         <EditableCancel />
       </EditableToolbar>
     </Editable>
-  );
-};
+  )
+}

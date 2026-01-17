@@ -1,11 +1,10 @@
-import { NoteError } from "@/lib/notes";
-import { toast } from "sonner";
-import { useCallback } from "react";
-import { createNote as createNoteFn } from "@/lib/notes";
-import { FILE_EXTENSION } from "@/config/constants";
+import { useCallback } from 'react'
+import { toast } from 'sonner'
+import { FILE_EXTENSION } from '@/config/constants'
+import { createNote as createNoteFn, NoteError } from '@/lib/notes'
 
 interface Props {
-  workspace: string;
+  workspace: string
 }
 
 export const useCreateNote = ({ workspace }: Props) => {
@@ -15,21 +14,21 @@ export const useCreateNote = ({ workspace }: Props) => {
         const notePath = await createNoteFn({
           workspace,
           path: `${noteName}${FILE_EXTENSION}`,
-        });
-        onSuccess?.(notePath);
-        return notePath;
+        })
+        onSuccess?.(notePath)
+        return notePath
       } catch (error) {
         if (error instanceof NoteError) {
           switch (error.code) {
-            case "CREATE_FAILED":
-              toast.error("Failed to create note");
-              break;
+            case 'CREATE_FAILED':
+              toast.error('Failed to create note')
+              break
           }
         }
       }
     },
     [workspace],
-  );
+  )
 
-  return { createNote };
-};
+  return { createNote }
+}

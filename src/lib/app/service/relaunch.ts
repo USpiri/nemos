@@ -1,13 +1,13 @@
-import { AppError } from "../errors";
+import { AppError } from '../errors'
 
 export const relaunch = async () => {
   try {
-    await relaunch();
+    await relaunch()
   } catch (error) {
     throw new AppError(
-      "RELAUNCH_FAILED",
+      'RELAUNCH_FAILED',
       `Failed to relaunch application after update\n` +
-        `Cause: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
+        `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    )
   }
-};
+}

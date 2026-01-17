@@ -1,16 +1,16 @@
-import { NodeModel } from "@minoru/react-dnd-treeview";
-import { Tree } from "../ui/tree";
-import { TreeNode } from "./TreeNode";
-import { TreeContextMenu } from "./TreeContextMenu";
-import { ChevronDown, ChevronRight, FileText } from "lucide-react";
-import { getNoteIdFromPath } from "@/lib/notes";
-import { FILE_EXTENSION } from "@/config/constants";
-import { EditableFilename } from "../EditableFilename";
+import { NodeModel } from '@minoru/react-dnd-treeview'
+import { ChevronDown, ChevronRight, FileText } from 'lucide-react'
+import { FILE_EXTENSION } from '@/config/constants'
+import { getNoteIdFromPath } from '@/lib/notes'
+import { EditableFilename } from '../EditableFilename'
+import { Tree } from '../ui/tree'
+import { TreeContextMenu } from './TreeContextMenu'
+import { TreeNode } from './TreeNode'
 
 interface Props {
-  tree: NodeModel[];
-  root: string;
-  workspace: string;
+  tree: NodeModel[]
+  root: string
+  workspace: string
 }
 
 export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
@@ -34,7 +34,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
               <FileText />
             )}
             <EditableFilename
-              display={node.text.replace(FILE_EXTENSION, "")}
+              display={node.text.replace(FILE_EXTENSION, '')}
               path={node.id.toString()}
               suffix={node.droppable ? undefined : FILE_EXTENSION}
               className="p-0"
@@ -45,5 +45,5 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
         onDrop={console.log}
       />
     </TreeContextMenu>
-  );
-};
+  )
+}

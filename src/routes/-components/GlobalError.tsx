@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { type ErrorComponentProps } from '@tanstack/react-router'
+import { AlertCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Empty,
   EmptyContent,
@@ -6,10 +8,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { AlertCircle } from "lucide-react";
-import { type ErrorComponentProps } from "@tanstack/react-router";
-import { Code } from "@/components/ui/typography";
+} from '@/components/ui/empty'
+import { Code } from '@/components/ui/typography'
 
 export const GlobalError = ({ error, reset }: ErrorComponentProps) => {
   return (
@@ -28,5 +28,5 @@ export const GlobalError = ({ error, reset }: ErrorComponentProps) => {
         </EmptyContent>
       </Empty>
     </main>
-  );
-};
+  )
+}

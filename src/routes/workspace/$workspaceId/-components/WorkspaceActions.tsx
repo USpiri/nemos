@@ -1,18 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
-import { getRouteApi } from "@tanstack/react-router";
-import { Download, FolderPlus, Plus } from "lucide-react";
+import { getRouteApi } from '@tanstack/react-router'
+import { Download, FolderPlus, Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 
-const route = getRouteApi("/workspace/$workspaceId");
+const route = getRouteApi('/workspace/$workspaceId')
 
 export const WorkspaceActions = () => {
-  const { workspaceId } = route.useParams();
+  const { workspaceId } = route.useParams()
 
   const { createNoteAndNavigate, createFolderAndRefresh } = useWorkspaceActions(
     {
       workspace: workspaceId,
     },
-  );
+  )
 
   return (
     <div className="flex flex-row flex-wrap gap-2">
@@ -29,5 +29,5 @@ export const WorkspaceActions = () => {
         Import Notes
       </Button>
     </div>
-  );
-};
+  )
+}

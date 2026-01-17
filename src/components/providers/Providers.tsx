@@ -1,7 +1,7 @@
-import { SidebarProvider } from "../ui/sidebar";
+import { SidebarProvider } from '../ui/sidebar'
 
 interface Props {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const Providers = ({ children }: Props) => {
@@ -9,5 +9,5 @@ export const Providers = ({ children }: Props) => {
     <>
       <SidebarProvider>{children}</SidebarProvider>
     </>
-  );
-};
+  )
+}

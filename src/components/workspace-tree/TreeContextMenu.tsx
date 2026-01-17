@@ -1,16 +1,16 @@
+import { FilePlus, FolderOpen, FolderPlus, RefreshCw } from 'lucide-react'
+import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from "../ui/context-menu";
-import { FolderPlus, FilePlus, FolderOpen, RefreshCw } from "lucide-react";
-import { useWorkspaceActions } from "@/hooks/use-workspace-actions";
+} from '../ui/context-menu'
 
 interface Props {
-  children: React.ReactNode;
-  workspace: string;
+  children: React.ReactNode
+  workspace: string
 }
 
 export const TreeContextMenu = ({ children, workspace }: Props) => {
@@ -21,7 +21,7 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
     revealInExplorer,
   } = useWorkspaceActions({
     workspace,
-  });
+  })
 
   return (
     <ContextMenu>
@@ -58,5 +58,5 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
-  );
-};
+  )
+}

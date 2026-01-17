@@ -1,8 +1,14 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from '@tanstack/react-router'
+import { useCallback } from 'react'
+import { useForm } from 'react-hook-form'
+import { useCreateWorkspace } from '@/hooks/use-create-workspace'
+import { useDialog } from '@/hooks/use-dialog'
 import {
   CreateWorkspaceInput,
   createWorkspaceSchema,
-} from "@/lib/workspace/workspace.schema";
-import { Button } from "./ui/button";
+} from '@/lib/workspace/workspace.schema'
+import { Button } from './ui/button'
 import {
   Dialog,
   DialogContent,
@@ -10,26 +16,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from './ui/dialog'
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "./ui/field";
-import { Input } from "./ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useDialog } from "@/hooks/use-dialog";
-import { useCallback } from "react";
-import { useCreateWorkspace } from "@/hooks/use-create-workspace";
-import { useNavigate } from "@tanstack/react-router";
+} from './ui/field'
+import { Input } from './ui/input'
 
 export const WorkspaceFormDialog = () => {
-  const { close, isOpen } = useDialog();
-  const { createWorkspace } = useCreateWorkspace();
-  const navigate = useNavigate();
+  const { close, isOpen } = useDialog()
+  const { createWorkspace } = useCreateWorkspace()
+  const navigate = useNavigate()
 
   const {
     handleSubmit,
@@ -38,29 +38,29 @@ export const WorkspaceFormDialog = () => {
     formState: { errors, isSubmitting },
   } = useForm<CreateWorkspaceInput>({
     resolver: zodResolver(createWorkspaceSchema),
-  });
+  })
 
   const onSubmit = useCallback(
     async (data: CreateWorkspaceInput) => {
       await createWorkspace(data.name, () => {
-        close();
-        reset();
+        close()
+        reset()
         navigate({
-          to: "/workspace/$workspaceId",
+          to: '/workspace/$workspaceId',
           params: { workspaceId: data.name },
-        });
-      });
+        })
+      })
     },
     [createWorkspace, navigate, close, reset],
-  );
+  )
 
   const handleClose = () => {
-    close();
-    reset();
-  };
+    close()
+    reset()
+  }
 
   return (
-    <Dialog open={isOpen("workspace")} onOpenChange={handleClose}>
+    <Dialog open={isOpen('workspace')} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader className="sr-only">
           <DialogTitle>Create Workspace</DialogTitle>
@@ -77,7 +77,7 @@ export const WorkspaceFormDialog = () => {
                 placeholder="my-workspace"
                 autoComplete="off"
                 aria-invalid={!!errors.name}
-                {...register("name")}
+                {...register('name')}
               />
               <FieldDescription>
                 Choose a unique name for your workspace
@@ -96,11 +96,11 @@ export const WorkspaceFormDialog = () => {
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create Workspace"}
+              {isSubmitting ? 'Creating...' : 'Create Workspace'}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

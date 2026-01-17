@@ -1,7 +1,7 @@
-import { LogOut } from "lucide-react";
-import { SidebarFooter as SidebarFooterBase } from "../ui/sidebar";
-import { WorkspaceSelector } from "../WorkspaceSelector";
-import { Link } from "../ui/link";
+import { LogOut } from 'lucide-react'
+import { Link } from '../ui/link'
+import { SidebarFooter as SidebarFooterBase } from '../ui/sidebar'
+import { WorkspaceSelector } from '../WorkspaceSelector'
 
 // TODO: Improve settings link
 export const SidebarFooter = () => {
@@ -12,5 +12,5 @@ export const SidebarFooter = () => {
         <LogOut className="text-muted-foreground" />
       </Link>
     </SidebarFooterBase>
-  );
-};
+  )
+}

@@ -1,12 +1,12 @@
-import { create } from "zustand";
+import { create } from 'zustand'
 
-type RenameContext = string | null | undefined;
+type RenameContext = string | null | undefined
 
 interface RenameState {
-  renamingPath: string | null;
-  renamingContext: RenameContext;
-  setRenamingPath: (path: string | null, context?: RenameContext) => void;
-  isRenaming: (path: string, context: RenameContext) => boolean;
+  renamingPath: string | null
+  renamingContext: RenameContext
+  setRenamingPath: (path: string | null, context?: RenameContext) => void
+  isRenaming: (path: string, context: RenameContext) => boolean
 }
 
 export const useRenameStore = create<RenameState>((set, get) => ({
@@ -19,4 +19,4 @@ export const useRenameStore = create<RenameState>((set, get) => ({
     (context === null ||
       context === undefined ||
       context === get().renamingContext),
-}));
+}))

@@ -1,18 +1,18 @@
-import { ArrowRightIcon, FolderIcon } from "lucide-react";
-import { Link } from "@/components/ui/link";
+import { ArrowRightIcon, FolderIcon } from 'lucide-react'
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { type WorkspaceEntry } from "@/lib/workspace";
-import { Code } from "@/components/ui/typography";
+} from '@/components/ui/card'
+import { Link } from '@/components/ui/link'
+import { Code } from '@/components/ui/typography'
+import { type WorkspaceEntry } from '@/lib/workspace'
 
 type Props = {
-  workspaces: WorkspaceEntry[];
-};
+  workspaces: WorkspaceEntry[]
+}
 
 export const WorkspaceList = ({ workspaces }: Props) => {
   return (
@@ -45,5 +45,5 @@ export const WorkspaceList = ({ workspaces }: Props) => {
         </Card>
       ))}
     </div>
-  );
-};
+  )
+}
