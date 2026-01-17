@@ -43,7 +43,7 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
         params: { workspaceId: workspace, noteId },
       })
     },
-    [navigate],
+    [navigate, workspace],
   )
 
   const createNote = useCallback(
