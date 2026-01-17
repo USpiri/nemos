@@ -12,6 +12,7 @@ interface TabsActions {
   openTab: (tab: Tab) => Tab
   closeTab: (tabId: string) => void
   activateTab: (tabId: string) => void
+  isTabActive: (tabId: string) => boolean
 
   // Bulk
   closeAllTabs: () => void
@@ -94,6 +95,11 @@ export const useTabsStore = create<TabsState & TabsActions>()(
         if (!tab) return
 
         set({ activeTabId: tabId })
+      },
+
+      isTabActive: (tabId) => {
+        const state = get()
+        return state.activeTabId === tabId
       },
 
       // Bulk operations
