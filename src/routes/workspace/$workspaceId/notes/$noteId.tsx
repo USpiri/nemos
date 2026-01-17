@@ -1,28 +1,40 @@
-import { Editor } from "@/components/editor";
-import { useNoteEditor } from "@/hooks/use-note-editor";
-import { readNote } from "@/lib/notes";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo } from "react";
-import { NoteError, NotePending } from "./-components";
+import { createFileRoute } from '@tanstack/react-router'
+import { useEffect, useMemo } from 'react'
+import { Editor } from '@/components/editor'
+import { useNoteEditor } from '@/hooks/use-note-editor'
+import { readNote } from '@/lib/notes'
+import { createNoteTab } from '@/lib/tabs'
+import { useTabsStore } from '@/store'
+import { NoteError, NotePending } from './-components'
 
-export const Route = createFileRoute("/workspace/$workspaceId/notes/$noteId")({
+export const Route = createFileRoute('/workspace/$workspaceId/notes/$noteId')({
   component: NoteIdComponent,
   pendingComponent: NotePending,
   errorComponent: NoteError,
   loader: ({ params: { workspaceId, noteId } }) =>
     readNote(`${workspaceId}/${noteId}`),
-});
+})
 
 function NoteIdComponent() {
-  const { workspaceId, noteId } = Route.useParams();
-  const note = Route.useLoaderData();
+  const { workspaceId, noteId } = Route.useParams()
+  const note = Route.useLoaderData()
+  const openTab = useTabsStore((s) => s.openTab)
 
-  const content = useMemo(() => note.content, [note, noteId]);
+  // Sync URL to tabs: when navigating directly to a note URL, open the tab
+  useEffect(() => {
+    const tabData = createNoteTab({
+      workspaceId,
+      noteId,
+    })
+    openTab(tabData)
+  }, [workspaceId, noteId, openTab])
+
+  const content = useMemo(() => note.content, [note, noteId])
 
   const { save } = useNoteEditor({
     path: `${workspaceId}/${noteId}`,
     initialContent: note,
-  });
+  })
 
   return (
     <main>
@@ -32,5 +44,5 @@ function NoteIdComponent() {
         onUpdate={(content) => save({ content })}
       />
     </main>
-  );
+  )
 }
