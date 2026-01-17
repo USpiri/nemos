@@ -1,15 +1,15 @@
-import { linkOptions } from "@tanstack/react-router";
-import { Link } from "../ui/link";
-import { TreeNodeContextMenu } from "./TreeNodeContextMenu";
+import { linkOptions } from '@tanstack/react-router'
+import { Link } from '../ui/link'
+import { TreeNodeContextMenu } from './TreeNodeContextMenu'
 
 interface Props {
-  depth: number;
-  isOpen: boolean;
-  onToggle: () => void;
-  isDroppable: boolean;
-  workspace: string;
-  note: string;
-  children: React.ReactNode;
+  depth: number
+  isOpen: boolean
+  onToggle: () => void
+  isDroppable: boolean
+  workspace: string
+  note: string
+  children: React.ReactNode
 }
 
 export const TreeNode = ({
@@ -23,12 +23,13 @@ export const TreeNode = ({
   const props = isDroppable
     ? { onClick: onToggle }
     : linkOptions({
-        to: "/workspace/$workspaceId/notes/$noteId",
+        to: '/workspace/$workspaceId/notes/$noteId',
         params: { workspaceId: workspace, noteId: note },
         activeProps: {
-          className: "text-foreground!",
+          className: 'text-foreground!',
         },
-      });
+      })
+
   return (
     <TreeNodeContextMenu
       isFolder={isDroppable}
@@ -37,12 +38,12 @@ export const TreeNode = ({
     >
       <Link
         {...props}
-        className="text-muted-foreground w-full justify-start rounded-none"
+        className="w-full justify-start rounded-none text-muted-foreground"
         variant="ghost"
         style={{ paddingInlineStart: depth * 10 + 8 }}
       >
         {children}
       </Link>
     </TreeNodeContextMenu>
-  );
-};
+  )
+}
