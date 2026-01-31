@@ -6,7 +6,7 @@ import { getNotePath } from './path'
 const readRawNote = async (path: string) => {
   try {
     return await read(getNotePath(path))
-  } catch (error) {
+  } catch {
     throw new NoteError('NOT_FOUND', `Note not found: ${path}`)
   }
 }

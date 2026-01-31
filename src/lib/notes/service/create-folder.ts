@@ -14,7 +14,7 @@ export const createFolder = async ({ workspace, path }: Props) => {
     const uniquePath = await getUniquePath(folderPath)
     await createDir(uniquePath)
     return uniquePath
-  } catch (error) {
+  } catch {
     throw new NoteError(
       'CREATE_FAILED',
       `Failed to create folder: ${folderPath}`,

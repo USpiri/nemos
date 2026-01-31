@@ -19,7 +19,7 @@ export const copyNote = async ({ workspace, path }: Props) => {
 
     await copy(notePath, uniquePath)
     return uniquePath
-  } catch (error) {
+  } catch {
     throw new NoteError('COPY_FAILED', `Failed to copy note: ${notePath}`)
   }
 }
