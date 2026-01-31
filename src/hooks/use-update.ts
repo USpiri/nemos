@@ -82,7 +82,14 @@ export const useUpdate = (): UseUpdateReturn => {
     } finally {
       setIsChecking(false)
     }
-  }, [isChecking, updateInfo, setUpdateInfo, setIsChecking])
+  }, [
+    isChecking,
+    updateInfo,
+    setUpdateInfo,
+    setIsChecking,
+    isDialogOpen,
+    openDialog,
+  ])
 
   const downloadAndInstall = useCallback(async () => {
     if (!updateInfo?.updater || isDownloading) return
@@ -126,7 +133,7 @@ export const useUpdate = (): UseUpdateReturn => {
     } finally {
       setIsDownloading(false)
     }
-  }, [updateInfo])
+  }, [updateInfo, setIsDownloading, setProgress])
 
   const install = useCallback(async () => {
     if (!updateInfo?.updater) return
@@ -143,7 +150,7 @@ export const useUpdate = (): UseUpdateReturn => {
       })
       console.error('Failed to install update', error)
     }
-  }, [updateInfo])
+  }, [updateInfo, setProgress])
 
   const dismiss = useCallback(async () => {
     if (!updateInfo?.updater) return
@@ -153,7 +160,7 @@ export const useUpdate = (): UseUpdateReturn => {
     } catch (error) {
       console.error('Failed to dismiss update', error)
     }
-  }, [updateInfo])
+  }, [updateInfo, reset])
 
   return {
     available: !!updateInfo,
