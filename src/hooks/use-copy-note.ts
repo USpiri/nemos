@@ -20,7 +20,7 @@ export const useCopyNote = ({ workspace }: Props) => {
           path: noteName,
         })
         onSuccess?.(notePath)
-      } catch (error) {
+      } catch {
         toast.error('Failed to copy note')
       }
     },
