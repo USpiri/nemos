@@ -61,15 +61,15 @@ export const CommandList = ({ items, editor, range }: Props) => {
   }, [selectedIndex])
 
   return (
-    <Card className="overflow-hidden rounded-sm py-0">
-      <ScrollArea className="h-72 py-2">
-        <CardContent className="flex min-w-52 flex-col gap-2 p-0" ref={listRef}>
+    <Card className="rounded-sm py-0">
+      <ScrollArea className="py-2">
+        <CardContent className="max-h-72 w-52 p-0" ref={listRef}>
           {items.map((item, index) => (
             <Button
               key={item.title}
               variant="ghost"
               className={cn(
-                'dark:hover:bg-muted w-full justify-start rounded-none',
+                'w-full justify-start rounded-none dark:hover:bg-muted',
                 selectedIndex === index && 'bg-muted hover:text-foreground',
               )}
               data-index={index}
