@@ -6,7 +6,8 @@ interface DialogState {
   dialog: DialogType | null
   data: Record<string, unknown> | null
 
-  open: (dialog: DialogType, data?: Record<string, any>) => void
+  // TODO: Improve type safety for data
+  open: (dialog: DialogType, data?: Record<string, unknown>) => void
   close: () => void
   isOpen: (dialog: DialogType) => boolean
   getData: () => Record<string, unknown> | null
