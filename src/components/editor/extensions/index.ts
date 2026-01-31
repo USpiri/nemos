@@ -7,7 +7,7 @@ import { filterCommandItems, SlashCommands } from './commands'
 import { FileHandler } from './file-handler'
 import { Image } from './image'
 import { Link } from './link'
-import { Math } from './math'
+import { MathExtension } from './math'
 import { Table } from './table'
 
 export const Extensions = [
@@ -32,7 +32,7 @@ export const Extensions = [
   TaskList,
   TaskItem,
   CodeBlock,
-  Math,
+  MathExtension,
   Image,
   Link,
   Table,
