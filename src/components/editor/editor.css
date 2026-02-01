@@ -6,6 +6,15 @@
     color: var(--color-foreground);
     white-space: pre-wrap;
 
+    /* Placeholder */
+    & p.is-empty:not(.not-typography p.is-empty)::before {
+      color: var(--color-muted-foreground);
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
+    }
+
     & h1:not(.not-typography h1) {
       scroll-margin: calc(var(--spacing) * 20);
       font-size: calc(var(--text-3xl) * 1.1 * var(--font-size-multiplier));
