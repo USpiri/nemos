@@ -28,7 +28,6 @@ interface Props {
   note: string
 }
 
-// TODO: implement a confirmation dialog or "hold to execute" for delete note and folder
 export const TreeNodeContextMenu = ({
   children,
   isFolder,
