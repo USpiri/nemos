@@ -1,3 +1,4 @@
+import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import { WorkspaceFormDialog } from './WorkspaceFormDialog'
 
 /**
@@ -9,6 +10,7 @@ export const GlobalDialogs = () => {
   return (
     <>
       <WorkspaceFormDialog />
+      <DeleteConfirmDialog />
     </>
   )
 }
