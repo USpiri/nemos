@@ -2,9 +2,7 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "enables the default permissions",
-  "windows": [
-    "main"
-  ],
+  "windows": ["main"],
   "permissions": [
     "core:default",
     "fs:default",
@@ -89,6 +87,18 @@
       ]
     },
     "updater:default",
-    "updater:allow-check"
+    "updater:allow-check",
+    "opener:default",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "$DOCUMENT/"
+        },
+        {
+          "path": "$DOCUMENT/**"
+        }
+      ]
+    }
   ]
 }
