@@ -28,14 +28,14 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
       <ContextMenuTrigger className="h-full">{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-48 p-0">
         <ContextMenuItem
-          className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
+          className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
           onClick={() => createNoteAndNavigate()}
         >
           <FilePlus className="text-foreground" />
           New Note
         </ContextMenuItem>
         <ContextMenuItem
-          className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
+          className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
           onClick={() => createFolderAndRefresh()}
         >
           <FolderPlus className="text-foreground" />
@@ -43,14 +43,14 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem
-          className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
+          className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
           onClick={() => revealInExplorer()}
         >
           <FolderOpen className="text-foreground" />
           Reveal in File Explorer
         </ContextMenuItem>
         <ContextMenuItem
-          className="text-muted-foreground rounded-none px-2 py-1.5 text-xs"
+          className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
           onClick={() => refreshWorkspace()}
         >
           <RefreshCw className="text-foreground" />

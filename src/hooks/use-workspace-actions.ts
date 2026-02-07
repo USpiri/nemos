@@ -1,16 +1,17 @@
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
-import { useCopyNote } from '@/hooks/use-copy-note'
-import { useCreateFolder } from '@/hooks/use-create-folder'
-import { useCreateNote } from '@/hooks/use-create-note'
 import {
   getNewFolderPath,
   getNewNotePath,
   getNoteIdFromPath,
 } from '@/lib/notes'
+import { useCopyNote } from './use-copy-note'
+import { useCreateFolder } from './use-create-folder'
+import { useCreateNote } from './use-create-note'
 import { useDeleteFolder } from './use-delete-folder'
 import { useDeleteNote } from './use-delete-note'
+import { useOpenInExplorer } from './use-open-in-explorer'
 import { useRenameFolder } from './use-rename-folder'
 import { useRenameNote } from './use-rename-note'
 
@@ -29,6 +30,7 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
   const { renameFolder: renameFolderFn } = useRenameFolder({ workspace })
   const { deleteNote: deleteNoteFn } = useDeleteNote({ workspace })
   const { deleteFolder: deleteFolderFn } = useDeleteFolder({ workspace })
+  const { openInExplorer } = useOpenInExplorer()
 
   const refreshWorkspace = useCallback(() => {
     router.invalidate({
@@ -107,10 +109,12 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     [deleteFolderFn],
   )
 
-  const revealInExplorer = useCallback(() => {
-    console.log('Reveal in File Explorer')
-    toast.info('Reveal in File Explorer feature coming soon')
-  }, [])
+  const revealInExplorer = useCallback(
+    async (note?: string) => {
+      await openInExplorer({ workspace, note })
+    },
+    [openInExplorer, workspace],
+  )
 
   const createNoteAndNavigate = useCallback(
     async (note = '') => {

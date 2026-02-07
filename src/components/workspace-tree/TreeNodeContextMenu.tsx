@@ -86,7 +86,7 @@ export const TreeNodeContextMenu = ({
             </ContextMenuItem>
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
-              onClick={() => revealInExplorer()}
+              onClick={() => revealInExplorer(note)}
             >
               <FolderOpen className="text-foreground" />
               Reveal in File Explorer
@@ -148,7 +148,7 @@ export const TreeNodeContextMenu = ({
             </ContextMenuItem>
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
-              onClick={() => revealInExplorer()}
+              onClick={() => revealInExplorer(note)}
             >
               <FolderOpen className="text-foreground" />
               Reveal in File Explorer
