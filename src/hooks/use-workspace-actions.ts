@@ -1,6 +1,5 @@
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import { useCallback } from 'react'
-import { toast } from 'sonner'
 import {
   getNewFolderPath,
   getNewNotePath,

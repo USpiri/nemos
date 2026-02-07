@@ -1,8 +1,4 @@
-import {
-  LinkOptions,
-  linkOptions,
-  type RouteOptions,
-} from '@tanstack/react-router'
+import { LinkOptions, linkOptions } from '@tanstack/react-router'
 import { getNoteNameWithoutExtension } from '../notes'
 import type { NoteTab, Tab } from './tab.type'
 
