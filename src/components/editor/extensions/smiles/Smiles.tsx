@@ -4,9 +4,15 @@ import SmilesDrawer from 'smiles-drawer'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 
 // TODO: Add theme support
-export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
+export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const drawer = useMemo(() => new SmilesDrawer.SvgDrawer({}), [])
+
+  const onClick = () => {
+    const pos = getPos()
+    if (pos == undefined) return
+    editor.chain().focus().setNodeSelection(pos).run()
+  }
 
   useEffect(() => {
     if (!svgRef.current) return
@@ -23,6 +29,7 @@ export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
     <NodeViewWrapper className="smiles">
       <pre
         style={
+          !selected &&
           !isInsideNode(
             editor.state.selection.from,
             editor.state.selection.to,
@@ -36,7 +43,8 @@ export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
         <NodeViewContent className="smiles-source language-smiles" />
       </pre>
       <div
-        className="smiles-render transition-all select-none"
+        className="smiles-render select-none transition-all"
+        onClick={onClick}
         contentEditable={false}
       >
         <svg ref={svgRef} />
