@@ -301,11 +301,60 @@
       color: var(--color-muted-foreground);
     }
 
-    & img:not(.not-typography img),
+    & figure:not(.not-typography figure),
     & picture:not(.not-typography picture),
     & video:not(.not-typography video) {
+      display: block;
       margin-top: calc(var(--spacing) * 6);
       margin-bottom: calc(var(--spacing) * 6);
+    }
+
+    & figure:not(.not-typography figure) {
+      position: relative;
+      .image-resize-trigger {
+        opacity: 0;
+        transition: opacity 0.1s ease-in-out;
+      }
+      &:hover .image-resize-trigger,
+      &.has-focus .image-align-buttons {
+        opacity: 1;
+      }
+      &.has-focus > img {
+        outline: 2px solid var(--color-primary);
+      }
+    }
+
+    & img:not(.not-typography img) {
+      display: inline-block;
+    }
+
+    .image-resize-trigger {
+      position: absolute;
+      display: inline-block;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: grab;
+      color: var(--color-muted-foreground);
+      z-index: 10;
+
+      & svg {
+        width: calc(var(--spacing) * 6);
+        height: calc(var(--spacing) * 6);
+      }
+    }
+
+    .image-align-buttons {
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.1s ease-in-out;
+      gap: var(--spacing);
+      padding-right: calc(var(--spacing) * 2);
     }
 
     & picture > img:not(.not-typography picture > img) {
