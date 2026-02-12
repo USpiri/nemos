@@ -1,4 +1,4 @@
-import { SidebarProvider } from '../ui/sidebar'
+import { SidebarProvider } from '../layout/SidebarProvider'
 
 interface Props {
   children: React.ReactNode
