@@ -1,4 +1,5 @@
 import { linkOptions } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
 import { Link } from '../ui/link'
 import { TreeNodeContextMenu } from './TreeNodeContextMenu'
 
@@ -7,6 +8,8 @@ interface Props {
   isOpen: boolean
   onToggle: () => void
   isDroppable: boolean
+  isDragging: boolean
+  isDropTarget: boolean
   workspace: string
   note: string
   children: React.ReactNode
@@ -16,6 +19,8 @@ export const TreeNode = ({
   depth,
   onToggle,
   isDroppable,
+  isDragging,
+  isDropTarget,
   workspace,
   note,
   children,
@@ -38,7 +43,11 @@ export const TreeNode = ({
     >
       <Link
         {...props}
-        className="w-full justify-start rounded-none text-muted-foreground"
+        className={cn(
+          'w-full justify-start rounded-none text-muted-foreground',
+          isDragging && 'bg-muted opacity-40',
+          isDropTarget && 'border-2 border-primary',
+        )}
         variant="ghost"
         style={{ paddingInlineStart: depth * 10 + 8 }}
       >

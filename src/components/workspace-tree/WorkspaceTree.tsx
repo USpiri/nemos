@@ -44,11 +44,16 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
       <Tree
         tree={tree}
         rootId={`${root}/${workspace}`}
-        render={(node, { depth, isOpen, onToggle }) => (
+        render={(
+          node,
+          { depth, isOpen, onToggle, isDragging, isDropTarget },
+        ) => (
           <TreeNode
             depth={depth}
             isOpen={isOpen}
             isDroppable={!!node.droppable}
+            isDragging={isDragging}
+            isDropTarget={isDropTarget}
             workspace={workspace}
             note={getNoteIdFromPath(node.id.toString())}
             onToggle={onToggle}
