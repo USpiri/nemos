@@ -29,7 +29,7 @@ class MathNodeView implements NodeView {
     const source = document.createElement(el)
     const katexNode = document.createElement(el)
 
-    source.innerHTML = this.node.textContent
+    source.textContent = this.node.textContent
     source.classList.add('math-content')
 
     if (!source.innerText.trim()) {
