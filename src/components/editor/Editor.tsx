@@ -60,7 +60,7 @@ export const Editor = ({
           <Button
             variant="ghost"
             size="icon"
-            className="text-muted-foreground cursor-grab"
+            className="cursor-grab text-muted-foreground"
           >
             <GripVertical className="size-4" />
           </Button>
