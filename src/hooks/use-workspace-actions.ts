@@ -10,6 +10,8 @@ import { useCreateFolder } from './use-create-folder'
 import { useCreateNote } from './use-create-note'
 import { useDeleteFolder } from './use-delete-folder'
 import { useDeleteNote } from './use-delete-note'
+import { useMoveFolder } from './use-move-folder'
+import { useMoveNote } from './use-move-note'
 import { useOpenInExplorer } from './use-open-in-explorer'
 import { useRenameFolder } from './use-rename-folder'
 import { useRenameNote } from './use-rename-note'
@@ -27,6 +29,8 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
   const { copyNote: copyNoteFn } = useCopyNote({ workspace })
   const { renameNote: renameNoteFn } = useRenameNote({ workspace })
   const { renameFolder: renameFolderFn } = useRenameFolder({ workspace })
+  const { moveNote: moveNoteFn } = useMoveNote({ workspace })
+  const { moveFolder: moveFolderFn } = useMoveFolder({ workspace })
   const { deleteNote: deleteNoteFn } = useDeleteNote({ workspace })
   const { deleteFolder: deleteFolderFn } = useDeleteFolder({ workspace })
   const { openInExplorer } = useOpenInExplorer()
@@ -92,6 +96,24 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
       return getNoteIdFromPath(folderPath)
     },
     [renameFolderFn],
+  )
+
+  const moveNote = useCallback(
+    async (note: string, destination: string) => {
+      const notePath = await moveNoteFn(note, destination)
+      if (!notePath) return
+      return getNoteIdFromPath(notePath)
+    },
+    [moveNoteFn],
+  )
+
+  const moveFolder = useCallback(
+    async (folder: string, destination: string) => {
+      const folderPath = await moveFolderFn(folder, destination)
+      if (!folderPath) return
+      return getNoteIdFromPath(folderPath)
+    },
+    [moveFolderFn],
   )
 
   const deleteNote = useCallback(
@@ -163,6 +185,24 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     [refreshWorkspace, renameFolder],
   )
 
+  const moveNoteAndRefresh = useCallback(
+    async (note: string, destination: string) => {
+      const notePath = await moveNote(note, destination)
+      if (!notePath) return
+      refreshWorkspace()
+    },
+    [moveNote, refreshWorkspace],
+  )
+
+  const moveFolderAndRefresh = useCallback(
+    async (folder: string, destination: string) => {
+      const folderPath = await moveFolder(folder, destination)
+      if (!folderPath) return
+      refreshWorkspace()
+    },
+    [moveFolder, refreshWorkspace],
+  )
+
   const deleteNoteAndRefresh = useCallback(
     async (note: string) => {
       await deleteNote(note)
@@ -187,6 +227,8 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     deleteFolder,
     renameNote,
     renameFolder,
+    moveNote,
+    moveFolder,
     refreshWorkspace,
     navigateToNote,
     revealInExplorer,
@@ -195,6 +237,8 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     renameNoteAndRefresh,
     renameNoteAndNavigate,
     renameFolderAndRefresh,
+    moveNoteAndRefresh,
+    moveFolderAndRefresh,
     deleteNoteAndRefresh,
     deleteFolderAndRefresh,
   }
