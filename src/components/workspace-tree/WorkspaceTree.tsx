@@ -1,9 +1,10 @@
-import { NodeModel } from '@minoru/react-dnd-treeview'
+import { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
 import { ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { FILE_EXTENSION } from '@/config/constants'
 import { getNoteIdFromPath } from '@/lib/notes'
 import { EditableFilename } from '../EditableFilename'
 import { Tree } from '../ui/tree'
+import { DropTargetPlaceholder } from './DropTargetPlaceholder'
 import { TreeContextMenu } from './TreeContextMenu'
 import { TreeNode } from './TreeNode'
 
@@ -14,6 +15,10 @@ interface Props {
 }
 
 export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
+  const handleDrop = (tree: NodeModel[], options: DropOptions<unknown>) => {
+    console.log(tree, options)
+  }
+
   return (
     <TreeContextMenu workspace={workspace}>
       <Tree
@@ -42,7 +47,14 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
             />
           </TreeNode>
         )}
-        onDrop={console.log}
+        onDrop={handleDrop}
+        placeholderRender={({ text, droppable }, { depth }) => (
+          <DropTargetPlaceholder
+            text={text}
+            droppable={!!droppable}
+            depth={depth}
+          />
+        )}
       />
     </TreeContextMenu>
   )

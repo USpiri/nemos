@@ -5,6 +5,7 @@ import {
   MultiBackend,
   NodeModel,
   NodeRender,
+  PlaceholderRender,
   Tree as TreeView,
 } from '@minoru/react-dnd-treeview'
 import { useRef } from 'react'
@@ -15,17 +16,25 @@ interface TreeProps {
   rootId: string
   onDrop: (tree: NodeModel<unknown>[], options: DropOptions<unknown>) => void
   render: NodeRender<unknown>
+  placeholderRender: PlaceholderRender<unknown>
   classes?: Classes
 }
 
-export const Tree = ({ tree, rootId, onDrop, render, classes }: TreeProps) => {
+export const Tree = ({
+  tree,
+  rootId,
+  onDrop,
+  render,
+  classes,
+  placeholderRender,
+}: TreeProps) => {
   const contextRef = useRef(null)
   return (
     <div ref={contextRef}>
       <DndProvider
         backend={MultiBackend}
         options={getBackendOptions()}
-        context={contextRef}
+        context={contextRef.current}
       >
         <TreeView
           tree={tree}
@@ -33,6 +42,8 @@ export const Tree = ({ tree, rootId, onDrop, render, classes }: TreeProps) => {
           render={render}
           onDrop={onDrop}
           classes={classes}
+          dropTargetOffset={5}
+          placeholderRender={placeholderRender}
         />
       </DndProvider>
     </div>
