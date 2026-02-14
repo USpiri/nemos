@@ -37,7 +37,7 @@ export const Tree = ({
   )
 
   return (
-    <div ref={contextRef}>
+    <div ref={contextRef} className="h-full">
       {contextElement && (
         <DndProvider
           backend={MultiBackend}
