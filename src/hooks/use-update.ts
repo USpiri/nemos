@@ -118,7 +118,6 @@ export const useUpdate = (): UseUpdateReturn => {
     setIsDownloading(true)
     try {
       await downloadFn(updateInfo.updater, (progress) => {
-        console.log('download progress', progress)
         setProgress(progress)
       })
       toast.success('Update downloaded successfully', {
