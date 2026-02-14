@@ -30,6 +30,7 @@ export const renameNote = async ({
     await rename(fromPath, newPath)
     return newPath
   } catch (error) {
+    if (error instanceof NoteError) throw error
     throw new NoteError(
       'RENAME_FAILED',
       `Failed to rename note: ${fromPath}\n` +
@@ -65,6 +66,7 @@ export const renameFolder = async ({
     await rename(folderPath, newPath)
     return newPath
   } catch (error) {
+    if (error instanceof NoteError) throw error
     throw new NoteError(
       'RENAME_FAILED',
       `Failed to rename folder: ${folderPath}\n` +

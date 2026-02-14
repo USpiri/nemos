@@ -24,7 +24,8 @@ const parseNote = (raw: string) => {
       )
 
     return parsed.data
-  } catch {
+  } catch (error) {
+    if (error instanceof NoteError) throw error
     throw new NoteError('INVALID_CONTENT', `Invalid note content: ${raw}`)
   }
 }
