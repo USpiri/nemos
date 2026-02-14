@@ -1,4 +1,5 @@
 import { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
+import { useParams } from '@tanstack/react-router'
 import { ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { FILE_EXTENSION } from '@/config/constants'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
@@ -16,9 +17,9 @@ interface Props {
 }
 
 export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
-  const { moveNoteAndRefresh, moveFolderAndRefresh } = useWorkspaceActions({
-    workspace,
-  })
+  const { noteId: currentNoteId } = useParams({ strict: false })
+  const { moveNote, moveFolder, refreshWorkspace, navigateToNote } =
+    useWorkspaceActions({ workspace })
 
   const handleDrop = async (
     _tree: NodeModel[],
@@ -33,9 +34,18 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
       : ''
 
     if (dragSource.droppable) {
-      await moveFolderAndRefresh(sourceId, targetId)
+      const newFolderId = await moveFolder(sourceId, targetId)
+      refreshWorkspace()
+      if (newFolderId && currentNoteId?.startsWith(`${sourceId}/`)) {
+        const updatedNoteId = currentNoteId.replace(sourceId, newFolderId)
+        navigateToNote(updatedNoteId)
+      }
     } else {
-      await moveNoteAndRefresh(sourceId, targetId)
+      const newNoteId = await moveNote(sourceId, targetId)
+      refreshWorkspace()
+      if (newNoteId && currentNoteId === sourceId) {
+        navigateToNote(newNoteId)
+      }
     }
   }
 
