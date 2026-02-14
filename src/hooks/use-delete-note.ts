@@ -15,10 +15,14 @@ export const useDeleteNote = ({ workspace }: Props) => {
   const { open } = useDialog()
 
   const deleteNote = useCallback(
-    async (note: string, skipConfirmation = false) => {
+    async (
+      note: string,
+      options: { skipConfirmation?: boolean; onSuccess?: () => void } = {},
+    ) => {
       const performDelete = async () => {
         try {
           await deleteNoteFn({ workspace, note })
+          options.onSuccess?.()
         } catch (error) {
           if (error instanceof NoteError) {
             switch (error.code) {
@@ -34,7 +38,7 @@ export const useDeleteNote = ({ workspace }: Props) => {
         }
       }
 
-      if (skipConfirmation) {
+      if (options.skipConfirmation) {
         await performDelete()
       } else {
         // Extract the note name from the path for display

@@ -15,10 +15,14 @@ export const useDeleteFolder = ({ workspace }: Props) => {
   const { open } = useDialog()
 
   const deleteFolder = useCallback(
-    async (folder: string, skipConfirmation = false) => {
+    async (
+      folder: string,
+      options: { skipConfirmation?: boolean; onSuccess?: () => void } = {},
+    ) => {
       const performDelete = async () => {
         try {
           await deleteFolderFn({ workspace, folder })
+          options.onSuccess?.()
         } catch (error) {
           if (error instanceof NoteError) {
             switch (error.code) {
@@ -34,7 +38,7 @@ export const useDeleteFolder = ({ workspace }: Props) => {
         }
       }
 
-      if (skipConfirmation) {
+      if (options.skipConfirmation) {
         await performDelete()
       } else {
         // Extract the folder name from the path for display

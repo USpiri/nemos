@@ -205,18 +205,20 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
 
   const deleteNoteAndRefresh = useCallback(
     async (note: string) => {
-      await deleteNote(note)
-      refreshWorkspace()
+      await deleteNoteFn(note, {
+        onSuccess: refreshWorkspace,
+      })
     },
-    [deleteNote, refreshWorkspace],
+    [deleteNoteFn, refreshWorkspace],
   )
 
   const deleteFolderAndRefresh = useCallback(
     async (folder: string) => {
-      await deleteFolder(folder)
-      refreshWorkspace()
+      await deleteFolderFn(folder, {
+        onSuccess: refreshWorkspace,
+      })
     },
-    [deleteFolder, refreshWorkspace],
+    [deleteFolderFn, refreshWorkspace],
   )
 
   return {
