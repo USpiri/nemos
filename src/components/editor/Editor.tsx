@@ -36,6 +36,12 @@ export const Editor = ({
           class: cn('typography focus:outline-none relative', className),
           spellcheck: 'false',
         },
+        handleDrop: (_view, event) => {
+          // check if the dropped item is a workspace tree node
+          const uri = event.dataTransfer?.getData('text/uri-list')
+          if (uri?.includes('/workspace/')) return true
+          return false
+        },
       },
       onUpdate: ({ editor }) => {
         onUpdate?.(editor.getHTML())
