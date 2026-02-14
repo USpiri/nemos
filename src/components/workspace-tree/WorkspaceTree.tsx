@@ -1,6 +1,7 @@
 import { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
 import { ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { FILE_EXTENSION } from '@/config/constants'
+import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import { getNoteIdFromPath } from '@/lib/notes'
 import { EditableFilename } from '../EditableFilename'
 import { Tree } from '../ui/tree'
@@ -15,8 +16,27 @@ interface Props {
 }
 
 export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
-  const handleDrop = (tree: NodeModel[], options: DropOptions<unknown>) => {
-    console.log(tree, options)
+  const { moveNoteAndRefresh, moveFolderAndRefresh } = useWorkspaceActions({
+    workspace,
+  })
+
+  const handleDrop = async (
+    _tree: NodeModel[],
+    options: DropOptions<unknown>,
+  ) => {
+    const { dragSource, dropTargetId } = options
+    if (!dragSource) return
+
+    const sourceId = getNoteIdFromPath(dragSource.id.toString())
+    const targetId = dropTargetId
+      ? getNoteIdFromPath(dropTargetId.toString())
+      : ''
+
+    if (dragSource.droppable) {
+      await moveFolderAndRefresh(sourceId, targetId)
+    } else {
+      await moveNoteAndRefresh(sourceId, targetId)
+    }
   }
 
   return (
@@ -55,6 +75,9 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
             depth={depth}
           />
         )}
+        classes={{
+          container: 'h-full',
+        }}
       />
     </TreeContextMenu>
   )
