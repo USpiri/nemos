@@ -9,7 +9,7 @@ mermaid.initialize({
   startOnLoad: false,
   suppressErrorRendering: true,
   theme: 'default',
-  securityLevel: 'loose',
+  securityLevel: 'strict',
 })
 
 export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
