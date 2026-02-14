@@ -8,7 +8,7 @@ import {
   PlaceholderRender,
   Tree as TreeView,
 } from '@minoru/react-dnd-treeview'
-import { useRef } from 'react'
+import { useCallback, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 
 interface TreeProps {
@@ -28,24 +28,33 @@ export const Tree = ({
   classes,
   placeholderRender,
 }: TreeProps) => {
-  const contextRef = useRef(null)
+  const [contextElement, setContextElement] = useState<HTMLDivElement | null>(
+    null,
+  )
+  const contextRef = useCallback(
+    (node: HTMLDivElement | null) => setContextElement(node),
+    [],
+  )
+
   return (
     <div ref={contextRef}>
-      <DndProvider
-        backend={MultiBackend}
-        options={getBackendOptions()}
-        context={contextRef.current}
-      >
-        <TreeView
-          tree={tree}
-          rootId={rootId}
-          render={render}
-          onDrop={onDrop}
-          classes={classes}
-          dropTargetOffset={5}
-          placeholderRender={placeholderRender}
-        />
-      </DndProvider>
+      {contextElement && (
+        <DndProvider
+          backend={MultiBackend}
+          options={getBackendOptions()}
+          context={contextElement}
+        >
+          <TreeView
+            tree={tree}
+            rootId={rootId}
+            render={render}
+            onDrop={onDrop}
+            classes={classes}
+            dropTargetOffset={5}
+            placeholderRender={placeholderRender}
+          />
+        </DndProvider>
+      )}
     </div>
   )
 }
