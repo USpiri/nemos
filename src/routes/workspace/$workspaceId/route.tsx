@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { Topbar } from '@/components/layout/Topbar'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -9,6 +10,9 @@ export const Route = createFileRoute('/workspace/$workspaceId')({
   component: RouteComponent,
   loader: async ({ params: { workspaceId } }) => {
     const workspaceTree = await getWorkspaceTree(workspaceId).catch(() => {
+      toast.error('Workspace not found', {
+        description: 'The workspace you are looking for does not exist.',
+      })
       throw redirect({ to: '/workspace', replace: true })
     })
     return workspaceTree
