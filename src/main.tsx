@@ -23,10 +23,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
-await initialize()
+const bootstrap = async () => {
+  await initialize()
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-)
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>,
+  )
+}
+
+bootstrap().catch((error) => {
+  console.error('Failed to start app', error)
+})
