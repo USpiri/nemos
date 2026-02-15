@@ -1,11 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import { Editor } from '@/components/editor'
+import { lazy, Suspense, useEffect } from 'react'
 import { useNoteEditor } from '@/hooks/use-note-editor'
 import { readNote } from '@/lib/notes'
 import { createNoteTab } from '@/lib/tabs'
 import { useTabsStore } from '@/store'
 import { NoteError, NotePending } from './-components'
+
+const Editor = lazy(() =>
+  import('@/components/editor/Editor').then((m) => ({ default: m.Editor })),
+)
 
 export const Route = createFileRoute('/workspace/$workspaceId/notes/$noteId')({
   component: NoteIdComponent,
@@ -36,11 +39,13 @@ function NoteIdComponent() {
 
   return (
     <main>
-      <Editor
-        content={note.content}
-        className="mx-auto w-full max-w-3xl px-10 py-32"
-        onUpdate={(content) => save({ content })}
-      />
+      <Suspense fallback={<NotePending />}>
+        <Editor
+          content={note.content}
+          className="mx-auto w-full max-w-3xl px-10 py-32"
+          onUpdate={(content) => save({ content })}
+        />
+      </Suspense>
     </main>
   )
 }

@@ -1,5 +1,5 @@
 import { CheckIcon, DownloadIcon, XIcon } from 'lucide-react'
-import { CSSProperties } from 'react'
+import { CSSProperties, lazy, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,10 +11,13 @@ import {
 } from '@/components/ui/dialog'
 import { useUpdate } from '@/hooks/use-update'
 import { cn } from '@/lib/utils'
-import { Editor } from './editor'
 import { Badge } from './ui/badge'
 import { Progress } from './ui/progress'
 import { ScrollArea } from './ui/scroll-area'
+
+const Editor = lazy(() =>
+  import('./editor/Editor').then((m) => ({ default: m.Editor })),
+)
 
 /**
  * Dialog that displays update information and allows users to download and install
@@ -61,15 +64,17 @@ export const UpdateDialog = () => {
         {updateInfo.body && (
           <div
             style={{ '--font-size-multiplier': '0.8' } as CSSProperties}
-            className="bg-muted/50 rounded-lg border p-1"
+            className="rounded-lg border bg-muted/50 p-1"
           >
             <ScrollArea className="max-h-80 w-full p-4">
-              <h4 className="mb-2 text-sm font-semibold">What's new:</h4>
-              <Editor
-                content={updateInfo.body}
-                className="h-full w-full"
-                editable={false}
-              />
+              <h4 className="mb-2 font-semibold text-sm">What's new:</h4>
+              <Suspense>
+                <Editor
+                  content={updateInfo.body}
+                  className="h-full w-full"
+                  editable={false}
+                />
+              </Suspense>
             </ScrollArea>
           </div>
         )}
