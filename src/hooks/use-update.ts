@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
+import { useShallow } from 'zustand/react/shallow'
 import {
   checkForUpdate,
   close as closeFn,
@@ -32,10 +33,14 @@ interface UseUpdateReturn {
 }
 
 export const useUpdate = (): UseUpdateReturn => {
-  const updateInfo = useUpdateStore((state) => state.updateInfo)
-  const progress = useUpdateStore((state) => state.progress)
-  const isChecking = useUpdateStore((state) => state.isChecking)
-  const isDownloading = useUpdateStore((state) => state.isDownloading)
+  const { updateInfo, progress, isChecking, isDownloading } = useUpdateStore(
+    useShallow((state) => ({
+      updateInfo: state.updateInfo,
+      progress: state.progress,
+      isChecking: state.isChecking,
+      isDownloading: state.isDownloading,
+    })),
+  )
   const setUpdateInfo = useUpdateStore((state) => state.setUpdateInfo)
   const setProgress = useUpdateStore((state) => state.setProgress)
   const setIsChecking = useUpdateStore((state) => state.setIsChecking)
