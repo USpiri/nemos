@@ -25,7 +25,9 @@ function RootComponent() {
       <UpdateChecker />
       <GlobalDialogs />
       <Toaster />
-      <TanStackRouterDevtools position="bottom-right" />
+      {import.meta.env.DEV && (
+        <TanStackRouterDevtools position="bottom-right" />
+      )}
     </>
   )
 }
