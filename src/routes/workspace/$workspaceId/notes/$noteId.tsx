@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Editor } from '@/components/editor'
 import { useNoteEditor } from '@/hooks/use-note-editor'
 import { readNote } from '@/lib/notes'
@@ -29,8 +29,6 @@ function NoteIdComponent() {
     openTab(tabData)
   }, [workspaceId, noteId, openTab])
 
-  const content = useMemo(() => note.content, [note, noteId])
-
   const { save } = useNoteEditor({
     path: `${workspaceId}/${noteId}`,
     initialContent: note,
@@ -39,7 +37,7 @@ function NoteIdComponent() {
   return (
     <main>
       <Editor
-        content={content}
+        content={note.content}
         className="mx-auto w-full max-w-3xl px-10 py-32"
         onUpdate={(content) => save({ content })}
       />

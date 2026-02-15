@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
 import { Note, NoteError, writeNote } from '@/lib/notes'
@@ -37,6 +37,10 @@ export const useNoteEditor = ({
   )
 
   const save = useDebouncedCallback(saveFn, 1000)
+
+  // Flush pending save on unmount so the disk is up-to-date
+  // before the loader re-reads the note
+  useEffect(() => () => void save.flush(), [save])
 
   return { save }
 }
