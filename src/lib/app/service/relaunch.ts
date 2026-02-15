@@ -1,8 +1,9 @@
+import { relaunch as tauriRelaunch } from '@tauri-apps/plugin-process'
 import { AppError } from '../errors'
 
 export const relaunch = async () => {
   try {
-    await relaunch()
+    await tauriRelaunch()
   } catch (error) {
     throw new AppError(
       'RELAUNCH_FAILED',
