@@ -1,5 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { FolderPlus, Settings, SquarePen } from 'lucide-react'
+import { toast } from 'sonner'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import {
   SidebarHeader as SidebarHeaderBase,
@@ -18,6 +19,10 @@ export const SidebarHeader = () => {
     },
   )
 
+  const openSettings = () => {
+    toast.info('Settings are not implemented yet')
+  }
+
   return (
     <SidebarHeaderBase className="border-border border-b">
       <SidebarMenu className="h-full flex-row items-center justify-center gap-1">
@@ -33,7 +38,10 @@ export const SidebarHeader = () => {
         >
           <FolderPlus className="size-4" />
         </SidebarMenuButton>
-        <SidebarMenuButton className="aspect-square w-[unset] items-center justify-center p-0">
+        <SidebarMenuButton
+          className="aspect-square w-[unset] items-center justify-center p-0"
+          onClick={openSettings}
+        >
           <Settings className="size-4" />
         </SidebarMenuButton>
       </SidebarMenu>
