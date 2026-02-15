@@ -1,5 +1,5 @@
 import { Editor, Range } from '@tiptap/react'
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -12,7 +12,7 @@ interface Props {
   range: Range
 }
 
-export const CommandList = ({ items, editor, range }: Props) => {
+export const CommandList = memo(({ items, editor, range }: Props) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const listRef = useRef<HTMLDivElement>(null)
 
@@ -83,4 +83,4 @@ export const CommandList = ({ items, editor, range }: Props) => {
       </ScrollArea>
     </Card>
   )
-}
+})
