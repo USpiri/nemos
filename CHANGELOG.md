@@ -71,6 +71,15 @@
 - **Linting & Formatting**: Migrated from ESLint + Prettier to Biome — faster, unified linting and formatting
 - **Dependencies**: Upgraded TipTap v2 to v3, updated all Tauri plugins, replaced tippy.js with Floating UI, added TanStack Router, React Hook Form, Sonner, use-debounce, and Zod
 
+### Performance
+
+- **Lazy-loaded KaTeX**: Math rendering (KaTeX JS + CSS) is now dynamically imported only when a math node is rendered, removing ~265 KB from the initial bundle
+- **Lazy-loaded Mermaid**: Mermaid core is now dynamically imported only when a diagram node is rendered, removing ~502 KB from the initial bundle
+- **Lazy-loaded SMILES**: Chemical structure rendering (smiles-drawer) is dynamically imported only when a SMILES node is rendered
+- **Vite manual chunks**: Configured code splitting to separate React, TipTap/ProseMirror, and highlight.js into independent cacheable vendor chunks — reducing the main bundle from ~2.3 MB to ~562 KB
+- **Debounced Mermaid rendering**: Mermaid diagrams now render with debounce to avoid unnecessary re-renders while typing
+- **Memoized CommandList**: Slash command palette component is memoized to prevent unnecessary re-renders
+
 ### Security
 
 - Mermaid diagram security level changed from `loose` to `strict`
