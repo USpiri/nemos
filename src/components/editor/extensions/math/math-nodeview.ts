@@ -12,6 +12,8 @@ class MathNodeView implements NodeView {
   showSource!: boolean
   type: string
   isInline: boolean
+  private handleClick: () => void
+  private boundHandleSelectionUpdate: () => void
 
   constructor(props: NodeViewRendererProps, isInline = false) {
     this.editor = props.editor
@@ -20,6 +22,8 @@ class MathNodeView implements NodeView {
     this.showSource = this.node.attrs.showSource
     this.type = isInline ? 'math-inline' : 'math-display'
     this.isInline = isInline
+    this.handleClick = () => this.selectNode()
+    this.boundHandleSelectionUpdate = this.handleSelectionUpdate.bind(this)
     this.mount()
   }
 
@@ -49,9 +53,7 @@ class MathNodeView implements NodeView {
     dom.append(katexNode)
 
     // select the node on click
-    dom.addEventListener('click', () => {
-      this.selectNode()
-    })
+    dom.addEventListener('click', this.handleClick)
 
     dom.setAttribute('draggable', 'true')
 
@@ -69,7 +71,7 @@ class MathNodeView implements NodeView {
         )
     }
 
-    this.editor.on('selectionUpdate', this.handleSelectionUpdate.bind(this))
+    this.editor.on('selectionUpdate', this.boundHandleSelectionUpdate)
 
     this.renderer = dom
     this.content = source
@@ -139,7 +141,8 @@ class MathNodeView implements NodeView {
   }
 
   destroy() {
-    this.editor.off('selectionUpdate', this.handleSelectionUpdate.bind(this))
+    this.renderer.removeEventListener('click', this.handleClick)
+    this.editor.off('selectionUpdate', this.boundHandleSelectionUpdate)
     this.content = null
   }
 
