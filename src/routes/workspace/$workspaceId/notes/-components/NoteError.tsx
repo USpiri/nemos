@@ -11,9 +11,8 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
-import { useDialog } from '@/hooks/use-dialog'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
-import { getNoteNameFromPath, NoteError as NoteErrorClass } from '@/lib/notes'
+import { NoteError as NoteErrorClass } from '@/lib/notes'
 
 const route = getRouteApi('/workspace/$workspaceId/notes/$noteId')
 
