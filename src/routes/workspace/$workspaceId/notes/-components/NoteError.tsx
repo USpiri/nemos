@@ -11,7 +11,9 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
-import { NoteError as NoteErrorClass } from '@/lib/notes'
+import { useDialog } from '@/hooks/use-dialog'
+import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { getNoteNameFromPath, NoteError as NoteErrorClass } from '@/lib/notes'
 
 const route = getRouteApi('/workspace/$workspaceId/notes/$noteId')
 
@@ -30,7 +32,10 @@ const NoteErrorSwitch = ({
   error: Error
   reset: () => void
 }) => {
-  const { workspaceId } = route.useParams()
+  const { workspaceId, noteId } = route.useParams()
+  const { deleteNoteAndRefresh } = useWorkspaceActions({
+    workspace: workspaceId,
+  })
 
   if (error instanceof NoteErrorClass) {
     switch (error.code) {
@@ -69,7 +74,12 @@ const NoteErrorSwitch = ({
                 Go back to workspace
               </Link>
               <div className="flex flex-row items-center gap-4">
-                <Button variant={'destructive'}>Delete note</Button>
+                <Button
+                  variant={'destructive'}
+                  onClick={() => deleteNoteAndRefresh(noteId)}
+                >
+                  Delete note
+                </Button>
                 <Button onClick={reset}>Reload page</Button>
               </div>
               {error.message && <Code>{error.message}</Code>}
