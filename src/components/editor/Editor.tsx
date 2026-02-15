@@ -9,7 +9,6 @@ import { Extensions } from './extensions'
 import './editor.css'
 import './extensions/higlights.css'
 import './extensions/mermaid.css'
-import 'katex/dist/katex.min.css'
 
 interface Props {
   content?: string

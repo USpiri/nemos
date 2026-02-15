@@ -1,7 +1,18 @@
 import { Node } from '@tiptap/pm/model'
 import { NodeView } from '@tiptap/pm/view'
 import { Editor, NodeViewRendererProps } from '@tiptap/react'
-import katex from 'katex'
+
+let katexPromise: Promise<typeof import('katex')> | null = null
+
+function loadKatex() {
+  if (!katexPromise) {
+    katexPromise = Promise.all([
+      import('katex'),
+      import('katex/dist/katex.min.css'),
+    ]).then(([mod]) => mod)
+  }
+  return katexPromise
+}
 
 class MathNodeView implements NodeView {
   renderer!: HTMLElement
@@ -12,6 +23,7 @@ class MathNodeView implements NodeView {
   showSource!: boolean
   type: string
   isInline: boolean
+  private destroyed = false
   private handleClick: () => void
   private boundHandleSelectionUpdate: () => void
 
@@ -46,9 +58,12 @@ class MathNodeView implements NodeView {
 
     // render katex
     katexNode.setAttribute('contentEditable', 'false')
-    katex.render(this.node.textContent, katexNode, {
-      displayMode: !this.isInline,
-      throwOnError: false,
+    loadKatex().then((mod) => {
+      if (this.destroyed) return
+      mod.default.render(this.node.textContent, katexNode, {
+        displayMode: !this.isInline,
+        throwOnError: false,
+      })
     })
     dom.append(katexNode)
 
@@ -141,6 +156,7 @@ class MathNodeView implements NodeView {
   }
 
   destroy() {
+    this.destroyed = true
     this.renderer.removeEventListener('click', this.handleClick)
     this.editor.off('selectionUpdate', this.boundHandleSelectionUpdate)
     this.content = null
