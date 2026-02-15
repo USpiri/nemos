@@ -25,7 +25,7 @@ export default function TableNodeView({ node, editor, getPos }: NodeViewProps) {
       ) && (
         <>
           <Button
-            onClick={() => addRow()}
+            onClick={addRow}
             variant="ghost"
             size="icon-xs"
             className="absolute bottom-0 z-10 w-full translate-y-full"
@@ -34,7 +34,7 @@ export default function TableNodeView({ node, editor, getPos }: NodeViewProps) {
             <Plus className="size-4" />
           </Button>
           <Button
-            onClick={() => addColumn()}
+            onClick={addColumn}
             variant="ghost"
             size="icon-xs"
             className="absolute top-0 left-full z-10 h-full"
