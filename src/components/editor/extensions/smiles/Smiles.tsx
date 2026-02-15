@@ -1,12 +1,11 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { useEffect, useMemo, useRef } from 'react'
-import SmilesDrawer from 'smiles-drawer'
+import { useEffect, useRef } from 'react'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 
 // TODO: Add theme support
 export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
-  const drawer = useMemo(() => new SmilesDrawer.SvgDrawer({}), [])
+  const mountedRef = useRef(true)
 
   const onClick = () => {
     const pos = getPos()
@@ -15,15 +14,29 @@ export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
   }
 
   useEffect(() => {
+    mountedRef.current = true
     if (!svgRef.current) return
-    const smiles = SmilesDrawer.clean(node.textContent.trim())
 
-    SmilesDrawer.parse(
-      smiles,
-      (tree: unknown) => drawer.draw(tree, svgRef.current, 'dark'),
-      (err: unknown) => console.error(err),
-    )
-  }, [node.textContent, drawer])
+    import('smiles-drawer').then((mod) => {
+      if (!mountedRef.current || !svgRef.current) return
+      const SmilesDrawer = mod.default
+      const drawer = new SmilesDrawer.SvgDrawer({})
+      const smiles = SmilesDrawer.clean(node.textContent.trim())
+
+      SmilesDrawer.parse(
+        smiles,
+        (tree: unknown) => {
+          if (mountedRef.current && svgRef.current)
+            drawer.draw(tree, svgRef.current, 'dark')
+        },
+        (err: unknown) => console.error(err),
+      )
+    })
+
+    return () => {
+      mountedRef.current = false
+    }
+  }, [node.textContent])
 
   return (
     <NodeViewWrapper className="smiles">
