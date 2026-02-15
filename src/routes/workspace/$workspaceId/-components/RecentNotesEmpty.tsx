@@ -16,7 +16,7 @@ export const RecentNotesEmpty = () => {
         </EmptyMedia>
         <EmptyTitle>No notes yet</EmptyTitle>
         <EmptyDescription>
-          Create a new note by clicking the button below.
+          Create a new note by clicking the "New Note" button above.
         </EmptyDescription>
       </EmptyHeader>
     </Empty>
