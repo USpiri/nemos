@@ -19,6 +19,7 @@
     "@floating-ui/dom": "^1.7.4",
     "@hookform/resolvers": "^5.2.2",
     "@minoru/react-dnd-treeview": "^3.5.3",
+    "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-select": "^2.2.6",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-router": "^1.141.2",
