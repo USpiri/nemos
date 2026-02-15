@@ -118,7 +118,7 @@ To set up a development environment for Nemos, ensure you have the required [Tau
    ```
 4. Start the Tauri development server:
    ```sh
-   pnpm tauri dev
+   pnpm dev
    ```
 
 ### Building the Application
@@ -126,7 +126,7 @@ To set up a development environment for Nemos, ensure you have the required [Tau
 To create a production-ready Tauri build:
 
 ```sh
-pnpm tauri build
+pnpm build
 ```
 
 ## 🤝 Contribution Guidelines

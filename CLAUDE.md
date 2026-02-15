@@ -8,10 +8,10 @@ Nemos is a minimalist, local-first note-taking desktop app built with **Tauri v2
 
 ## Commands
 
-- **Dev server (frontend only):** `pnpm dev`
-- **Tauri dev (full app with Rust backend):** `pnpm tauri dev`
-- **Build frontend:** `pnpm build` (runs `tsc -b && vite build`)
-- **Build Tauri app:** `pnpm tauri build`
+- **Dev server (frontend only):** `pnpm vite:dev`
+- **Tauri dev (full app with Rust backend):** `pnpm dev`
+- **Build frontend:** `pnpm vite:build` (runs `tsc -b && vite build`)
+- **Build Tauri app:** `pnpm build`
 - **Lint:** `pnpm lint` (Biome)
 - **Lint + autofix:** `pnpm lint:fix`
 - **Format:** `pnpm format`
