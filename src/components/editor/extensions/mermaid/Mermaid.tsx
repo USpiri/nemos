@@ -1,7 +1,8 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { LoaderCircle } from 'lucide-react'
 import mermaid from 'mermaid'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 import { cn } from '@/lib/utils'
 
@@ -14,11 +15,13 @@ mermaid.initialize({
 
 export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
   const renderRef = useRef<HTMLDivElement | null>(null)
+  const mermaidIdRef = useRef(`mermaid-${crypto.randomUUID()}`)
+  const renderVersionRef = useRef(0)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const renderDiagram = useCallback(async () => {
-    const source = node.textContent.trim()
+  const debouncedRender = useDebouncedCallback(async (source: string) => {
+    const version = ++renderVersionRef.current
 
     if (!source || !renderRef.current) {
       setError(null)
@@ -29,22 +32,33 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
     setError(null)
 
     try {
-      const id = `mermaid-${Math.random().toString(36).slice(2)}`
-
-      const { svg } = await mermaid.render(id, source)
+      const { svg } = await mermaid.render(
+        `${mermaidIdRef.current}-${version}`,
+        source,
+      )
+      if (renderVersionRef.current !== version || !renderRef.current) return
       renderRef.current.innerHTML = svg
     } catch (err) {
+      if (renderVersionRef.current !== version) return
       setError(err instanceof Error ? err.message : 'Failed to render diagram')
-      renderRef.current.innerHTML = ''
+      if (renderRef.current) renderRef.current.innerHTML = ''
     } finally {
-      setLoading(false)
+      if (renderVersionRef.current === version) {
+        setLoading(false)
+      }
     }
-  }, [node.textContent])
+  }, 300)
 
   // Re-render on content change
   useEffect(() => {
-    renderDiagram()
-  }, [renderDiagram])
+    const source = node.textContent.trim()
+    debouncedRender(source)
+
+    return () => {
+      renderVersionRef.current++
+      debouncedRender.cancel()
+    }
+  }, [node.textContent, debouncedRender])
 
   return (
     <NodeViewWrapper className="mermaid relative">
@@ -64,7 +78,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
       </pre>
       <div
         className={cn(
-          'mermaid-render transition-all select-none',
+          'mermaid-render select-none transition-all',
           error && 'h-0 opacity-0',
         )}
         contentEditable={false}
@@ -77,7 +91,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
       )}
       {loading && node.textContent.trim().length !== 0 && (
         <div className="mermaid-loading" contentEditable={false}>
-          <LoaderCircle className="text-muted-foreground absolute top-2 right-2 size-4 animate-spin" />
+          <LoaderCircle className="absolute top-2 right-2 size-4 animate-spin text-muted-foreground" />
         </div>
       )}
       {!node.textContent.trim().length && (
