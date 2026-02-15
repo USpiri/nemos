@@ -1,17 +1,26 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { LoaderCircle } from 'lucide-react'
-import mermaid from 'mermaid'
 import { useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 import { cn } from '@/lib/utils'
 
-mermaid.initialize({
-  startOnLoad: false,
-  suppressErrorRendering: true,
-  theme: 'default',
-  securityLevel: 'strict',
-})
+let mermaidPromise: Promise<typeof import('mermaid')> | null = null
+
+function loadMermaid() {
+  if (!mermaidPromise) {
+    mermaidPromise = import('mermaid').then((mod) => {
+      mod.default.initialize({
+        startOnLoad: false,
+        suppressErrorRendering: true,
+        theme: 'default',
+        securityLevel: 'strict',
+      })
+      return mod
+    })
+  }
+  return mermaidPromise
+}
 
 export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
   const renderRef = useRef<HTMLDivElement | null>(null)
@@ -32,6 +41,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
     setError(null)
 
     try {
+      const { default: mermaid } = await loadMermaid()
       const { svg } = await mermaid.render(
         `${mermaidIdRef.current}-${version}`,
         source,
