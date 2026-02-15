@@ -8,12 +8,15 @@ import {
 } from '@/components/ui/empty'
 import { Code } from '@/components/ui/typography'
 import { ROOT } from '@/config/constants'
+import { useDialog } from '@/hooks/use-dialog'
 
 type Props = {
   onRefresh?: () => void
 }
 
 export const WorkspaceEmpty = ({ onRefresh }: Props) => {
+  const { open } = useDialog()
+
   return (
     <Empty className="max-h-96 border border-dashed">
       <EmptyHeader>
@@ -26,7 +29,9 @@ export const WorkspaceEmpty = ({ onRefresh }: Props) => {
       <EmptyContent className="flex flex-row justify-center gap-2">
         <Button onClick={onRefresh}>Refresh list</Button>
         or
-        <Button variant="outline">Create a new workspace</Button>
+        <Button variant="outline" onClick={() => open('workspace')}>
+          Create a new workspace
+        </Button>
       </EmptyContent>
     </Empty>
   )
