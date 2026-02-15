@@ -1,5 +1,6 @@
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { AlignCenter, AlignLeft, AlignRight, GripVertical } from 'lucide-react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -19,30 +20,43 @@ export default function ImageNodeView({
   editor,
   selected,
 }: NodeViewProps) {
-  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    const parent = event.currentTarget.parentElement
-    if (!parent) return
-    const image = parent.querySelector('img')
-    if (!image) return
+  const cleanUpRef = useRef<() => void>(null)
 
-    const startSize = { x: image.clientWidth, y: image.clientHeight }
-    const startPosition = { x: event.pageX, y: event.pageY }
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const parent = event.currentTarget.parentElement
+      if (!parent) return
+      const image = parent.querySelector('img')
+      if (!image) return
 
-    function onMouseMove(mouseMoveEvent: MouseEvent) {
-      const newWidth = startSize.x - startPosition.x + mouseMoveEvent.pageX
-      if (newWidth < MIN_WIDTH) return
-      editor.commands.updateAttributes('image', {
-        width: newWidth,
-        height: startSize.y - startPosition.y + mouseMoveEvent.pageY,
-      })
-    }
-    function onMouseUp() {
-      document.body.removeEventListener('mousemove', onMouseMove)
-    }
+      const startSize = { x: image.clientWidth, y: image.clientHeight }
+      const startPosition = { x: event.pageX, y: event.pageY }
 
-    document.body.addEventListener('mousemove', onMouseMove)
-    document.body.addEventListener('mouseup', onMouseUp, { once: true })
-  }
+      function onMouseMove(mouseMoveEvent: MouseEvent) {
+        const newWidth = startSize.x - startPosition.x + mouseMoveEvent.pageX
+        if (newWidth < MIN_WIDTH) return
+        editor.commands.updateAttributes('image', {
+          width: newWidth,
+          height: startSize.y - startPosition.y + mouseMoveEvent.pageY,
+        })
+      }
+
+      function cleanup() {
+        document.body.removeEventListener('mousemove', onMouseMove)
+        document.body.removeEventListener('mouseup', cleanup)
+        cleanUpRef.current = null
+      }
+
+      document.body.addEventListener('mousemove', onMouseMove)
+      document.body.addEventListener('mouseup', cleanup, { once: true })
+      cleanUpRef.current = cleanup
+    },
+    [editor],
+  )
+
+  useEffect(() => {
+    return () => cleanUpRef.current?.()
+  }, [])
 
   return (
     <NodeViewWrapper
