@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { Topbar } from '@/components/layout/Topbar'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -7,8 +7,12 @@ import { getWorkspaceTree } from '@/lib/workspace'
 
 export const Route = createFileRoute('/workspace/$workspaceId')({
   component: RouteComponent,
-  loader: async ({ params: { workspaceId } }) =>
-    await getWorkspaceTree(workspaceId),
+  loader: async ({ params: { workspaceId } }) => {
+    const workspaceTree = await getWorkspaceTree(workspaceId).catch(() => {
+      throw redirect({ to: '/workspace', replace: true })
+    })
+    return workspaceTree
+  },
 })
 
 function RouteComponent() {
