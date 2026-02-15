@@ -1,10 +1,12 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { Download, FolderPlus, Plus } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 
 const route = getRouteApi('/workspace/$workspaceId')
 
+// TODO: Implement import notes
 export const WorkspaceActions = () => {
   const { workspaceId } = route.useParams()
 
@@ -13,6 +15,9 @@ export const WorkspaceActions = () => {
       workspace: workspaceId,
     },
   )
+
+  const handleImportNotes = () =>
+    toast.info('Import notes is not implemented yet')
 
   return (
     <div className="flex flex-row flex-wrap gap-2">
@@ -24,7 +29,7 @@ export const WorkspaceActions = () => {
         <FolderPlus />
         New Folder
       </Button>
-      <Button variant="ghost">
+      <Button variant="ghost" onClick={handleImportNotes}>
         <Download />
         Import Notes
       </Button>
