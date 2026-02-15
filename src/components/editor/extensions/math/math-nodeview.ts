@@ -55,15 +55,15 @@ class MathNodeView implements NodeView {
     // select the node on click
     dom.addEventListener('click', this.handleClick)
 
-    dom.setAttribute('draggable', 'true')
-
     if (!this.showSource || !this.editor.isEditable) {
+      dom.setAttribute('draggable', 'true')
       source.setAttribute(
         'style',
         'opacity: 0; overflow: hidden; position: absolute; width: 0px; height: 0px;',
       )
     } else {
       dom.classList.add('math-selected')
+      dom.addEventListener('dragstart', (e) => e.preventDefault())
       if (this.isInline)
         katexNode.setAttribute(
           'style',
