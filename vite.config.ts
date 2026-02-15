@@ -38,6 +38,35 @@ export default defineConfig({
       process.env.TAURI_ENV_PLATFORM == 'windows' ? 'chrome105' : 'safari13',
     minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_ENV_DEBUG,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+
+          if (
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/scheduler/')
+          ) {
+            return 'react'
+          }
+
+          if (
+            id.includes('node_modules/@tiptap/') ||
+            id.includes('node_modules/prosemirror-')
+          ) {
+            return 'tiptap'
+          }
+
+          if (
+            id.includes('node_modules/highlight.js/') ||
+            id.includes('node_modules/lowlight/')
+          ) {
+            return 'highlight'
+          }
+        },
+      },
+    },
   },
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, './src') }],
