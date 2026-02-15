@@ -30,19 +30,21 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
 
 ### ✨ Key Features
 
-- **Minimalist & Customizable**: Simple and extensive customization options. Including custom color schemes and light/dark mode.
-- **Standard Editor Features**: Headings, paragraphs, bold, italics, quotes, inline code, strikethrough, underline.
-- **Advanced & Custom Editor Features**:
+- **Workspaces**: Organize your notes into separate workspaces, each with its own directory, file tree, and recent notes view.
+- **Tabbed Editing**: Open multiple notes at once with keyboard shortcuts, context menus, and tab persistence across sessions.
+- **Rich Text Editor** (TipTap v3): Headings, paragraphs, bold, italics, quotes, inline code, strikethrough, underline, task lists, and more.
+- **Advanced Editor Extensions**:
+  - **Slash Commands**: Type `/` to insert headings, lists, code blocks, math, diagrams, and more.
   - **Code Blocks**: Language selector, syntax highlighting, and copy button.
   - **Diagrams**: Integrated Mermaid.js support.
   - **Mathematical Notation**: Inline and display math with KaTeX.
   - **Chemical Notation**: Support for SMILES chemical structures.
-  - **Resizable Images**: Drag to adjust image size.
-  - **File Handling**: Direct image uploads and embedding.
-  - **Slash Command Menu**: Quickly access editor features with `/` commands.
-  - **Drag & Drop Nodes**: Easily rearrange content blocks.
-- **File Tree Navigation**: Organize your notes effectively.
-- **Note Properties**: Customize metadata and styling for each note (coming soon).
+  - **Resizable Images**: Drag to resize and align images.
+  - **Tables**: Interactive tables with add row/column buttons.
+  - **File Upload**: Drag-and-drop or paste images directly into the editor.
+- **File Tree with Drag & Drop**: Hierarchical workspace tree with drag-and-drop for moving notes and folders, context menus, and "Reveal in Explorer".
+- **Auto-Save**: Notes are saved automatically as you type.
+- **In-App Updates**: Automatic update checking with download progress tracking.
 - **Local-First**: No cloud storage—your notes stay on your device.
 
 ## 🖼️ Screenshoots
@@ -53,32 +55,40 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Tauri + React (Vite).
+- **Framework**: Tauri v2 + React 19 (Vite).
 - **Language**: TypeScript.
-- **Database**: None! Notes are stored locally.
+- **Routing**: TanStack Router (file-based).
+- **Editor**: TipTap v3.
+- **Database**: None! Notes are stored locally as `.note` files.
 - **State Management**: Zustand.
-- **Styling**: Tailwind CSS.
+- **Styling**: Tailwind CSS v4 + shadcn/ui.
+- **Linting & Formatting**: Biome.
 
 ## 📂 Project Structure
 
 ```
-.git/                              # Git workflow and build
-dist/                              # Frontend build output
-
 src/
-├── app/                           # App routing
 ├── components/                    # UI Components
-|   ├── editor/                    # Editor
-|   |   ├── extensions/            # Editor extensions
-|   |   └── Editor.tsx
-|   ├── ui                         # ShadCN UI components
-|   └── ...
-├── config/                        # Configuration files
-├── hooks/                         # Global hooks
-├── models/                        # Types & interfaces
-├── store/                         # Zustand global state
-├── utils/                         # Utility functions
-├── style.css                      # Global styles
+|   ├── editor/                    # Editor & extensions
+|   ├── layout/                    # Layout components (sidebar, topbar)
+|   ├── tabs/                      # Tab bar components
+|   ├── ui/                        # shadcn/ui components
+|   └── workspace-tree/            # Workspace file tree
+├── config/                        # Configuration & constants
+├── hooks/                         # Domain-specific hooks (CRUD, navigation)
+├── lib/                           # Service layer
+|   ├── app/                       # App initialization
+|   ├── editor/                    # Editor utilities
+|   ├── fs/                        # Filesystem abstraction
+|   ├── notes/                     # Note reading/writing & schemas
+|   ├── opener/                    # File & URL opener
+|   ├── tabs/                      # Tab utilities
+|   ├── updater/                   # In-app updater service
+|   └── workspace/                 # Workspace management & tree building
+├── routes/                        # TanStack Router file-based routes
+├── store/                         # Zustand stores (tabs, dialogs, UI, etc.)
+├── types/                         # Type definitions
+├── index.css                      # Global styles
 └── main.tsx                       # Application entry point
 
 src-tauri/                         # Tauri backend
@@ -86,8 +96,6 @@ src-tauri/                         # Tauri backend
 ├── icons/                         # App icon
 ├── src/                           # Rust code
 └── tauri.conf.json                # Tauri configuration
-
-...                                # Config files (package.json, etc.)
 ```
 
 ## 🚀 Getting Started
@@ -115,10 +123,10 @@ To set up a development environment for Nemos, ensure you have the required [Tau
 
 ### Building the Application
 
-To create a production-ready build:
+To create a production-ready Tauri build:
 
 ```sh
-pnpm build
+pnpm tauri build
 ```
 
 ## 🤝 Contribution Guidelines
