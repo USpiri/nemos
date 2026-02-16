@@ -5,6 +5,7 @@
   .typography {
     color: var(--color-foreground);
     white-space: pre-wrap;
+    caret-color: var(--color-primary);
 
     /* Placeholder */
     & p.is-empty:not(.not-typography p.is-empty)::before {
@@ -15,12 +16,15 @@
       pointer-events: none;
     }
 
+    /* ── Headings ───────────────────────────────────── */
+
     & h1:not(.not-typography h1) {
       scroll-margin: calc(var(--spacing) * 20);
       font-size: calc(var(--text-3xl) * 1.1 * var(--font-size-multiplier));
       line-height: var(--text-4xl--line-height);
       font-weight: 700;
       letter-spacing: var(--tracking-tight);
+      text-wrap: balance;
 
       @media (min-width: 1024px) {
         font-size: var(--text-4xl);
@@ -31,12 +35,13 @@
     & h2:not(.not-typography h2) {
       scroll-margin: calc(var(--spacing) * 20);
       border-bottom: 1px solid var(--color-border);
-      padding-bottom: calc(var(--spacing) * 2);
+      padding-bottom: calc(var(--spacing) * 3);
       font-size: calc(var(--text-3xl) * var(--font-size-multiplier));
       line-height: var(--text-3xl--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
-      margin-top: calc(var(--spacing) * 12);
+      margin-top: calc(var(--spacing) * 14);
+      text-wrap: balance;
 
       &:first-child {
         margin-top: 0;
@@ -50,6 +55,7 @@
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
       margin-top: calc(var(--spacing) * 12);
+      text-wrap: balance;
 
       &:first-child {
         margin-top: 0;
@@ -62,7 +68,8 @@
       line-height: var(--text-xl--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
-      margin-top: calc(var(--spacing) * 12);
+      margin-top: calc(var(--spacing) * 10);
+      text-wrap: balance;
 
       &:first-child {
         margin-top: 0;
@@ -75,7 +82,8 @@
       line-height: var(--text-lg--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
-      margin-top: calc(var(--spacing) * 12);
+      margin-top: calc(var(--spacing) * 10);
+      text-wrap: balance;
 
       &:first-child {
         margin-top: 0;
@@ -88,7 +96,8 @@
       line-height: var(--text-base--line-height);
       font-weight: 600;
       letter-spacing: var(--tracking-tight);
-      margin-top: calc(var(--spacing) * 12);
+      margin-top: calc(var(--spacing) * 10);
+      text-wrap: balance;
 
       &:first-child {
         margin-top: 0;
@@ -106,12 +115,14 @@
       }
     }
 
+    /* ── Body text ──────────────────────────────────── */
+
     & p:not(.not-typography p) {
       line-height: 1.75;
       font-size: calc(var(--text-base) * var(--font-size-multiplier));
 
       &:not(:first-child) {
-        margin-top: calc(var(--spacing) * 6);
+        margin-top: calc(var(--spacing) * 5);
       }
     }
 
@@ -119,30 +130,49 @@
       line-height: 1.75;
     }
 
+    /* ── Links ──────────────────────────────────────── */
+
     & a:not(.not-typography a) {
       cursor: pointer;
       color: var(--color-primary);
       text-decoration: underline;
-      text-underline-offset: var(--spacing);
+      text-decoration-color: color-mix(
+        in oklch,
+        var(--color-primary) 35%,
+        transparent
+      );
+      text-underline-offset: calc(var(--spacing) * 1.5);
+      text-decoration-skip-ink: auto;
+      transition:
+        text-decoration-color 0.15s ease,
+        color 0.15s ease;
+
+      &:hover {
+        text-decoration-color: var(--color-primary);
+      }
     }
 
+    /* ── Blockquote ─────────────────────────────────── */
+
     & blockquote:not(.not-typography blockquote) {
-      margin-top: calc(var(--spacing) * 6);
-      border-left: 2px solid var(--color-border);
+      margin-top: calc(var(--spacing) * 7);
+      border-left: 3px solid var(--color-border);
       padding-left: calc(var(--spacing) * 6);
       font-style: italic;
+      color: var(--color-muted-foreground);
     }
+
+    /* ── Tables ─────────────────────────────────────── */
 
     .tableWrapper {
       position: relative;
-      margin-top: calc(var(--spacing) * 6);
-      margin-bottom: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 7);
+      margin-bottom: calc(var(--spacing) * 7);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
 
       .selectedCell {
         border: 1px solid var(--color-primary);
-        /* outline: 1px solid var(--color-primary); */
       }
     }
 
@@ -159,10 +189,12 @@
 
       & th {
         border: 1px solid var(--color-border);
-        padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+        padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 4);
         text-align: left;
-        font-weight: 700;
-        background-color: var(--color-card);
+        font-weight: 600;
+        font-size: calc(var(--text-sm) * var(--font-size-multiplier));
+        background-color: var(--color-muted);
+        font-variant-numeric: tabular-nums;
 
         &[align="center"] {
           text-align: center;
@@ -181,9 +213,10 @@
 
       & td {
         border: 1px solid var(--color-border);
-        padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+        padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 4);
         text-align: left;
         background-color: var(--color-card);
+        font-variant-numeric: tabular-nums;
 
         &[align="center"] {
           text-align: center;
@@ -195,8 +228,10 @@
       }
     }
 
+    /* ── Lists ──────────────────────────────────────── */
+
     & ul:not(.not-typography ul) {
-      margin-top: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 5);
       margin-left: calc(var(--spacing) * 6);
       list-style: disc;
 
@@ -233,11 +268,12 @@
 
       & input[type="checkbox"]:not(.not-typography input[type="checkbox"]) {
         cursor: pointer;
+        accent-color: var(--color-primary);
       }
     }
 
     & ol:not(.not-typography ol) {
-      margin-top: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 5);
       margin-left: calc(var(--spacing) * 6);
       list-style: decimal;
 
@@ -252,30 +288,30 @@
       }
     }
 
+    /* ── Code ───────────────────────────────────────── */
+
     & pre:not(.not-typography pre) {
       background-color: var(--color-card);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
-      padding: calc(var(--spacing) * 4);
-      margin-top: calc(var(--spacing) * 6);
-      margin-bottom: calc(var(--spacing) * 6);
+      padding: calc(var(--spacing) * 4) calc(var(--spacing) * 5);
+      margin-top: calc(var(--spacing) * 7);
+      margin-bottom: calc(var(--spacing) * 7);
       font-size: calc(var(--text-sm) * var(--font-size-multiplier));
-      line-height: var(--text-sm--line-height);
-      overflow-y: auto;
+      line-height: 1.7;
+      overflow: auto;
     }
 
     & code:not(pre code):not(.not-typography code) {
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       background-color: var(--color-muted);
-      padding: calc(var(--spacing) * 0.8) calc(var(--spacing) * 1.2);
+      padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
       font-family: var(--font-mono);
-      line-height: var(--text-sm--line-height);
-
-      &:is(p > code) {
-        font-size: calc(var(--text-sm) * var(--font-size-multiplier));
-      }
+      font-size: 0.875em;
     }
+
+    /* ── Utility classes ────────────────────────────── */
 
     & .lead:not(.not-typography .lead) {
       font-size: calc(var(--text-xl) * var(--font-size-multiplier));
@@ -291,9 +327,8 @@
 
     & .small:not(.not-typography .small) {
       font-size: calc(var(--text-sm) * var(--font-size-multiplier));
-      line-height: var(--text-sm--line-height);
-      font-weight: 500;
       line-height: 1;
+      font-weight: 500;
     }
 
     & .muted:not(.not-typography .muted) {
@@ -302,26 +337,33 @@
       color: var(--color-muted-foreground);
     }
 
+    /* ── Media ──────────────────────────────────────── */
+
     & figure:not(.not-typography figure),
     & picture:not(.not-typography picture),
     & video:not(.not-typography video) {
       display: block;
-      margin-top: calc(var(--spacing) * 6);
-      margin-bottom: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 7);
+      margin-bottom: calc(var(--spacing) * 7);
     }
 
     & figure:not(.not-typography figure) {
       position: relative;
+
       .image-resize-trigger {
         opacity: 0;
-        transition: opacity 0.1s ease-in-out;
+        transition: opacity 0.15s ease;
       }
+
       &:hover .image-resize-trigger,
       &.has-focus .image-align-buttons {
         opacity: 1;
       }
+
       &.has-focus > img {
         outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
       }
     }
 
@@ -353,7 +395,7 @@
       flex-direction: column;
       justify-content: center;
       opacity: 0;
-      transition: opacity 0.1s ease-in-out;
+      transition: opacity 0.15s ease;
       gap: var(--spacing);
       padding-right: calc(var(--spacing) * 2);
     }
@@ -363,23 +405,45 @@
       margin-bottom: 0;
     }
 
+    /* ── Inline elements ────────────────────────────── */
+
     & kbd:not(.not-typography kbd) {
       border-radius: calc(var(--radius) - 2px);
+      border: 1px solid var(--color-border);
       background-color: var(--color-muted);
       padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
       font-size: calc(var(--text-xs) * var(--font-size-multiplier));
       line-height: var(--text-xs--line-height);
       font-weight: 600;
+      font-family: var(--font-mono);
+      box-shadow: 0 1px 0 var(--color-border);
     }
+
+    & mark:not(.not-typography mark) {
+      background-color: var(--color-yellow-300);
+      border-radius: var(--radius-sm);
+      padding-inline: calc(var(--spacing) * 0.5);
+      box-decoration-break: clone;
+    }
+
+    & small:not(.not-typography small) {
+      font-size: calc(var(--text-xs) * var(--font-size-multiplier));
+      line-height: 1;
+    }
+
+    /* ── Horizontal rule ────────────────────────────── */
 
     & hr {
-      margin-top: calc(var(--spacing) * 10);
-      margin-bottom: calc(var(--spacing) * 10);
+      margin-top: calc(var(--spacing) * 14);
+      margin-bottom: calc(var(--spacing) * 14);
+      border-color: var(--color-border);
     }
 
+    /* ── Definition list ────────────────────────────── */
+
     & dl:not(.not-typography dl) {
-      margin-top: calc(var(--spacing) * 6);
-      margin-bottom: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 7);
+      margin-bottom: calc(var(--spacing) * 7);
 
       & dt {
         font-weight: 600;
@@ -392,8 +456,10 @@
       }
     }
 
+    /* ── Details/summary ────────────────────────────── */
+
     & details:not(.not-typography details) {
-      margin-top: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 7);
 
       & summary {
         cursor: pointer;
@@ -408,18 +474,20 @@
         }
       }
     }
-
-    & mark:not(.not-typography mark) {
-      background-color: var(--color-yellow-300);
-    }
-
-    & small:not(.not-typography small) {
-      font-size: calc(var(--text-xs) * var(--font-size-multiplier));
-      line-height: var(--text-xs--line-height);
-      line-height: 1;
-    }
   }
 }
+
+/* ── Reduced motion ───────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .typography a,
+  .typography .image-resize-trigger,
+  .typography .image-align-buttons {
+    transition: none;
+  }
+}
+
+/* ── Drag handle ──────────────────────────────────── */
 
 .drag-handle {
   cursor: grab;
@@ -432,23 +500,24 @@
   color: var(--color-primary);
 }
 
+/* ── Math ─────────────────────────────────────────── */
+
 .math {
   cursor: pointer;
   overflow: hidden;
 
   &.math-display {
     border-radius: var(--radius-md);
-    border-color: var(--border);
+    border: 1px solid var(--color-border);
     background-color: var(--color-card);
-    border-width: 1px;
-    margin-block: 0.75rem;
+    margin-block: calc(var(--spacing) * 7);
 
     .math-content {
       font-family: var(--font-mono);
       font-size: calc(var(--text-sm) * var(--font-size-multiplier));
-      padding: 0.5rem;
+      padding: calc(var(--spacing) * 3);
       background-color: var(--color-sidebar);
-      border-bottom: 2px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
 
       &::before,
       &::after {
@@ -463,14 +532,11 @@
   &.math-inline {
     .math-content {
       border-radius: var(--radius-md);
-      border-color: var(--border);
+      border: 1px solid var(--color-border);
       background-color: var(--color-muted);
-      border-width: 1px;
-      margin-block: 0.75rem;
-      padding: calc(var(--spacing) * 0.8) calc(var(--spacing) * 1.2);
+      padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
       font-family: var(--font-mono);
-      line-height: var(--text-sm--line-height);
-      font-size: calc(var(--text-sm) * var(--font-size-multiplier));
+      font-size: 0.875em;
 
       &::before,
       &::after {
@@ -487,6 +553,8 @@
   }
 }
 
+/* ── Mermaid ──────────────────────────────────────── */
+
 .mermaid {
   &:has(.mermaid-error) {
     & > pre {
@@ -501,12 +569,15 @@
   }
 
   .mermaid-render {
-    padding: 0.5rem;
+    padding: calc(var(--spacing) * 3);
+
     svg {
       margin-inline: auto;
     }
   }
 }
+
+/* ── SMILES ───────────────────────────────────────── */
 
 .smiles {
   .smiles-render svg {
