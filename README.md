@@ -129,16 +129,25 @@ To create a production-ready Tauri build:
 pnpm build
 ```
 
-## 🤝 Contribution Guidelines
+## 📦 Releasing
 
-Contributions are welcome! If you'd like to contribute:
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full release process.
 
-1. **Fork** the repository.
-2. **Create a new branch** for your feature or bug fix.
-3. **Commit your changes** with a descriptive message.
-4. **Submit a pull request** for review.
+Quick reference:
 
-We appreciate your help in making Nemos even better!
+```sh
+pnpm bump <version>       # Update version in all config files
+git add .
+git commit -m "chore: bump version to <version>"
+git tag v<version>
+git push origin main --tags
+```
+
+Pushing a `v*` tag triggers the CI workflow that builds for macOS, Linux, and Windows, then creates a draft GitHub Release.
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 
 Happy note-taking! 😊
