@@ -1,7 +1,7 @@
 {
   "name": "nemos",
   "private": true,
-  "version": "0.3.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "vite:dev": "vite",
@@ -12,6 +12,7 @@
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
     "preview": "vite preview",
+    "bump": "node scripts/bump-version.js",
     "tauri": "tauri"
   },
   "dependencies": {
