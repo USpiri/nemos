@@ -15,6 +15,7 @@ Nemos is a minimalist, local-first note-taking desktop app built with **Tauri v2
 - **Lint:** `pnpm lint` (Biome)
 - **Lint + autofix:** `pnpm lint:fix`
 - **Format:** `pnpm format`
+- **Bump version:** `pnpm bump <version>` (updates `package.json`, `src-tauri/tauri.conf.json`)
 
 No test framework is configured.
 
@@ -66,3 +67,8 @@ Domain-specific hooks for CRUD operations: `use-create-note`, `use-delete-note`,
 - **Icon library:** Lucide React
 - **Schema validation:** Zod v4
 - **Forms:** React Hook Form with `@hookform/resolvers` for Zod integration
+- **Commit messages:** [Conventional Commits](https://www.conventionalcommits.org/) — `<type>: <description>` (e.g., `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`)
+
+## Releasing
+
+Version is tracked in `package.json` and `src-tauri/tauri.conf.json`. Use `pnpm bump <version>` to update both. Pushing a `v*` tag triggers the CI workflow (`.github/workflows/release.yml`) that builds for macOS, Linux, and Windows and creates a draft GitHub Release. See `CONTRIBUTING.md` for the full process.
