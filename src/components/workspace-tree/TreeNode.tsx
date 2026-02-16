@@ -50,6 +50,7 @@ export const TreeNode = ({
         )}
         variant="ghost"
         style={{ paddingInlineStart: depth * 10 + 8 }}
+        title={note}
       >
         {children}
       </Link>
