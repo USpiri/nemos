@@ -5,7 +5,7 @@ import { SidebarHeader } from './SidebarHeader'
 
 export const Sidebar = () => {
   return (
-    <SidebarBase>
+    <SidebarBase className="static! w-full border-none">
       <SidebarHeader />
       <SidebarContent />
       <SidebarFooter />
