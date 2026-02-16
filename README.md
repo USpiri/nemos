@@ -26,7 +26,7 @@
 
 Nemos is an intuitive and easy-to-use note-taking application designed to help users focus on capturing and organizing their thoughts without distractions. Most of its features seamlessly integrate into the text, providing a smooth and immersive writing experience.
 
-![349shots_so](https://github.com/user-attachments/assets/aba352d7-106c-4103-9447-dae423bb506a)
+<img width="1920" height="1440" alt="257shots_so" src="https://github.com/user-attachments/assets/ddbc570b-f125-4aae-b343-a89282064179" />
 
 ### ✨ Key Features
 
@@ -49,9 +49,8 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
 
 ## 🖼️ Screenshoots
 
-![916shots_so](https://github.com/user-attachments/assets/9b1c84b4-3fd8-42b9-8dbb-4c66a9307559)
-
-![736shots_so](https://github.com/user-attachments/assets/c9a94775-c4e6-4e53-bd73-ab8fe6075f65)
+<img width="1920" height="1440" alt="484shots_so" src="https://github.com/user-attachments/assets/8826fb80-2bc7-471a-b89f-7469447b613e" />
+<img width="1920" height="1440" alt="884shots_so" src="https://github.com/user-attachments/assets/ebecb8fb-1a28-4b27-b554-b555e95770a3" />
 
 ## 🛠️ Tech Stack
 
