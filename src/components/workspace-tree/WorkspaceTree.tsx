@@ -77,7 +77,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
               display={node.text.replace(FILE_EXTENSION, '')}
               path={node.id.toString()}
               suffix={node.droppable ? undefined : FILE_EXTENSION}
-              className="p-0"
+              className="truncate p-0"
               isFolder={!!node.droppable}
             />
           </TreeNode>
