@@ -1,4 +1,5 @@
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
+import { SettingsDialog } from './settings/SettingsDialog'
 import { WorkspaceFormDialog } from './WorkspaceFormDialog'
 
 /**
@@ -11,6 +12,7 @@ export const GlobalDialogs = () => {
     <>
       <WorkspaceFormDialog />
       <DeleteConfirmDialog />
+      <SettingsDialog />
     </>
   )
 }
