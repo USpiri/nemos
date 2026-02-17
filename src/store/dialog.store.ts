@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 
-export type DialogType = 'workspace' | 'update' | 'delete-confirmation'
+export type DialogType =
+  | 'workspace'
+  | 'update'
+  | 'delete-confirmation'
+  | 'settings'
 
 interface DialogState {
   dialog: DialogType | null
