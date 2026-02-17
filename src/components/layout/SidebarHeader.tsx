@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { FolderPlus, Settings, SquarePen } from 'lucide-react'
-import { toast } from 'sonner'
+import { useDialog } from '@/hooks/use-dialog'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import {
   SidebarHeader as SidebarHeaderBase,
@@ -19,8 +19,10 @@ export const SidebarHeader = () => {
     },
   )
 
+  const { open } = useDialog()
+
   const openSettings = () => {
-    toast.info('Settings are not implemented yet')
+    open('settings')
   }
 
   return (
