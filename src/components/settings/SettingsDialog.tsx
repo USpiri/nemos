@@ -47,7 +47,7 @@ export const SettingsDialog = () => {
 
   return (
     <Dialog open={isOpen('settings')} onOpenChange={close}>
-      <DialogContent className="h-full p-0 sm:max-w-3xl md:max-h-[500px]">
+      <DialogContent className="h-full overflow-hidden p-0 sm:max-w-3xl md:max-h-[500px]">
         <DialogHeader className="sr-only">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription>Application settings</DialogDescription>
