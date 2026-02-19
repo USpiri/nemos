@@ -1,4 +1,6 @@
 import { SidebarProvider } from '../layout/SidebarProvider'
+import { SettingsProvider } from './SettingsProvider'
+import { ThemeProvider } from './ThemeProvider'
 
 interface Props {
   children: React.ReactNode
@@ -6,8 +8,10 @@ interface Props {
 
 export const Providers = ({ children }: Props) => {
   return (
-    <>
-      <SidebarProvider>{children}</SidebarProvider>
-    </>
+    <SettingsProvider>
+      <ThemeProvider>
+        <SidebarProvider>{children}</SidebarProvider>
+      </ThemeProvider>
+    </SettingsProvider>
   )
 }
