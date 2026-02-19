@@ -1,5 +1,12 @@
 import { z } from 'zod'
+import { createScope } from '../settings.service'
 
-const EditorSchema = z.object({})
+export const EditorSettings = z.object({})
+export type EditorSettings = z.infer<typeof EditorSettings>
 
-export type EditorSettings = z.infer<typeof EditorSchema>
+export const useEditorSettings = createScope({
+  key: 'editor',
+  version: 1,
+  schema: EditorSettings,
+  defaults: {},
+})

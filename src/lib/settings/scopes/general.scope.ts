@@ -1,5 +1,12 @@
 import { z } from 'zod'
+import { createScope } from '../settings.service'
 
-const GeneralSchema = z.object({})
+export const GeneralSettings = z.object({})
+export type GeneralSettings = z.infer<typeof GeneralSettings>
 
-export type GeneralSettings = z.infer<typeof GeneralSchema>
+export const useGeneralSettings = createScope({
+  key: 'general',
+  version: 1,
+  schema: GeneralSettings,
+  defaults: {},
+})
