@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### New Features
+
+- **Settings Dialog**: A new settings panel is now accessible from the sidebar, with a tabbed layout for Appearance, Editor, General, and About sections.
+- **Appearance & Theme Settings**: Choose your preferred theme (light, dark, or system) from the Appearance settings. The app now syncs with your OS theme automatically when "System" is selected.
+- **Resizable Sidebar**: Drag the sidebar edge to resize it to your preferred width. The sidebar can also be fully collapsed to give your notes more space.
+- **About Section**: A new About tab in Settings displays app version and other information.
+
+### Improvements
+
+- File tree item names that exceed the sidebar width are now truncated with an ellipsis to keep the layout clean.
+- Tooltips have been added to file tree items so you can always see the full name on hover.
+
+### Fixes
+
+- Fixed a flash of incorrect theme on startup — the app now applies the correct theme immediately before the first render.
+
+---
+
 ## v1.0.0 — Complete Rewrite
 
 > Nemos v1.0.0 is a ground-up rewrite of the application. This release re-architects the core of the app, establishes the foundation for upcoming features, and introduces significant structural, architectural, performance, and UI changes.
