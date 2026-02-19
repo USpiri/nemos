@@ -65,7 +65,7 @@ export const SettingsDialog = () => {
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
           />
-          <main className="p-5">
+          <main className="flex-1 p-5">
             <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
               <div className="fade-in animate-in duration-200">
                 <Section />
