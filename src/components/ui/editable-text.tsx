@@ -63,6 +63,22 @@ function Editable({
   const isControlled = controlledValue !== undefined
   const value = isControlled ? controlledValue : internalValue
 
+  // Sync isEditingProp → isEditing during render to avoid an extra commit
+  const [prevIsEditingProp, setPrevIsEditingProp] = useState(isEditingProp)
+  if (prevIsEditingProp !== isEditingProp) {
+    setPrevIsEditingProp(isEditingProp)
+    setIsEditing(isEditingProp)
+  }
+
+  // Sync defaultValue → internalValue during render to avoid an extra commit
+  const [prevDefaultValue, setPrevDefaultValue] = useState(defaultValue)
+  if (prevDefaultValue !== defaultValue) {
+    setPrevDefaultValue(defaultValue)
+    if (!isControlled) {
+      setInternalValue(defaultValue)
+    }
+  }
+
   const setValue = useCallback(
     (newValue: string) => {
       if (!isControlled) {
@@ -106,14 +122,6 @@ function Editable({
     },
     [handleSubmit, value],
   )
-
-  useEffect(() => {
-    setInternalValue(defaultValue)
-  }, [defaultValue])
-
-  useEffect(() => {
-    setIsEditing(isEditingProp)
-  }, [isEditingProp])
 
   return (
     <EditableContext.Provider
@@ -192,9 +200,9 @@ function EditableInput({ className, onKeyDown, ...props }: EditableInputProps) {
     [onChange],
   )
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setIsEditing(false)
-  }
+  }, [setIsEditing])
 
   return (
     <input
@@ -236,18 +244,21 @@ function EditablePreview({
   const { value, disabled, isEditing, setIsEditing } =
     useEditableContext('EditablePreview')
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (!disabled) {
       setIsEditing(true)
     }
-  }
+  }, [disabled, setIsEditing])
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
-      e.preventDefault()
-      setIsEditing(true)
-    }
-  }
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
+        e.preventDefault()
+        setIsEditing(true)
+      }
+    },
+    [disabled, setIsEditing],
+  )
 
   return (
     <div
