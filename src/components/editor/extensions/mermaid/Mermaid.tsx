@@ -13,7 +13,7 @@ function loadMermaid() {
       mod.default.initialize({
         startOnLoad: false,
         suppressErrorRendering: true,
-        theme: 'default',
+        theme: 'base',
         securityLevel: 'strict',
       })
       return mod
