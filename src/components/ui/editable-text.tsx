@@ -75,9 +75,12 @@ function Editable({
   const handleSubmit = useCallback(
     (submitValue: string) => {
       setIsEditing(false)
+      if (!isControlled) {
+        setInternalValue(defaultValue)
+      }
       onSubmitProp?.(submitValue)
     },
-    [onSubmitProp],
+    [onSubmitProp, isControlled, defaultValue],
   )
 
   const handleChange = useCallback(
