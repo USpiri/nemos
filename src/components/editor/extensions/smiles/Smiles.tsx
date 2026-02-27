@@ -2,7 +2,26 @@ import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import { useEffect, useRef } from 'react'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 
-// TODO: Add theme support
+const options = {
+  themes: {
+    variables: {
+      C: 'var(--smiles-color-c)',
+      O: 'var(--smiles-color-o)',
+      N: 'var(--smiles-color-n)',
+      F: 'var(--smiles-color-f)',
+      CL: 'var(--smiles-color-cl)',
+      BR: 'var(--smiles-color-br)',
+      I: 'var(--smiles-color-i)',
+      P: 'var(--smiles-color-p)',
+      S: 'var(--smiles-color-s)',
+      B: 'var(--smiles-color-b)',
+      SI: 'var(--smiles-color-si)',
+      H: 'var(--smiles-color-h)',
+      BACKGROUND: 'var(--smiles-color-background)',
+    },
+  },
+}
+
 export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const mountedRef = useRef(true)
@@ -20,14 +39,14 @@ export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
     import('smiles-drawer').then((mod) => {
       if (!mountedRef.current || !svgRef.current) return
       const SmilesDrawer = mod.default
-      const drawer = new SmilesDrawer.SvgDrawer({})
+      const drawer = new SmilesDrawer.SvgDrawer(options)
       const smiles = SmilesDrawer.clean(node.textContent.trim())
 
       SmilesDrawer.parse(
         smiles,
         (tree: unknown) => {
           if (mountedRef.current && svgRef.current)
-            drawer.draw(tree, svgRef.current, 'dark')
+            drawer.draw(tree, svgRef.current, 'variables')
         },
         (err: unknown) => console.error(err),
       )

@@ -30,6 +30,21 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
 
+  /* Smiles colors */
+  --smiles-color-c: var(--color-foreground);
+  --smiles-color-o: var(--color-rose-500);
+  --smiles-color-n: var(--color-blue-500);
+  --smiles-color-f: var(--color-green-500);
+  --smiles-color-cl: var(--color-cyan-500);
+  --smiles-color-br: var(--color-orange-500);
+  --smiles-color-i: var(--color-purple-500);
+  --smiles-color-p: var(--color-orange-500);
+  --smiles-color-s: var(--color-yellow-500);
+  --smiles-color-b: var(--color-brown-500);
+  --smiles-color-si: var(--color-brown-500);
+  --smiles-color-h: var(--color-black);
+  --smiles-color-background: var(--background);
+
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
@@ -82,6 +97,22 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+
+  /* Smiles colors */
+  --smiles-color-c: var(--color-muted-foreground);
+  --smiles-color-o: var(--color-rose-400);
+  --smiles-color-n: var(--color-blue-400);
+  --smiles-color-f: var(--color-green-400);
+  --smiles-color-cl: var(--color-cyan-400);
+  --smiles-color-br: var(--color-orange-400);
+  --smiles-color-i: var(--color-purple-400);
+  --smiles-color-p: var(--color-orange-400);
+  --smiles-color-s: var(--color-yellow-400);
+  --smiles-color-b: var(--color-brown-400);
+  --smiles-color-si: var(--color-brown-400);
+  --smiles-color-h: var(--color-white);
+  --smiles-color-background: var(--background);
+
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
