@@ -65,7 +65,11 @@ export default function ImageNodeView({
       className={cn('image-resizable', selected && 'has-focus')}
     >
       <img {...node.attrs} />
-      <div className="image-resize-trigger" onMouseDown={handleMouseDown}>
+      <div
+        className="image-resize-trigger"
+        onMouseDown={handleMouseDown}
+        role="button"
+      >
         <GripVertical />
       </div>
       <div className="image-align-buttons">

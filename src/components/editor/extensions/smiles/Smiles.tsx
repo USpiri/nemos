@@ -78,6 +78,7 @@ export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
         className="smiles-render select-none transition-all"
         onClick={onClick}
         contentEditable={false}
+        role="button"
       >
         <svg ref={svgRef} />
       </div>
