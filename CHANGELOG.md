@@ -8,15 +8,21 @@
 - **Appearance & Theme Settings**: Choose your preferred theme (light, dark, or system) from the Appearance settings. The app now syncs with your OS theme automatically when "System" is selected.
 - **Resizable Sidebar**: Drag the sidebar edge to resize it to your preferred width. The sidebar can also be fully collapsed to give your notes more space.
 - **About Section**: A new About tab in Settings displays app version and other information.
+- **Mermaid Diagram Theming**: Mermaid diagrams now automatically match your selected theme (light/dark) and support custom color variable overrides for advanced styling.
+- **Chemical Structure (SMILES) Theming**: SMILES molecular structure diagrams now adapt to your app theme, using customizable color variables for consistent visual integration.
 
 ### Improvements
 
 - File tree item names that exceed the sidebar width are now truncated with an ellipsis to keep the layout clean.
 - Tooltips have been added to file tree items so you can always see the full name on hover.
+- **Faster File Tree Loading**: The workspace file tree now reads directories in parallel.
+- Toast notifications now respect your selected light/dark theme setting.
 
 ### Fixes
 
 - Fixed a flash of incorrect theme on startup — the app now applies the correct theme immediately before the first render.
+- Fixed the settings dialog layout overflowing its container.
+- Fixed an edge case where inline editable fields could display stale values after external updates.
 
 ---
 
