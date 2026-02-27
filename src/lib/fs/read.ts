@@ -23,23 +23,26 @@ export const readDir = async (path: string) => {
 
 export const readDirRecursive = async (path: string) => {
   const entries = await readDir(path)
-  const results: (DirEntry & { path: string })[] = []
 
-  for (const entry of entries) {
-    const fullPath = `${path}/${entry.name}`
-    const current = {
-      path: fullPath,
-      name: entry.name,
-      isDirectory: entry.isDirectory,
-      isFile: entry.isFile,
-      isSymlink: entry.isSymlink,
-    }
+  const results: (DirEntry & { path: string })[][] = await Promise.all(
+    entries.map(async (entry) => {
+      const fullPath = `${path}/${entry.name}`
+      const current: DirEntry & { path: string } = {
+        path: fullPath,
+        name: entry.name,
+        isDirectory: entry.isDirectory,
+        isFile: entry.isFile,
+        isSymlink: entry.isSymlink,
+      }
 
-    results.push(current)
-    if (entry.isDirectory) {
-      results.push(...(await readDirRecursive(fullPath)))
-    }
-  }
+      if (entry.isDirectory) {
+        const children = await readDirRecursive(fullPath)
+        return [current, ...children]
+      }
 
-  return results
+      return [current]
+    }),
+  )
+
+  return results.flat()
 }
