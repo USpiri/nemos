@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 import { cn } from '@/lib/utils'
+import { options } from './options'
 
 let mermaidPromise: Promise<typeof import('mermaid')> | null = null
 
@@ -13,8 +14,7 @@ function loadMermaid() {
       mod.default.initialize({
         startOnLoad: false,
         suppressErrorRendering: true,
-        theme: 'base',
-        securityLevel: 'strict',
+        ...options,
       })
       return mod
     })

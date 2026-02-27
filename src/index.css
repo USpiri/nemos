@@ -45,6 +45,16 @@
   --smiles-color-h: var(--color-black);
   --smiles-color-background: var(--background);
 
+  /* Mermaid colors */
+  --mermaid-primary-color: #fafafa;
+  --mermaid-primary-text-color: #000;
+  --mermaid-primary-border-color: #e5e5e5;
+  --mermaid-line-color: #a1a1a1;
+  --mermaid-secondary-color: #fca5a5;
+  --mermaid-tertiary-color: #f4f4f592;
+  --mermaid-edge-label-background: #bbf7d0;
+  --mermaid-edge-label-color: #bae6fd;
+
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
@@ -112,6 +122,16 @@
   --smiles-color-si: var(--color-brown-400);
   --smiles-color-h: var(--color-white);
   --smiles-color-background: var(--background);
+
+  /* Mermaid colors */
+  --mermaid-primary-color: #171717;
+  --mermaid-primary-text-color: #fff;
+  --mermaid-primary-border-color: #ffffff1a;
+  --mermaid-line-color: #3f3f3f;
+  --mermaid-secondary-color: #fca5a5;
+  --mermaid-tertiary-color: #1725544d;
+  --mermaid-edge-label-background: #10b981;
+  --mermaid-edge-label-color: #000;
 
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
