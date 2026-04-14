@@ -1,9 +1,9 @@
 import { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
 import { useParams } from '@tanstack/react-router'
 import { ChevronDown, ChevronRight, FileText } from 'lucide-react'
-import { FILE_EXTENSION } from '@/config/constants'
+import { EXTENSION } from '@/config/constants'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
-import { getNoteIdFromPath } from '@/lib/notes'
+import { getBaseName, toRelativePath } from '@/lib/paths'
 import { EditableFilename } from '../EditableFilename'
 import { Tree } from '../ui/tree'
 import { DropTargetPlaceholder } from './DropTargetPlaceholder'
@@ -28,10 +28,8 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
     const { dragSource, dropTargetId } = options
     if (!dragSource) return
 
-    const sourceId = getNoteIdFromPath(dragSource.id.toString())
-    const targetId = dropTargetId
-      ? getNoteIdFromPath(dropTargetId.toString())
-      : ''
+    const sourceId = toRelativePath(dragSource.id.toString())
+    const targetId = dropTargetId ? toRelativePath(dropTargetId.toString()) : ''
 
     if (dragSource.droppable) {
       const newFolderId = await moveFolder(sourceId, targetId)
@@ -65,7 +63,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
             isDragging={isDragging}
             isDropTarget={isDropTarget}
             workspace={workspace}
-            note={getNoteIdFromPath(node.id.toString())}
+            note={toRelativePath(node.id.toString())}
             onToggle={onToggle}
           >
             {node.droppable ? (
@@ -74,9 +72,9 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
               <FileText />
             )}
             <EditableFilename
-              display={node.text.replace(FILE_EXTENSION, '')}
+              display={getBaseName(node.text)}
               path={node.id.toString()}
-              suffix={node.droppable ? undefined : FILE_EXTENSION}
+              suffix={node.droppable ? undefined : `.${EXTENSION}`}
               className="truncate p-0"
               isFolder={!!node.droppable}
             />
