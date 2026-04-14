@@ -1,5 +1,5 @@
 import { LinkOptions, linkOptions } from '@tanstack/react-router'
-import { getNoteNameWithoutExtension } from '../notes'
+import { getBaseName } from '@/lib/paths'
 import type { NoteTab, Tab } from './tab.type'
 
 export const createNoteTab = ({
@@ -12,8 +12,7 @@ export const createNoteTab = ({
   return {
     id: noteId,
     type: 'note',
-    title:
-      getNoteNameWithoutExtension(`${workspaceId}/${noteId}`) || 'Untitled',
+    title: getBaseName(noteId) || 'Untitled',
     path: `workspace/${workspaceId}/notes/${noteId}`,
     dirty: false,
     payload: { workspaceId, noteId },
