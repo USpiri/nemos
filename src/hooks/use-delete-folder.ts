@@ -1,27 +1,24 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
-import {
-  deleteFolder as deleteFolderFn,
-  getNoteNameFromPath,
-  NoteError,
-} from '@/lib/notes'
+import { deleteFolder as deleteFolderFn, NoteError } from '@/lib/notes'
+import { getEntryName } from '@/lib/paths'
 import { useDialog } from './use-dialog'
 
 interface Props {
-  workspace: string
+  workspaceId: string
 }
 
-export const useDeleteFolder = ({ workspace }: Props) => {
+export const useDeleteFolder = ({ workspaceId }: Props) => {
   const { open } = useDialog()
 
   const deleteFolder = useCallback(
     async (
-      folder: string,
+      relativePath: string,
       options: { skipConfirmation?: boolean; onSuccess?: () => void } = {},
     ) => {
       const performDelete = async () => {
         try {
-          await deleteFolderFn({ workspace, folder })
+          await deleteFolderFn({ workspaceId, relativePath })
           options.onSuccess?.()
         } catch (error) {
           if (error instanceof NoteError) {
@@ -41,8 +38,7 @@ export const useDeleteFolder = ({ workspace }: Props) => {
       if (options.skipConfirmation) {
         await performDelete()
       } else {
-        // Extract the folder name from the path for display
-        const folderName = getNoteNameFromPath(folder)
+        const folderName = getEntryName(relativePath)
         open('delete-confirmation', {
           type: 'folder',
           name: folderName,
@@ -50,7 +46,7 @@ export const useDeleteFolder = ({ workspace }: Props) => {
         })
       }
     },
-    [workspace, open],
+    [workspaceId, open],
   )
   return { deleteFolder }
 }

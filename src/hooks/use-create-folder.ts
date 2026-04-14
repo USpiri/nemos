@@ -3,17 +3,14 @@ import { toast } from 'sonner'
 import { createFolder as createFolderFn, NoteError } from '@/lib/notes'
 
 interface Props {
-  workspace: string
+  workspaceId: string
 }
 
-export const useCreateFolder = ({ workspace }: Props) => {
+export const useCreateFolder = ({ workspaceId }: Props) => {
   const createFolder = useCallback(
-    async (folderName: string, onSuccess?: (folderPath: string) => void) => {
+    async (relativePath: string, onSuccess?: (folderPath: string) => void) => {
       try {
-        const folderPath = await createFolderFn({
-          workspace,
-          path: folderName,
-        })
+        const folderPath = await createFolderFn({ workspaceId, relativePath })
         onSuccess?.(folderPath)
         return folderPath
       } catch (error) {
@@ -26,7 +23,7 @@ export const useCreateFolder = ({ workspace }: Props) => {
         }
       }
     },
-    [workspace],
+    [workspaceId],
   )
 
   return { createFolder }

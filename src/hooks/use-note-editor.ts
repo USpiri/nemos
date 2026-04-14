@@ -4,10 +4,12 @@ import { useDebouncedCallback } from 'use-debounce'
 import { Note, NoteError, writeNote } from '@/lib/notes'
 
 export const useNoteEditor = ({
-  path,
+  workspaceId,
+  relativePath,
   initialContent,
 }: {
-  path: string
+  workspaceId: string
+  relativePath: string
   initialContent: Note
 }) => {
   const lastSaved = useRef(initialContent)
@@ -17,7 +19,7 @@ export const useNoteEditor = ({
       if (lastSaved.current.content === note.content) return
 
       try {
-        await writeNote(path, note)
+        await writeNote(workspaceId, relativePath, note)
         lastSaved.current = note
       } catch (error) {
         if (error instanceof NoteError) {
@@ -33,13 +35,11 @@ export const useNoteEditor = ({
         }
       }
     },
-    [path],
+    [workspaceId, relativePath],
   )
 
-  const save = useDebouncedCallback(saveFn, 1000)
+  const save = useDebouncedCallback(saveFn, 500)
 
-  // Flush pending save on unmount so the disk is up-to-date
-  // before the loader re-reads the note
   useEffect(() => () => void save.flush(), [save])
 
   return { save }

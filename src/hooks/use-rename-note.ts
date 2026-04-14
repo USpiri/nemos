@@ -3,19 +3,23 @@ import { toast } from 'sonner'
 import { NoteError, renameNote as renameNoteFn } from '@/lib/notes'
 
 interface Props {
-  workspace: string
+  workspaceId: string
 }
 
-export const useRenameNote = ({ workspace }: Props) => {
+export const useRenameNote = ({ workspaceId }: Props) => {
   const renameNote = useCallback(
-    async (note: string, newName: string) => {
-      if (!note || !newName) {
+    async (relativePath: string, newName: string) => {
+      if (!relativePath || !newName) {
         toast.error('Note and the new name are required')
         return
       }
 
       try {
-        const notePath = await renameNoteFn({ workspace, note, newName })
+        const notePath = await renameNoteFn({
+          workspaceId,
+          relativePath,
+          newName,
+        })
         return notePath
       } catch (error) {
         if (error instanceof NoteError) {
@@ -32,7 +36,7 @@ export const useRenameNote = ({ workspace }: Props) => {
         }
       }
     },
-    [workspace],
+    [workspaceId],
   )
 
   return { renameNote }

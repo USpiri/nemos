@@ -1,27 +1,24 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
-import {
-  deleteNote as deleteNoteFn,
-  getNoteNameFromPath,
-  NoteError,
-} from '@/lib/notes'
+import { deleteNote as deleteNoteFn, NoteError } from '@/lib/notes'
+import { getEntryName } from '@/lib/paths'
 import { useDialog } from './use-dialog'
 
 interface Props {
-  workspace: string
+  workspaceId: string
 }
 
-export const useDeleteNote = ({ workspace }: Props) => {
+export const useDeleteNote = ({ workspaceId }: Props) => {
   const { open } = useDialog()
 
   const deleteNote = useCallback(
     async (
-      note: string,
+      relativePath: string,
       options: { skipConfirmation?: boolean; onSuccess?: () => void } = {},
     ) => {
       const performDelete = async () => {
         try {
-          await deleteNoteFn({ workspace, note })
+          await deleteNoteFn({ workspaceId, relativePath })
           options.onSuccess?.()
         } catch (error) {
           if (error instanceof NoteError) {
@@ -41,8 +38,7 @@ export const useDeleteNote = ({ workspace }: Props) => {
       if (options.skipConfirmation) {
         await performDelete()
       } else {
-        // Extract the note name from the path for display
-        const noteName = getNoteNameFromPath(note)
+        const noteName = getEntryName(relativePath)
         open('delete-confirmation', {
           type: 'note',
           name: noteName,
@@ -50,7 +46,7 @@ export const useDeleteNote = ({ workspace }: Props) => {
         })
       }
     },
-    [workspace, open],
+    [workspaceId, open],
   )
   return { deleteNote }
 }

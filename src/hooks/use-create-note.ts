@@ -1,20 +1,16 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
-import { FILE_EXTENSION } from '@/config/constants'
 import { createNote as createNoteFn, NoteError } from '@/lib/notes'
 
 interface Props {
-  workspace: string
+  workspaceId: string
 }
 
-export const useCreateNote = ({ workspace }: Props) => {
+export const useCreateNote = ({ workspaceId }: Props) => {
   const createNote = useCallback(
-    async (noteName: string, onSuccess?: (notePath: string) => void) => {
+    async (relativePath: string, onSuccess?: (notePath: string) => void) => {
       try {
-        const notePath = await createNoteFn({
-          workspace,
-          path: `${noteName}${FILE_EXTENSION}`,
-        })
+        const notePath = await createNoteFn({ workspaceId, relativePath })
         onSuccess?.(notePath)
         return notePath
       } catch (error) {
@@ -27,7 +23,7 @@ export const useCreateNote = ({ workspace }: Props) => {
         }
       }
     },
-    [workspace],
+    [workspaceId],
   )
 
   return { createNote }

@@ -3,19 +3,23 @@ import { toast } from 'sonner'
 import { moveNote as moveNoteFn, NoteError } from '@/lib/notes'
 
 interface Props {
-  workspace: string
+  workspaceId: string
 }
 
-export const useMoveNote = ({ workspace }: Props) => {
+export const useMoveNote = ({ workspaceId }: Props) => {
   const moveNote = useCallback(
-    async (note: string, destination: string) => {
-      if (!note) {
+    async (relativePath: string, destinationPath: string) => {
+      if (!relativePath) {
         toast.error('Note is required')
         return
       }
 
       try {
-        const notePath = await moveNoteFn({ workspace, note, destination })
+        const notePath = await moveNoteFn({
+          workspaceId,
+          relativePath,
+          destinationPath,
+        })
         return notePath
       } catch (error) {
         if (error instanceof NoteError) {
@@ -32,7 +36,7 @@ export const useMoveNote = ({ workspace }: Props) => {
         }
       }
     },
-    [workspace],
+    [workspaceId],
   )
 
   return { moveNote }
