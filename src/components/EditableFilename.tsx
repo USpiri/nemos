@@ -1,6 +1,6 @@
 import { useParams } from '@tanstack/react-router'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
-import { getNoteIdFromPath } from '@/lib/notes'
+import { toRelativePath } from '@/lib/paths'
 import { useRenameStore } from '@/store/rename.store'
 import {
   Editable,
@@ -13,6 +13,7 @@ import {
 
 interface Props {
   display: string
+  /** The full path of the note or folder. */
   path: string
   suffix?: string
   className?: string
@@ -36,14 +37,14 @@ export const EditableFilename = ({
     },
   )
 
-  const noteId = getNoteIdFromPath(path)
-  const shouldEdit = isRenaming(noteId, context)
+  const relativePath = toRelativePath(path)
+  const shouldEdit = isRenaming(relativePath, context)
 
   const handleSubmit = (value: string) => {
     if (isFolder) {
-      renameFolderAndRefresh(noteId, value)
+      renameFolderAndRefresh(relativePath, value)
     } else {
-      renameNoteAndNavigate(noteId, value)
+      renameNoteAndNavigate(relativePath, value)
     }
     setRenamingPath(null)
   }
