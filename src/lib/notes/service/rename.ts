@@ -1,27 +1,29 @@
-import { FILE_EXTENSION } from '@/config/constants'
 import { exists, rename } from '@/lib/fs'
-import { NoteError } from '../errors'
 import {
-  getFolderParentPath,
-  getNoteFolderPath,
-  getNoteNameFromPath,
-  getNotePath,
-} from './path'
+  getContainerPath,
+  getEntryName,
+  getParentPath,
+  toFsPath,
+  toNoteFileName,
+} from '@/lib/paths'
+import { NoteError } from '../errors'
+
+// TODO: Abstract rename operations to a common function
 
 interface RenameNoteProps {
-  workspace: string
-  note: string // current note path
-  newName: string // new note name, without file extension and workspace path
+  workspaceId: string
+  relativePath: string
+  newName: string
 }
 
 export const renameNote = async ({
-  workspace,
-  note,
+  workspaceId,
+  relativePath,
   newName,
 }: RenameNoteProps) => {
-  const fromPath = getNotePath(`${workspace}/${note}`)
-  const parentDir = getNoteFolderPath(fromPath)
-  const newPath = `${parentDir}/${newName}${FILE_EXTENSION}`
+  const fromPath = toFsPath(workspaceId, relativePath)
+  const parentDir = getContainerPath(fromPath)
+  const newPath = `${parentDir}/${toNoteFileName(newName)}`
 
   try {
     const existsTo = await exists(newPath)
@@ -45,18 +47,18 @@ export const renameNote = async ({
 }
 
 interface RenameFolderProps {
-  workspace: string
-  folder: string // current folder path
-  newName: string // new folder name, without file extension and workspace path
+  workspaceId: string
+  relativePath: string
+  newName: string
 }
 
 export const renameFolder = async ({
-  workspace,
-  folder,
+  workspaceId,
+  relativePath,
   newName,
 }: RenameFolderProps) => {
-  const folderPath = getNotePath(`${workspace}/${folder}`)
-  const parentDir = getFolderParentPath(folderPath)
+  const folderPath = toFsPath(workspaceId, relativePath)
+  const parentDir = getParentPath(folderPath)
   const newPath = `${parentDir}/${newName}`
 
   try {
@@ -81,21 +83,21 @@ export const renameFolder = async ({
 }
 
 interface MoveNoteProps {
-  workspace: string
-  note: string // workspace-relative path with extension, e.g. "folder/note.note"
-  destination: string // workspace-relative target folder, e.g. "other-folder" or "" for root
+  workspaceId: string
+  relativePath: string
+  destinationPath: string
 }
 
 export const moveNote = async ({
-  workspace,
-  note,
-  destination,
+  workspaceId,
+  relativePath,
+  destinationPath,
 }: MoveNoteProps) => {
-  const fromPath = getNotePath(`${workspace}/${note}`)
-  const fileName = getNoteNameFromPath(fromPath)
-  const destDir = destination
-    ? getNotePath(`${workspace}/${destination}`)
-    : getNotePath(workspace)
+  const fromPath = toFsPath(workspaceId, relativePath)
+  const fileName = getEntryName(fromPath)
+  const destDir = destinationPath
+    ? toFsPath(workspaceId, destinationPath)
+    : toFsPath(workspaceId)
   const newPath = `${destDir}/${fileName}`
 
   if (fromPath === newPath) return fromPath
@@ -122,21 +124,21 @@ export const moveNote = async ({
 }
 
 interface MoveFolderProps {
-  workspace: string
-  folder: string // workspace-relative folder path, e.g. "parent/folder"
-  destination: string // workspace-relative target folder, e.g. "other-folder" or "" for root
+  workspaceId: string
+  relativePath: string
+  destinationPath: string
 }
 
 export const moveFolder = async ({
-  workspace,
-  folder,
-  destination,
+  workspaceId,
+  relativePath,
+  destinationPath,
 }: MoveFolderProps) => {
-  const folderPath = getNotePath(`${workspace}/${folder}`)
-  const folderName = getNoteNameFromPath(folderPath)
-  const destDir = destination
-    ? getNotePath(`${workspace}/${destination}`)
-    : getNotePath(workspace)
+  const folderPath = toFsPath(workspaceId, relativePath)
+  const folderName = getEntryName(folderPath)
+  const destDir = destinationPath
+    ? toFsPath(workspaceId, destinationPath)
+    : toFsPath(workspaceId)
   const newPath = `${destDir}/${folderName}`
 
   if (folderPath === newPath) return folderPath

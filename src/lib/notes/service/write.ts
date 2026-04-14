@@ -1,8 +1,12 @@
 import { writeJson } from '@/lib/fs'
 import { Note, NoteError, NoteSchema } from '@/lib/notes'
-import { getNotePath } from './path'
+import { toFsPath } from '@/lib/paths'
 
-export const writeNote = async (path: string, note: Note) => {
+export const writeNote = async (
+  workspaceId: string,
+  relativePath: string,
+  note: Note,
+) => {
   const parsed = NoteSchema.safeParse(note)
 
   if (!parsed.success) {
@@ -12,5 +16,5 @@ export const writeNote = async (path: string, note: Note) => {
     )
   }
 
-  await writeJson(getNotePath(path), parsed.data)
+  await writeJson(toFsPath(workspaceId, relativePath), parsed.data)
 }

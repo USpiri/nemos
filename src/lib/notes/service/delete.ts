@@ -1,14 +1,17 @@
 import { removeDir, removeFile } from '@/lib/fs/remove'
+import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
-import { getNotePath } from './path'
 
 interface DeleteNoteProps {
-  workspace: string
-  note: string
+  workspaceId: string
+  relativePath: string
 }
 
-export const deleteNote = async ({ workspace, note }: DeleteNoteProps) => {
-  const notePath = getNotePath(`${workspace}/${note}`)
+export const deleteNote = async ({
+  workspaceId,
+  relativePath,
+}: DeleteNoteProps) => {
+  const notePath = toFsPath(workspaceId, relativePath)
   try {
     await removeFile(notePath)
   } catch (error) {
@@ -20,15 +23,15 @@ export const deleteNote = async ({ workspace, note }: DeleteNoteProps) => {
 }
 
 interface DeleteFolderProps {
-  workspace: string
-  folder: string
+  workspaceId: string
+  relativePath: string
 }
 
 export const deleteFolder = async ({
-  workspace,
-  folder,
+  workspaceId,
+  relativePath,
 }: DeleteFolderProps) => {
-  const folderPath = getNotePath(`${workspace}/${folder}`)
+  const folderPath = toFsPath(workspaceId, relativePath)
   try {
     await removeDir(folderPath)
   } catch (error) {

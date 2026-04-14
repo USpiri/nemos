@@ -1,16 +1,20 @@
 import { getUniquePath, write } from '@/lib/fs'
+import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 import { Note } from '../note.type'
-import { getNotePath } from './path'
 
 interface Props {
-  workspace: string
-  path: string
+  workspaceId: string
+  relativePath: string
   content?: string
 }
 
-export const createNote = async ({ workspace, path, content }: Props) => {
-  const notePath = getNotePath(`${workspace}/${path}`)
+export const createNote = async ({
+  workspaceId,
+  relativePath,
+  content,
+}: Props) => {
+  const notePath = toFsPath(workspaceId, relativePath)
 
   try {
     const uniquePath = await getUniquePath(notePath)

@@ -1,13 +1,13 @@
 import { read } from '@/lib/fs'
 import { emptyNote, NoteSchema } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
-import { getNotePath } from './path'
 
-const readRawNote = async (path: string) => {
+const readRawNote = async (workspaceId: string, relativePath: string) => {
   try {
-    return await read(getNotePath(path))
+    return await read(toFsPath(workspaceId, relativePath))
   } catch {
-    throw new NoteError('NOT_FOUND', `Note not found: ${path}`)
+    throw new NoteError('NOT_FOUND', `Note not found: ${relativePath}`)
   }
 }
 
@@ -30,7 +30,7 @@ const parseNote = (raw: string) => {
   }
 }
 
-export const readNote = async (path: string) => {
-  const raw = await readRawNote(path)
+export const readNote = async (workspaceId: string, relativePath: string) => {
+  const raw = await readRawNote(workspaceId, relativePath)
   return parseNote(raw)
 }
