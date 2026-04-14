@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Code, P } from '@/components/ui/typography'
-import { getNoteIdFromPath } from '@/lib/notes'
+import { toRelativePath } from '@/lib/paths'
 import { DetailedWorkspaceEntry } from '@/lib/workspace'
 import { getNoteRelativeDir } from '@/lib/workspace/utils'
 
@@ -39,7 +39,7 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
                   to="/workspace/$workspaceId/notes/$noteId"
                   params={{
                     workspaceId,
-                    noteId: getNoteIdFromPath(note.path),
+                    noteId: toRelativePath(note.path),
                   }}
                   className="flex items-center gap-2"
                 >
@@ -58,7 +58,7 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
               <TableCell className="text-right">
                 <LinkComponent
                   to="/workspace/$workspaceId/notes/$noteId"
-                  params={{ workspaceId, noteId: getNoteIdFromPath(note.path) }}
+                  params={{ workspaceId, noteId: toRelativePath(note.path) }}
                   size="sm"
                   variant="ghost"
                 >
