@@ -15,7 +15,7 @@ export const Route = createFileRoute('/workspace/$workspaceId/notes/$noteId')({
   pendingComponent: NotePending,
   errorComponent: NoteError,
   loader: ({ params: { workspaceId, noteId } }) =>
-    readNote(`${workspaceId}/${noteId}`),
+    readNote(workspaceId, noteId),
 })
 
 function NoteIdComponent() {
@@ -23,17 +23,14 @@ function NoteIdComponent() {
   const note = Route.useLoaderData()
   const openTab = useTabsStore((s) => s.openTab)
 
-  // Sync URL to tabs: when navigating directly to a note URL, open the tab
   useEffect(() => {
-    const tabData = createNoteTab({
-      workspaceId,
-      noteId,
-    })
+    const tabData = createNoteTab({ workspaceId, noteId })
     openTab(tabData)
   }, [workspaceId, noteId, openTab])
 
   const { save } = useNoteEditor({
-    path: `${workspaceId}/${noteId}`,
+    workspaceId,
+    relativePath: noteId,
     initialContent: note,
   })
 
