@@ -122,12 +122,7 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
     [moveFolderFn],
   )
 
-  const deleteNote = useCallback(
-    async (relativeNotePath: string) => {
-      await deleteNoteFn(relativeNotePath)
-    },
-    [deleteNoteFn],
-  )
+  const deleteNote = useCallback(deleteNoteFn, [])
 
   const deleteFolder = useCallback(
     async (relativeFolderPath: string) => {

@@ -38,14 +38,16 @@ export const TreeNodeContextMenu = ({
     createNoteAndNavigate,
     createFolderAndRefresh,
     deleteNoteAndRefresh,
-    deleteFolderAndRefresh,
     copyNote,
     navigateToNote,
     revealInExplorer,
+    deleteNote,
+    refreshWorkspace,
   } = useWorkspaceActions({
     workspace,
   })
   const openNewTab = useTabsStore((s) => s.openNewTab)
+  const closeTab = useTabsStore((s) => s.closeTab)
   const setRenamingPath = useRenameStore((state) => state.setRenamingPath)
 
   const handleOpenNote = useCallback(() => {
@@ -56,6 +58,11 @@ export const TreeNodeContextMenu = ({
     openNewTab(tabData)
     navigateToNote(note)
   }, [workspace, note, openNewTab, navigateToNote])
+
+  const handleDeleteNote = useCallback(() => {
+    closeTab(note)
+    deleteNote(note, { onSuccess: refreshWorkspace })
+  }, [closeTab, deleteNote, note, refreshWorkspace])
 
   return (
     <ContextMenu>
@@ -94,7 +101,7 @@ export const TreeNodeContextMenu = ({
             <ContextMenuSeparator />
             <ContextMenuItem
               className="rounded-none px-2 py-1.5 text-xs"
-              onClick={() => deleteFolderAndRefresh(note)}
+              onClick={handleDeleteNote}
               variant="destructive"
             >
               <Trash2 />
