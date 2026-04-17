@@ -1,4 +1,5 @@
 import { exists, rename } from '@/lib/fs'
+import { join } from '@/lib/fs/path'
 import {
   getContainerPath,
   getEntryName,
@@ -8,7 +9,47 @@ import {
 } from '@/lib/paths'
 import { NoteError } from '../errors'
 
-// TODO: Abstract rename operations to a common function
+interface MoveOrRenameProps {
+  fromPath: string
+  toPath: string
+  entity: 'note' | 'folder'
+  operation: 'rename' | 'move'
+}
+
+const moveOrRename = async ({
+  fromPath,
+  toPath,
+  entity,
+  operation,
+}: MoveOrRenameProps) => {
+  if (fromPath === toPath) return fromPath
+
+  try {
+    const existsTo = await exists(toPath)
+    if (existsTo)
+      throw new NoteError(
+        'RENAME_FAILED',
+        `${entity} already exists: ${toPath}`,
+      )
+
+    const existsFrom = await exists(fromPath)
+    if (!existsFrom)
+      throw new NoteError(
+        'NOT_FOUND',
+        `${operation} ${entity} not found: ${fromPath}`,
+      )
+
+    await rename(fromPath, toPath)
+    return toPath
+  } catch (error) {
+    if (error instanceof NoteError) throw error
+    throw new NoteError(
+      'RENAME_FAILED',
+      `Failed to ${operation} ${entity}: ${fromPath}\n` +
+        `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    )
+  }
+}
 
 interface RenameNoteProps {
   workspaceId: string
@@ -23,27 +64,14 @@ export const renameNote = async ({
 }: RenameNoteProps) => {
   const fromPath = toFsPath(workspaceId, relativePath)
   const parentDir = getContainerPath(fromPath)
-  const newPath = `${parentDir}/${toNoteFileName(newName)}`
+  const newPath = await join(parentDir, toNoteFileName(newName))
 
-  try {
-    const existsTo = await exists(newPath)
-    if (existsTo)
-      throw new NoteError('RENAME_FAILED', `Note already exists: ${newPath}`)
-
-    const existsFrom = await exists(fromPath)
-    if (!existsFrom)
-      throw new NoteError('NOT_FOUND', `Note not found: ${fromPath}`)
-
-    await rename(fromPath, newPath)
-    return newPath
-  } catch (error) {
-    if (error instanceof NoteError) throw error
-    throw new NoteError(
-      'RENAME_FAILED',
-      `Failed to rename note: ${fromPath}\n` +
-        `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
-    )
-  }
+  return moveOrRename({
+    fromPath,
+    toPath: newPath,
+    entity: 'note',
+    operation: 'rename',
+  })
 }
 
 interface RenameFolderProps {
@@ -59,27 +87,14 @@ export const renameFolder = async ({
 }: RenameFolderProps) => {
   const folderPath = toFsPath(workspaceId, relativePath)
   const parentDir = getParentPath(folderPath)
-  const newPath = `${parentDir}/${newName}`
+  const newPath = await join(parentDir, newName)
 
-  try {
-    const existsTo = await exists(newPath)
-    if (existsTo)
-      throw new NoteError('RENAME_FAILED', `Folder already exists: ${newPath}`)
-
-    const existsFrom = await exists(folderPath)
-    if (!existsFrom)
-      throw new NoteError('NOT_FOUND', `Folder not found: ${folderPath}`)
-
-    await rename(folderPath, newPath)
-    return newPath
-  } catch (error) {
-    if (error instanceof NoteError) throw error
-    throw new NoteError(
-      'RENAME_FAILED',
-      `Failed to rename folder: ${folderPath}\n` +
-        `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
-    )
-  }
+  return moveOrRename({
+    fromPath: folderPath,
+    toPath: newPath,
+    entity: 'folder',
+    operation: 'rename',
+  })
 }
 
 interface MoveNoteProps {
@@ -98,29 +113,14 @@ export const moveNote = async ({
   const destDir = destinationPath
     ? toFsPath(workspaceId, destinationPath)
     : toFsPath(workspaceId)
-  const newPath = `${destDir}/${fileName}`
+  const newPath = await join(destDir, fileName)
 
-  if (fromPath === newPath) return fromPath
-
-  try {
-    const existsTo = await exists(newPath)
-    if (existsTo)
-      throw new NoteError('RENAME_FAILED', `Note already exists: ${newPath}`)
-
-    const existsFrom = await exists(fromPath)
-    if (!existsFrom)
-      throw new NoteError('NOT_FOUND', `Note not found: ${fromPath}`)
-
-    await rename(fromPath, newPath)
-    return newPath
-  } catch (error) {
-    if (error instanceof NoteError) throw error
-    throw new NoteError(
-      'RENAME_FAILED',
-      `Failed to move note: ${fromPath}\n` +
-        `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
-    )
-  }
+  return moveOrRename({
+    fromPath,
+    toPath: newPath,
+    entity: 'note',
+    operation: 'move',
+  })
 }
 
 interface MoveFolderProps {
@@ -139,27 +139,12 @@ export const moveFolder = async ({
   const destDir = destinationPath
     ? toFsPath(workspaceId, destinationPath)
     : toFsPath(workspaceId)
-  const newPath = `${destDir}/${folderName}`
+  const newPath = await join(destDir, folderName)
 
-  if (folderPath === newPath) return folderPath
-
-  try {
-    const existsTo = await exists(newPath)
-    if (existsTo)
-      throw new NoteError('RENAME_FAILED', `Folder already exists: ${newPath}`)
-
-    const existsFrom = await exists(folderPath)
-    if (!existsFrom)
-      throw new NoteError('NOT_FOUND', `Folder not found: ${folderPath}`)
-
-    await rename(folderPath, newPath)
-    return newPath
-  } catch (error) {
-    if (error instanceof NoteError) throw error
-    throw new NoteError(
-      'RENAME_FAILED',
-      `Failed to move folder: ${folderPath}\n` +
-        `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
-    )
-  }
+  return moveOrRename({
+    fromPath: folderPath,
+    toPath: newPath,
+    entity: 'folder',
+    operation: 'move',
+  })
 }
