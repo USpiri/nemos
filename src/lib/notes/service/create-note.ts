@@ -1,7 +1,6 @@
 import { getUniquePath, write } from '@/lib/fs'
 import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
-import { Note } from '../note.type'
 
 interface Props {
   workspaceId: string
@@ -18,11 +17,7 @@ export const createNote = async ({
 
   try {
     const uniquePath = await getUniquePath(notePath)
-    const note: Note = {
-      content: content || '',
-    }
-
-    await write(uniquePath, JSON.stringify(note, null, 2))
+    await write(uniquePath, content ?? '')
     return uniquePath
   } catch (error) {
     throw new NoteError(
