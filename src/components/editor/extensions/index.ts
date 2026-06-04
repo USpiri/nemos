@@ -1,5 +1,6 @@
 import { TaskItem, TaskList } from '@tiptap/extension-list'
 import { Focus, Placeholder, Selection } from '@tiptap/extensions'
+import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
 import { suggestionItems } from '@/config/suggestion-menu'
 import { CodeBlock } from './codeblock'
@@ -36,4 +37,5 @@ export const Extensions = [
   Image,
   Link,
   Table,
+  Markdown,
 ]

@@ -31,6 +31,51 @@ export const MathDisplay = Node.create({
     return [tag, mergeAttributes(HTMLAttributes), 0]
   },
 
+  markdownTokenizer: {
+    name,
+    level: 'block' as const,
+    start: (src: string) => src.indexOf('$$'),
+    tokenize(src: string) {
+      // Match $$ ... $$ spanning multiple lines
+      const match = src.match(/^\$\$\n?([\s\S]*?)\n?\$\$(\n|$)/)
+      if (!match) return undefined
+      return {
+        type: name,
+        raw: match[0],
+        math: match[1].trim(),
+      }
+    },
+  },
+
+  // @ts-ignore – @tiptap/markdown augments the extension config at runtime
+  parseMarkdown(
+    token: { math: string },
+    helpers: {
+      createNode: (
+        type: string,
+        attrs?: Record<string, unknown>,
+        content?: unknown[],
+      ) => unknown
+      createTextNode: (text: string) => unknown
+    },
+  ) {
+    const expression = token.math ?? ''
+    return helpers.createNode(
+      name,
+      undefined,
+      expression ? [helpers.createTextNode(expression)] : [],
+    )
+  },
+
+  // @ts-ignore – @tiptap/markdown augments the extension config at runtime
+  renderMarkdown(
+    node: { content?: Array<{ text?: string }> },
+    helpers: { renderChildren: (nodes: unknown) => string },
+  ) {
+    const text = helpers.renderChildren(node.content ?? [])
+    return `$$\n${text}\n$$`
+  },
+
   addInputRules() {
     return [textblockTypeInputRule({ find: inputRule, type: this.type })]
   },
