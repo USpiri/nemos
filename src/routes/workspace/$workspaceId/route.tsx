@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { SidebarPanel } from '@/components/layout/SidebarPanel'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { SidebarProvider } from '@/components/layout/SidebarProvider'
 import { Topbar } from '@/components/layout/Topbar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useTabShortcuts } from '@/hooks/use-tab-shortcuts'
@@ -23,13 +24,14 @@ function RouteComponent() {
   useTabShortcuts()
 
   return (
-    <SidebarPanel>
+    <SidebarProvider>
+      <Sidebar />
       <div className="grid h-screen w-full grid-rows-[auto_1fr] overflow-hidden">
         <Topbar />
         <ScrollArea className="h-full overflow-hidden">
           <Outlet />
         </ScrollArea>
       </div>
-    </SidebarPanel>
+    </SidebarProvider>
   )
 }

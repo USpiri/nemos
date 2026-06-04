@@ -1,4 +1,3 @@
-import { SidebarProvider } from '../layout/SidebarProvider'
 import { SettingsProvider } from './SettingsProvider'
 import { ThemeProvider } from './ThemeProvider'
 
@@ -9,9 +8,7 @@ interface Props {
 export const Providers = ({ children }: Props) => {
   return (
     <SettingsProvider>
-      <ThemeProvider>
-        <SidebarProvider>{children}</SidebarProvider>
-      </ThemeProvider>
+      <ThemeProvider>{children}</ThemeProvider>
     </SettingsProvider>
   )
 }
