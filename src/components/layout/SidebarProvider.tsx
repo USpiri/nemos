@@ -8,8 +8,16 @@ export const SidebarProvider = ({
 }) => {
   const open = useUiStore((state) => state.sidebarOpen)
   const setOpen = useUiStore((state) => state.setSidebarState)
+  const sidebarWidth = useUiStore((state) => state.sidebarWidth)
+
   return (
-    <SidebarProviderBase open={open} onOpenChange={setOpen}>
+    <SidebarProviderBase
+      open={open}
+      onOpenChange={setOpen}
+      style={
+        { '--sidebar-width': `${sidebarWidth}px` } as React.CSSProperties
+      }
+    >
       {children}
     </SidebarProviderBase>
   )
