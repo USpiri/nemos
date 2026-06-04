@@ -27,12 +27,18 @@ export const SidebarResizeHandle = () => {
     document.documentElement.removeAttribute('data-sidebar-resizing')
   }
 
+  const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    document.documentElement.removeAttribute('data-sidebar-resizing')
+  }
+
   return (
     <div
-      className="absolute top-0 right-0 z-20 h-full w-1 cursor-col-resize opacity-0 hover:opacity-100 hover:bg-sidebar-border transition-opacity"
+      className="absolute top-0 right-0 z-20 h-full w-1 cursor-col-resize opacity-0 transition-opacity hover:bg-sidebar-border hover:opacity-100"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
     />
   )
 }
