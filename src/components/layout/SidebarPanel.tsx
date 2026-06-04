@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { usePanelRef } from 'react-resizable-panels'
 import { Sidebar } from '@/components/layout/Sidebar'
 import {
@@ -15,6 +16,14 @@ interface SidebarPanelProps {
 export const SidebarPanel = ({ children }: SidebarPanelProps) => {
   const { open, setOpen, isMobile } = useSidebar()
   const sidebarRef = usePanelRef()
+
+  useEffect(() => {
+    const panel = sidebarRef.current
+    if (!panel) return
+    if (open) panel.expand()
+    else panel.collapse()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
 
   return (
     <ResizablePanelGroup orientation="horizontal">
