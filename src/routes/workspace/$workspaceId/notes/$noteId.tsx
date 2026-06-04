@@ -1,11 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useNoteEditor } from '@/hooks/use-note-editor'
+import type { Frontmatter, Note } from '@/lib/notes'
 import { readNote } from '@/lib/notes'
 import { createNoteTab } from '@/lib/tabs'
 import { cn } from '@/lib/utils'
 import { useTabsStore } from '@/store'
 import { NoteError, NotePending } from './-components'
+import { NoteProperties } from './-components/NoteProperties'
 
 const Editor = lazy(() =>
   import('@/components/editor/Editor').then((m) => ({ default: m.Editor })),
@@ -29,6 +31,22 @@ function NoteIdComponent() {
     openTab(tabData)
   }, [workspaceId, noteId, openTab])
 
+  return (
+    <NoteView key={noteId} workspaceId={workspaceId} noteId={noteId} note={note} />
+  )
+}
+
+function NoteView({
+  workspaceId,
+  noteId,
+  note,
+}: {
+  workspaceId: string
+  noteId: string
+  note: Note
+}) {
+  const [frontmatter, setFrontmatter] = useState<Frontmatter>(note.frontmatter)
+
   const { save } = useNoteEditor({
     workspaceId,
     relativePath: noteId,
@@ -36,13 +54,26 @@ function NoteIdComponent() {
     initialFrontmatter: note.frontmatter,
   })
 
+  const handleFrontmatterChange = useCallback(
+    (updated: Frontmatter) => {
+      setFrontmatter(updated)
+      save({ frontmatter: updated })
+    },
+    [save],
+  )
+
   return (
-    <main className={cn('h-full', note.frontmatter.cssClass)}>
+    <main className={cn('h-full', frontmatter.cssClass)}>
       <Suspense fallback={<NotePending />}>
+        <NoteProperties
+          className="mx-auto w-full max-w-3xl px-10 pt-20"
+          frontmatter={frontmatter}
+          onChange={handleFrontmatterChange}
+        />
         <Editor
           content={note.content}
           className="mx-auto w-full max-w-3xl px-10 pt-8 pb-32"
-          editable={!note.frontmatter.readonly}
+          editable={!frontmatter.readonly}
           onUpdate={(content) => save({ content })}
         />
       </Suspense>
