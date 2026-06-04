@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { useDefaultLayout, usePanelRef } from 'react-resizable-panels'
+import { usePanelRef } from 'react-resizable-panels'
 import { Sidebar } from '@/components/layout/Sidebar'
 import {
   ResizableHandle,
