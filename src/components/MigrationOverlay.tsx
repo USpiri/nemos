@@ -1,24 +1,45 @@
 import { FileText, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-
-type Phase = 'prompt' | 'migrating'
+import { migrateAllNotes } from '@/lib/migration'
 
 interface Props {
-  phase: Phase
-  total: number
-  done?: number
-  onMigrate: () => void
-  onMigrateAndDelete: () => void
+  workspaceId: string
+  legacyCount: number
 }
 
-export const MigrationOverlay = ({
-  phase,
-  total,
-  done = 0,
-  onMigrate,
-  onMigrateAndDelete,
-}: Props) => {
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0
+export const MigrationOverlay = ({ workspaceId, legacyCount }: Props) => {
+  const [phase, setPhase] = useState<'prompt' | 'migrating' | 'done'>(
+    legacyCount > 0 ? 'prompt' : 'done',
+  )
+  const [progress, setProgress] = useState({ done: 0, total: legacyCount })
+
+  const runMigration = (deleteAfter: boolean) => {
+    setPhase('migrating')
+    migrateAllNotes(workspaceId, {
+      deleteAfter,
+      onProgress: (done, total) => setProgress({ done, total }),
+    })
+      .then((result) => {
+        if (result.failed.length > 0) {
+          toast.warning(
+            `${result.failed.length} note${result.failed.length > 1 ? 's' : ''} could not be migrated. Check the log for details.`,
+          )
+        }
+      })
+      .catch(() => {
+        toast.error('Migration failed unexpectedly.')
+      })
+      .finally(() => {
+        setPhase('done')
+      })
+  }
+
+  if (phase === 'done') return null
+
+  const pct =
+    progress.total > 0 ? Math.round((progress.done / progress.total) * 100) : 0
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -28,8 +49,9 @@ export const MigrationOverlay = ({
             <div className="space-y-1.5">
               <p className="font-semibold text-base">Legacy notes found</p>
               <p className="text-muted-foreground text-sm">
-                {total} note{total !== 1 ? 's are' : ' is'} stored in the old
-                format. Migrate them to Markdown to continue using them.
+                {legacyCount} note{legacyCount !== 1 ? 's are' : ' is'} stored
+                in the old format. Migrate them to Markdown to continue using
+                them.
               </p>
             </div>
 
@@ -38,7 +60,7 @@ export const MigrationOverlay = ({
                 variant="default"
                 size="lg"
                 className="w-full justify-between"
-                onClick={onMigrateAndDelete}
+                onClick={() => runMigration(true)}
               >
                 <span className="flex items-center gap-2">
                   <Trash2 className="size-4" />
@@ -53,7 +75,7 @@ export const MigrationOverlay = ({
                 variant="outline"
                 size="lg"
                 className="w-full justify-start gap-2"
-                onClick={onMigrate}
+                onClick={() => runMigration(false)}
               >
                 <FileText className="size-4" />
                 Migrate only
@@ -77,7 +99,7 @@ export const MigrationOverlay = ({
                 />
               </div>
               <p className="text-right text-muted-foreground text-xs tabular-nums">
-                {done} / {total}
+                {progress.done} / {progress.total}
               </p>
             </div>
           </>
