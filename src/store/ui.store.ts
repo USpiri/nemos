@@ -4,16 +4,16 @@ import { persist } from 'zustand/middleware'
 interface UiState {
   sidebarOpen: boolean
   setSidebarState: (open: boolean) => void
-  sidebarWidth: number
-  setSidebarWidth: (width: number) => void
+  sidebarWidth: string
+  setSidebarWidth: (width: string) => void
 }
 
 export const useUiStore = create<UiState>()(
   persist(
     (set) => ({
-      sidebarOpen: false,
+      sidebarOpen: true,
       setSidebarState: (open) => set({ sidebarOpen: open }),
-      sidebarWidth: 240,
+      sidebarWidth: '16rem',
       setSidebarWidth: (width) => set({ sidebarWidth: width }),
     }),
     {
