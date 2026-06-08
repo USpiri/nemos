@@ -242,3 +242,12 @@ body {
     }
   }
 }
+
+[data-sidebar-resizing] {
+  user-select: none;
+  cursor: col-resize;
+}
+
+[data-sidebar-resizing] * {
+  transition: none !important;
+}
