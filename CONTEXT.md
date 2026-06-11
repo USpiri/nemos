@@ -29,7 +29,13 @@ The YAML block at the top of a Note file. Built-in fields: `readonly` (bool — 
 A directory inside a Workspace that contains Notes and/or other Folders. Folders are part of the workspace tree and are represented as real directories on the local filesystem.
 
 ### Settings
-App-wide user preferences persisted to disk.
+User preferences persisted to disk in two layers: **Global Settings** and **Workspace Settings**.
+
+#### Global Settings
+The baseline set of user preferences stored in the OS app data directory. Applies across all Workspaces. Editable manually (not through the Settings UI). If absent on first launch, hardcoded schema defaults are written.
+
+#### Workspace Settings
+A sparse delta of preference overrides scoped to a single Workspace, stored at `.config/settings.json` inside the Workspace root. Only keys that differ from Global Settings are stored. The effective value for any setting is the Workspace override if present, otherwise the Global value. Written exclusively through the Settings UI. The `.config` folder is hidden from the Workspace file tree.
 
 ### Tab
 An open Note in the editor. Multiple Tabs can be open simultaneously in a browser-like tab bar. Tabs persist across app restarts.
