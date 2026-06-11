@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+### New Features
+
+- **Markdown as native format**: Notes are now stored as `.md` files. The editor serializes and deserializes content as Markdown using `@tiptap/markdown`, replacing the previous custom `.note` format.
+- **Frontmatter support**: Notes now support YAML frontmatter (parsed via `gray-matter`) for structured metadata — title, tags, creation date, and update date are stored directly in each file.
+- **Note Properties panel**: A new side panel in the note editor exposes the frontmatter fields (title, tags, dates) for direct editing without touching the raw file.
+- **Tag management**: New `TagInput` / `TokenInput` components let you add and remove tags from the Note Properties panel.
+- **Automatic migration**: On workspace load, a `MigrationOverlay` detects legacy `.note` files and migrates them to the new `.md` format in-place with frontmatter injected automatically.
+
+### Improvements
+
+- New `Accordion` and `Combobox` UI components added to the component library.
+- Removed the unused `resizable.tsx` shadcn wrapper (sidebar resizing uses the custom handle added in v1.1.0).
+
+### Breaking Changes
+
+- **File extension changed from `.note` to `.md`**: New notes are created as `.md` files. Existing `.note` files are migrated automatically on workspace open, but any external tooling that relied on the `.note` extension will need to be updated.
+
 ### Build
 
 - **Windows-only builds**: Linux and macOS CI builds have been temporarily disabled — they remain commented out in the release workflow and can be re-enabled once those platforms can be properly tested.
