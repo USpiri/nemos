@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Build
+
+- **Windows-only builds**: Linux and macOS CI builds have been temporarily disabled — they remain commented out in the release workflow and can be re-enabled once those platforms can be properly tested.
+
+---
+
+## v1.1.0 — Settings & Theming
+
 ### New Features
 
 - **Settings Dialog**: A new settings panel is now accessible from the sidebar, with a tabbed layout for Appearance, Editor, General, and About sections.
@@ -17,12 +25,14 @@
 - Tooltips have been added to file tree items so you can always see the full name on hover.
 - **Faster File Tree Loading**: The workspace file tree now reads directories in parallel.
 - Toast notifications now respect your selected light/dark theme setting.
+- Sidebar resizing is now implemented with a custom handle, removing the `react-resizable-panels` dependency and improving pointer interaction reliability.
 
 ### Fixes
 
 - Fixed a flash of incorrect theme on startup — the app now applies the correct theme immediately before the first render.
 - Fixed the settings dialog layout overflowing its container.
 - Fixed an edge case where inline editable fields could display stale values after external updates.
+- Fixed open tabs not being cleared when their corresponding note is deleted.
 
 ---
 
