@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Build
+
+- **Windows-only builds**: Linux and macOS CI builds have been temporarily disabled — they remain commented out in the release workflow and can be re-enabled once those platforms can be properly tested.
+
+---
+
 ## v1.1.0 — Settings & Theming
 
 ### New Features
