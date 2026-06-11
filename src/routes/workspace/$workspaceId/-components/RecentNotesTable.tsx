@@ -43,12 +43,12 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
                   }}
                   className="flex items-center gap-2"
                 >
-                  <FileText className="text-muted-foreground size-4" />
-                  <span className="text-sm font-medium">{note.name}</span>
+                  <FileText className="size-4 text-muted-foreground" />
+                  <span className="font-medium text-sm">{note.name}</span>
                 </Link>
               </TableCell>
               <TableCell>
-                <Code>{getNoteRelativeDir(note.path, workspaceId)}</Code>
+                <Code>{getNoteRelativeDir(note.path)}</Code>
               </TableCell>
               <TableCell>
                 <P variant="muted" className="text-xs">
