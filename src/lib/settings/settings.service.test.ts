@@ -96,6 +96,92 @@ describe('createScope', () => {
     })
   })
 
+  describe('workspaceDelta', () => {
+    it('is empty before init', () => {
+      const scope = createScope(testDef)
+      expect(scope.getState().workspaceDelta).toEqual({})
+    })
+
+    it('reflects loaded workspace delta after init', async () => {
+      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockReadJson.mockResolvedValue({ test: { theme: 'light' } })
+
+      const scope = createScope(testDef)
+      await scope.getState().init(WORKSPACE)
+
+      expect(scope.getState().workspaceDelta).toEqual({ theme: 'light' })
+    })
+
+    it('is empty after reset()', async () => {
+      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockReadJson
+        .mockResolvedValueOnce({ test: { theme: 'light', value: 99 } })
+        .mockResolvedValueOnce({ test: { theme: 'light', value: 99 } })
+
+      const scope = createScope(testDef)
+      await scope.getState().init(WORKSPACE)
+      await scope.getState().reset()
+
+      expect(scope.getState().workspaceDelta).toEqual({})
+    })
+
+    it('accumulates keys from update() into workspaceDelta', async () => {
+      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockReadJson.mockResolvedValue({})
+
+      const scope = createScope(testDef)
+      await scope.getState().init(WORKSPACE)
+
+      await scope.getState().update({ theme: 'light' })
+      expect(scope.getState().workspaceDelta).toEqual({ theme: 'light' })
+
+      await scope.getState().update({ value: 99 })
+      expect(scope.getState().workspaceDelta).toEqual({ theme: 'light', value: 99 })
+    })
+  })
+
+  describe('revertKey()', () => {
+    it('removes the key from workspaceDelta in state', async () => {
+      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockReadJson.mockResolvedValue({ test: { theme: 'light', value: 99 } })
+
+      const scope = createScope(testDef)
+      await scope.getState().init(WORKSPACE)
+
+      await scope.getState().revertKey('theme')
+
+      expect(scope.getState().workspaceDelta).toEqual({ value: 99 })
+    })
+
+    it('reverts state for that key to the global value', async () => {
+      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockReadJson.mockResolvedValue({ test: { theme: 'light', value: 99 } })
+
+      const scope = createScope(testDef)
+      await scope.getState().init(WORKSPACE)
+
+      expect(scope.getState().theme).toBe('light')
+      await scope.getState().revertKey('theme')
+      expect(scope.getState().theme).toBe('dark')
+    })
+
+    it('persists the delta file without that key', async () => {
+      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockReadJson
+        .mockResolvedValueOnce({ test: { theme: 'light', value: 99 } }) // init
+        .mockResolvedValueOnce({ test: { theme: 'light', value: 99 }, other: { x: 1 } }) // revertKey read
+
+      const scope = createScope(testDef)
+      await scope.getState().init(WORKSPACE)
+      await scope.getState().revertKey('theme')
+
+      expect(mockWriteJson).toHaveBeenLastCalledWith(
+        `${WORKSPACE}/.config/settings.json`,
+        { test: { value: 99 }, other: { x: 1 } },
+      )
+    })
+  })
+
   describe('reset()', () => {
     it('reverts effective state to global settings', async () => {
       const globalData = { theme: 'dark', value: 5 }

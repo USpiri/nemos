@@ -86,6 +86,7 @@ export function createScope<TSchema extends z.ZodObject>(
   return create<ScopeStore<Data>>()((set) => ({
     ...def.defaults,
     _initialized: false,
+    workspaceDelta: {} as Partial<Data>,
 
     init: async (workspacePath: string) => {
       _workspacePath = workspacePath
@@ -118,26 +119,61 @@ export function createScope<TSchema extends z.ZodObject>(
       const workspaceDelta = await loadWorkspaceDelta(workspacePath)
       const effective = resolveSettings(globalData, workspaceDelta)
 
-      set({ ...effective, _initialized: true } as Partial<ScopeStore<Data>>)
+      set({ ...effective, workspaceDelta, _initialized: true } as Partial<ScopeStore<Data>>)
     },
 
     update: async (patch) => {
       const workspacePath = _workspacePath
-      set(patch as Partial<ScopeStore<Data>>)
+      set((prev) => ({
+        ...(patch as Partial<ScopeStore<Data>>),
+        workspaceDelta: { ...prev.workspaceDelta, ...patch },
+      }))
       if (workspacePath) await saveWorkspaceDelta(workspacePath, patch)
+    },
+
+    revertKey: async (key) => {
+      const workspacePath = _workspacePath
+      const globalData = _globalData ?? def.defaults
+
+      set((prev) => {
+        const nextDelta = { ...prev.workspaceDelta }
+        delete nextDelta[key]
+        return {
+          [key]: globalData[key],
+          workspaceDelta: nextDelta,
+        } as Partial<ScopeStore<Data>>
+      })
+
+      if (workspacePath) {
+        const settingsPath = `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`
+        let all: Record<string, unknown> = {}
+        try {
+          all = await readJson<Record<string, unknown>>(settingsPath)
+        } catch {
+          return
+        }
+        const scopeDelta = { ...(all[def.key] as Record<string, unknown>) }
+        delete scopeDelta[key as string]
+        if (Object.keys(scopeDelta).length === 0) {
+          delete all[def.key]
+        } else {
+          all[def.key] = scopeDelta
+        }
+        await writeJson(settingsPath, all)
+      }
     },
 
     reset: async () => {
       const workspacePath = _workspacePath
       const globalData = _globalData ?? def.defaults
       if (workspacePath) await removeWorkspaceDelta(workspacePath)
-      set({ ...globalData } as Partial<ScopeStore<Data>>)
+      set({ ...globalData, workspaceDelta: {} } as Partial<ScopeStore<Data>>)
     },
 
     resetToDefaults: async () => {
       const workspacePath = _workspacePath
       if (workspacePath) await removeWorkspaceDelta(workspacePath)
-      set({ ...def.defaults } as Partial<ScopeStore<Data>>)
+      set({ ...def.defaults, workspaceDelta: {} } as Partial<ScopeStore<Data>>)
       await persistGlobal(def.defaults)
     },
   }))
