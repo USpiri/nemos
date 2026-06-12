@@ -5,6 +5,7 @@ import { Switch } from '@/components/ui/switch'
 import type { Theme } from '@/lib/settings'
 import { useAppearanceSettings } from '@/lib/settings'
 import { cn } from '@/lib/utils'
+import { OverrideIndicator } from '../OverrideIndicator'
 
 const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
   { value: 'light', label: 'Light', icon: Sun },
@@ -16,6 +17,12 @@ export const AppearanceSection = () => {
   const theme = useAppearanceSettings((s) => s.theme)
   const autoSyncTheme = useAppearanceSettings((s) => s.autoSyncTheme)
   const update = useAppearanceSettings((s) => s.update)
+  const revertKey = useAppearanceSettings((s) => s.revertKey)
+  const workspaceDelta = useAppearanceSettings((s) => s.workspaceDelta)
+
+  const hasAutoSyncThemeOrThemeDelta =
+    workspaceDelta.autoSyncTheme !== undefined ||
+    workspaceDelta.theme !== undefined
 
   const handleAutoSyncThemeChange = (checked: boolean) => {
     update({ autoSyncTheme: theme === 'system' ? checked : false })
@@ -48,20 +55,30 @@ export const AppearanceSection = () => {
           </Button>
         ))}
       </div>
-      <Field
-        orientation="horizontal"
-        className={cn(theme !== 'system' && 'cursor-not-allowed opacity-50')}
-      >
-        <FieldContent>
-          <FieldLabel htmlFor="auto-sync-theme">Auto-sync theme</FieldLabel>
-        </FieldContent>
-        <Switch
-          id="auto-sync-theme"
-          disabled={theme !== 'system'}
-          checked={theme === 'system' ? autoSyncTheme : false}
-          onCheckedChange={handleAutoSyncThemeChange}
-        />
-      </Field>
+      <div className="flex items-center gap-2">
+        <Field
+          orientation="horizontal"
+          className={cn(theme !== 'system' && 'cursor-not-allowed opacity-50')}
+        >
+          <FieldContent>
+            <FieldLabel htmlFor="auto-sync-theme">Auto-sync theme</FieldLabel>
+          </FieldContent>
+          <Switch
+            id="auto-sync-theme"
+            disabled={theme !== 'system'}
+            checked={theme === 'system' ? autoSyncTheme : false}
+            onCheckedChange={handleAutoSyncThemeChange}
+          />
+        </Field>
+        {hasAutoSyncThemeOrThemeDelta && (
+          <OverrideIndicator
+            onRevert={() => {
+              revertKey('theme')
+              revertKey('autoSyncTheme')
+            }}
+          />
+        )}
+      </div>
     </div>
   )
 }
