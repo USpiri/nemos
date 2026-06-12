@@ -5,3 +5,9 @@ export const exists = async (path: string) => {
     baseDir: BaseDirectory.Document,
   })
 }
+
+export const existsAppData = async (path: string) => {
+  return tauriExists(path, {
+    baseDir: BaseDirectory.AppData,
+  })
+}
