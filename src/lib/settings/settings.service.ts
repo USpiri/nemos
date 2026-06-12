@@ -173,7 +173,7 @@ export function createScope<TSchema extends z.ZodObject>(
     resetToDefaults: async () => {
       const workspacePath = _workspacePath
       if (workspacePath) await removeWorkspaceDelta(workspacePath)
-      set({ ...def.defaults } as Partial<ScopeStore<Data>>)
+      set({ ...def.defaults, workspaceDelta: {} } as Partial<ScopeStore<Data>>)
       await persistGlobal(def.defaults)
     },
   }))
