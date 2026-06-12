@@ -18,4 +18,5 @@ export type ScopeStore<T> = T & {
   init: (workspacePath: string) => Promise<void>
   update: (patch: Partial<T>) => Promise<void>
   reset: () => Promise<void>
+  resetToDefaults: () => Promise<void>
 }

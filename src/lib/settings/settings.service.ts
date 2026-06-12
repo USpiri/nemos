@@ -34,6 +34,7 @@ export function createScope<TSchema extends z.ZodObject>(
   type Data = z.infer<TSchema>
 
   let _workspacePath: string | null = null
+  let _globalData: Data | null = null
 
   const persistGlobal = async (data: Data) => {
     await store.set(def.key, { _meta: { version: def.version }, data })
@@ -51,6 +52,18 @@ export function createScope<TSchema extends z.ZodObject>(
     } catch {
       return {}
     }
+  }
+
+  const removeWorkspaceDelta = async (workspacePath: string) => {
+    const settingsPath = `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`
+    let all: Record<string, unknown> = {}
+    try {
+      all = await readJson<Record<string, unknown>>(settingsPath)
+    } catch {
+      return
+    }
+    delete all[def.key]
+    await writeJson(settingsPath, all)
   }
 
   const saveWorkspaceDelta = async (
@@ -100,6 +113,8 @@ export function createScope<TSchema extends z.ZodObject>(
         if (!parsed.success) await persistGlobal(globalData)
       }
 
+      _globalData = globalData
+
       const workspaceDelta = await loadWorkspaceDelta(workspacePath)
       const effective = resolveSettings(globalData, workspaceDelta)
 
@@ -113,6 +128,15 @@ export function createScope<TSchema extends z.ZodObject>(
     },
 
     reset: async () => {
+      const workspacePath = _workspacePath
+      const globalData = _globalData ?? def.defaults
+      if (workspacePath) await removeWorkspaceDelta(workspacePath)
+      set({ ...globalData } as Partial<ScopeStore<Data>>)
+    },
+
+    resetToDefaults: async () => {
+      const workspacePath = _workspacePath
+      if (workspacePath) await removeWorkspaceDelta(workspacePath)
       set({ ...def.defaults } as Partial<ScopeStore<Data>>)
       await persistGlobal(def.defaults)
     },
