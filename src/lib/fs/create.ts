@@ -10,8 +10,12 @@ export const createFile = async (path: string) => {
   })
 }
 
-export const createDir = async (path: string) => {
+export const createDir = async (
+  path: string,
+  { recursive = true }: { recursive?: boolean } = {},
+) => {
   return mkdir(path, {
     baseDir: BaseDirectory.Document,
+    recursive,
   })
 }

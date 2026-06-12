@@ -1,7 +1,13 @@
 import { LazyStore } from '@tauri-apps/plugin-store'
 import type { z } from 'zod'
 import { create } from 'zustand'
-import { SETTINGS_FILE } from '@/config/constants'
+import {
+  SETTINGS_FILE,
+  WORKSPACE_CONFIG_DIR,
+  WORKSPACE_SETTINGS_FILE,
+} from '@/config/constants'
+import { ensureDir, readJson, writeJson } from '@/lib/fs'
+import { resolveSettings } from './resolve-settings'
 import type {
   PersistedScope,
   ScopeDefinition,
@@ -27,22 +33,58 @@ export function createScope<TSchema extends z.ZodObject>(
 ) {
   type Data = z.infer<TSchema>
 
-  const persist = async (data: Data) => {
+  let _workspacePath: string | null = null
+
+  const persistGlobal = async (data: Data) => {
     await store.set(def.key, { _meta: { version: def.version }, data })
     await store.save()
   }
 
-  return create<ScopeStore<Data>>()((set, get) => ({
+  const loadWorkspaceDelta = async (
+    workspacePath: string,
+  ): Promise<Partial<Data>> => {
+    try {
+      const all = await readJson<Record<string, Partial<Data>>>(
+        `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`,
+      )
+      return (all[def.key] as Partial<Data>) ?? {}
+    } catch {
+      return {}
+    }
+  }
+
+  const saveWorkspaceDelta = async (
+    workspacePath: string,
+    patch: Partial<Data>,
+  ) => {
+    const configDir = `${workspacePath}/${WORKSPACE_CONFIG_DIR}`
+    const settingsPath = `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`
+    await ensureDir(configDir, { recursive: true })
+    let all: Record<string, unknown> = {}
+    try {
+      all = await readJson<Record<string, unknown>>(settingsPath)
+    } catch {
+      /* no existing settings, will create new */
+    }
+    all[def.key] = { ...(all[def.key] as Record<string, unknown>), ...patch }
+    await writeJson(settingsPath, all)
+  }
+
+  return create<ScopeStore<Data>>()((set) => ({
     ...def.defaults,
     _initialized: false,
 
-    init: async () => {
-      const stored = await store.get<PersistedScope<unknown>>(def.key)
-      let data: Data
+    init: async (workspacePath: string) => {
+      _workspacePath = workspacePath
 
+      const stored = await store.get<PersistedScope<unknown>>(def.key)
+      let globalData: Data
+
+      // If there's no existing stored data, initialize with defaults.
+      // Otherwise, attempt to migrate and validate.
       if (!stored) {
-        data = def.defaults
-        await persist(data)
+        globalData = def.defaults
+        await persistGlobal(globalData)
       } else {
         const storedVersion = stored._meta?.version ?? 0
         const migrated = runMigration<Data>(
@@ -52,30 +94,27 @@ export function createScope<TSchema extends z.ZodObject>(
           def.migrate,
         )
         const parsed = def.schema.safeParse(migrated)
-        data = parsed.success ? parsed.data : def.defaults
-        if (!parsed.success) await persist(data)
+        globalData = parsed.success ? parsed.data : def.defaults
+
+        // If migration or validation failed, persist the defaults to reset the global settings.
+        if (!parsed.success) await persistGlobal(globalData)
       }
 
-      set({ ...data, _initialized: true } as Partial<ScopeStore<Data>>)
+      const workspaceDelta = await loadWorkspaceDelta(workspacePath)
+      const effective = resolveSettings(globalData, workspaceDelta)
+
+      set({ ...effective, _initialized: true } as Partial<ScopeStore<Data>>)
     },
 
     update: async (patch) => {
+      const workspacePath = _workspacePath
       set(patch as Partial<ScopeStore<Data>>)
-      const state = get()
-      const snapshot = Object.fromEntries(
-        Object.keys(def.defaults).map((k) => [
-          k,
-          state[k as keyof typeof state],
-        ]),
-      )
-      const result = def.schema.safeParse(snapshot)
-      const data: Data = result.success ? result.data : def.defaults
-      await persist(data)
+      if (workspacePath) await saveWorkspaceDelta(workspacePath, patch)
     },
 
     reset: async () => {
       set({ ...def.defaults } as Partial<ScopeStore<Data>>)
-      await persist(def.defaults)
+      await persistGlobal(def.defaults)
     },
   }))
 }
