@@ -11,6 +11,7 @@ export type Theme = (typeof Themes)[keyof typeof Themes]
 export const AppearanceSettings = z.object({
   theme: z.enum(Themes),
   autoSyncTheme: z.boolean(),
+  activeTheme: z.string().nullable().default(null),
 })
 export type AppearanceSettings = z.infer<typeof AppearanceSettings>
 
@@ -18,5 +19,5 @@ export const useAppearanceSettings = createScope({
   key: 'appearance',
   version: 1,
   schema: AppearanceSettings,
-  defaults: { theme: Themes.SYSTEM, autoSyncTheme: true },
+  defaults: { theme: Themes.SYSTEM, autoSyncTheme: true, activeTheme: null },
 })
