@@ -16,7 +16,10 @@ const loadGlobalThemes = async (): Promise<ThemeDescriptor[]> => {
       .map(async (e) => {
         const hasCss = await existsAppData(`${THEMES_DIR}/${e.name}/theme.css`)
         if (!hasCss) return null
-        return { id: e.name, displayName: toDisplayName(e.name) } satisfies ThemeDescriptor
+        return {
+          id: e.name,
+          displayName: toDisplayName(e.name),
+        } satisfies ThemeDescriptor
       }),
   )
   return descriptors.filter((d): d is ThemeDescriptor => d !== null)
@@ -38,7 +41,10 @@ const loadWorkspaceThemes = async (
       .map(async (e) => {
         const hasCss = await exists(`${themesPath}/${e.name}/theme.css`)
         if (!hasCss) return null
-        return { id: e.name, displayName: toDisplayName(e.name) } satisfies ThemeDescriptor
+        return {
+          id: e.name,
+          displayName: toDisplayName(e.name),
+        } satisfies ThemeDescriptor
       }),
   )
   return descriptors.filter((d): d is ThemeDescriptor => d !== null)
