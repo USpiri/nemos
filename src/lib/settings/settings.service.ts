@@ -86,6 +86,7 @@ export function createScope<TSchema extends z.ZodObject>(
   return create<ScopeStore<Data>>()((set) => ({
     ...def.defaults,
     _initialized: false,
+    workspacePath: null,
     workspaceDelta: {} as Partial<Data>,
 
     init: async (workspacePath: string) => {
@@ -119,7 +120,7 @@ export function createScope<TSchema extends z.ZodObject>(
       const workspaceDelta = await loadWorkspaceDelta(workspacePath)
       const effective = resolveSettings(globalData, workspaceDelta)
 
-      set({ ...effective, workspaceDelta, _initialized: true } as Partial<ScopeStore<Data>>)
+      set({ ...effective, workspaceDelta, _initialized: true, workspacePath } as Partial<ScopeStore<Data>>)
     },
 
     update: async (patch) => {
