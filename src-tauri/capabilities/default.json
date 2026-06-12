@@ -21,6 +21,9 @@
       "allow": [
         {
           "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$APPDATA/**"
         }
       ]
     },
@@ -45,6 +48,9 @@
       "allow": [
         {
           "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$APPDATA/**"
         }
       ]
     },
@@ -53,6 +59,9 @@
       "allow": [
         {
           "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$APPDATA/**"
         }
       ]
     },
