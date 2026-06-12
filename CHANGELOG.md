@@ -4,6 +4,7 @@
 
 ### New Features
 
+- **Two-layer settings (Global + Workspace)**: Settings now operate on two layers — a Global Settings file in the OS app data directory and a per-workspace `.config/settings.json`.
 - **Markdown as native format**: Notes are now stored as `.md` files. The editor serializes and deserializes content as Markdown using `@tiptap/markdown`, replacing the previous custom `.note` format.
 - **Frontmatter support**: Notes now support YAML frontmatter (parsed via `gray-matter`) for structured metadata — title, tags, creation date, and update date are stored directly in each file.
 - **Note Properties panel**: A new side panel in the note editor exposes the frontmatter fields (title, tags, dates) for direct editing without touching the raw file.
