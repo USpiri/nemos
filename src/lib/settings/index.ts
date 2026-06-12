@@ -1,3 +1,5 @@
+export { initWorkspaceSettings } from './init-workspace-settings'
+export { resolveSettings } from './resolve-settings'
 export {
   AppearanceSettings,
   type Theme,

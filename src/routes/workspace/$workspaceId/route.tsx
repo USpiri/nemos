@@ -7,6 +7,8 @@ import { MigrationOverlay } from '@/components/MigrationOverlay'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useTabShortcuts } from '@/hooks/use-tab-shortcuts'
 import { findLegacyNotes } from '@/lib/migration'
+import { toFsPath } from '@/lib/paths'
+import { initWorkspaceSettings } from '@/lib/settings'
 import { getWorkspaceTree } from '@/lib/workspace'
 
 export const Route = createFileRoute('/workspace/$workspaceId')({
@@ -18,7 +20,10 @@ export const Route = createFileRoute('/workspace/$workspaceId')({
       })
       throw redirect({ to: '/workspace', replace: true })
     })
-    const legacyPaths = await findLegacyNotes(workspaceId)
+    const [legacyPaths] = await Promise.all([
+      findLegacyNotes(workspaceId),
+      initWorkspaceSettings(toFsPath(workspaceId)),
+    ])
     return { workspaceTree, legacyCount: legacyPaths.length }
   },
 })
