@@ -7,8 +7,8 @@ const workspace = { autoSyncTheme: false }
 describe('resolveSettings', () => {
   it('workspace key overrides global', () => {
     expect(resolveSettings(global, workspace)).toEqual({
-      theme: 'dark',
-      autoSyncTheme: true,
+      theme: 'system',
+      autoSyncTheme: false,
     })
   })
 
