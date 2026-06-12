@@ -15,6 +15,7 @@ export interface PersistedScope<T> {
 
 export type ScopeStore<T> = T & {
   _initialized: boolean
+  workspacePath: string | null
   workspaceDelta: Partial<T>
   init: (workspacePath: string) => Promise<void>
   update: (patch: Partial<T>) => Promise<void>

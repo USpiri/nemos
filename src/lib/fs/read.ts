@@ -17,6 +17,12 @@ export const readDirAppData = async (path: string) => {
   })
 }
 
+export const readAppData = async (path: string) => {
+  return readTextFile(path, {
+    baseDir: BaseDirectory.AppData,
+  })
+}
+
 export const readJson = async <T = unknown>(path: string) => {
   return read(path).then((data) => JSON.parse(data) as T)
 }
