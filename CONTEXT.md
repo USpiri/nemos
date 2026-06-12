@@ -39,3 +39,18 @@ A sparse delta of preference overrides scoped to a single Workspace, stored at `
 
 ### Tab
 An open Note in the editor. Multiple Tabs can be open simultaneously in a browser-like tab bar. Tabs persist across app restarts.
+
+### Theme
+A user-installed CSS customization for the app, consisting of a folder containing a `theme.css` file. Theme CSS is injected after the app's base styles — it augments rather than replaces them. The app's base styles always remain in effect, so a Theme that only overrides one CSS variable only changes that variable; the rest of the UI is unaffected. A Theme that targets `.dark` selectors only affects dark mode; light mode is untouched. The light/dark/system toggle works independently of Themes.
+
+Themes are discovered and resolved across two scopes: **Global Themes** (available to all Workspaces) and **Workspace Themes** (scoped to a single Workspace). When a Global Theme and a Workspace Theme share the same ID, the Workspace Theme takes precedence.
+
+A Theme's ID is its folder name. Renaming the folder changes the Theme's ID and breaks any saved reference to it.
+
+#### Global Theme
+A Theme installed in the OS app data directory, available across all Workspaces.
+
+#### Workspace Theme
+A Theme installed inside a Workspace's `.config/themes/[ThemeID]/` directory, scoped to that Workspace. Overrides a Global Theme with the same ID.
+
+> **CSS variable contract:** Theme authors can override any CSS variable or class the app currently exposes. No stability guarantee is made yet — the authoritative list and any public API contract will be defined as part of the planned CSS classes rethink.
