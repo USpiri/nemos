@@ -17,10 +17,6 @@ function injectSnippetStyle(attr: string, id: string, css: string) {
   document.head.appendChild(style)
 }
 
-function removeAllSnippetStyles(attr: string) {
-  document.querySelectorAll(`[${attr}]`).forEach((el) => el.remove())
-}
-
 export const SnippetsProvider = ({
   children,
 }: {
@@ -36,9 +32,6 @@ export const SnippetsProvider = ({
     if (!workspacePath) return
     let cancelled = false
 
-    removeAllSnippetStyles(GLOBAL_ATTR)
-    removeAllSnippetStyles(WORKSPACE_ATTR)
-
     loadCssSnippets(workspacePath).then(
       async ({ globalSnippets, workspaceSnippets }) => {
         if (cancelled) return
@@ -48,6 +41,9 @@ export const SnippetsProvider = ({
           workspaceSnippets,
           disabledWorkspace,
         )
+
+        const nextGlobalIds = new Set(enabledGlobal.map((s) => s.id))
+        const nextWorkspaceIds = new Set(enabledWorkspace.map((s) => s.id))
 
         for (const snippet of enabledGlobal) {
           if (cancelled) return
@@ -70,6 +66,16 @@ export const SnippetsProvider = ({
           if (cancelled || !css) continue
           injectSnippetStyle(WORKSPACE_ATTR, snippet.id, css)
         }
+
+        if (cancelled) return
+
+        document.querySelectorAll(`[${GLOBAL_ATTR}]`).forEach((el) => {
+          if (!nextGlobalIds.has(el.getAttribute(GLOBAL_ATTR)!)) el.remove()
+        })
+        document.querySelectorAll(`[${WORKSPACE_ATTR}]`).forEach((el) => {
+          if (!nextWorkspaceIds.has(el.getAttribute(WORKSPACE_ATTR)!))
+            el.remove()
+        })
       },
     )
 
