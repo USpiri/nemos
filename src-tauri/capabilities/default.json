@@ -108,6 +108,9 @@
         },
         {
           "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$APPDATA/**"
         }
       ]
     },
