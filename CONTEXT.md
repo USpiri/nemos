@@ -54,3 +54,18 @@ A Theme installed in the OS app data directory, available across all Workspaces.
 A Theme installed inside a Workspace's `.config/themes/[ThemeID]/` directory, scoped to that Workspace. Overrides a Global Theme with the same ID.
 
 > **CSS variable contract:** Theme authors can override any CSS variable or class the app currently exposes. No stability guarantee is made yet — the authoritative list and any public API contract will be defined as part of the planned CSS classes rethink.
+
+### CSS Snippet
+A flat `.css` file placed in a snippets folder that is injected into the app after the base styles and any active Theme. CSS Snippets augment rather than replace existing styles. Unlike Themes, a CSS Snippet is a single file — there is no enclosing folder.
+
+CSS Snippets are discovered across two scopes: **Global Snippets** (available to all Workspaces) and **Workspace Snippets** (scoped to a single Workspace). Both scopes are loaded additively — a filename that appears in both scopes does not cause one to replace the other; both are injected. Global Snippets are injected first; Workspace Snippets are injected after, so Workspace CSS rules win on any property conflict via cascade.
+
+Each CSS Snippet can be independently toggled on or off. Toggle state is per-Workspace: disabling a Global Snippet in one Workspace does not affect other Workspaces. Snippets are enabled by default — only disabled Snippet IDs are persisted (in the Workspace Settings delta under `disabledGlobalSnippets` and `disabledWorkspaceSnippets`).
+
+A CSS Snippet's ID is its filename without the `.css` extension.
+
+#### Global CSS Snippet
+A CSS Snippet installed in the OS app data directory (`snippets/[filename].css`), available to all Workspaces.
+
+#### Workspace CSS Snippet
+A CSS Snippet installed inside a Workspace's `.config/snippets/[filename].css`, scoped to that Workspace.
