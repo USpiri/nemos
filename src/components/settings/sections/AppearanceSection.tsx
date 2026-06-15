@@ -17,6 +17,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { SNIPPETS_DIR, WORKSPACE_SNIPPETS_DIR } from '@/config/constants'
+import { ensureDir, ensureDirAppData } from '@/lib/fs'
 import { openAppDataPath, openPath } from '@/lib/opener'
 import type { Theme } from '@/lib/settings'
 import { useAppearanceSettings } from '@/lib/settings'
@@ -187,7 +188,11 @@ export const AppearanceSection = () => {
           variant="ghost"
           size="sm"
           className="text-xs"
-          onClick={() => openAppDataPath(SNIPPETS_DIR)}
+          onClick={() =>
+            ensureDirAppData(SNIPPETS_DIR).then(() =>
+              openAppDataPath(SNIPPETS_DIR),
+            )
+          }
         >
           <FolderOpen className="size-3.5" />
           Open folder
@@ -236,10 +241,11 @@ export const AppearanceSection = () => {
           variant="ghost"
           size="sm"
           className="h-7 gap-1.5 text-xs"
-          onClick={() =>
-            workspacePath &&
-            openPath(`${workspacePath}/${WORKSPACE_SNIPPETS_DIR}`)
-          }
+          onClick={() => {
+            if (!workspacePath) return
+            const dir = `${workspacePath}/${WORKSPACE_SNIPPETS_DIR}`
+            ensureDir(dir).then(() => openPath(dir))
+          }}
         >
           <FolderOpen className="size-3.5" />
           Open folder
