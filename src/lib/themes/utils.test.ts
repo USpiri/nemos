@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { AppearanceSettings } from '@/lib/settings'
-import type { ThemeDescriptor } from './theme.types'
-import { mergeThemes, toDisplayName } from './utils'
+import type { SnippetDescriptor, ThemeDescriptor } from './theme.types'
+import { filterEnabled, mergeThemes, toDisplayName } from './utils'
 
 describe('toDisplayName', () => {
   it('replaces hyphens with spaces and title-cases each word', () => {
@@ -22,7 +22,10 @@ describe('toDisplayName', () => {
 })
 
 describe('mergeThemes', () => {
-  const g = (id: string): ThemeDescriptor => ({ id, displayName: toDisplayName(id) })
+  const g = (id: string): ThemeDescriptor => ({
+    id,
+    displayName: toDisplayName(id),
+  })
 
   it('returns global-only themes when no workspace themes exist', () => {
     const result = mergeThemes([g('alpha'), g('beta')], [])
@@ -35,8 +38,14 @@ describe('mergeThemes', () => {
   })
 
   it('workspace entry wins on ID collision', () => {
-    const globalTheme: ThemeDescriptor = { id: 'my-theme', displayName: 'Global Name' }
-    const workspaceTheme: ThemeDescriptor = { id: 'my-theme', displayName: 'Workspace Name' }
+    const globalTheme: ThemeDescriptor = {
+      id: 'my-theme',
+      displayName: 'Global Name',
+    }
+    const workspaceTheme: ThemeDescriptor = {
+      id: 'my-theme',
+      displayName: 'Workspace Name',
+    }
     const result = mergeThemes([globalTheme], [workspaceTheme])
     expect(result).toHaveLength(1)
     expect(result[0].displayName).toBe('Workspace Name')
@@ -59,9 +68,75 @@ describe('mergeThemes', () => {
   })
 })
 
+describe('filterEnabled', () => {
+  const s = (id: string): SnippetDescriptor => ({ id, displayName: id })
+
+  it('returns empty array when snippet list is empty', () => {
+    expect(filterEnabled([], [])).toEqual([])
+  })
+
+  it('returns all snippets when disabled list is empty', () => {
+    expect(filterEnabled([s('nord'), s('dracula')], [])).toEqual([
+      s('nord'),
+      s('dracula'),
+    ])
+  })
+
+  it('excludes a snippet whose ID is in the disabled list', () => {
+    expect(filterEnabled([s('nord'), s('dracula')], ['nord'])).toEqual([
+      s('dracula'),
+    ])
+  })
+
+  it('excludes all snippets when all IDs are disabled', () => {
+    expect(
+      filterEnabled([s('nord'), s('dracula')], ['nord', 'dracula']),
+    ).toEqual([])
+  })
+
+  it('returns all snippets when disabled list contains IDs not present in the list', () => {
+    expect(filterEnabled([s('nord')], ['other'])).toEqual([s('nord')])
+  })
+})
+
+describe('AppearanceSettings schema — disabled snippets', () => {
+  it('defaults disabledGlobalSnippets to [] when field is missing', () => {
+    const result = AppearanceSettings.safeParse({
+      theme: 'system',
+      autoSyncTheme: true,
+    })
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.disabledGlobalSnippets).toEqual([])
+  })
+
+  it('defaults disabledWorkspaceSnippets to [] when field is missing', () => {
+    const result = AppearanceSettings.safeParse({
+      theme: 'system',
+      autoSyncTheme: true,
+    })
+    expect(result.success).toBe(true)
+    if (result.success)
+      expect(result.data.disabledWorkspaceSnippets).toEqual([])
+  })
+
+  it('accepts string array for disabledGlobalSnippets', () => {
+    const result = AppearanceSettings.safeParse({
+      theme: 'system',
+      autoSyncTheme: true,
+      disabledGlobalSnippets: ['nord', 'dracula'],
+    })
+    expect(result.success).toBe(true)
+    if (result.success)
+      expect(result.data.disabledGlobalSnippets).toEqual(['nord', 'dracula'])
+  })
+})
+
 describe('AppearanceSettings schema — activeTheme', () => {
   it('defaults activeTheme to null when field is missing', () => {
-    const result = AppearanceSettings.safeParse({ theme: 'system', autoSyncTheme: true })
+    const result = AppearanceSettings.safeParse({
+      theme: 'system',
+      autoSyncTheme: true,
+    })
     expect(result.success).toBe(true)
     if (result.success) expect(result.data.activeTheme).toBeNull()
   })

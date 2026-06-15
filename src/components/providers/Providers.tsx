@@ -1,4 +1,5 @@
 import { SettingsProvider } from './SettingsProvider'
+import { SnippetsProvider } from './SnippetsProvider'
 import { ThemeProvider } from './ThemeProvider'
 
 interface Props {
@@ -8,7 +9,9 @@ interface Props {
 export const Providers = ({ children }: Props) => {
   return (
     <SettingsProvider>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <SnippetsProvider>{children}</SnippetsProvider>
+      </ThemeProvider>
     </SettingsProvider>
   )
 }
