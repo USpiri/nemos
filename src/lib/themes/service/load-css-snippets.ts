@@ -38,7 +38,10 @@ const loadWorkspaceSnippets = async (
 
 export const loadCssSnippets = async (
   workspaceFsPath: string,
-): Promise<{ globalSnippets: SnippetDescriptor[]; workspaceSnippets: SnippetDescriptor[] }> => {
+): Promise<{
+  globalSnippets: SnippetDescriptor[]
+  workspaceSnippets: SnippetDescriptor[]
+}> => {
   const [globalSnippets, workspaceSnippets] = await Promise.all([
     loadGlobalSnippets(),
     loadWorkspaceSnippets(workspaceFsPath),

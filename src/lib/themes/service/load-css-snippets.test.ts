@@ -11,7 +11,12 @@ vi.mock('@/lib/fs', () => ({
   readDirAppData: mockReadDirAppData,
 }))
 
-const file = (name: string) => ({ name, isDirectory: false, isFile: true, isSymlink: false })
+const file = (name: string) => ({
+  name,
+  isDirectory: false,
+  isFile: true,
+  isSymlink: false,
+})
 const WORKSPACE = 'nemos-app/my-workspace'
 
 describe('loadCssSnippets', () => {
@@ -42,24 +47,39 @@ describe('loadCssSnippets', () => {
 
     const result = await loadCssSnippets(WORKSPACE)
     expect(result.globalSnippets).toEqual([])
-    expect(result.workspaceSnippets).toEqual([{ id: 'my-snippet', displayName: 'My Snippet' }])
+    expect(result.workspaceSnippets).toEqual([
+      { id: 'my-snippet', displayName: 'My Snippet' },
+    ])
   })
 
   it('ignores non-.css files', async () => {
     mockReadDirAppData.mockResolvedValue([
       file('valid.css'),
-      { name: 'readme.txt', isDirectory: false, isFile: true, isSymlink: false },
+      {
+        name: 'readme.txt',
+        isDirectory: false,
+        isFile: true,
+        isSymlink: false,
+      },
       { name: 'theme', isDirectory: true, isFile: false, isSymlink: false },
     ])
     mockReadDir.mockResolvedValue([])
 
     const result = await loadCssSnippets(WORKSPACE)
-    expect(result.globalSnippets).toEqual([{ id: 'valid', displayName: 'Valid' }])
+    expect(result.globalSnippets).toEqual([
+      { id: 'valid', displayName: 'Valid' },
+    ])
   })
 
   it('returns both lists independently without merging', async () => {
-    mockReadDirAppData.mockResolvedValue([file('shared.css'), file('global-only.css')])
-    mockReadDir.mockResolvedValue([file('shared.css'), file('workspace-only.css')])
+    mockReadDirAppData.mockResolvedValue([
+      file('shared.css'),
+      file('global-only.css'),
+    ])
+    mockReadDir.mockResolvedValue([
+      file('shared.css'),
+      file('workspace-only.css'),
+    ])
 
     const result = await loadCssSnippets(WORKSPACE)
     expect(result.globalSnippets).toHaveLength(2)

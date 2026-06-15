@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { readThemeCss } from './read-theme-css'
 
-const { mockExists, mockExistsAppData, mockRead, mockReadAppData } = vi.hoisted(() => ({
-  mockExists: vi.fn(),
-  mockExistsAppData: vi.fn(),
-  mockRead: vi.fn(),
-  mockReadAppData: vi.fn(),
-}))
+const { mockExists, mockExistsAppData, mockRead, mockReadAppData } = vi.hoisted(
+  () => ({
+    mockExists: vi.fn(),
+    mockExistsAppData: vi.fn(),
+    mockRead: vi.fn(),
+    mockReadAppData: vi.fn(),
+  }),
+)
 
 vi.mock('@/lib/fs', () => ({
   exists: mockExists,
