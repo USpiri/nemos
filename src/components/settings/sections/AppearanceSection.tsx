@@ -1,11 +1,23 @@
 import { MonitorCog, Moon, Sun } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Field, FieldContent, FieldLabel } from '@/components/ui/field'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import type { Theme } from '@/lib/settings'
 import { useAppearanceSettings } from '@/lib/settings'
+import { loadThemes } from '@/lib/themes/service/load-themes'
+import type { ThemeDescriptor } from '@/lib/themes/theme.types'
 import { cn } from '@/lib/utils'
 import { OverrideIndicator } from '../OverrideIndicator'
+
+const DEFAULT_THEME = '__default__'
 
 const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
   { value: 'light', label: 'Light', icon: Sun },
@@ -16,16 +28,32 @@ const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
 export const AppearanceSection = () => {
   const theme = useAppearanceSettings((s) => s.theme)
   const autoSyncTheme = useAppearanceSettings((s) => s.autoSyncTheme)
+  const activeTheme = useAppearanceSettings((s) => s.activeTheme)
+  const workspacePath = useAppearanceSettings((s) => s.workspacePath)
   const update = useAppearanceSettings((s) => s.update)
   const revertKey = useAppearanceSettings((s) => s.revertKey)
   const workspaceDelta = useAppearanceSettings((s) => s.workspaceDelta)
 
+  const [availableThemes, setAvailableThemes] = useState<ThemeDescriptor[]>([])
+
+  useEffect(() => {
+    if (!workspacePath) return
+    loadThemes(workspacePath)
+      .then(setAvailableThemes)
+      .catch((e) => console.error('Failed to load themes', e))
+  }, [workspacePath])
+
   const hasAutoSyncThemeOrThemeDelta =
     workspaceDelta.autoSyncTheme !== undefined ||
     workspaceDelta.theme !== undefined
+  const hasActiveThemeDelta = workspaceDelta.activeTheme !== undefined
 
   const handleAutoSyncThemeChange = (checked: boolean) => {
     update({ autoSyncTheme: theme === 'system' ? checked : false })
+  }
+
+  const handleThemeChange = (value: string) => {
+    update({ activeTheme: value === DEFAULT_THEME ? null : value })
   }
 
   return (
@@ -77,6 +105,32 @@ export const AppearanceSection = () => {
               revertKey('autoSyncTheme')
             }}
           />
+        )}
+      </div>
+      <div className="flex items-center gap-2">
+        <Field orientation="horizontal">
+          <FieldContent>
+            <FieldLabel>Custom theme</FieldLabel>
+          </FieldContent>
+          <Select
+            value={activeTheme ?? DEFAULT_THEME}
+            onValueChange={handleThemeChange}
+          >
+            <SelectTrigger className="w-36">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={DEFAULT_THEME}>Default</SelectItem>
+              {availableThemes.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.displayName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+        {hasActiveThemeDelta && (
+          <OverrideIndicator onRevert={() => revertKey('activeTheme')} />
         )}
       </div>
     </div>
