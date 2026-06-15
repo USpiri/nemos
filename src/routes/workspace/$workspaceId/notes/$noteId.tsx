@@ -32,7 +32,12 @@ function NoteIdComponent() {
   }, [workspaceId, noteId, openTab])
 
   return (
-    <NoteView key={noteId} workspaceId={workspaceId} noteId={noteId} note={note} />
+    <NoteView
+      key={noteId}
+      workspaceId={workspaceId}
+      noteId={noteId}
+      note={note}
+    />
   )
 }
 

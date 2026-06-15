@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { AppearanceSettings } from '@/lib/settings'
 import type { SnippetDescriptor, ThemeDescriptor } from './theme.types'
-import { filterEnabled, mergeThemes, toDisplayName } from './utils'
+import {
+  filterEnabled,
+  mergeThemes,
+  toDisplayName,
+  toggleSnippetId,
+} from './utils'
 
 describe('toDisplayName', () => {
   it('replaces hyphens with spaces and title-cases each word', () => {
@@ -128,6 +133,26 @@ describe('AppearanceSettings schema — disabled snippets', () => {
     expect(result.success).toBe(true)
     if (result.success)
       expect(result.data.disabledGlobalSnippets).toEqual(['nord', 'dracula'])
+  })
+})
+
+describe('toggleSnippetId', () => {
+  it('adds id to disabled list when snippet is currently enabled', () => {
+    expect(toggleSnippetId([], 'nord')).toEqual(['nord'])
+  })
+
+  it('removes id from disabled list when snippet is currently disabled', () => {
+    expect(toggleSnippetId(['nord', 'dracula'], 'nord')).toEqual(['dracula'])
+  })
+
+  it('does not mutate the original array', () => {
+    const disabled = ['nord']
+    toggleSnippetId(disabled, 'dracula')
+    expect(disabled).toEqual(['nord'])
+  })
+
+  it('returns empty array when toggling the only disabled snippet on', () => {
+    expect(toggleSnippetId(['nord'], 'nord')).toEqual([])
   })
 })
 

@@ -1,7 +1,12 @@
-import { MonitorCog, Moon, Sun } from 'lucide-react'
+import { FolderOpen, MonitorCog, Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Field, FieldContent, FieldLabel } from '@/components/ui/field'
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from '@/components/ui/field'
 import {
   Select,
   SelectContent,
@@ -9,11 +14,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
+import { SNIPPETS_DIR, WORKSPACE_SNIPPETS_DIR } from '@/config/constants'
+import { ensureDir, ensureDirAppData } from '@/lib/fs'
+import { openAppDataPath, openPath } from '@/lib/opener'
 import type { Theme } from '@/lib/settings'
 import { useAppearanceSettings } from '@/lib/settings'
+import { loadCssSnippets, toggleSnippetId } from '@/lib/themes'
 import { loadThemes } from '@/lib/themes/service/load-themes'
-import type { ThemeDescriptor } from '@/lib/themes/theme.types'
+import type {
+  SnippetDescriptor,
+  ThemeDescriptor,
+} from '@/lib/themes/theme.types'
 import { cn } from '@/lib/utils'
 import { OverrideIndicator } from '../OverrideIndicator'
 
@@ -30,17 +43,33 @@ export const AppearanceSection = () => {
   const autoSyncTheme = useAppearanceSettings((s) => s.autoSyncTheme)
   const activeTheme = useAppearanceSettings((s) => s.activeTheme)
   const workspacePath = useAppearanceSettings((s) => s.workspacePath)
+  const disabledGlobalSnippets = useAppearanceSettings(
+    (s) => s.disabledGlobalSnippets,
+  )
+  const disabledWorkspaceSnippets = useAppearanceSettings(
+    (s) => s.disabledWorkspaceSnippets,
+  )
   const update = useAppearanceSettings((s) => s.update)
   const revertKey = useAppearanceSettings((s) => s.revertKey)
   const workspaceDelta = useAppearanceSettings((s) => s.workspaceDelta)
 
   const [availableThemes, setAvailableThemes] = useState<ThemeDescriptor[]>([])
+  const [globalSnippets, setGlobalSnippets] = useState<SnippetDescriptor[]>([])
+  const [workspaceSnippets, setWorkspaceSnippets] = useState<
+    SnippetDescriptor[]
+  >([])
 
   useEffect(() => {
     if (!workspacePath) return
     loadThemes(workspacePath)
       .then(setAvailableThemes)
       .catch((e) => console.error('Failed to load themes', e))
+    loadCssSnippets(workspacePath)
+      .then(({ globalSnippets, workspaceSnippets }) => {
+        setGlobalSnippets(globalSnippets)
+        setWorkspaceSnippets(workspaceSnippets)
+      })
+      .catch((e) => console.error('Failed to load snippets', e))
   }, [workspacePath])
 
   const hasAutoSyncThemeOrThemeDelta =
@@ -54,6 +83,18 @@ export const AppearanceSection = () => {
 
   const handleThemeChange = (value: string) => {
     update({ activeTheme: value === DEFAULT_THEME ? null : value })
+  }
+
+  const handleToggleGlobalSnippet = (id: string) => {
+    update({
+      disabledGlobalSnippets: toggleSnippetId(disabledGlobalSnippets, id),
+    })
+  }
+
+  const handleToggleWorkspaceSnippet = (id: string) => {
+    update({
+      disabledWorkspaceSnippets: toggleSnippetId(disabledWorkspaceSnippets, id),
+    })
   }
 
   return (
@@ -133,6 +174,112 @@ export const AppearanceSection = () => {
           <OverrideIndicator onRevert={() => revertKey('activeTheme')} />
         )}
       </div>
+
+      <Separator />
+
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <p className="font-medium text-sm">Global snippets</p>
+          <p className="text-muted-foreground text-xs">
+            CSS snippets applied across all workspaces.
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-xs"
+          onClick={() =>
+            ensureDirAppData(SNIPPETS_DIR).then(() =>
+              openAppDataPath(SNIPPETS_DIR),
+            )
+          }
+        >
+          <FolderOpen className="size-3.5" />
+          Open folder
+        </Button>
+      </div>
+      {globalSnippets.length === 0 ? (
+        <p className="text-muted-foreground text-xs">
+          No snippets found. Add <code>.css</code> files to the global snippets
+          folder.
+        </p>
+      ) : (
+        <div className="space-y-2">
+          {globalSnippets.map((s) => (
+            <Field key={s.id} orientation="horizontal">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor={`global-snippet-${s.id}`}
+                  className="text-xs"
+                >
+                  {s.displayName}
+                </FieldLabel>
+                <FieldDescription className="text-xs">
+                  {s.id}.css
+                </FieldDescription>
+              </FieldContent>
+              <Switch
+                id={`global-snippet-${s.id}`}
+                checked={!disabledGlobalSnippets.includes(s.id)}
+                onCheckedChange={() => handleToggleGlobalSnippet(s.id)}
+              />
+            </Field>
+          ))}
+        </div>
+      )}
+
+      <Separator />
+
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <p className="font-medium text-sm">Workspace snippets</p>
+          <p className="text-muted-foreground text-xs">
+            CSS snippets applied only in this workspace.
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-7 gap-1.5 text-xs"
+          onClick={() => {
+            if (!workspacePath) return
+            const dir = `${workspacePath}/${WORKSPACE_SNIPPETS_DIR}`
+            ensureDir(dir).then(() => openPath(dir))
+          }}
+        >
+          <FolderOpen className="size-3.5" />
+          Open folder
+        </Button>
+      </div>
+      {workspaceSnippets.length === 0 ? (
+        <p className="text-muted-foreground text-xs">
+          No snippets found. Add <code>.css</code> files to the workspace
+          snippets folder.
+        </p>
+      ) : (
+        <div className="space-y-2">
+          {workspaceSnippets.map((s) => (
+            <Field key={s.id} orientation="horizontal">
+              <FieldContent>
+                <FieldLabel
+                  htmlFor={`workspace-snippet-${s.id}`}
+                  className="text-xs"
+                >
+                  {s.displayName}
+                </FieldLabel>
+                <FieldDescription className="text-xs">
+                  {s.id}.css
+                </FieldDescription>
+              </FieldContent>
+              <Switch
+                id={`workspace-snippet-${s.id}`}
+                checked={!disabledWorkspaceSnippets.includes(s.id)}
+                onCheckedChange={() => handleToggleWorkspaceSnippet(s.id)}
+              />
+            </Field>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
