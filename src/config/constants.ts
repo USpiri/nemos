@@ -8,3 +8,5 @@ export const WORKSPACE_CONFIG_DIR = '.config'
 export const WORKSPACE_SETTINGS_FILE = `${WORKSPACE_CONFIG_DIR}/${SETTINGS_FILE}`
 export const THEMES_DIR = 'themes'
 export const WORKSPACE_THEMES_DIR = `${WORKSPACE_CONFIG_DIR}/${THEMES_DIR}`
+export const SNIPPETS_DIR = 'snippets'
+export const WORKSPACE_SNIPPETS_DIR = `${WORKSPACE_CONFIG_DIR}/${SNIPPETS_DIR}`

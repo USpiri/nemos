@@ -16,7 +16,12 @@ vi.mock('@/lib/fs', () => ({
   existsAppData: mockExistsAppData,
 }))
 
-const dir = (name: string) => ({ name, isDirectory: true, isFile: false, isSymlink: false })
+const dir = (name: string) => ({
+  name,
+  isDirectory: true,
+  isFile: false,
+  isSymlink: false,
+})
 const WORKSPACE = 'nemos-app/my-workspace'
 
 describe('loadThemes', () => {
@@ -54,7 +59,7 @@ describe('loadThemes', () => {
     mockReadDirAppData.mockResolvedValue([dir('no-css'), dir('has-css')])
     mockExistsAppData
       .mockResolvedValueOnce(false) // no-css/theme.css
-      .mockResolvedValueOnce(true)  // has-css/theme.css
+      .mockResolvedValueOnce(true) // has-css/theme.css
     mockReadDir.mockResolvedValue([])
 
     const result = await loadThemes(WORKSPACE)
@@ -79,7 +84,10 @@ describe('loadThemes', () => {
     mockExists.mockResolvedValue(true)
 
     const result = await loadThemes(WORKSPACE)
-    expect(result.map((t) => t.displayName)).toEqual(['Apple Theme', 'Zebra Theme'])
+    expect(result.map((t) => t.displayName)).toEqual([
+      'Apple Theme',
+      'Zebra Theme',
+    ])
   })
 
   it('derives display name correctly from folder name', async () => {

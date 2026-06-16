@@ -1,9 +1,15 @@
-import type { ThemeDescriptor } from './theme.types'
+import type { SnippetDescriptor, ThemeDescriptor } from './theme.types'
 
 export const toDisplayName = (folderName: string): string =>
-  folderName
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
+  folderName.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+
+export const toggleSnippetId = (disabled: string[], id: string): string[] =>
+  disabled.includes(id) ? disabled.filter((d) => d !== id) : [...disabled, id]
+
+export const filterEnabled = (
+  descriptors: SnippetDescriptor[],
+  disabled: string[],
+): SnippetDescriptor[] => descriptors.filter((d) => !disabled.includes(d.id))
 
 export const mergeThemes = (
   global: ThemeDescriptor[],

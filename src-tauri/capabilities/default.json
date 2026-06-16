@@ -70,6 +70,9 @@
       "allow": [
         {
           "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$APPDATA/**"
         }
       ]
     },
@@ -108,6 +111,9 @@
         },
         {
           "path": "$DOCUMENT/**"
+        },
+        {
+          "path": "$APPDATA/**"
         }
       ]
     },
