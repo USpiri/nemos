@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { useAppearanceSettings } from '@/lib/settings'
 import { readThemeCss } from '@/lib/themes'
-
-const THEME_STYLE_ATTR = 'data-nemos-theme'
+import { applyThemeCSS } from '@/lib/themes/style-injectors'
 
 function getSystemTheme(): 'light' | 'dark' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -12,22 +11,6 @@ function getSystemTheme(): 'light' | 'dark' {
 
 function applyTheme(resolved: 'light' | 'dark') {
   document.documentElement.classList.toggle('dark', resolved === 'dark')
-}
-
-function applyThemeCSS(css: string | null) {
-  const existing = document.querySelector(`[${THEME_STYLE_ATTR}]`)
-  if (!css) {
-    existing?.remove()
-    return
-  }
-  if (existing) {
-    existing.textContent = css
-  } else {
-    const style = document.createElement('style')
-    style.setAttribute(THEME_STYLE_ATTR, '')
-    style.textContent = css
-    document.head.appendChild(style)
-  }
 }
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
