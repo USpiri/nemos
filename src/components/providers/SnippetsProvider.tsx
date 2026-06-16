@@ -19,6 +19,8 @@ export const SnippetsProvider = ({
     (s) => s.disabledWorkspaceSnippets,
   )
 
+  // Mirrors the pipeline in reload-styles.ts but needs a cancellation flag to
+  // drop stale async reads when deps change before the effect completes.
   useEffect(() => {
     if (!workspacePath) return
     let cancelled = false
