@@ -1,21 +1,12 @@
 import { useEffect } from 'react'
 import { useAppearanceSettings } from '@/lib/settings'
 import { filterEnabled, loadCssSnippets, readSnippetCss } from '@/lib/themes'
-
-const GLOBAL_ATTR = 'data-nemos-snippet-global'
-const WORKSPACE_ATTR = 'data-nemos-snippet-workspace'
-
-function injectSnippetStyle(attr: string, id: string, css: string) {
-  const existing = document.querySelector(`[${attr}="${id}"]`)
-  if (existing) {
-    existing.textContent = css
-    return
-  }
-  const style = document.createElement('style')
-  style.setAttribute(attr, id)
-  style.textContent = css
-  document.head.appendChild(style)
-}
+import {
+  GLOBAL_ATTR,
+  injectSnippetStyle,
+  removeStaleSnippets,
+  WORKSPACE_ATTR,
+} from '@/lib/themes/style-injectors'
 
 export const SnippetsProvider = ({
   children,
@@ -69,13 +60,8 @@ export const SnippetsProvider = ({
 
         if (cancelled) return
 
-        document.querySelectorAll(`[${GLOBAL_ATTR}]`).forEach((el) => {
-          if (!nextGlobalIds.has(el.getAttribute(GLOBAL_ATTR)!)) el.remove()
-        })
-        document.querySelectorAll(`[${WORKSPACE_ATTR}]`).forEach((el) => {
-          if (!nextWorkspaceIds.has(el.getAttribute(WORKSPACE_ATTR)!))
-            el.remove()
-        })
+        removeStaleSnippets(GLOBAL_ATTR, nextGlobalIds)
+        removeStaleSnippets(WORKSPACE_ATTR, nextWorkspaceIds)
       },
     )
 
