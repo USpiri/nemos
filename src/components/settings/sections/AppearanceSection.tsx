@@ -101,10 +101,12 @@ export const AppearanceSection = () => {
   }
 
   const handleReloadStyles = () => {
-    reloadStyles().then(({ globalSnippets, workspaceSnippets }) => {
-      setGlobalSnippets(globalSnippets)
-      setWorkspaceSnippets(workspaceSnippets)
-    })
+    reloadStyles()
+      .then(({ globalSnippets, workspaceSnippets }) => {
+        setGlobalSnippets(globalSnippets)
+        setWorkspaceSnippets(workspaceSnippets)
+      })
+      .catch((e) => console.error('Failed to reload styles', e))
   }
 
   return (
@@ -197,7 +199,7 @@ export const AppearanceSection = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="text-xs"
+          className="h-7 gap-1.5 text-xs"
           onClick={() =>
             ensureDirAppData(SNIPPETS_DIR).then(() =>
               openAppDataPath(SNIPPETS_DIR),
