@@ -1,4 +1,4 @@
-import { FolderOpen, MonitorCog, Moon, Sun } from 'lucide-react'
+import { FolderOpen, MonitorCog, Moon, RefreshCw, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +17,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { SNIPPETS_DIR, WORKSPACE_SNIPPETS_DIR } from '@/config/constants'
+import { useReloadStyles } from '@/hooks/use-reload-styles'
 import { ensureDir, ensureDirAppData } from '@/lib/fs'
 import { openAppDataPath, openPath } from '@/lib/opener'
 import type { Theme } from '@/lib/settings'
@@ -52,6 +53,8 @@ export const AppearanceSection = () => {
   const update = useAppearanceSettings((s) => s.update)
   const revertKey = useAppearanceSettings((s) => s.revertKey)
   const workspaceDelta = useAppearanceSettings((s) => s.workspaceDelta)
+
+  const reloadStyles = useReloadStyles()
 
   const [availableThemes, setAvailableThemes] = useState<ThemeDescriptor[]>([])
   const [globalSnippets, setGlobalSnippets] = useState<SnippetDescriptor[]>([])
@@ -94,6 +97,13 @@ export const AppearanceSection = () => {
   const handleToggleWorkspaceSnippet = (id: string) => {
     update({
       disabledWorkspaceSnippets: toggleSnippetId(disabledWorkspaceSnippets, id),
+    })
+  }
+
+  const handleReloadStyles = () => {
+    reloadStyles().then(({ globalSnippets, workspaceSnippets }) => {
+      setGlobalSnippets(globalSnippets)
+      setWorkspaceSnippets(workspaceSnippets)
     })
   }
 
@@ -280,6 +290,18 @@ export const AppearanceSection = () => {
           ))}
         </div>
       )}
+
+      <Separator />
+
+      <Button
+        variant="ghost"
+        size="sm"
+        className="w-full"
+        onClick={handleReloadStyles}
+      >
+        <RefreshCw className="size-3.5" />
+        Reload styles
+      </Button>
     </div>
   )
 }
