@@ -53,7 +53,7 @@ A Theme installed in the OS app data directory, available across all Workspaces.
 #### Workspace Theme
 A Theme installed inside a Workspace's `.config/themes/[ThemeID]/` directory, scoped to that Workspace. Overrides a Global Theme with the same ID.
 
-> **CSS variable contract:** Theme authors can override any CSS variable or class the app currently exposes. No stability guarantee is made yet — the authoritative list and any public API contract will be defined as part of the planned CSS classes rethink.
+> **Theming API:** Theme authors can override any CSS variable, target any structural selector, or inject arbitrary CSS. The stable selectors and variables that form the public contract are documented in `docs/theming.md`.
 
 ### CSS Snippet
 A flat `.css` file placed in a snippets folder that is injected into the app after the base styles and any active Theme. CSS Snippets augment rather than replace existing styles. Unlike Themes, a CSS Snippet is a single file — there is no enclosing folder.
