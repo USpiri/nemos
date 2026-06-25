@@ -15,7 +15,7 @@ export default function TableNodeView({ node, editor, getPos }: NodeViewProps) {
   )
 
   return (
-    <NodeViewWrapper className="tableWrapper">
+    <NodeViewWrapper className="table-wrapper">
       <NodeViewContent />
       {isInsideNode(
         editor.state.selection.from,

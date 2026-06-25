@@ -35,7 +35,7 @@ export const Editor = ({
       editorProps: {
         attributes: {
           class: cn(
-            'typography focus:outline-none relative',
+            'typography editor focus:outline-none relative',
             className,
             cssClass,
           ),
