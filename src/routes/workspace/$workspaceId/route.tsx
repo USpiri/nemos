@@ -38,7 +38,7 @@ function RouteComponent() {
     <SidebarProvider>
       <MigrationOverlay workspaceId={workspaceId} legacyCount={legacyCount} />
       <Sidebar />
-      <div className="grid h-screen w-full grid-rows-[auto_1fr] overflow-hidden">
+      <div className="content grid h-screen w-full grid-rows-[auto_1fr] overflow-hidden">
         <Topbar />
         <ScrollArea className="h-full overflow-hidden">
           <Outlet />
