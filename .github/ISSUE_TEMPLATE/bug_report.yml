@@ -1,0 +1,71 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in Nemos
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Fill out as much as you can so we can reproduce it quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear summary of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How do we trigger this bug?
+      placeholder: |
+        1. Open the app
+        2. Click on ...
+        3. Observe that ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened? Screenshots or recordings are helpful.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Nemos Version
+      placeholder: "e.g. v1.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows 11
+        - Windows 10
+        - macOS
+        - Linux
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Anything else that might be relevant (logs, related issues, etc.)

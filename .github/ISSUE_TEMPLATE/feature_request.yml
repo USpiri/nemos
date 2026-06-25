@@ -1,0 +1,38 @@
+name: Feature Request
+description: Propose a new feature or enhancement for Nemos
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make Nemos better? Describe it here.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: What problem does this solve, or what need does it address?
+      placeholder: "I find it frustrating when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature you'd like. Mockups or examples are welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any other approaches you thought about?
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Anything else — related issues, prior art, links, etc.
