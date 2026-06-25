@@ -66,7 +66,7 @@ export const UpdateDialog = () => {
             style={{ '--font-size-multiplier': '0.8' } as CSSProperties}
             className="rounded-lg border bg-muted/50 p-1"
           >
-            <ScrollArea className="max-h-80 w-full p-4">
+            <ScrollArea className="h-80 w-full p-4">
               <h4 className="mb-2 font-semibold text-sm">What's new:</h4>
               <Suspense>
                 <Editor
