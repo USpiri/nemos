@@ -29,6 +29,14 @@
 
 ---
 
+## v1.1.1 — Patch
+
+### Fixes
+
+- Fixed updater dialog buttons overlapping the changelog content due to an unconstrained `ScrollArea` height.
+
+---
+
 ## v1.1.0 — Settings & Theming
 
 ### New Features
