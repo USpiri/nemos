@@ -1,4 +1,5 @@
 import { z } from 'zod'
-import { NoteSchema } from './note.schema'
+import { FrontmatterSchema, NoteSchema } from './note.schema'
 
+export type Frontmatter = z.infer<typeof FrontmatterSchema>
 export type Note = z.infer<typeof NoteSchema>

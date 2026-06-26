@@ -164,7 +164,7 @@
 
     /* ── Tables ─────────────────────────────────────── */
 
-    .tableWrapper {
+    .table-wrapper {
       position: relative;
       margin-top: calc(var(--spacing) * 7);
       margin-bottom: calc(var(--spacing) * 7);

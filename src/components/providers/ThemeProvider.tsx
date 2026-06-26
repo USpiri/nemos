@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { useAppearanceSettings } from '@/lib/settings'
+import { readThemeCss } from '@/lib/themes'
+import { applyThemeCSS } from '@/lib/themes/style-injectors'
 
 function getSystemTheme(): 'light' | 'dark' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -15,6 +17,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const theme = useAppearanceSettings((s) => s.theme)
   const autoSyncTheme = useAppearanceSettings((s) => s.autoSyncTheme)
   const setTheme = useAppearanceSettings((s) => s.update)
+  const activeTheme = useAppearanceSettings((s) => s.activeTheme)
+  const workspacePath = useAppearanceSettings((s) => s.workspacePath)
 
   useEffect(() => {
     if (theme !== 'system') {
@@ -36,5 +40,20 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [theme, autoSyncTheme, setTheme])
+
+  useEffect(() => {
+    if (!activeTheme) {
+      applyThemeCSS(null)
+      return
+    }
+    let cancelled = false
+    readThemeCss(activeTheme, workspacePath).then((css) => {
+      if (!cancelled) applyThemeCSS(css)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [activeTheme, workspacePath])
+
   return <>{children}</>
 }

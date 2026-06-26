@@ -1,5 +1,34 @@
 # Changelog
 
+## Unreleased
+
+### New Features
+
+- **Stable semantic theming API**: A stable layer of semantic CSS classes is now applied to key DOM regions.
+- **CSS Snippets**: Drop individual `.css` files into the global snippets folder (`<AppData>/snippets/`) or into a workspace's `.config/snippets/` folder to apply additive styles on top of the active theme. All snippets are enabled by default; each can independently be toggled on or off per workspace from Settings > Appearance. Global snippets are injected first; workspace snippets follow, so workspace rules win on any property conflict via the CSS cascade.
+- **Custom theme system**: Drop a folder containing a `theme.css` file into the global themes directory or the workspace themes directory (`.config/themes/<ThemeID>/`). Theme CSS is injected after the app's base styles so the app never breaks regardless of what the file contains. The light/dark/system toggle continues to work independently. Themes are discovered from both scopes each time Appearance settings opens, workspace themes override global themes with the same ID.
+- **Two-layer settings (Global + Workspace)**: Settings now operate on two layers — a Global Settings file in the OS app data directory and a per-workspace `.config/settings.json`.
+- **Markdown as native format**: Notes are now stored as `.md` files. The editor serializes and deserializes content as Markdown using `@tiptap/markdown`, replacing the previous custom `.note` format.
+- **Frontmatter support**: Notes now support YAML frontmatter (parsed via `gray-matter`) for structured metadata — title, tags, creation date, and update date are stored directly in each file.
+- **Note Properties panel**: A new side panel in the note editor exposes the frontmatter fields (title, tags, dates) for direct editing without touching the raw file.
+- **Tag management**: New `TagInput` / `TokenInput` components let you add and remove tags from the Note Properties panel.
+- **Automatic migration**: On workspace load, a `MigrationOverlay` detects legacy `.note` files and migrates them to the new `.md` format in-place with frontmatter injected automatically.
+
+### Improvements
+
+- New `Accordion` and `Combobox` UI components added to the component library.
+- Removed the unused `resizable.tsx` shadcn wrapper (sidebar resizing uses the custom handle added in v1.1.0).
+
+### Breaking Changes
+
+- **File extension changed from `.note` to `.md`**: New notes are created as `.md` files. Existing `.note` files are migrated automatically on workspace open, but any external tooling that relied on the `.note` extension will need to be updated.
+
+### Build
+
+- **Windows-only builds**: Linux and macOS CI builds have been temporarily disabled — they remain commented out in the release workflow and can be re-enabled once those platforms can be properly tested.
+
+---
+
 ## v1.1.1 — Patch
 
 ### Fixes

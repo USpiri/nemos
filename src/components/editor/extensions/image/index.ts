@@ -38,4 +38,25 @@ export const Image = ImageExtension.configure({
   addNodeView() {
     return ReactNodeViewRenderer(ImageNodeView)
   },
+
+  renderMarkdown(node) {
+    const { src, alt, title, align, width } = node.attrs as {
+      src: string
+      alt?: string
+      title?: string
+      align?: 'start' | 'center' | 'end'
+      width?: string
+    }
+
+    const altText = alt || ''
+    const titlePart = title ? ` "${title}"` : ''
+
+    if ((align && align !== 'center') || width) {
+      const alignAttr = align ? ` align="${align}"` : ''
+      const widthAttr = width ? ` width="${width}"` : ''
+      return `<img src="${src}" alt="${altText}"${alignAttr}${widthAttr} />`
+    }
+
+    return `![${altText}](${src}${titlePart})`
+  },
 })

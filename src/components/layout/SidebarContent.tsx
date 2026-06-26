@@ -7,7 +7,7 @@ import { WorkspaceTree } from '../workspace-tree'
 const route = getRouteApi('/workspace/$workspaceId')
 
 export const SidebarContent = () => {
-  const tree = route.useLoaderData()
+  const { workspaceTree: tree } = route.useLoaderData()
   const { workspaceId } = route.useParams()
 
   return (

@@ -1,0 +1,3 @@
+# Markdown as the canonical storage format
+
+Notes are stored as plain `.md` files, not as TipTap's native JSON. TipTap JSON would preserve editor-specific structures with full fidelity and round-trip cleanly through the editor — but it is a proprietary, opaque format that only works inside Nemos. Markdown is portable, human-readable, and editable with any text editor. The cost is that some TipTap-specific constructs (e.g. complex node attributes) may not survive the round-trip perfectly, and the editor must serialise to Markdown on every save rather than persisting its native format. We accepted this cost because the core promise of the app is that notes belong to the user, not to the application.

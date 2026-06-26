@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog'
+import { ScrollArea } from '../ui/scroll-area'
 import { SidebarProvider } from '../ui/sidebar'
 import { type CategoryId, SettingsSidebar } from './SettingsSidebar'
 
@@ -47,7 +48,7 @@ export const SettingsDialog = () => {
 
   return (
     <Dialog open={isOpen('settings')} onOpenChange={close}>
-      <DialogContent className="h-full overflow-hidden p-0 sm:max-w-3xl md:max-h-[500px]">
+      <DialogContent className="h-full overflow-hidden p-0 sm:max-w-3xl md:max-h-125">
         <DialogHeader className="sr-only">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription>Application settings</DialogDescription>
@@ -59,19 +60,21 @@ export const SettingsDialog = () => {
               '--sidebar-width-mobile': '10rem',
             } as React.CSSProperties
           }
-          className="min-h-full items-start"
+          className="h-full min-h-0! items-start"
         >
           <SettingsSidebar
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
           />
-          <main className="flex-1 p-5">
-            <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
-              <div className="fade-in animate-in duration-200">
-                <Section />
-              </div>
-            </Suspense>
-          </main>
+          <ScrollArea className="h-full flex-1">
+            <main className="p-5">
+              <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
+                <div className="fade-in animate-in duration-200">
+                  <Section />
+                </div>
+              </Suspense>
+            </main>
+          </ScrollArea>
         </SidebarProvider>
       </DialogContent>
     </Dialog>
