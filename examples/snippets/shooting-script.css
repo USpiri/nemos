@@ -1,0 +1,322 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   shooting-script — a director's marked-up shooting script, in the dark
+   Apply with:  cssClass: shooting-script
+
+   Two typewriter faces do the work: 'Special Elite' (distressed, for slates
+   and cues) and 'Courier Prime' (the real screenwriting industry standard,
+   for action and dialogue). Enforces its own dark palette regardless of the
+   app's light/dark toggle — a screening room stays dark either way.
+
+   Element mapping, if you're writing a script in here:
+     h1          scene heading        INT./EXT. LOCATION — TIME
+     h2          character cue        centered, above dialogue
+     h3          transition           CUT TO: / FADE IN: (right-aligned)
+     blockquote  dialogue block
+     em          parenthetical, e.g. (beat)
+     p           action / description
+     hr          reel change (scene break)
+     `code`      camera direction, e.g. `PAN`, `RACK FOCUS`
+     ```block``` shot list
+   ───────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ── Page — undeveloped film black, perforated edges ──────────────────── */
+
+main.shooting-script {
+  background-color: #16130f;
+  color: #e8e1cf;
+  padding-left: 40px;
+  padding-right: 40px;
+  position: relative;
+
+  background-repeat: repeat-y, repeat-y, repeat-y, repeat-y;
+  background-attachment: local, local, local, local;
+  background-position: left top, left top, right top, right top;
+  background-size: 28px 34px, 28px 100%, 28px 34px, 28px 100%;
+  background-image:
+    radial-gradient(circle at 14px 17px, #16130f 6px, transparent 7px),
+    linear-gradient(#3a2c18, #3a2c18),
+    radial-gradient(circle at 14px 17px, #16130f 6px, transparent 7px),
+    linear-gradient(#3a2c18, #3a2c18);
+}
+
+/* ── Slate header — clapperboard stripe + production line ─────────────── */
+
+main.shooting-script [class*='px-10']:first-of-type {
+  padding-top: 5.5rem !important;
+  position: relative;
+}
+
+main.shooting-script [class*='px-10']:first-of-type::before {
+  content: '';
+  position: absolute;
+  top: 2.4rem;
+  left: 40px;
+  right: 40px;
+  height: 10px;
+  background: repeating-linear-gradient(-45deg, #f2ead6 0 10px, #16130f 10px 20px);
+}
+
+main.shooting-script [class*='px-10']:first-of-type::after {
+  content: 'SCENE ___  ·  TAKE ___  ·  ROLL A  ·  SHOOTING SCRIPT — FINAL DRAFT';
+  position: absolute;
+  top: 0.9rem;
+  left: 40px;
+  right: 40px;
+  text-align: center;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: #c8862e;
+}
+
+/* ── Body copy ──────────────────────────────────────────────────────────── */
+
+main.shooting-script .editor {
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #e8e1cf;
+  caret-color: #c8862e;
+}
+
+/* ── Scene headings ─────────────────────────────────────────────────────── */
+
+main.shooting-script .editor h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #f2ead6;
+  border-bottom: 1px dashed #4a4438;
+  padding-bottom: 0.6rem;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+}
+
+main.shooting-script .editor h1::before {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  background: repeating-linear-gradient(45deg, #f2ead6 0 4px, #16130f 4px 8px);
+  border: 1px solid #4a4438;
+}
+
+/* ── Character cues ─────────────────────────────────────────────────────── */
+
+main.shooting-script .editor h2 {
+  text-align: center;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #f2ead6;
+  margin-top: 2.2rem;
+  margin-bottom: 0.3rem;
+}
+
+main.shooting-script .editor h2::before {
+  content: '● ';
+  color: #7c2020;
+  font-size: 0.55rem;
+  vertical-align: middle;
+}
+
+/* ── Transitions ────────────────────────────────────────────────────────── */
+
+main.shooting-script .editor h3 {
+  text-align: right;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-style: italic;
+  font-size: 0.7rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #8a7f68;
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+
+/* ── Action / description ──────────────────────────────────────────────── */
+
+main.shooting-script .editor p {
+  margin-bottom: 0.9rem;
+  color: #e8e1cf;
+}
+
+main.shooting-script .editor strong {
+  color: #f2ead6;
+  font-weight: bold;
+  text-decoration: underline wavy #c8862e;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+main.shooting-script .editor em {
+  color: #8a7f68;
+  font-style: italic;
+}
+
+/* ── Dialogue block ─────────────────────────────────────────────────────── */
+
+main.shooting-script .editor blockquote {
+  max-width: 78%;
+  margin: 0.4rem auto 1.4rem;
+  padding: 0;
+  border: none;
+  font-family: 'Courier Prime', monospace;
+  color: #f2ead6;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+main.shooting-script .editor blockquote em {
+  display: block;
+  text-align: center;
+  color: #8a7f68;
+  margin-bottom: 0.2rem;
+}
+
+/* ── Reel change (scene break) ─────────────────────────────────────────── */
+
+main.shooting-script .editor hr {
+  border: none;
+  height: 1px;
+  background: #3a2c18;
+  margin: 3rem 0;
+  position: relative;
+}
+
+main.shooting-script .editor hr::before {
+  content: '\25C9';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #16130f;
+  padding: 0 1rem;
+  color: #7c2020;
+  font-size: 0.85rem;
+}
+
+main.shooting-script .editor hr::after {
+  content: 'REEL CHANGE';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 0.9rem);
+  white-space: nowrap;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.3em;
+  color: #4a4438;
+}
+
+/* ── Camera directions (inline code) ───────────────────────────────────── */
+
+main.shooting-script .editor code {
+  font-family: 'Special Elite', monospace;
+  background: #3a2c18;
+  color: #c8862e;
+  border: 1px solid #4a4438;
+  padding: 0.1em 0.5em;
+  border-radius: 2px;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Shot list (code block) ─────────────────────────────────────────────── */
+
+main.shooting-script .editor .codeblock pre {
+  background: #1e1a14;
+  border: 1px solid #4a4438;
+  border-top: 3px solid #7c2020;
+  padding: 1rem 1.2rem;
+  margin: 1.4rem 0;
+}
+
+main.shooting-script .editor .codeblock pre::before {
+  content: 'SHOT LIST';
+  display: block;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: #7c2020;
+  margin-bottom: 0.6rem;
+}
+
+main.shooting-script .editor .codeblock pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #e8e1cf;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 0.85em;
+}
+
+/* ── Continuity sheet (tables) ──────────────────────────────────────────── */
+
+main.shooting-script .editor .table-wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.4rem 0;
+  font-size: 0.78rem;
+}
+
+main.shooting-script .editor .table-wrapper th {
+  background: #3a2c18;
+  color: #f2ead6;
+  border: 1px solid #4a4438;
+  border-top: 2px solid #7c2020;
+  padding: 0.45rem 0.8rem;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: normal;
+}
+
+main.shooting-script .editor .table-wrapper td {
+  border: 1px solid #2a2118;
+  padding: 0.4rem 0.8rem;
+  color: #c9bfa6;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────────────── */
+
+main.shooting-script .editor ul,
+main.shooting-script .editor ol {
+  padding-left: 1.4rem;
+  color: #e8e1cf;
+}
+
+main.shooting-script .editor li::marker {
+  color: #c8862e;
+}
+
+/* ── Continuity photos (images) ─────────────────────────────────────────── */
+
+main.shooting-script .editor .image-resizable {
+  border: 8px solid #f2ead6;
+  border-bottom-width: 26px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+  transform: rotate(-1deg);
+  margin: 2rem auto;
+}
+
+/* ── Selection ──────────────────────────────────────────────────────────── */
+
+main.shooting-script .editor ::selection {
+  background: rgba(200, 134, 46, 0.35);
+  color: #16130f;
+}

@@ -1,0 +1,207 @@
+/*
+  fairy-diary.css
+  Transforms a specific note into a parchment page from a fairy's writing desk.
+
+  Activation
+  ──────────
+  Add the following to the YAML frontmatter of any note you want to style:
+
+      ---
+      cssClass: fairy-diary
+      ---
+
+  The class lands on the <main> wrapper of that note, so every selector here
+  is scoped under .fairy-diary and will not affect any other note.
+
+  Image placeholders
+  ──────────────────
+  In your note, write a blockquote wherever you want a drawing slot:
+
+      > ✦ your drawing caption goes here ✦
+
+  The blockquote renders as a dashed parchment frame. When you are ready
+  to add your image, delete the blockquote line and paste or drag your
+  image in its place — the snippet will frame it automatically.
+
+  Designed for light mode.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cinzel+Decorative:wght@400&display=swap');
+
+/* ── Parchment page ─────────────────────────────────────────────────────── */
+
+main.fairy-diary,
+.fairy-diary .ProseMirror {
+  font-family: 'Caveat', 'Segoe Print', cursive !important;
+  font-size: 2rem !important;
+  line-height: 2 !important;
+  color: #2c1a0e !important;
+  background:
+    radial-gradient(ellipse at 8%  8%,  rgba(255, 248, 218, 0.95) 0%, transparent 52%),
+    radial-gradient(ellipse at 92% 92%, rgba(195, 162, 100, 0.35) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 30%, rgba(248, 238, 200, 0.50) 0%, transparent 65%),
+    #f2e6c4 !important;
+  border-radius: 2px !important;
+  box-shadow:
+    0 1px 3px  rgba(100, 60, 20, 0.10),
+    0 6px 20px rgba(100, 60, 20, 0.10),
+    inset 0 0 80px rgba(160, 110, 40, 0.06) !important;
+}
+
+/* ── Headings ───────────────────────────────────────────────────────────── */
+
+.fairy-diary .typography h1 {
+  font-family: 'Cinzel Decorative', serif !important;
+  font-size: 1.7rem !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+  color: #4a240a !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* Fairy-dust row above every h1 */
+.fairy-diary .typography h1::before {
+  content: '✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦';
+  display: block;
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.35rem;
+  color: rgba(140, 85, 30, 0.40);
+  margin-bottom: 1.5rem;
+  font-family: sans-serif;
+  font-weight: 400;
+}
+
+.fairy-diary .typography h2 {
+  font-family: 'Caveat', cursive !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #5e2f0d !important;
+  border-bottom: 1px dashed rgba(160, 100, 40, 0.30) !important;
+  padding-bottom: 0.15rem !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
+.fairy-diary .typography h3 {
+  font-family: 'Caveat', cursive !important;
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  color: #6b3a15 !important;
+}
+
+/* ── Body text ──────────────────────────────────────────────────────────── */
+
+.fairy-diary .typography p {
+  margin-bottom: 0.75rem !important;
+  font-size: 1.25rem !important;
+}
+
+.fairy-diary .typography em {
+  color: #7d3f10 !important;
+}
+
+.fairy-diary .typography strong {
+  color: #3d1a05 !important;
+}
+
+/* ── Horizontal rule → fairy divider ───────────────────────────────────── */
+
+.fairy-diary .typography hr {
+  border: none !important;
+  height: 1.2rem !important;
+  overflow: visible !important;
+  margin: 1.6rem 0 !important;
+}
+
+.fairy-diary .typography hr::after {
+  content: '·  ✦  ·  ✿  ·  ✦  ·';
+  display: block;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  color: rgba(150, 90, 30, 0.45);
+  letter-spacing: 0.45rem;
+  font-family: sans-serif;
+}
+
+/* ── Blockquote = image placeholder frame ───────────────────────────────── */
+/*
+  Write  >  ✦ your drawing caption here ✦  in the note to get a frame.
+  Replace the whole blockquote with an image when you are ready.
+*/
+
+.fairy-diary .typography blockquote {
+  /* min-height: 190px !important; */
+  padding: 1rem 1.5rem !important;
+  margin: 2rem 0 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  outline: 2px dashed rgba(160, 100, 40, 0.38) !important;
+  outline-offset: -1px !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(210, 175, 110, 0.05),
+      rgba(210, 175, 110, 0.05) 12px,
+      transparent 12px,
+      transparent 24px
+    ),
+    rgba(255, 247, 225, 0.55) !important;
+}
+
+/* Diamond jewel centred on the top border */
+.fairy-diary .typography blockquote::before {
+  content: '✦';
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 0.65rem;
+  background: #f2e6c4; /* matches parchment */
+  color: rgba(150, 90, 30, 0.50);
+  font-size: 1.1rem;
+  font-family: sans-serif;
+  line-height: 1;
+}
+
+/* Corner flourish */
+.fairy-diary .typography blockquote::after {
+  content: '❧';
+  position: absolute;
+  bottom: 0.4rem;
+  right: 0.75rem;
+  font-size: 1.1rem;
+  color: rgba(150, 90, 30, 0.22);
+  font-family: serif;
+}
+
+.fairy-diary .typography blockquote p {
+  font-style: italic !important;
+  color: rgba(130, 75, 20, 0.50) !important;
+  text-align: center !important;
+  text-indent: 0 !important;
+  margin: 0 !important;
+  font-size: 1.2rem !important;
+}
+
+/* ── Actual images (pasted / dropped) ───────────────────────────────────── */
+
+.fairy-diary .typography .image-resizable {
+  margin: 1.5rem auto !important;
+}
+
+/* ── Inline code ────────────────────────────────────────────────────────── */
+
+.fairy-diary .typography code {
+  font-family: 'Caveat', cursive !important;
+  background: rgba(200, 165, 100, 0.18) !important;
+  color: #5a2e08 !important;
+  border-radius: 3px !important;
+  padding: 0.05em 0.3em !important;
+}

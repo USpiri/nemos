@@ -1,0 +1,251 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   technical-doc — blueprint/specification document style
+   Apply with:  cssClass: technical-doc
+   ───────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+/* ── Container ─────────────────────────────────────────────────── */
+
+main.technical-doc {
+  background-color: #071320;
+  background-image:
+    linear-gradient(rgba(80, 160, 220, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80, 160, 220, 0.055) 1px, transparent 1px);
+  background-size: 32px 32px;
+  position: relative;
+  color: #9ec8e8;
+}
+
+/* Classification bar — top and bottom */
+main.technical-doc::before,
+main.technical-doc::after {
+  content: '— RESTRICTED — TSI SURVEY DIVISION — INTERNAL USE ONLY —';
+  display: block;
+  position: sticky;          /* was: fixed — sticky stays inside the scroll container */
+  text-align: center;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: #3a6a8a;
+  background: #040e1a;
+  border-top: 1px solid #1a3a5a;
+  padding: 4px 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+main.technical-doc::before { top: 0; border-bottom: 1px solid #1a3a5a; }
+main.technical-doc::after  { bottom: 0; }
+/* ── Note properties area (title / tags) ───────────────────────── */
+
+main.technical-doc [class*='px-10']:first-of-type {
+  padding-top: 4rem !important;
+}
+
+/* ── Editor content ────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror {
+  font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: #9ec8e8;
+  caret-color: #50c8f0;
+}
+
+/* ── Headings ──────────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror h1 {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #d0eeff;
+  border-bottom: 2px solid #2a6a9a;
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.2rem;
+}
+
+main.technical-doc .ProseMirror h2 {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #8abcd8;
+  border-bottom: 1px solid #1a3a5a;
+  padding-bottom: 0.3rem;
+  margin-top: 2rem;
+  margin-bottom: 0.9rem;
+}
+
+main.technical-doc .ProseMirror h3 {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 0.8rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #5a9ab8;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+/* ── Paragraphs ────────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror p {
+  margin-bottom: 0.9rem;
+  color: #8ab8d4;
+}
+
+/* ── Horizontal rules ──────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror hr {
+  border: none;
+  border-top: 1px solid #1a3a5a;
+  margin: 2rem 0;
+  position: relative;
+}
+
+main.technical-doc .ProseMirror hr::before {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #071320;
+  padding: 0 0.6rem;
+  color: #2a5a7a;
+  font-size: 0.6rem;
+}
+
+/* ── Strong / em ───────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror strong {
+  color: #c8e4f8;
+  font-weight: bold;
+}
+
+main.technical-doc .ProseMirror em {
+  color: #6aaec8;
+  font-style: italic;
+}
+
+/* ── Blockquotes (used for notes / callouts) ───────────────────── */
+
+main.technical-doc .ProseMirror blockquote {
+  border-left: 3px solid #2a6a9a;
+  background: rgba(30, 80, 120, 0.18);
+  margin: 1.2rem 0;
+  padding: 0.6rem 1.2rem;
+  color: #6a9ab8;
+  font-style: italic;
+}
+
+main.technical-doc .ProseMirror blockquote::before {
+  content: '▸ NOTE: ';
+  color: #3a7aaa;
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+
+/* ── Tables ────────────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.2rem 0;
+  font-size: 0.78rem;
+}
+
+main.technical-doc .ProseMirror th {
+  background: rgba(30, 80, 120, 0.35);
+  color: #c0daf0;
+  border: 1px solid #1e4a6a;
+  padding: 0.45rem 0.8rem;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: normal;
+}
+
+main.technical-doc .ProseMirror td {
+  border: 1px solid #132a3e;
+  padding: 0.4rem 0.8rem;
+  color: #7aaac4;
+}
+
+main.technical-doc .ProseMirror tr:nth-child(even) td {
+  background: rgba(20, 50, 80, 0.15);
+}
+
+main.technical-doc .ProseMirror tr:nth-child(odd) td {
+  /* background: rgba(20, 50, 80, 0.15); */
+  background: transparent;
+}
+
+/* ── Inline code ───────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror code {
+  background: rgba(30, 80, 120, 0.25);
+  color: #60d8b0;
+  padding: 0.1em 0.45em;
+  border-radius: 2px;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 0.9em;
+  border: 1px solid #1a4a6a;
+}
+
+/* ── Code blocks ───────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror pre {
+  background: rgba(4, 14, 26, 0.7);
+  border: 1px solid #1a3a5a;
+  border-left: 3px solid #2a6a9a;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+  overflow-x: auto;
+}
+
+main.technical-doc .ProseMirror pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #60d8b0;
+}
+
+/* ── Lists ─────────────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror ul,
+main.technical-doc .ProseMirror ol {
+  padding-left: 1.5rem;
+  color: #7aaac4;
+}
+
+main.technical-doc .ProseMirror li {
+  margin-bottom: 0.3rem;
+}
+
+main.technical-doc .ProseMirror li::marker {
+  color: #2a6a9a;
+}
+
+/* ── Images (placeholders show as bordered frames) ─────────────── */
+
+main.technical-doc .ProseMirror img {
+  /* border: 1px solid #2a6a9a; */
+  max-width: 100%;
+  display: block;
+  margin: 1.5rem auto;
+  /* filter: sepia(0.15) hue-rotate(180deg) saturate(0.8); */
+  /* box-shadow: 0 0 24px rgba(40, 120, 180, 0.2); */
+}
+
+/* ── Selection ─────────────────────────────────────────────────── */
+
+main.technical-doc .ProseMirror ::selection {
+  background: rgba(50, 130, 200, 0.35);
+  color: #e0f0ff;
+}
