@@ -69,3 +69,30 @@ A CSS Snippet installed in the OS app data directory (`snippets/[filename].css`)
 
 #### Workspace CSS Snippet
 A CSS Snippet installed inside a Workspace's `.config/snippets/[filename].css`, scoped to that Workspace.
+
+### Release Workflow
+
+#### Release
+
+A tagged, shipped version of the app (e.g., `v1.1.0`). Releases are immutable — once tagged, the code at that point never changes. Only the changelog and release notes may be edited after the fact.
+
+#### Minor release
+A release that increments the minor version (`vX.Y.0`) and delivers new user-facing features. Cut from `main`.
+
+#### Patch release
+A release that increments the patch version (`vX.Y.Z`) and delivers only bug fixes against a previously shipped version. Cut from a maintenance line, not from `main`.
+
+#### Maintenance line
+The `fix/vX.Y.x` branch tracking all patches for a specific minor version. Created reactively from the release tag when the first bug is found. Deleted after the next minor version ships.
+
+#### Integration branch
+`main`. The branch where all feature work lands. Represents the next unreleased version. Version in `package.json` stays at the last released version until release day.
+
+#### Feature branch
+A short-lived branch for a self-contained piece of work. Always branched from and merged back to its target (either `main` or a parent feature branch). Deleted after merge.
+
+#### Merge back
+The act of merging a maintenance line onto `main` once its patch has shipped, carrying the fix commits, changelog entry, and version bump over in a single merge. Performed after the release ceremony (version bump, tag, push) on the maintenance line, not before it.
+
+#### Release ceremony
+The sequence of steps that converts code on a branch into a shipped release: changelog update → version bump → commit → tag → push → publish GitHub Release.
