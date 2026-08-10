@@ -1,5 +1,4 @@
 import { exists, rename } from '@/lib/fs'
-import { join } from '@/lib/fs/path'
 import {
   getContainerPath,
   getEntryName,
@@ -64,7 +63,7 @@ export const renameNote = async ({
 }: RenameNoteProps) => {
   const fromPath = toFsPath(workspaceId, relativePath)
   const parentDir = getContainerPath(fromPath)
-  const newPath = await join(parentDir, toNoteFileName(newName))
+  const newPath = `${parentDir}/${toNoteFileName(newName)}`
 
   return moveOrRename({
     fromPath,
@@ -87,7 +86,7 @@ export const renameFolder = async ({
 }: RenameFolderProps) => {
   const folderPath = toFsPath(workspaceId, relativePath)
   const parentDir = getParentPath(folderPath)
-  const newPath = await join(parentDir, newName)
+  const newPath = `${parentDir}/${newName}`
 
   return moveOrRename({
     fromPath: folderPath,
@@ -113,7 +112,7 @@ export const moveNote = async ({
   const destDir = destinationPath
     ? toFsPath(workspaceId, destinationPath)
     : toFsPath(workspaceId)
-  const newPath = await join(destDir, fileName)
+  const newPath = `${destDir}/${fileName}`
 
   return moveOrRename({
     fromPath,
@@ -139,7 +138,7 @@ export const moveFolder = async ({
   const destDir = destinationPath
     ? toFsPath(workspaceId, destinationPath)
     : toFsPath(workspaceId)
-  const newPath = await join(destDir, folderName)
+  const newPath = `${destDir}/${folderName}`
 
   return moveOrRename({
     fromPath: folderPath,
