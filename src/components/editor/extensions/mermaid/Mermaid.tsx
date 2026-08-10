@@ -22,12 +22,18 @@ function loadMermaid() {
   return mermaidPromise
 }
 
-export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
+export const Mermaid = ({ node, getPos, editor, selected }: NodeViewProps) => {
   const renderRef = useRef<HTMLDivElement | null>(null)
   const mermaidIdRef = useRef(`mermaid-${crypto.randomUUID()}`)
   const renderVersionRef = useRef(0)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  const onClick = () => {
+    const pos = getPos()
+    if (pos == undefined) return
+    editor.chain().focus().setNodeSelection(pos).run()
+  }
 
   const debouncedRender = useDebouncedCallback(async (source: string) => {
     const version = ++renderVersionRef.current
@@ -74,6 +80,7 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
     <NodeViewWrapper className="mermaid relative">
       <pre
         style={
+          !selected &&
           !isInsideNode(
             editor.state.selection.from,
             editor.state.selection.to,
@@ -91,7 +98,9 @@ export const Mermaid = ({ node, getPos, editor }: NodeViewProps) => {
           'mermaid-render select-none transition-all',
           error && 'h-0 opacity-0',
         )}
+        onClick={onClick}
         contentEditable={false}
+        role="button"
         ref={renderRef}
       />
       {error && !loading && (
