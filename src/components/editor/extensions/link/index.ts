@@ -139,7 +139,19 @@ function materializeLinkPlugin(linkType: MarkType) {
         changed = true
       }
 
-      if (empty && (!active || !insideActive)) {
+      // Any transaction we ourselves dispatch always tags this same meta
+      // key (see commitMaterializedRange/materializeMarkRange), so this
+      // detects "is everything in this batch our own follow-up, or did a
+      // real user action (click, arrow key) happen". Without this guard, a
+      // link committed via blur maps the cursor right back inside the mark
+      // it just created, and this same appendTransaction call — or
+      // ProseMirror's own re-run of it after we return a tr — would
+      // immediately re-materialize the link it just finished committing.
+      const userDriven = transactions.some(
+        (t) => t.getMeta(materializeLinkKey) === undefined,
+      )
+
+      if (userDriven && empty && (!active || !insideActive)) {
         const pos = changed ? tr.mapping.map(newState.selection.from) : from
         const range = getMarkRange(tr.doc.resolve(pos), linkType)
         if (range) {
@@ -159,6 +171,21 @@ function materializeLinkPlugin(linkType: MarkType) {
             class: 'link-raw-source',
           }),
         ])
+      },
+      handleDOMEvents: {
+        // Losing focus entirely (switching apps, clicking outside the
+        // editor) never produces a ProseMirror transaction on its own, so
+        // appendTransaction never runs — without this, a link mid-edit
+        // would stay stuck in Source Mode until the next selection change.
+        blur(view) {
+          const active = materializeLinkKey.getState(view.state)
+          if (!active) return false
+
+          const tr = view.state.tr
+          commitMaterializedRange(tr, active, linkType)
+          view.dispatch(tr)
+          return false
+        },
       },
     },
   })
