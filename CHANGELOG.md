@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- The rename now correctly navigates to the renamed note and refreshes the workspace tree. ([#38](https://github.com/USpiri/nemos/issues/38))
+
+---
+
 ## v1.2.0 — Markdown & Theming API
 
 ### New Features
