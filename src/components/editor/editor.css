@@ -551,6 +551,17 @@
   }
 }
 
+/* ── Link raw source ──────────────────────────────── */
+
+.link-raw-source {
+  border-radius: var(--radius-md);
+  background-color: var(--color-muted);
+  padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 0.25);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--color-muted-foreground);
+}
+
 /* ── Mermaid ──────────────────────────────────────── */
 
 .mermaid {
