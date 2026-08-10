@@ -5,6 +5,7 @@
 ### Fixes
 
 - The rename now correctly navigates to the renamed note and refreshes the workspace tree. ([#38](https://github.com/USpiri/nemos/issues/38))
+- Mermaid diagrams now support click-to-edit, matching the existing Smiles and KaTeX behavior. ([#40](https://github.com/USpiri/nemos/issues/40))
 
 ---
 
