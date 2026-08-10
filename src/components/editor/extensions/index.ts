@@ -10,13 +10,16 @@ import { Image } from './image'
 import { Link } from './link'
 import { MathExtension } from './math'
 import { Table } from './table'
+import { Underline } from './underline'
 
 export const Extensions = [
   StarterKit.configure({
     codeBlock: false,
     link: false,
+    underline: false,
     dropcursor: { class: 'dropcursor' },
   }),
+  Underline,
   Selection,
   Focus,
   FileHandler,

@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- Typing or pasting `++text++` now applies underline formatting live in the editor, matching the existing `~~text~~` behavior for strikethrough. ([#44](https://github.com/USpiri/nemos/issues/44))
+
+---
+
 ## v1.2.0 — Markdown & Theming API
 
 ### New Features
