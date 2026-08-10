@@ -43,12 +43,12 @@ main.shooting-script {
 
 /* ── Slate header — clapperboard stripe + production line ─────────────── */
 
-main.shooting-script [class*='px-10']:first-of-type {
+.shooting-script .editor {
   padding-top: 5.5rem !important;
   position: relative;
 }
 
-main.shooting-script [class*='px-10']:first-of-type::before {
+.shooting-script .editor::before {
   content: '';
   position: absolute;
   top: 2.4rem;
@@ -58,7 +58,7 @@ main.shooting-script [class*='px-10']:first-of-type::before {
   background: repeating-linear-gradient(-45deg, #f2ead6 0 10px, #16130f 10px 20px);
 }
 
-main.shooting-script [class*='px-10']:first-of-type::after {
+main.shooting-script .editor::after {
   content: 'SCENE ___  ·  TAKE ___  ·  ROLL A  ·  SHOOTING SCRIPT — FINAL DRAFT';
   position: absolute;
   top: 0.9rem;
