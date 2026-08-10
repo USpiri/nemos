@@ -1,14 +1,5 @@
 # Changelog
 
-## Unreleased
-
-### Fixes
-
-- The rename now correctly navigates to the renamed note and refreshes the workspace tree. ([#38](https://github.com/USpiri/nemos/issues/38))
-- Mermaid diagrams now support click-to-edit, matching the existing Smiles and KaTeX behavior. ([#40](https://github.com/USpiri/nemos/issues/40))
-
----
-
 ## v1.2.0 — Markdown & Theming API
 
 ### New Features
@@ -27,6 +18,11 @@
 
 - New `Accordion` and `Combobox` UI components added to the component library.
 - Removed the unused `resizable.tsx` shadcn wrapper (sidebar resizing uses the custom handle added in v1.1.0).
+
+### Fixes
+
+- The rename now correctly navigates to the renamed note and refreshes the workspace tree. ([#38](https://github.com/USpiri/nemos/issues/38))
+- Mermaid diagrams now support click-to-edit, matching the existing Smiles and KaTeX behavior. ([#40](https://github.com/USpiri/nemos/issues/40))
 
 ### Breaking Changes
 
