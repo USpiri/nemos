@@ -41,6 +41,7 @@
     "@tiptap/extension-link": "^3.13.0",
     "@tiptap/extension-list": "^3.13.0",
     "@tiptap/extension-table": "^3.13.0",
+    "@tiptap/extension-underline": "^3.29.2",
     "@tiptap/extensions": "^3.13.0",
     "@tiptap/markdown": "^3.23.6",
     "@tiptap/pm": "^3.13.0",
