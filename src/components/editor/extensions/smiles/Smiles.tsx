@@ -1,5 +1,5 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { hiddenStyle, isInsideNode } from '@/lib/editor/utils'
 
 const options = {
@@ -22,15 +22,47 @@ const options = {
   },
 }
 
-export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
+export const Smiles = ({ node, getPos, editor }: NodeViewProps) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const mountedRef = useRef(true)
+
+  // whether the current selection is this node (fully selected, or the
+  // cursor is somewhere inside its source text) — computed live rather than
+  // trusted from the `selected` prop, since that prop updates asynchronously
+  // relative to the `selectionUpdate` event below and would otherwise race it
+  const isOwnSelection = () => {
+    const pos = getPos()
+    if (pos == undefined) return false
+    const { from, to } = editor.state.selection
+    return (
+      (from <= pos && to >= pos + node.nodeSize) ||
+      isInsideNode(from, to, pos, node.nodeSize)
+    )
+  }
+
+  const [showSource, setShowSource] = useState(isOwnSelection)
 
   const onClick = () => {
     const pos = getPos()
     if (pos == undefined) return
     editor.chain().focus().setNodeSelection(pos).run()
   }
+
+  useEffect(() => {
+    const handleSelectionUpdate = () => setShowSource(isOwnSelection())
+    // closing here only on an actual selection change (not on refocus) means
+    // regaining app/window focus can't silently reopen Source mode off the
+    // stale selection left over from before the blur
+    const handleBlur = () => setShowSource(false)
+
+    editor.on('selectionUpdate', handleSelectionUpdate)
+    editor.on('blur', handleBlur)
+
+    return () => {
+      editor.off('selectionUpdate', handleSelectionUpdate)
+      editor.off('blur', handleBlur)
+    }
+  }, [editor, getPos, node])
 
   useEffect(() => {
     mountedRef.current = true
@@ -59,19 +91,7 @@ export const Smiles = ({ node, getPos, editor, selected }: NodeViewProps) => {
 
   return (
     <NodeViewWrapper className="smiles">
-      <pre
-        style={
-          !selected &&
-          !isInsideNode(
-            editor.state.selection.from,
-            editor.state.selection.to,
-            getPos() ?? 0,
-            node.nodeSize,
-          )
-            ? hiddenStyle
-            : undefined
-        }
-      >
+      <pre style={showSource ? undefined : hiddenStyle}>
         <NodeViewContent className="smiles-source language-smiles" />
       </pre>
       <div
