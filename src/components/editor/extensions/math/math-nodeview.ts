@@ -14,8 +14,9 @@ class MathNodeView implements NodeView {
   showSource!: boolean
   type: string
   isInline: boolean
-  private handleClick: () => void
+  private handleMouseDown: () => void
   private boundHandleSelectionUpdate: () => void
+  private boundHandleBlur: () => void
 
   constructor(props: NodeViewRendererProps, isInline = false) {
     this.editor = props.editor
@@ -24,8 +25,9 @@ class MathNodeView implements NodeView {
     this.showSource = this.node.attrs.showSource
     this.type = isInline ? 'math-inline' : 'math-display'
     this.isInline = isInline
-    this.handleClick = () => this.selectNode()
+    this.handleMouseDown = () => this.focusNode()
     this.boundHandleSelectionUpdate = this.handleSelectionUpdate.bind(this)
+    this.boundHandleBlur = this.handleBlur.bind(this)
     this.mount()
   }
 
@@ -54,8 +56,12 @@ class MathNodeView implements NodeView {
     })
     dom.append(katexNode)
 
-    // select the node on click
-    dom.addEventListener('click', this.handleClick)
+    // open the node on click, and place the cursor inside it.
+    // uses mousedown rather than click: in the embedded webview, the first
+    // mousedown after the app/editor was unfocused re-establishes focus but
+    // the follow-up synthetic click event is sometimes swallowed, so a
+    // click listener here needs an extra click to ever fire
+    dom.addEventListener('mousedown', this.handleMouseDown)
 
     if (!this.showSource || !this.editor.isEditable) {
       dom.setAttribute('draggable', 'true')
@@ -74,6 +80,7 @@ class MathNodeView implements NodeView {
     }
 
     this.editor.on('selectionUpdate', this.boundHandleSelectionUpdate)
+    this.editor.on('blur', this.boundHandleBlur)
 
     this.renderer = dom
     this.content = source
@@ -97,18 +104,52 @@ class MathNodeView implements NodeView {
       if (!this.showSource) {
         this.selectNode()
       }
-    } else if (this.showSource) {
-      this.deselectNode()
+    } else {
+      this.closeIfOpen()
     }
   }
 
-  selectNode() {
-    const pos = this.getPos()
-    if (pos == undefined) return
-    // check the node at `pos` is a math node
-    const nodeAfter = this.editor.state.tr.doc.resolve(pos).nodeAfter
+  handleBlur() {
+    this.closeIfOpen()
+  }
 
-    if (nodeAfter?.type.name != this.type && !this.showSource) return
+  closeIfOpen() {
+    if (this.showSource) this.deselectNode()
+  }
+
+  // resolve the node this view actually owns, guarding against a stale
+  // getPos() after the doc has changed underneath this instance
+  private resolveOwnNode() {
+    const pos = this.getPos()
+    if (pos == undefined) return undefined
+    const nodeAfter = this.editor.state.tr.doc.resolve(pos).nodeAfter
+    if (nodeAfter?.type.name != this.type) return undefined
+    return pos
+  }
+
+  // open this node directly on click — don't rely on the selection actually
+  // moving to trigger it via selectionUpdate. A native click on the
+  // non-editable KaTeX render doesn't reliably relocate the browser's
+  // selection (especially right after a blur, since the DOM selection can
+  // survive the blur unchanged), so focus() alone can be a no-op. Moving
+  // the selection afterwards is just for cursor placement; the previously
+  // active node still closes itself through its own selectionUpdate handler
+  // once the selection actually lands elsewhere.
+  focusNode() {
+    const pos = this.resolveOwnNode()
+    if (pos == undefined) return
+
+    if (!this.showSource) this.selectNode()
+
+    this.editor
+      .chain()
+      .focus(pos + 1)
+      .run()
+  }
+
+  selectNode() {
+    const pos = this.showSource ? this.getPos() : this.resolveOwnNode()
+    if (pos == undefined) return
 
     this.editor
       .chain()
@@ -143,8 +184,9 @@ class MathNodeView implements NodeView {
   }
 
   destroy() {
-    this.renderer.removeEventListener('click', this.handleClick)
+    this.renderer.removeEventListener('mousedown', this.handleMouseDown)
     this.editor.off('selectionUpdate', this.boundHandleSelectionUpdate)
+    this.editor.off('blur', this.boundHandleBlur)
     this.content = null
   }
 

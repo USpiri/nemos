@@ -62,7 +62,7 @@ export const MathDisplay = Node.create({
     const expression = token.math ?? ''
     return helpers.createNode(
       name,
-      undefined,
+      { showSource: false },
       expression ? [helpers.createTextNode(expression)] : [],
     )
   },
