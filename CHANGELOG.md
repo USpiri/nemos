@@ -11,6 +11,7 @@
 - Typing or pasting `++text++` now applies underline formatting live in the editor, matching the existing `~~text~~` behavior for strikethrough. ([#44](https://github.com/USpiri/nemos/issues/44))
 - Math nodes now correctly exit Source mode when clicking another math node or losing focus. ([#46](https://github.com/USpiri/nemos/issues/46))
 - Smiles nodes now correctly exit Source mode when clicking another node or losing focus. ([#47](https://github.com/USpiri/nemos/issues/47))
+- Mermaid nodes now correctly exit Source mode when clicking another node or losing focus. ([#48](https://github.com/USpiri/nemos/issues/48))
 
 ---
 
