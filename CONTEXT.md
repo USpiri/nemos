@@ -40,6 +40,11 @@ A sparse delta of preference overrides scoped to a single Workspace, stored at `
 ### Tab
 An open Note in the editor. Multiple Tabs can be open simultaneously in a browser-like tab bar. Tabs persist across app restarts.
 
+### Source Mode
+The per-element state in which an inline element — a Math expression, Mermaid diagram, SMILES structure, or Link — shows its raw, directly-editable markup source instead of its rendered form. An element enters Source Mode when the cursor, or a selection fully contained within it, moves into it (by click or by keyboard navigation), and leaves Source Mode the instant the cursor moves elsewhere, at which point it re-renders from the (possibly just-edited) source. Each element type implements Source Mode with whatever mechanism fits it — Math/Mermaid/SMILES toggle a `showSource` node attribute, Link unwraps its mark into literal text and re-parses it on exit — but the observable behavior is the same across all of them.
+
+Distinct from a Note's `readonly` field, which is a separate, whole-document edit/read-only state. Also distinct from the app's broader writing-first design principle (keeping edits inline, without modals or side panels) — that principle is *why* Source Mode exists, not the thing itself. Referred to informally as "click-to-edit" in the changelog and commit history, though that undersells the keyboard-navigation trigger.
+
 ### Theme
 A user-installed CSS customization for the app, consisting of a folder containing a `theme.css` file. Theme CSS is injected after the app's base styles — it augments rather than replaces them. The app's base styles always remain in effect, so a Theme that only overrides one CSS variable only changes that variable; the rest of the UI is unaffected. A Theme that targets `.dark` selectors only affects dark mode; light mode is untouched. The light/dark/system toggle works independently of Themes.
 

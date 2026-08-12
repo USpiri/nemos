@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### New Features
+
+- **Inline, writing-first link editing**: Clicking into a link, or moving the cursor into one with the arrow keys, now reveals its raw `[label](url)` markdown source as directly-editable text — the same in-place pattern already used by Math, Mermaid, and Smiles. Moving the cursor away re-parses and re-renders it; an unparseable or empty-href edit is left as plain text instead of erroring. A new `Ctrl`/`Cmd`+`K` shortcut wraps the current selection into a link and drops straight into this editable state, ready to type the destination. ([#42](https://github.com/USpiri/nemos/issues/42))
+
 ### Fixes
 
 - Typing or pasting `++text++` now applies underline formatting live in the editor, matching the existing `~~text~~` behavior for strikethrough. ([#44](https://github.com/USpiri/nemos/issues/44))
