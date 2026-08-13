@@ -7,10 +7,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { setTableHandleFrozen, TABLE_HANDLE_OVERLAY_CLASS } from './handle-plugin'
+import {
+  setTableHandleFrozen,
+  TABLE_HANDLE_OVERLAY_CLASS,
+} from './handle-plugin'
 import { useTableHandleState } from './use-table-handle-state'
 
 const HANDLE_SIZE = 20
@@ -21,6 +25,8 @@ interface HandleMenuItem {
   disabled?: boolean
   onClick: () => void
 }
+
+type HandleMenuEntry = HandleMenuItem | 'separator'
 
 function HandleMenu({
   icon,
@@ -33,7 +39,7 @@ function HandleMenu({
   ariaLabel: string
   style: CSSProperties
   side: 'left' | 'bottom'
-  items: HandleMenuItem[]
+  items: HandleMenuEntry[]
 }) {
   return (
     <div className={cn(TABLE_HANDLE_OVERLAY_CLASS, 'z-40')} style={style}>
@@ -52,15 +58,19 @@ function HandleMenu({
           side={side}
           align="center"
         >
-          {items.map(item => (
-            <DropdownMenuItem
-              key={item.label}
-              disabled={item.disabled}
-              onClick={item.onClick}
-            >
-              {item.label}
-            </DropdownMenuItem>
-          ))}
+          {items.map((item, index) =>
+            item === 'separator' ? (
+              <DropdownMenuSeparator key={`separator-${index}`} />
+            ) : (
+              <DropdownMenuItem
+                key={item.label}
+                disabled={item.disabled}
+                onClick={item.onClick}
+              >
+                {item.label}
+              </DropdownMenuItem>
+            ),
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -76,7 +86,16 @@ export function TableHandles({ editor }: Props) {
 
   if (!editor || !state) return null
 
-  const { tablePos, rowIndex, colIndex, isHeaderRow, tableRect, cellRect } = state
+  const {
+    tablePos,
+    rowIndex,
+    colIndex,
+    isHeaderRow,
+    rowCount,
+    colCount,
+    tableRect,
+    cellRect,
+  } = state
 
   const rowHandleStyle: CSSProperties = {
     position: 'fixed',
@@ -107,6 +126,16 @@ export function TableHandles({ editor }: Props) {
             label: 'Insert row below',
             onClick: () => editor.commands.insertRow(tablePos, rowIndex + 1),
           },
+          'separator',
+          {
+            label: 'Duplicate row',
+            onClick: () => editor.commands.duplicateRow(tablePos, rowIndex),
+          },
+          {
+            label: 'Delete row',
+            disabled: isHeaderRow || rowCount <= 2,
+            onClick: () => editor.commands.deleteRow(tablePos, rowIndex),
+          },
         ]}
       />
 
@@ -123,6 +152,16 @@ export function TableHandles({ editor }: Props) {
           {
             label: 'Insert column right',
             onClick: () => editor.commands.insertColumn(tablePos, colIndex + 1),
+          },
+          'separator',
+          {
+            label: 'Duplicate column',
+            onClick: () => editor.commands.duplicateColumn(tablePos, colIndex),
+          },
+          {
+            label: 'Delete column',
+            disabled: colCount <= 1,
+            onClick: () => editor.commands.deleteColumn(tablePos, colIndex),
           },
         ]}
       />

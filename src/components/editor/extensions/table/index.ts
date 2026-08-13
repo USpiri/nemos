@@ -7,8 +7,15 @@ import {
 } from '@tiptap/extension-table'
 import { Extension, ReactNodeViewRenderer } from '@tiptap/react'
 import { setColumnAlign, TableAlign } from './align'
+import {
+  deleteColumnAt,
+  deleteRowAt,
+  duplicateColumnAt,
+  duplicateRowAt,
+  insertColumnAt,
+  insertRowAt,
+} from './handle-commands'
 import { TableHandle } from './handle-extension'
-import { insertColumnAt, insertRowAt } from './handle-commands'
 import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
 import TableNodeView from './Table'
 
@@ -27,6 +34,14 @@ declare module '@tiptap/react' {
       insertRow: (tablePos: number, row: number) => ReturnType
       /** Inserts a column at `col` in the table at `tablePos` (existing columns shift right). */
       insertColumn: (tablePos: number, col: number) => ReturnType
+      /** Deletes the body row at `row` in the table at `tablePos`. */
+      deleteRow: (tablePos: number, row: number) => ReturnType
+      /** Deletes the column at `col` in the table at `tablePos`. */
+      deleteColumn: (tablePos: number, col: number) => ReturnType
+      /** Duplicates the row at `row` in the table at `tablePos`, inserting the copy after it. */
+      duplicateRow: (tablePos: number, row: number) => ReturnType
+      /** Duplicates the column at `col` in the table at `tablePos`, inserting the copy after it. */
+      duplicateColumn: (tablePos: number, col: number) => ReturnType
     }
   }
 }
@@ -88,6 +103,22 @@ const AlignedTable = TableExtension.extend({
         (tablePos: number, col: number) =>
         ({ state, dispatch }) =>
           insertColumnAt(state, dispatch, tablePos, col),
+      deleteRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          deleteRowAt(state, dispatch, tablePos, row),
+      deleteColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          deleteColumnAt(state, dispatch, tablePos, col),
+      duplicateRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          duplicateRowAt(state, dispatch, tablePos, row),
+      duplicateColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          duplicateColumnAt(state, dispatch, tablePos, col),
     }
   },
 })

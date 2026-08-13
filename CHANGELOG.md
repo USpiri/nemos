@@ -6,7 +6,7 @@
 
 - **Inline, writing-first link editing**: Clicking into a link, or moving the cursor into one with the arrow keys, now reveals its raw `[label](url)` markdown source as directly-editable text — the same in-place pattern already used by Math, Mermaid, and Smiles. Moving the cursor away re-parses and re-renders it; an unparseable or empty-href edit is left as plain text instead of erroring. A new `Ctrl`/`Cmd`+`K` shortcut wraps the current selection into a link and drops straight into this editable state, ready to type the destination. ([#42](https://github.com/USpiri/nemos/issues/42))
 - **Table column alignment**: Tables now preserve left/center/right column alignment when opening and saving a Note — previously parsed from the file and silently discarded. Table cells are also now restricted to a single line of inline content.
-- **Table Row/Column handles**: Hovering the start of a table row or the top of a column now reveals a handle.
+- **Table Row/Column handles**: Hovering the start of a table row or the top of a column now reveals a handle whose menu can insert, duplicate, or delete that row/column.
 
 ### Fixes
 

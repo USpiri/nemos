@@ -8,6 +8,8 @@ export type TableHandleState = {
   rowIndex: number
   colIndex: number
   isHeaderRow: boolean
+  rowCount: number
+  colCount: number
   tableRect: DOMRect
   cellRect: DOMRect
 } | null
@@ -146,6 +148,8 @@ class TableHandleView implements PluginView {
       rowIndex: rect.top,
       colIndex: rect.left,
       isHeaderRow: rect.top === 0,
+      rowCount: map.height,
+      colCount: map.width,
       tableRect: tableElement.getBoundingClientRect(),
       cellRect: cell.getBoundingClientRect(),
     }
@@ -164,7 +168,7 @@ export function createTableHandlePlugin(
 ) {
   return new Plugin({
     key: tableHandlePluginKey,
-    view: view => {
+    view: (view) => {
       activeView = new TableHandleView(editor, view, emit)
       return activeView
     },
