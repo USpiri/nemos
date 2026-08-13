@@ -1,4 +1,6 @@
+import { getVersion } from '@tauri-apps/api/app'
 import { Info, Keyboard, Palette, Settings, Type } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +30,12 @@ export const SettingsSidebar = ({
   activeCategory,
   onCategoryChange,
 }: SettingsSidebarProps) => {
+  const [appVersion, setAppVersion] = useState('')
+
+  useEffect(() => {
+    getVersion().then(setAppVersion)
+  }, [])
+
   return (
     <Sidebar className="w-52 border-r" collapsible="none">
       <SidebarContent>
@@ -49,7 +57,7 @@ export const SettingsSidebar = ({
       </SidebarContent>
       <SidebarFooter className="border-t">
         <span className="font-mono text-muted-foreground text-xs">
-          Nemos v1.0.0
+          Nemos v{appVersion || '...'}
         </span>
       </SidebarFooter>
     </Sidebar>
