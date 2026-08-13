@@ -12,6 +12,7 @@
 - Math nodes now correctly exit Source mode when clicking another math node or losing focus. ([#46](https://github.com/USpiri/nemos/issues/46))
 - Smiles nodes now correctly exit Source mode when clicking another node or losing focus. ([#47](https://github.com/USpiri/nemos/issues/47))
 - Mermaid nodes now correctly exit Source mode when clicking another node or losing focus. ([#48](https://github.com/USpiri/nemos/issues/48))
+- Code blocks no longer let the copy button/language selector overlay obscure code text. ([#49](https://github.com/USpiri/nemos/issues/49))
 
 ---
 
