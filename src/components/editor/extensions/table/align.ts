@@ -42,7 +42,16 @@ export function setColumnAlign(
 
   if (dispatch) {
     const rect = selectedRect(state)
-    dispatch(applyColumnAlign(state.tr, rect.map, rect.tableStart, rect.table, rect.left, align))
+    dispatch(
+      applyColumnAlign(
+        state.tr,
+        rect.map,
+        rect.tableStart,
+        rect.table,
+        rect.left,
+        align,
+      ),
+    )
   }
 
   return true

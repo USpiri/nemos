@@ -1,4 +1,9 @@
-import type { JSONContent, MarkdownParseHelpers, MarkdownRendererHelpers, MarkdownToken } from '@tiptap/core'
+import type {
+  JSONContent,
+  MarkdownParseHelpers,
+  MarkdownRendererHelpers,
+  MarkdownToken,
+} from '@tiptap/core'
 import type { TableAlign } from './align'
 
 type MarkdownTableToken = {
@@ -7,7 +12,10 @@ type MarkdownTableToken = {
   rows?: { tokens: MarkdownToken[] }[][]
 } & MarkdownToken
 
-export function parseTableMarkdown(token: MarkdownTableToken, h: MarkdownParseHelpers): JSONContent {
+export function parseTableMarkdown(
+  token: MarkdownTableToken,
+  h: MarkdownParseHelpers,
+): JSONContent {
   const align = token.align ?? []
   const rows: JSONContent[] = []
 
@@ -21,7 +29,7 @@ export function parseTableMarkdown(token: MarkdownTableToken, h: MarkdownParseHe
   }
 
   if (token.rows) {
-    token.rows.forEach(row => {
+    token.rows.forEach((row) => {
       const bodyCells = row.map((cell, i) =>
         h.createNode('tableCell', { align: align[i] ?? null }, [
           { type: 'paragraph', content: h.parseInline(cell.tokens) },
@@ -57,14 +65,21 @@ function minWidthFor(align: TableAlign) {
   return 3
 }
 
-export function renderTableToMarkdown(node: JSONContent, h: MarkdownRendererHelpers): string {
+export function renderTableToMarkdown(
+  node: JSONContent,
+  h: MarkdownRendererHelpers,
+): string {
   if (!node.content || node.content.length === 0) {
     return ''
   }
 
-  const rows = node.content.map(rowNode =>
-    (rowNode.content ?? []).map(cellNode => ({
-      text: collapseWhitespace(cellNode.content ? h.renderChildren(cellNode.content as JSONContent[]) : ''),
+  const rows = node.content.map((rowNode) =>
+    (rowNode.content ?? []).map((cellNode) => ({
+      text: collapseWhitespace(
+        cellNode.content
+          ? h.renderChildren(cellNode.content as JSONContent[])
+          : '',
+      ),
       align: (cellNode.attrs?.align ?? null) as TableAlign,
     })),
   )
@@ -78,7 +93,7 @@ export function renderTableToMarkdown(node: JSONContent, h: MarkdownRendererHelp
   const [headerRow, ...bodyRows] = rows
 
   const colWidths = new Array(columnCount).fill(3)
-  rows.forEach(r => {
+  rows.forEach((r) => {
     for (let i = 0; i < columnCount; i += 1) {
       colWidths[i] = Math.max(colWidths[i], r[i]?.text.length ?? 0)
     }
@@ -87,7 +102,8 @@ export function renderTableToMarkdown(node: JSONContent, h: MarkdownRendererHelp
     colWidths[i] = Math.max(colWidths[i], minWidthFor(cell.align))
   })
 
-  const pad = (s: string, width: number) => s + ' '.repeat(Math.max(0, width - s.length))
+  const pad = (s: string, width: number) =>
+    s + ' '.repeat(Math.max(0, width - s.length))
 
   let out = '\n'
 
@@ -98,10 +114,15 @@ export function renderTableToMarkdown(node: JSONContent, h: MarkdownRendererHelp
 
   out += `| ${new Array(columnCount)
     .fill(0)
-    .map((_, i) => pad(delimiterFor(headerRow[i]?.align ?? null, colWidths[i]), colWidths[i]))
+    .map((_, i) =>
+      pad(
+        delimiterFor(headerRow[i]?.align ?? null, colWidths[i]),
+        colWidths[i],
+      ),
+    )
     .join(' | ')} |\n`
 
-  bodyRows.forEach(r => {
+  bodyRows.forEach((r) => {
     out += `| ${new Array(columnCount)
       .fill(0)
       .map((_, i) => pad(r[i]?.text ?? '', colWidths[i]))

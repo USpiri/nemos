@@ -19,7 +19,7 @@ export const TableHandle = Extension.create({
     const { editor } = this
 
     return [
-      createTableHandlePlugin(editor, state => {
+      createTableHandlePlugin(editor, (state) => {
         editor.emit('tableHandleState', state)
       }),
     ]

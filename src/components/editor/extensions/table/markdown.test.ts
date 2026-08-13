@@ -1,10 +1,15 @@
-import type { JSONContent, MarkdownParseHelpers, MarkdownRendererHelpers } from '@tiptap/core'
+import type {
+  JSONContent,
+  MarkdownParseHelpers,
+  MarkdownRendererHelpers,
+} from '@tiptap/core'
 import { describe, expect, it } from 'vitest'
 import type { TableAlign } from './align'
 import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
 
 const parseHelpers: MarkdownParseHelpers = {
-  parseInline: tokens => tokens.map(t => ({ type: 'text', text: t.text ?? '' })),
+  parseInline: (tokens) =>
+    tokens.map((t) => ({ type: 'text', text: t.text ?? '' })),
   parseChildren: () => [],
   createTextNode: (text, marks) => ({ type: 'text', text, marks }),
   createNode: (type, attrs, content) => ({ type, attrs, content }),
@@ -12,12 +17,15 @@ const parseHelpers: MarkdownParseHelpers = {
 }
 
 const renderHelpers: MarkdownRendererHelpers = {
-  renderChildren: nodes =>
+  renderChildren: (nodes) =>
     (Array.isArray(nodes) ? nodes : [nodes])
-      .map(n => (n as JSONContent).content?.map(c => c.text ?? '').join('') ?? '')
+      .map(
+        (n) =>
+          (n as JSONContent).content?.map((c) => c.text ?? '').join('') ?? '',
+      )
       .join(''),
   wrapInBlock: (_prefix, content) => content,
-  indent: content => content,
+  indent: (content) => content,
 }
 
 describe('parseTableMarkdown', () => {
@@ -26,15 +34,33 @@ describe('parseTableMarkdown', () => {
       type: 'table',
       raw: '',
       align: ['left', 'center', null] as TableAlign[],
-      header: [{ tokens: [{ text: 'A' }] }, { tokens: [{ text: 'B' }] }, { tokens: [{ text: 'C' }] }],
-      rows: [[{ tokens: [{ text: '1' }] }, { tokens: [{ text: '2' }] }, { tokens: [{ text: '3' }] }]],
+      header: [
+        { tokens: [{ text: 'A' }] },
+        { tokens: [{ text: 'B' }] },
+        { tokens: [{ text: 'C' }] },
+      ],
+      rows: [
+        [
+          { tokens: [{ text: '1' }] },
+          { tokens: [{ text: '2' }] },
+          { tokens: [{ text: '3' }] },
+        ],
+      ],
     }
 
     const result = parseTableMarkdown(token, parseHelpers) as JSONContent
     const [headerRow, bodyRow] = result.content!
 
-    expect(headerRow.content!.map(c => c.attrs?.align)).toEqual(['left', 'center', null])
-    expect(bodyRow.content!.map(c => c.attrs?.align)).toEqual(['left', 'center', null])
+    expect(headerRow.content!.map((c) => c.attrs?.align)).toEqual([
+      'left',
+      'center',
+      null,
+    ])
+    expect(bodyRow.content!.map((c) => c.attrs?.align)).toEqual([
+      'left',
+      'center',
+      null,
+    ])
   })
 
   it('defaults align to null when the token has no align array', () => {
@@ -51,8 +77,16 @@ describe('parseTableMarkdown', () => {
 })
 
 describe('renderTableToMarkdown', () => {
-  function cell(type: string, text: string, align: string | null = null): JSONContent {
-    return { type, attrs: { align }, content: [{ type: 'paragraph', content: [{ type: 'text', text }] }] }
+  function cell(
+    type: string,
+    text: string,
+    align: string | null = null,
+  ): JSONContent {
+    return {
+      type,
+      attrs: { align },
+      content: [{ type: 'paragraph', content: [{ type: 'text', text }] }],
+    }
   }
 
   it('emits the correct GFM delimiter syntax per column alignment', () => {
@@ -70,7 +104,12 @@ describe('renderTableToMarkdown', () => {
         },
         {
           type: 'tableRow',
-          content: [cell('tableCell', 'a'), cell('tableCell', 'b'), cell('tableCell', 'c'), cell('tableCell', 'd')],
+          content: [
+            cell('tableCell', 'a'),
+            cell('tableCell', 'b'),
+            cell('tableCell', 'c'),
+            cell('tableCell', 'd'),
+          ],
         },
       ],
     }
@@ -79,7 +118,7 @@ describe('renderTableToMarkdown', () => {
     const lines = markdown.split('\n').filter(Boolean)
     const delimiterCells = lines[1]
       .split('|')
-      .map(s => s.trim())
+      .map((s) => s.trim())
       .filter(Boolean)
 
     expect(delimiterCells[0]).toMatch(/^:-+$/)
@@ -89,6 +128,8 @@ describe('renderTableToMarkdown', () => {
   })
 
   it('returns an empty string for a table with no rows', () => {
-    expect(renderTableToMarkdown({ type: 'table', content: [] }, renderHelpers)).toBe('')
+    expect(
+      renderTableToMarkdown({ type: 'table', content: [] }, renderHelpers),
+    ).toBe('')
   })
 })

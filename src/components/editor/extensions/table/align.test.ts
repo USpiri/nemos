@@ -32,7 +32,7 @@ describe('applyColumnAlign', () => {
 
     const colAAligns: (string | null)[] = []
     const colBAligns: (string | null)[] = []
-    newTable.forEach(row => {
+    newTable.forEach((row) => {
       colAAligns.push(row.child(0).attrs.align)
       colBAligns.push(row.child(1).attrs.align)
     })

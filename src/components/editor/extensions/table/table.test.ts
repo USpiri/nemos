@@ -38,14 +38,14 @@ describe('table markdown round-trip', () => {
   it('parses per-column alignment into cell attrs', () => {
     const editor = createEditor(ALIGNED_TABLE)
     const json = editor.getJSON() as JSONContent
-    const table = json.content?.find(n => n.type === 'table')
+    const table = json.content?.find((n) => n.type === 'table')
     expect(table).toBeDefined()
 
     const [headerRow, bodyRow] = table!.content!
-    const aligns = headerRow.content!.map(cell => cell.attrs?.align)
+    const aligns = headerRow.content!.map((cell) => cell.attrs?.align)
     expect(aligns).toEqual(['left', 'center', 'right', null])
 
-    const bodyAligns = bodyRow.content!.map(cell => cell.attrs?.align)
+    const bodyAligns = bodyRow.content!.map((cell) => cell.attrs?.align)
     expect(bodyAligns).toEqual(['left', 'center', 'right', null])
 
     editor.destroy()
@@ -59,7 +59,7 @@ describe('table markdown round-trip', () => {
 
     const cells = delimiterLine
       .split('|')
-      .map(s => s.trim())
+      .map((s) => s.trim())
       .filter(Boolean)
 
     expect(cells[0].startsWith(':')).toBe(true)
@@ -108,14 +108,16 @@ describe('table markdown round-trip', () => {
 describe('table cell content model', () => {
   it('restricts tableCell and tableHeader to a single mandatory paragraph', () => {
     const editor = createEditor(ALIGNED_TABLE)
-    const { tableCell, tableHeader, paragraph, bulletList } = editor.schema.nodes
+    const { tableCell, tableHeader, paragraph, bulletList } =
+      editor.schema.nodes
 
     const afterOneParagraph = tableCell.contentMatch.matchType(paragraph)
     expect(afterOneParagraph?.validEnd).toBe(true)
     expect(afterOneParagraph?.matchType(paragraph)).toBeNull()
     expect(tableCell.contentMatch.matchType(bulletList)).toBeNull()
 
-    const headerAfterOneParagraph = tableHeader.contentMatch.matchType(paragraph)
+    const headerAfterOneParagraph =
+      tableHeader.contentMatch.matchType(paragraph)
     expect(headerAfterOneParagraph?.validEnd).toBe(true)
     expect(headerAfterOneParagraph?.matchType(paragraph)).toBeNull()
     expect(tableHeader.contentMatch.matchType(bulletList)).toBeNull()
@@ -171,9 +173,9 @@ describe('setColumnAlign command', () => {
     expect(result).toBe(true)
 
     const json = editor.getJSON() as JSONContent
-    const table = json.content!.find(n => n.type === 'table')!
-    const colAAligns = table.content!.map(row => row.content![0].attrs?.align)
-    const colBAligns = table.content!.map(row => row.content![1].attrs?.align)
+    const table = json.content!.find((n) => n.type === 'table')!
+    const colAAligns = table.content!.map((row) => row.content![0].attrs?.align)
+    const colBAligns = table.content!.map((row) => row.content![1].attrs?.align)
 
     expect(colAAligns).toEqual(['right', 'right', 'right'])
     expect(colBAligns).toEqual([null, null, null])
