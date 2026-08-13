@@ -35,9 +35,9 @@ declare module '@tiptap/react' {
       /** Inserts a column at `col` in the table at `tablePos` (existing columns shift right). */
       insertColumn: (tablePos: number, col: number) => ReturnType
       /** Deletes the body row at `row` in the table at `tablePos`. */
-      deleteRow: (tablePos: number, row: number) => ReturnType
+      deleteRowAt: (tablePos: number, row: number) => ReturnType
       /** Deletes the column at `col` in the table at `tablePos`. */
-      deleteColumn: (tablePos: number, col: number) => ReturnType
+      deleteColumnAt: (tablePos: number, col: number) => ReturnType
       /** Duplicates the row at `row` in the table at `tablePos`, inserting the copy after it. */
       duplicateRow: (tablePos: number, row: number) => ReturnType
       /** Duplicates the column at `col` in the table at `tablePos`, inserting the copy after it. */
@@ -103,11 +103,11 @@ const AlignedTable = TableExtension.extend({
         (tablePos: number, col: number) =>
         ({ state, dispatch }) =>
           insertColumnAt(state, dispatch, tablePos, col),
-      deleteRow:
+      deleteRowAt:
         (tablePos: number, row: number) =>
         ({ state, dispatch }) =>
           deleteRowAt(state, dispatch, tablePos, row),
-      deleteColumn:
+      deleteColumnAt:
         (tablePos: number, col: number) =>
         ({ state, dispatch }) =>
           deleteColumnAt(state, dispatch, tablePos, col),

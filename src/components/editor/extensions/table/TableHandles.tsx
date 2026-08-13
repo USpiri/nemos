@@ -134,7 +134,7 @@ export function TableHandles({ editor }: Props) {
           {
             label: 'Delete row',
             disabled: isHeaderRow || rowCount <= 2,
-            onClick: () => editor.commands.deleteRow(tablePos, rowIndex),
+            onClick: () => editor.commands.deleteRowAt(tablePos, rowIndex),
           },
         ]}
       />
@@ -161,7 +161,7 @@ export function TableHandles({ editor }: Props) {
           {
             label: 'Delete column',
             disabled: colCount <= 1,
-            onClick: () => editor.commands.deleteColumn(tablePos, colIndex),
+            onClick: () => editor.commands.deleteColumnAt(tablePos, colIndex),
           },
         ]}
       />
