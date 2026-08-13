@@ -209,7 +209,7 @@ export const suggestionItems: CommandItem[] = [
         .chain()
         .focus()
         .deleteRange(range)
-        .insertTable({ rows: 2, cols: 1, withHeaderRow: true })
+        .insertTable({ rows: 2, cols: 3, withHeaderRow: true })
         .run()
     },
   },

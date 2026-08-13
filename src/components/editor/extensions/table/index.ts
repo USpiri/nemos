@@ -7,19 +7,26 @@ import {
 } from '@tiptap/extension-table'
 import { Extension, ReactNodeViewRenderer } from '@tiptap/react'
 import { setColumnAlign, TableAlign } from './align'
+import { TableHandle } from './handle-extension'
+import { insertColumnAt, insertRowAt } from './handle-commands'
 import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
 import TableNodeView from './Table'
 
 // TODO:
 // - Delete column/row by pressing backspace when empty row/column is selected
 // - Escape from table by pressing tab on empty row
-// - Add table node view
 
 declare module '@tiptap/react' {
   interface Commands<ReturnType> {
     tableAlign: {
       /** Sets the alignment of every cell (header included) in the current column. */
       setColumnAlign: (align: TableAlign) => ReturnType
+    }
+    tableHandle: {
+      /** Inserts a body row at `row` in the table at `tablePos` (existing rows shift down). */
+      insertRow: (tablePos: number, row: number) => ReturnType
+      /** Inserts a column at `col` in the table at `tablePos` (existing columns shift right). */
+      insertColumn: (tablePos: number, col: number) => ReturnType
     }
   }
 }
@@ -73,6 +80,14 @@ const AlignedTable = TableExtension.extend({
         (align: TableAlign) =>
         ({ state, dispatch }) =>
           setColumnAlign(state, dispatch, align),
+      insertRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          insertRowAt(state, dispatch, tablePos, row),
+      insertColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          insertColumnAt(state, dispatch, tablePos, col),
     }
   },
 })
@@ -86,6 +101,7 @@ export const Table = Extension.create<TableKitOptions>({
         AlignedTable.configure({
           allowTableNodeSelection: true,
         }),
+        TableHandle,
       )
     }
     if (this.options.tableCell !== false) {
