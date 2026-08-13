@@ -13,11 +13,11 @@ export const CodeBlock = ({ node, updateAttributes }: NodeViewProps) => {
   )
 
   return (
-    <NodeViewWrapper className="codeblock relative w-full overflow-hidden">
+    <NodeViewWrapper className="codeblock group relative w-full overflow-hidden">
       <pre>
         <NodeViewContent className={`language-${node.attrs.language}`} />
       </pre>
-      <div className="absolute right-2 bottom-8 flex flex-row items-center gap-2">
+      <div className="absolute top-9 right-2 flex flex-row items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
         <CopyButton content={node.textContent} variant="ghost" tabIndex={-1} />
         <LanguageSelector
           value={node.attrs.language}

@@ -94,7 +94,7 @@ body {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(0.20 0.00 0);
   --foreground: oklch(0.985 0 0);
 
   --selection: oklch(0.985 0 0);
@@ -104,7 +104,7 @@ body {
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.42 0.18 266);
+  --primary: oklch(0.55 0.22 263);
   --primary-foreground: oklch(0.97 0.014 254.604);
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
@@ -147,7 +147,7 @@ body {
   --chart-3: oklch(0.546 0.245 262.881);
   --chart-4: oklch(0.488 0.243 264.376);
   --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: oklch(0.145 0 0);
+  --sidebar: oklch(0.16 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.623 0.214 259.815);
   --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
@@ -219,9 +219,11 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html,
   body {
     @apply h-full overflow-hidden;
@@ -231,12 +233,15 @@ body {
     0% {
       transform: scale(1);
     }
+
     5% {
       transform: scale(0.25);
     }
+
     50% {
       transform: scale(1.25);
     }
+
     100% {
       transform: scale(1);
     }
