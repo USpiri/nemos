@@ -14,6 +14,8 @@ import {
   duplicateRowAt,
   insertColumnAt,
   insertRowAt,
+  moveColumnAt,
+  moveRowAt,
 } from './handle-commands'
 import { TableHandle } from './handle-extension'
 import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
@@ -42,6 +44,10 @@ declare module '@tiptap/react' {
       duplicateRow: (tablePos: number, row: number) => ReturnType
       /** Duplicates the column at `col` in the table at `tablePos`, inserting the copy after it. */
       duplicateColumn: (tablePos: number, col: number) => ReturnType
+      /** Moves the body row at `from` to `to` in the table at `tablePos`. */
+      moveRow: (tablePos: number, from: number, to: number) => ReturnType
+      /** Moves the column at `from` to `to` in the table at `tablePos`. */
+      moveColumn: (tablePos: number, from: number, to: number) => ReturnType
     }
   }
 }
@@ -119,6 +125,14 @@ const AlignedTable = TableExtension.extend({
         (tablePos: number, col: number) =>
         ({ state, dispatch }) =>
           duplicateColumnAt(state, dispatch, tablePos, col),
+      moveRow:
+        (tablePos: number, from: number, to: number) =>
+        ({ state, dispatch }) =>
+          moveRowAt(state, dispatch, tablePos, from, to),
+      moveColumn:
+        (tablePos: number, from: number, to: number) =>
+        ({ state, dispatch }) =>
+          moveColumnAt(state, dispatch, tablePos, from, to),
     }
   },
 })

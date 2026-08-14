@@ -1,4 +1,4 @@
-import type { Node as ProseMirrorNode } from '@tiptap/pm/model'
+import { Fragment, type Node as ProseMirrorNode } from '@tiptap/pm/model'
 import type { EditorState, Transaction } from '@tiptap/pm/state'
 import { TableMap } from '@tiptap/pm/tables'
 
@@ -10,6 +10,20 @@ function resolveTable(
   if (!table || table.type.name !== 'table') return null
 
   return { table, map: TableMap.get(table) }
+}
+
+/** Replaces the whole table node with `children` as its new rows, in a
+ * single dispatch — used by the move commands, which reorder by rebuilding
+ * the table rather than patching individual cell positions. */
+function replaceTableRows(
+  state: EditorState,
+  dispatch: (tr: Transaction) => void,
+  tablePos: number,
+  table: ProseMirrorNode,
+  children: ProseMirrorNode[],
+) {
+  const newTable = table.copy(Fragment.fromArray(children))
+  dispatch(state.tr.replaceWith(tablePos, tablePos + table.nodeSize, newTable))
 }
 
 /**
@@ -224,6 +238,77 @@ export function duplicateColumnAt(
     }
 
     dispatch(tr)
+  }
+
+  return true
+}
+
+/**
+ * Moves the body row at `from` to index `to`. Row 0 is the header row and
+ * is never a valid `from` or `to` index — it stays fixed at row 0.
+ */
+export function moveRowAt(
+  state: EditorState,
+  dispatch: ((tr: Transaction) => void) | undefined,
+  tablePos: number,
+  from: number,
+  to: number,
+): boolean {
+  const resolved = resolveTable(state, tablePos)
+  if (!resolved) return false
+
+  const { table, map } = resolved
+  if (from < 1 || from >= map.height) return false
+  if (to < 1 || to >= map.height) return false
+  if (from === to) return false
+
+  if (dispatch) {
+    const rows: ProseMirrorNode[] = []
+    table.forEach((row) => rows.push(row))
+
+    const [moved] = rows.splice(from, 1)
+    rows.splice(to, 0, moved)
+
+    replaceTableRows(state, dispatch, tablePos, table, rows)
+  }
+
+  return true
+}
+
+/**
+ * Moves the column at `from` to index `to`, keeping each row's cell for that
+ * column together (so header/body cell typing per row is preserved).
+ */
+export function moveColumnAt(
+  state: EditorState,
+  dispatch: ((tr: Transaction) => void) | undefined,
+  tablePos: number,
+  from: number,
+  to: number,
+): boolean {
+  const resolved = resolveTable(state, tablePos)
+  if (!resolved) return false
+
+  const { table, map } = resolved
+  if (from < 0 || from >= map.width) return false
+  if (to < 0 || to >= map.width) return false
+  if (from === to) return false
+
+  if (dispatch) {
+    const newRows: ProseMirrorNode[] = []
+    for (let row = 0; row < map.height; row += 1) {
+      const rowNode = table.child(row)
+      const cells: ProseMirrorNode[] = []
+      for (let col = 0; col < map.width; col += 1) {
+        cells.push(table.nodeAt(map.positionAt(row, col, table))!)
+      }
+
+      const [moved] = cells.splice(from, 1)
+      cells.splice(to, 0, moved)
+      newRows.push(rowNode.copy(Fragment.fromArray(cells)))
+    }
+
+    replaceTableRows(state, dispatch, tablePos, table, newRows)
   }
 
   return true

@@ -9,6 +9,8 @@ import {
   duplicateRowAt,
   insertColumnAt,
   insertRowAt,
+  moveColumnAt,
+  moveRowAt,
 } from './handle-commands'
 
 function createEditor(content: string) {
@@ -36,6 +38,20 @@ const SINGLE_COLUMN_TABLE = `
 | A |
 | - |
 | 1 |
+`
+
+const THREE_BODY_ROW_TABLE = `
+| A | B |
+| - | - |
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+`
+
+const THREE_COLUMN_TABLE = `
+| A | B | C |
+| - | - | - |
+| 1 | 2 | 3 |
 `
 
 describe('insertRowAt', () => {
@@ -485,6 +501,209 @@ describe('duplicateColumnAt', () => {
     const before = editor.state.doc.toJSON()
 
     const result = duplicateColumnAt(editor.state, undefined, 0, 0)
+
+    expect(result).toBe(true)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+})
+
+describe('moveRowAt', () => {
+  it('rejects moving the header row', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveRowAt(editor.state, editor.view.dispatch, 0, 0, 1)
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects moving a row into the header position', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveRowAt(editor.state, editor.view.dispatch, 0, 1, 0)
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects moving a row to its own index', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveRowAt(editor.state, editor.view.dispatch, 0, 1, 1)
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('moves a body row down, shifting the rows in between up', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+
+    const result = moveRowAt(editor.state, editor.view.dispatch, 0, 1, 3)
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    expect(table.child(0).child(0).textContent).toBe('A')
+    expect(table.child(1).child(0).textContent).toBe('3')
+    expect(table.child(2).child(0).textContent).toBe('5')
+    expect(table.child(3).child(0).textContent).toBe('1')
+    editor.destroy()
+  })
+
+  it('moves a body row up, shifting the rows in between down', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+
+    const result = moveRowAt(editor.state, editor.view.dispatch, 0, 3, 1)
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    expect(table.child(0).child(0).textContent).toBe('A')
+    expect(table.child(1).child(0).textContent).toBe('5')
+    expect(table.child(2).child(0).textContent).toBe('1')
+    expect(table.child(3).child(0).textContent).toBe('3')
+    editor.destroy()
+  })
+
+  it('rejects an out-of-bounds row index', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+    const map = TableMap.get(editor.state.doc.firstChild!)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveRowAt(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      1,
+      map.height,
+    )
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects a position that is not a table', () => {
+    const editor = createEditor('just a paragraph')
+
+    const result = moveRowAt(editor.state, editor.view.dispatch, 0, 1, 2)
+
+    expect(result).toBe(false)
+    editor.destroy()
+  })
+
+  it('is a no-op in dry-run mode (dispatch undefined) but still reports success', () => {
+    const editor = createEditor(THREE_BODY_ROW_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveRowAt(editor.state, undefined, 0, 1, 2)
+
+    expect(result).toBe(true)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+})
+
+describe('moveColumnAt', () => {
+  it('moves a column right, preserving header/body cell typing and attrs', () => {
+    const editor = createEditor(THREE_COLUMN_TABLE)
+    const table = editor.state.doc.firstChild!
+    const map = TableMap.get(table)
+    const cellStart = 1 + map.positionAt(0, 0, table)
+    editor.commands.setTextSelection(cellStart + 2)
+    editor.commands.setColumnAlign('right')
+
+    const result = moveColumnAt(editor.state, editor.view.dispatch, 0, 0, 2)
+
+    expect(result).toBe(true)
+    const resultTable = editor.state.doc.firstChild!
+    const headerRow = resultTable.child(0)
+    const bodyRow = resultTable.child(1)
+
+    expect(headerRow.childCount).toBe(3)
+    expect([0, 1, 2].map((i) => headerRow.child(i).textContent)).toEqual([
+      'B',
+      'C',
+      'A',
+    ])
+    expect([0, 1, 2].map((i) => bodyRow.child(i).textContent)).toEqual([
+      '2',
+      '3',
+      '1',
+    ])
+    expect(headerRow.child(2).type.name).toBe('tableHeader')
+    expect(bodyRow.child(2).type.name).toBe('tableCell')
+
+    // The moved column's alignment (set on the original 'A' column) travels
+    // with it to its new index; the others stay unaligned.
+    expect(headerRow.child(2).attrs.align).toBe('right')
+    expect(bodyRow.child(2).attrs.align).toBe('right')
+    expect(headerRow.child(0).attrs.align).toBeNull()
+    expect(headerRow.child(1).attrs.align).toBeNull()
+    editor.destroy()
+  })
+
+  it('moves a column left', () => {
+    const editor = createEditor(THREE_COLUMN_TABLE)
+
+    const result = moveColumnAt(editor.state, editor.view.dispatch, 0, 2, 0)
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    expect(table.child(0).child(0).textContent).toBe('C')
+    expect(table.child(0).child(1).textContent).toBe('A')
+    expect(table.child(0).child(2).textContent).toBe('B')
+    editor.destroy()
+  })
+
+  it('rejects moving a column to its own index', () => {
+    const editor = createEditor(THREE_COLUMN_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveColumnAt(editor.state, editor.view.dispatch, 0, 1, 1)
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects an out-of-bounds column index', () => {
+    const editor = createEditor(THREE_COLUMN_TABLE)
+    const map = TableMap.get(editor.state.doc.firstChild!)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveColumnAt(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      0,
+      map.width,
+    )
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects a position that is not a table', () => {
+    const editor = createEditor('just a paragraph')
+
+    const result = moveColumnAt(editor.state, editor.view.dispatch, 0, 0, 1)
+
+    expect(result).toBe(false)
+    editor.destroy()
+  })
+
+  it('is a no-op in dry-run mode (dispatch undefined) but still reports success', () => {
+    const editor = createEditor(THREE_COLUMN_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = moveColumnAt(editor.state, undefined, 0, 0, 1)
 
     expect(result).toBe(true)
     expect(editor.state.doc.toJSON()).toEqual(before)
