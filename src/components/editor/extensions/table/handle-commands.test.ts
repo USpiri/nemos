@@ -3,6 +3,8 @@ import { TableMap } from '@tiptap/pm/tables'
 import { describe, expect, it } from 'vitest'
 import { Extensions } from '@/components/editor/extensions'
 import {
+  clearColumnAt,
+  clearRowAt,
   deleteColumnAt,
   deleteRowAt,
   duplicateColumnAt,
@@ -11,6 +13,7 @@ import {
   insertRowAt,
   moveColumnAt,
   moveRowAt,
+  sortRowsByColumn,
 } from './handle-commands'
 
 function createEditor(content: string) {
@@ -704,6 +707,269 @@ describe('moveColumnAt', () => {
     const before = editor.state.doc.toJSON()
 
     const result = moveColumnAt(editor.state, undefined, 0, 0, 1)
+
+    expect(result).toBe(true)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+})
+
+describe('clearRowAt', () => {
+  it('empties every cell in the row, leaving the row and its alignment in place', () => {
+    const editor = createEditor(TABLE)
+    const table = editor.state.doc.firstChild!
+    const map = TableMap.get(table)
+    const cellStart = 1 + map.positionAt(0, 0, table)
+    editor.commands.setTextSelection(cellStart + 2)
+    editor.commands.setColumnAlign('right')
+
+    const result = clearRowAt(editor.state, editor.view.dispatch, 0, 1)
+
+    expect(result).toBe(true)
+    const resultTable = editor.state.doc.firstChild!
+    expect(resultTable.childCount).toBe(3)
+    const clearedRow = resultTable.child(1)
+    clearedRow.forEach((cell) => expect(cell.textContent).toBe(''))
+    expect(clearedRow.child(0).attrs.align).toBe('right')
+    // Other rows untouched.
+    expect(resultTable.child(0).child(0).textContent).toBe('A')
+    expect(resultTable.child(2).child(0).textContent).toBe('3')
+    editor.destroy()
+  })
+
+  it('clears the header row when hovered, leaving it as the header row', () => {
+    const editor = createEditor(TABLE)
+
+    const result = clearRowAt(editor.state, editor.view.dispatch, 0, 0)
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    const headerRow = table.child(0)
+    headerRow.forEach((cell) => {
+      expect(cell.textContent).toBe('')
+      expect(cell.type.name).toBe('tableHeader')
+    })
+    editor.destroy()
+  })
+
+  it('is a no-op when the row is already empty', () => {
+    const editor = createEditor(TABLE)
+    clearRowAt(editor.state, editor.view.dispatch, 0, 1)
+    const before = editor.state.doc.toJSON()
+
+    const result = clearRowAt(editor.state, editor.view.dispatch, 0, 1)
+
+    expect(result).toBe(true)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects an out-of-bounds row index', () => {
+    const editor = createEditor(TABLE)
+    const map = TableMap.get(editor.state.doc.firstChild!)
+    const before = editor.state.doc.toJSON()
+
+    const result = clearRowAt(editor.state, editor.view.dispatch, 0, map.height)
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects a position that is not a table', () => {
+    const editor = createEditor('just a paragraph')
+
+    const result = clearRowAt(editor.state, editor.view.dispatch, 0, 0)
+
+    expect(result).toBe(false)
+    editor.destroy()
+  })
+
+  it('is a no-op in dry-run mode (dispatch undefined) but still reports success', () => {
+    const editor = createEditor(TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = clearRowAt(editor.state, undefined, 0, 1)
+
+    expect(result).toBe(true)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+})
+
+describe('clearColumnAt', () => {
+  it('empties every cell in the column, including the header, leaving alignment in place', () => {
+    const editor = createEditor(TABLE)
+    const table = editor.state.doc.firstChild!
+    const map = TableMap.get(table)
+    const cellStart = 1 + map.positionAt(0, 0, table)
+    editor.commands.setTextSelection(cellStart + 2)
+    editor.commands.setColumnAlign('center')
+
+    const result = clearColumnAt(editor.state, editor.view.dispatch, 0, 0)
+
+    expect(result).toBe(true)
+    const resultTable = editor.state.doc.firstChild!
+    resultTable.forEach((row) => {
+      expect(row.child(0).textContent).toBe('')
+      expect(row.child(0).attrs.align).toBe('center')
+    })
+    // Other column untouched.
+    expect(resultTable.child(0).child(1).textContent).toBe('B')
+    expect(resultTable.child(1).child(1).textContent).toBe('2')
+    editor.destroy()
+  })
+
+  it('rejects an out-of-bounds column index', () => {
+    const editor = createEditor(TABLE)
+    const map = TableMap.get(editor.state.doc.firstChild!)
+    const before = editor.state.doc.toJSON()
+
+    const result = clearColumnAt(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      map.width,
+    )
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects a position that is not a table', () => {
+    const editor = createEditor('just a paragraph')
+
+    const result = clearColumnAt(editor.state, editor.view.dispatch, 0, 0)
+
+    expect(result).toBe(false)
+    editor.destroy()
+  })
+
+  it('is a no-op in dry-run mode (dispatch undefined) but still reports success', () => {
+    const editor = createEditor(TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = clearColumnAt(editor.state, undefined, 0, 0)
+
+    expect(result).toBe(true)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+})
+
+const SORT_TABLE = `
+| Name | Score |
+| - | - |
+| banana | 2 |
+| Apple | 3 |
+|  | 4 |
+| cherry | 1 |
+`
+
+describe('sortRowsByColumn', () => {
+  it('sorts body rows ascending by column text, case-insensitively, header fixed', () => {
+    const editor = createEditor(SORT_TABLE)
+
+    const result = sortRowsByColumn(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      0,
+      'asc',
+    )
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    expect(table.child(0).child(0).textContent).toBe('Name')
+    const names = [1, 2, 3, 4].map((i) => table.child(i).child(0).textContent)
+    expect(names).toEqual(['Apple', 'banana', 'cherry', ''])
+    editor.destroy()
+  })
+
+  it('sorts body rows descending, still leaving empty cells last', () => {
+    const editor = createEditor(SORT_TABLE)
+
+    const result = sortRowsByColumn(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      0,
+      'desc',
+    )
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    expect(table.child(0).child(0).textContent).toBe('Name')
+    const names = [1, 2, 3, 4].map((i) => table.child(i).child(0).textContent)
+    expect(names).toEqual(['cherry', 'banana', 'Apple', ''])
+    editor.destroy()
+  })
+
+  it('sorts by the score column, carrying each row along with it', () => {
+    const editor = createEditor(SORT_TABLE)
+
+    const result = sortRowsByColumn(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      1,
+      'asc',
+    )
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    const rows = [1, 2, 3, 4].map((i) => [
+      table.child(i).child(0).textContent,
+      table.child(i).child(1).textContent,
+    ])
+    expect(rows).toEqual([
+      ['cherry', '1'],
+      ['banana', '2'],
+      ['Apple', '3'],
+      ['', '4'],
+    ])
+    editor.destroy()
+  })
+
+  it('rejects an out-of-bounds column index', () => {
+    const editor = createEditor(TABLE)
+    const map = TableMap.get(editor.state.doc.firstChild!)
+    const before = editor.state.doc.toJSON()
+
+    const result = sortRowsByColumn(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      map.width,
+      'asc',
+    )
+
+    expect(result).toBe(false)
+    expect(editor.state.doc.toJSON()).toEqual(before)
+    editor.destroy()
+  })
+
+  it('rejects a position that is not a table', () => {
+    const editor = createEditor('just a paragraph')
+
+    const result = sortRowsByColumn(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      0,
+      'asc',
+    )
+
+    expect(result).toBe(false)
+    editor.destroy()
+  })
+
+  it('is a no-op in dry-run mode (dispatch undefined) but still reports success', () => {
+    const editor = createEditor(SORT_TABLE)
+    const before = editor.state.doc.toJSON()
+
+    const result = sortRowsByColumn(editor.state, undefined, 0, 0, 'asc')
 
     expect(result).toBe(true)
     expect(editor.state.doc.toJSON()).toEqual(before)

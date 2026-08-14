@@ -56,3 +56,26 @@ export function setColumnAlign(
 
   return true
 }
+
+/** Sets the alignment of column `col` in the table at `tablePos` — for
+ * callers (e.g. the Column Handle menu) that know which column to align
+ * without relying on where the current selection happens to be. */
+export function setColumnAlignAt(
+  state: EditorState,
+  dispatch: ((tr: Transaction) => void) | undefined,
+  tablePos: number,
+  col: number,
+  align: TableAlign,
+): boolean {
+  const table = state.doc.nodeAt(tablePos)
+  if (!table || table.type.name !== 'table') return false
+
+  const map = TableMap.get(table)
+  if (col < 0 || col >= map.width) return false
+
+  if (dispatch) {
+    dispatch(applyColumnAlign(state.tr, map, tablePos + 1, table, col, align))
+  }
+
+  return true
+}

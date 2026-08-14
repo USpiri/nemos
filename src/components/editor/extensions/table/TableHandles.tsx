@@ -9,9 +9,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
+import type { TableAlign } from './align'
 import { createTableDragImage } from './drag-image'
 import {
   beginTableDrag,
@@ -97,7 +101,23 @@ interface HandleMenuItem {
   onClick: () => void
 }
 
-type HandleMenuEntry = HandleMenuItem | 'separator'
+interface HandleSubmenu {
+  label: string
+  items: HandleMenuItem[]
+}
+
+type HandleMenuEntry = HandleMenuItem | HandleSubmenu | 'separator'
+
+function isSubmenu(entry: HandleMenuEntry): entry is HandleSubmenu {
+  return typeof entry === 'object' && 'items' in entry
+}
+
+const ALIGN_OPTIONS: { label: string; align: TableAlign }[] = [
+  { label: 'Left', align: 'left' },
+  { label: 'Center', align: 'center' },
+  { label: 'Right', align: 'right' },
+  { label: 'None', align: null },
+]
 
 function HandleMenu({
   icon,
@@ -161,10 +181,31 @@ function HandleMenu({
           side={side}
           align="center"
         >
-          {items.map((item, index) =>
-            item === 'separator' ? (
-              <DropdownMenuSeparator key={`separator-${index}`} />
-            ) : (
+          {items.map((item, index) => {
+            if (item === 'separator') {
+              return <DropdownMenuSeparator key={`separator-${index}`} />
+            }
+
+            if (isSubmenu(item)) {
+              return (
+                <DropdownMenuSub key={item.label}>
+                  <DropdownMenuSubTrigger>{item.label}</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    {item.items.map((subItem) => (
+                      <DropdownMenuItem
+                        key={subItem.label}
+                        disabled={subItem.disabled}
+                        onClick={subItem.onClick}
+                      >
+                        {subItem.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              )
+            }
+
+            return (
               <DropdownMenuItem
                 key={item.label}
                 disabled={item.disabled}
@@ -172,8 +213,8 @@ function HandleMenu({
               >
                 {item.label}
               </DropdownMenuItem>
-            ),
-          )}
+            )
+          })}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -272,6 +313,10 @@ export function TableHandles({ editor }: Props) {
             onClick: () => editor.commands.duplicateRow(tablePos, rowIndex),
           },
           {
+            label: 'Clear row contents',
+            onClick: () => editor.commands.clearRow(tablePos, rowIndex),
+          },
+          {
             label: 'Delete row',
             disabled: isHeaderRow || rowCount <= 2,
             onClick: () => editor.commands.deleteRowAt(tablePos, rowIndex),
@@ -316,9 +361,36 @@ export function TableHandles({ editor }: Props) {
             onClick: () => editor.commands.duplicateColumn(tablePos, colIndex),
           },
           {
+            label: 'Clear column contents',
+            onClick: () => editor.commands.clearColumn(tablePos, colIndex),
+          },
+          {
             label: 'Delete column',
             disabled: colCount <= 1,
             onClick: () => editor.commands.deleteColumnAt(tablePos, colIndex),
+          },
+          'separator',
+          {
+            label: 'Align',
+            items: ALIGN_OPTIONS.map((option) => ({
+              label: option.label,
+              onClick: () =>
+                editor.commands.setColumnAlignAt(
+                  tablePos,
+                  colIndex,
+                  option.align,
+                ),
+            })),
+          },
+          {
+            label: 'Sort ascending',
+            onClick: () =>
+              editor.commands.sortRowsByColumn(tablePos, colIndex, 'asc'),
+          },
+          {
+            label: 'Sort descending',
+            onClick: () =>
+              editor.commands.sortRowsByColumn(tablePos, colIndex, 'desc'),
           },
         ]}
       />

@@ -6,8 +6,10 @@ import {
   TableRow,
 } from '@tiptap/extension-table'
 import { Extension, ReactNodeViewRenderer } from '@tiptap/react'
-import { setColumnAlign, TableAlign } from './align'
+import { setColumnAlign, setColumnAlignAt, TableAlign } from './align'
 import {
+  clearColumnAt,
+  clearRowAt,
   deleteColumnAt,
   deleteRowAt,
   duplicateColumnAt,
@@ -16,6 +18,7 @@ import {
   insertRowAt,
   moveColumnAt,
   moveRowAt,
+  sortRowsByColumn,
 } from './handle-commands'
 import { TableHandle } from './handle-extension'
 import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
@@ -30,6 +33,12 @@ declare module '@tiptap/react' {
     tableAlign: {
       /** Sets the alignment of every cell (header included) in the current column. */
       setColumnAlign: (align: TableAlign) => ReturnType
+      /** Sets the alignment of every cell (header included) in column `col` of the table at `tablePos`. */
+      setColumnAlignAt: (
+        tablePos: number,
+        col: number,
+        align: TableAlign,
+      ) => ReturnType
     }
     tableHandle: {
       /** Inserts a body row at `row` in the table at `tablePos` (existing rows shift down). */
@@ -48,6 +57,16 @@ declare module '@tiptap/react' {
       moveRow: (tablePos: number, from: number, to: number) => ReturnType
       /** Moves the column at `from` to `to` in the table at `tablePos`. */
       moveColumn: (tablePos: number, from: number, to: number) => ReturnType
+      /** Empties every cell in the row at `row` in the table at `tablePos`. */
+      clearRow: (tablePos: number, row: number) => ReturnType
+      /** Empties every cell in the column at `col` in the table at `tablePos`. */
+      clearColumn: (tablePos: number, col: number) => ReturnType
+      /** Reorders body rows in the table at `tablePos` by the text content of column `col`. */
+      sortRowsByColumn: (
+        tablePos: number,
+        col: number,
+        direction: 'asc' | 'desc',
+      ) => ReturnType
     }
   }
 }
@@ -101,6 +120,10 @@ const AlignedTable = TableExtension.extend({
         (align: TableAlign) =>
         ({ state, dispatch }) =>
           setColumnAlign(state, dispatch, align),
+      setColumnAlignAt:
+        (tablePos: number, col: number, align: TableAlign) =>
+        ({ state, dispatch }) =>
+          setColumnAlignAt(state, dispatch, tablePos, col, align),
       insertRow:
         (tablePos: number, row: number) =>
         ({ state, dispatch }) =>
@@ -133,6 +156,18 @@ const AlignedTable = TableExtension.extend({
         (tablePos: number, from: number, to: number) =>
         ({ state, dispatch }) =>
           moveColumnAt(state, dispatch, tablePos, from, to),
+      clearRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          clearRowAt(state, dispatch, tablePos, row),
+      clearColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          clearColumnAt(state, dispatch, tablePos, col),
+      sortRowsByColumn:
+        (tablePos: number, col: number, direction: 'asc' | 'desc') =>
+        ({ state, dispatch }) =>
+          sortRowsByColumn(state, dispatch, tablePos, col, direction),
     }
   },
 })

@@ -243,6 +243,127 @@ export function duplicateColumnAt(
   return true
 }
 
+/** Empties a cell's single paragraph of its inline content, leaving the
+ * paragraph (and the cell's own type/attrs, e.g. `align`) in place. */
+function clearCellAt(tr: Transaction, cellPos: number) {
+  const cell = tr.doc.nodeAt(cellPos)
+  if (!cell) return
+
+  const paragraph = cell.firstChild
+  if (!paragraph || paragraph.content.size === 0) return
+
+  const from = cellPos + 2
+  tr.delete(from, from + paragraph.content.size)
+}
+
+/** Empties every cell in the row at `row` (header row included), leaving the
+ * row itself, its cell count, and every cell's `align` attribute in place. */
+export function clearRowAt(
+  state: EditorState,
+  dispatch: ((tr: Transaction) => void) | undefined,
+  tablePos: number,
+  row: number,
+): boolean {
+  const resolved = resolveTable(state, tablePos)
+  if (!resolved) return false
+
+  const { table, map } = resolved
+  if (row < 0 || row >= map.height) return false
+
+  if (dispatch) {
+    const tableStart = tablePos + 1
+    const tr = state.tr
+
+    for (let col = 0; col < map.width; col += 1) {
+      const pos = map.positionAt(row, col, table)
+      clearCellAt(tr, tr.mapping.map(tableStart + pos))
+    }
+
+    dispatch(tr)
+  }
+
+  return true
+}
+
+/** Empties every cell in the column at `col` (header cell included), leaving
+ * the column itself and every cell's `align` attribute in place. */
+export function clearColumnAt(
+  state: EditorState,
+  dispatch: ((tr: Transaction) => void) | undefined,
+  tablePos: number,
+  col: number,
+): boolean {
+  const resolved = resolveTable(state, tablePos)
+  if (!resolved) return false
+
+  const { table, map } = resolved
+  if (col < 0 || col >= map.width) return false
+
+  if (dispatch) {
+    const tableStart = tablePos + 1
+    const tr = state.tr
+
+    for (let row = 0; row < map.height; row += 1) {
+      const pos = map.positionAt(row, col, table)
+      clearCellAt(tr, tr.mapping.map(tableStart + pos))
+    }
+
+    dispatch(tr)
+  }
+
+  return true
+}
+
+/**
+ * Reorders all body rows by the text content of their cell in column `col`
+ * (case-insensitive locale comparison); the header row stays fixed at index
+ * 0. A row with an empty cell in that column always sorts last, regardless
+ * of direction.
+ */
+export function sortRowsByColumn(
+  state: EditorState,
+  dispatch: ((tr: Transaction) => void) | undefined,
+  tablePos: number,
+  col: number,
+  direction: 'asc' | 'desc',
+): boolean {
+  const resolved = resolveTable(state, tablePos)
+  if (!resolved) return false
+
+  const { table, map } = resolved
+  if (col < 0 || col >= map.width) return false
+
+  if (dispatch) {
+    const headerRow = table.child(0)
+    const bodyRows: ProseMirrorNode[] = []
+    for (let row = 1; row < map.height; row += 1) {
+      bodyRows.push(table.child(row))
+    }
+
+    const textAt = (row: ProseMirrorNode) => row.child(col).textContent
+
+    const sorted = [...bodyRows].sort((a, b) => {
+      const aText = textAt(a)
+      const bText = textAt(b)
+      const aEmpty = aText.length === 0
+      const bEmpty = bText.length === 0
+
+      if (aEmpty && bEmpty) return 0
+      if (aEmpty) return 1
+      if (bEmpty) return -1
+
+      const comparison = aText.localeCompare(bText, undefined, {
+        sensitivity: 'base',
+      })
+      return direction === 'asc' ? comparison : -comparison
+    })
+
+    replaceTableRows(state, dispatch, tablePos, table, [headerRow, ...sorted])
+  }
+
+  return true
+}
+
 /**
  * Moves the body row at `from` to index `to`. Row 0 is the header row and
  * is never a valid `from` or `to` index — it stays fixed at row 0.
