@@ -1,6 +1,7 @@
 import type { Node as ProseMirrorNode } from '@tiptap/pm/model'
 import type { EditorState, Transaction } from '@tiptap/pm/state'
-import { isInTable, selectedRect, TableMap } from '@tiptap/pm/tables'
+import { isInTable, selectedRect, type TableMap } from '@tiptap/pm/tables'
+import { resolveTable } from './handle-commands'
 
 export type TableAlign = 'left' | 'center' | 'right' | null
 
@@ -67,10 +68,10 @@ export function setColumnAlignAt(
   col: number,
   align: TableAlign,
 ): boolean {
-  const table = state.doc.nodeAt(tablePos)
-  if (!table || table.type.name !== 'table') return false
+  const resolved = resolveTable(state, tablePos)
+  if (!resolved) return false
 
-  const map = TableMap.get(table)
+  const { table, map } = resolved
   if (col < 0 || col >= map.width) return false
 
   if (dispatch) {

@@ -2,7 +2,10 @@ import { Fragment, type Node as ProseMirrorNode } from '@tiptap/pm/model'
 import type { EditorState, Transaction } from '@tiptap/pm/state'
 import { TableMap } from '@tiptap/pm/tables'
 
-function resolveTable(
+/** Resolves the `table` node at `tablePos` and its `TableMap`, or `null` if
+ * `tablePos` isn't a table — the shared entry check every table-position
+ * command starts from. */
+export function resolveTable(
   state: EditorState,
   tablePos: number,
 ): { table: ProseMirrorNode; map: TableMap } | null {
@@ -314,6 +317,8 @@ export function clearColumnAt(
   return true
 }
 
+export type SortDirection = 'asc' | 'desc'
+
 /**
  * Reorders all body rows by the text content of their cell in column `col`
  * (case-insensitive locale comparison); the header row stays fixed at index
@@ -325,7 +330,7 @@ export function sortRowsByColumn(
   dispatch: ((tr: Transaction) => void) | undefined,
   tablePos: number,
   col: number,
-  direction: 'asc' | 'desc',
+  direction: SortDirection,
 ): boolean {
   const resolved = resolveTable(state, tablePos)
   if (!resolved) return false
@@ -353,7 +358,7 @@ export function sortRowsByColumn(
       if (bEmpty) return -1
 
       const comparison = aText.localeCompare(bText, undefined, {
-        sensitivity: 'base',
+        sensitivity: 'accent',
       })
       return direction === 'asc' ? comparison : -comparison
     })

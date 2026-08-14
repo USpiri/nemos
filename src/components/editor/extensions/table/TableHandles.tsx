@@ -382,6 +382,7 @@ export function TableHandles({ editor }: Props) {
                 ),
             })),
           },
+          'separator',
           {
             label: 'Sort ascending',
             onClick: () =>

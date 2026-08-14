@@ -906,6 +906,32 @@ describe('sortRowsByColumn', () => {
     editor.destroy()
   })
 
+  it('is case-insensitive but still distinguishes accents', () => {
+    const editor = createEditor(`
+| Name |
+| - |
+| cafe |
+| Café |
+| Cafe |
+`)
+
+    const result = sortRowsByColumn(
+      editor.state,
+      editor.view.dispatch,
+      0,
+      0,
+      'asc',
+    )
+
+    expect(result).toBe(true)
+    const table = editor.state.doc.firstChild!
+    const names = [1, 2, 3].map((i) => table.child(i).child(0).textContent)
+    // "cafe"/"Cafe" fold together case-insensitively and sort before the
+    // accented "Café", which is a distinct value under a true case-only fold.
+    expect(names).toEqual(['cafe', 'Cafe', 'Café'])
+    editor.destroy()
+  })
+
   it('sorts by the score column, carrying each row along with it', () => {
     const editor = createEditor(SORT_TABLE)
 

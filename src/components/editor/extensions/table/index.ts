@@ -18,6 +18,7 @@ import {
   insertRowAt,
   moveColumnAt,
   moveRowAt,
+  SortDirection,
   sortRowsByColumn,
 } from './handle-commands'
 import { TableHandle } from './handle-extension'
@@ -65,7 +66,7 @@ declare module '@tiptap/react' {
       sortRowsByColumn: (
         tablePos: number,
         col: number,
-        direction: 'asc' | 'desc',
+        direction: SortDirection,
       ) => ReturnType
     }
   }
@@ -165,7 +166,7 @@ const AlignedTable = TableExtension.extend({
         ({ state, dispatch }) =>
           clearColumnAt(state, dispatch, tablePos, col),
       sortRowsByColumn:
-        (tablePos: number, col: number, direction: 'asc' | 'desc') =>
+        (tablePos: number, col: number, direction: SortDirection) =>
         ({ state, dispatch }) =>
           sortRowsByColumn(state, dispatch, tablePos, col, direction),
     }
