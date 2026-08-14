@@ -10,6 +10,27 @@
 - **Clear row/column contents**: The Row and Column Handle menus now have a clear-contents action.
 - **Column alignment from the handle menu**: The Column Handle menu now has an Align submenu (left/center/right/none) and persists correctly through Markdown save/reload.
 - **Sort rows by column**: The Column Handle menu now has Sort ascending / Sort descending actions that reorder body rows by that column's text.
+- **Table keyboard shortcuts**: Tables can now be created and restructured entirely from the keyboard.
+
+  | Category | Shortcut | Action |
+  | --- | --- | --- |
+  | Navigation | `Tab` / `Shift`+`Tab` | Next / previous cell |
+  | Navigation | `Enter` / `Shift`+`Enter` | Next / previous row, same column |
+  | Navigation | `Backspace` | At the start of an empty, non-header row: delete it, cursor to end of previous row |
+  | Navigation | `Backspace` | At the very start of the header, when the whole table is empty: delete the table |
+  | Navigation | `Tab` | In an empty last row: exit the table to a new paragraph after it |
+  | Insert | `Ctrl`/`Cmd`+`Shift`+`↑` / `↓` | Insert row above / below |
+  | Insert | `Ctrl`/`Cmd`+`Shift`+`←` / `→` | Insert column left / right |
+  | Move | `Ctrl`/`Cmd`+`Alt`+`↑` / `↓` | Move current row up / down |
+  | Move | `Ctrl`/`Cmd`+`Alt`+`←` / `→` | Move current column left / right |
+  | Delete | `Ctrl`/`Cmd`+`Shift`+`Delete` | Delete current row |
+  | Delete | `Ctrl`/`Cmd`+`Alt`+`Backspace` | Delete current column |
+  | Duplicate | `Ctrl`/`Cmd`+`Shift`+`D` | Duplicate current row |
+  | Duplicate | `Ctrl`/`Cmd`+`Alt`+`D` | Duplicate current column |
+  | Selection | `Shift`+`Space` | Select current row |
+  | Selection | `Ctrl`/`Cmd`+`Space` | Select current column |
+
+  Column delete uses `Backspace` rather than `Delete` because Windows reserves `Ctrl`+`Alt`+`Delete` at the OS level — no application ever receives that combination.
 
 ### Fixes
 

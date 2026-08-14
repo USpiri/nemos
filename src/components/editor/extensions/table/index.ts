@@ -22,12 +22,24 @@ import {
   sortRowsByColumn,
 } from './handle-commands'
 import { TableHandle } from './handle-extension'
+import {
+  deleteColumnAtCursor,
+  deleteEmptyRowOnBackspace,
+  deleteEmptyTableOnBackspace,
+  deleteRowAtCursor,
+  duplicateColumnAtCursor,
+  duplicateRowAtCursor,
+  exitTableOnTab,
+  goToAdjacentRow,
+  insertColumnAtCursor,
+  insertRowAtCursor,
+  moveColumnAtCursor,
+  moveRowAtCursor,
+  selectColumnAtCursor,
+  selectRowAtCursor,
+} from './keyboard-commands'
 import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
 import TableNodeView from './Table'
-
-// TODO:
-// - Delete column/row by pressing backspace when empty row/column is selected
-// - Escape from table by pressing tab on empty row
 
 declare module '@tiptap/react' {
   interface Commands<ReturnType> {
@@ -169,6 +181,79 @@ const AlignedTable = TableExtension.extend({
         (tablePos: number, col: number, direction: SortDirection) =>
         ({ state, dispatch }) =>
           sortRowsByColumn(state, dispatch, tablePos, col, direction),
+    }
+  },
+  addKeyboardShortcuts() {
+    // Captured once so the fallback path reuses the base extension's own
+    // Tab/Backspace handling (goToNextCell/addRowAfter, deleteTableWhenAll-
+    // CellsSelected) rather than reimplementing it.
+    const parentShortcuts = this.parent?.() ?? {}
+
+    return {
+      ...parentShortcuts,
+      Tab: (props) => {
+        if (exitTableOnTab(this.editor.state, this.editor.view.dispatch)) {
+          return true
+        }
+        return parentShortcuts.Tab?.(props) ?? false
+      },
+      Backspace: (props) => {
+        if (
+          deleteEmptyTableOnBackspace(
+            this.editor.state,
+            this.editor.view.dispatch,
+          )
+        ) {
+          return true
+        }
+        if (
+          deleteEmptyRowOnBackspace(
+            this.editor.state,
+            this.editor.view.dispatch,
+          )
+        ) {
+          return true
+        }
+        return parentShortcuts.Backspace?.(props) ?? false
+      },
+      Enter: () =>
+        goToAdjacentRow(this.editor.state, this.editor.view.dispatch, 1),
+      'Shift-Enter': () =>
+        goToAdjacentRow(this.editor.state, this.editor.view.dispatch, -1),
+
+      'Mod-Shift-ArrowUp': () =>
+        insertRowAtCursor(this.editor.state, this.editor.view.dispatch, 0),
+      'Mod-Shift-ArrowDown': () =>
+        insertRowAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+      'Mod-Shift-ArrowLeft': () =>
+        insertColumnAtCursor(this.editor.state, this.editor.view.dispatch, 0),
+      'Mod-Shift-ArrowRight': () =>
+        insertColumnAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+
+      'Mod-Alt-ArrowUp': () =>
+        moveRowAtCursor(this.editor.state, this.editor.view.dispatch, -1),
+      'Mod-Alt-ArrowDown': () =>
+        moveRowAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+      'Mod-Alt-ArrowLeft': () =>
+        moveColumnAtCursor(this.editor.state, this.editor.view.dispatch, -1),
+      'Mod-Alt-ArrowRight': () =>
+        moveColumnAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+
+      'Mod-Shift-Delete': () =>
+        deleteRowAtCursor(this.editor.state, this.editor.view.dispatch),
+      // Not Mod-Alt-Delete: Windows reserves Ctrl+Alt+Delete at the OS level
+      // (the Secure Attention Sequence) — no application ever receives it.
+      'Mod-Alt-Backspace': () =>
+        deleteColumnAtCursor(this.editor.state, this.editor.view.dispatch),
+      'Mod-Shift-d': () =>
+        duplicateRowAtCursor(this.editor.state, this.editor.view.dispatch),
+      'Mod-Alt-d': () =>
+        duplicateColumnAtCursor(this.editor.state, this.editor.view.dispatch),
+
+      'Shift-Space': () =>
+        selectRowAtCursor(this.editor.state, this.editor.view.dispatch),
+      'Mod-Space': () =>
+        selectColumnAtCursor(this.editor.state, this.editor.view.dispatch),
     }
   },
 })

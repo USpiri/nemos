@@ -1,5 +1,9 @@
 import { Fragment, type Node as ProseMirrorNode } from '@tiptap/pm/model'
-import type { EditorState, Transaction } from '@tiptap/pm/state'
+import {
+  type EditorState,
+  TextSelection,
+  type Transaction,
+} from '@tiptap/pm/state'
 import { TableMap } from '@tiptap/pm/tables'
 
 /** Resolves the `table` node at `tablePos` and its `TableMap`, or `null` if
@@ -15,18 +19,118 @@ export function resolveTable(
   return { table, map: TableMap.get(table) }
 }
 
+export type ResolvedCursorCell = {
+  tablePos: number
+  table: ProseMirrorNode
+  map: TableMap
+  rowIndex: number
+  colIndex: number
+  /** Position immediately before the cell node itself (not its content). */
+  cellPos: number
+}
+
+/** Resolves the table/cell containing the current selection's `$from`, or
+ * `null` if the selection isn't inside a table cell — used both by keyboard
+ * shortcuts that act on "the row/column the cursor is currently in", and by
+ * `moveRowAt`/`moveColumnAt` to re-locate the cursor's cell after rebuilding
+ * the table around it. */
+export function resolveCursorCell(
+  state: EditorState,
+): ResolvedCursorCell | null {
+  const { $from } = state.selection
+
+  let cellDepth = -1
+  let tableDepth = -1
+  for (let d = $from.depth; d > 0; d -= 1) {
+    const node = $from.node(d)
+    if (
+      cellDepth === -1 &&
+      (node.type.name === 'tableCell' || node.type.name === 'tableHeader')
+    ) {
+      cellDepth = d
+    }
+    if (node.type.name === 'table') {
+      tableDepth = d
+      break
+    }
+  }
+  if (cellDepth === -1 || tableDepth === -1) return null
+
+  const table = $from.node(tableDepth)
+  const tablePos = $from.before(tableDepth)
+  const cellPos = $from.before(cellDepth)
+  const map = TableMap.get(table)
+  const rect = map.findCell(cellPos - (tablePos + 1))
+
+  return {
+    tablePos,
+    table,
+    map,
+    rowIndex: rect.top,
+    colIndex: rect.left,
+    cellPos,
+  }
+}
+
+/** Maps an index through the same "remove at `from`, reinsert at `to`"
+ * splice `moveRowAt`/`moveColumnAt` apply to the table's rows/columns — used
+ * to follow the cursor's row/column to wherever it ends up after the move. */
+function reindexAfterMove(index: number, from: number, to: number): number {
+  if (index === from) return to
+  const shifted = index < from ? index : index - 1
+  return shifted >= to ? shifted + 1 : shifted
+}
+
 /** Replaces the whole table node with `children` as its new rows, in a
  * single dispatch — used by the move commands, which reorder by rebuilding
- * the table rather than patching individual cell positions. */
+ * the table rather than patching individual cell positions.
+ *
+ * A wholesale `replaceWith` of the table gives ProseMirror nothing to map an
+ * old in-table selection onto, so it collapses to just outside the table.
+ * `preserveCursor`, when given, re-locates that cell (by its post-move row/
+ * col) in the rebuilt table and restores the cursor there, at the same
+ * offset within the cell's text it had before.
+ */
 function replaceTableRows(
   state: EditorState,
   dispatch: (tr: Transaction) => void,
   tablePos: number,
   table: ProseMirrorNode,
   children: ProseMirrorNode[],
+  preserveCursor?: { row: number; col: number; offset: number } | null,
 ) {
   const newTable = table.copy(Fragment.fromArray(children))
-  dispatch(state.tr.replaceWith(tablePos, tablePos + table.nodeSize, newTable))
+  const tr = state.tr.replaceWith(tablePos, tablePos + table.nodeSize, newTable)
+
+  if (preserveCursor) {
+    const map = TableMap.get(newTable)
+    if (preserveCursor.row < map.height && preserveCursor.col < map.width) {
+      const cellRelPos = map.positionAt(
+        preserveCursor.row,
+        preserveCursor.col,
+        newTable,
+      )
+      const cell = newTable.nodeAt(cellRelPos)!
+      const contentSize = cell.firstChild?.content.size ?? 0
+      const contentStart = tablePos + 1 + cellRelPos + 2
+      const offset = Math.min(Math.max(preserveCursor.offset, 0), contentSize)
+      tr.setSelection(TextSelection.near(tr.doc.resolve(contentStart + offset)))
+    }
+  }
+
+  dispatch(tr)
+}
+
+/** Resolves the current cursor's cell in `table` at `tablePos`, for commands
+ * that need to restore the cursor after rebuilding the table around it. */
+function resolveCursorForMove(state: EditorState, tablePos: number) {
+  const cursor = resolveCursorCell(state)
+  if (!cursor || cursor.tablePos !== tablePos) return null
+  return {
+    row: cursor.rowIndex,
+    col: cursor.colIndex,
+    offset: state.selection.$from.pos - (cursor.cellPos + 2),
+  }
 }
 
 /**
@@ -395,7 +499,13 @@ export function moveRowAt(
     const [moved] = rows.splice(from, 1)
     rows.splice(to, 0, moved)
 
-    replaceTableRows(state, dispatch, tablePos, table, rows)
+    const cursor = resolveCursorForMove(state, tablePos)
+    const preserveCursor = cursor && {
+      ...cursor,
+      row: reindexAfterMove(cursor.row, from, to),
+    }
+
+    replaceTableRows(state, dispatch, tablePos, table, rows, preserveCursor)
   }
 
   return true
@@ -434,7 +544,13 @@ export function moveColumnAt(
       newRows.push(rowNode.copy(Fragment.fromArray(cells)))
     }
 
-    replaceTableRows(state, dispatch, tablePos, table, newRows)
+    const cursor = resolveCursorForMove(state, tablePos)
+    const preserveCursor = cursor && {
+      ...cursor,
+      col: reindexAfterMove(cursor.col, from, to),
+    }
+
+    replaceTableRows(state, dispatch, tablePos, table, newRows, preserveCursor)
   }
 
   return true
