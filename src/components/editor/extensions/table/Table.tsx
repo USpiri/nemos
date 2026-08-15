@@ -42,7 +42,9 @@ export default function TableNodeView({ editor, getPos }: NodeViewProps) {
 
   return (
     <NodeViewWrapper className="table-wrapper">
-      <NodeViewContent />
+      <div className="table-scroll">
+        <NodeViewContent />
+      </div>
       {showAddRow && (
         <Button
           onClick={addRow}

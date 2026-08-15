@@ -1,6 +1,7 @@
 @layer base {
   :root {
     --font-size-multiplier: 1;
+    --content-max-width: 43rem;
   }
 
   .typography {
@@ -164,6 +165,7 @@
     /* ── Tables ─────────────────────────────────────── */
 
     .table-wrapper {
+      /* display: flex; */
       position: relative;
       margin-top: calc(var(--spacing) * 7);
       margin-bottom: calc(var(--spacing) * 7);
@@ -173,8 +175,36 @@
       }
     }
 
+    .table-scroll {
+      --WINDOW-X-SPACE: calc(100vw - var(--content-max-width));
+      display: flex;
+      overflow: auto;
+
+      margin: 0 calc(-1 * var(--WINDOW-X-SPACE) / 2);
+      padding: 0 calc(var(--WINDOW-X-SPACE) / 2);
+
+      /* max-width: 100%;
+      overflow-x: auto; */
+
+      &::-webkit-scrollbar {
+        height: 7px;
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        margin: 0 calc(var(--WINDOW-X-SPACE) / 2);
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 9999px;
+        background-color: var(--color-border);
+      }
+    }
+
     & table:not(.not-typography table) {
       width: 100%;
+      min-width: var(--content-max-width);
       border-collapse: collapse;
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
@@ -182,6 +212,7 @@
 
       & th,
       & td {
+        white-space: nowrap;
         text-align: left;
         font-variant-numeric: tabular-nums;
         transition: background-color 0.12s ease;
