@@ -1,6 +1,7 @@
 @layer base {
   :root {
     --font-size-multiplier: 1;
+    --content-max-width: 43rem;
   }
 
   .typography {
@@ -164,34 +165,61 @@
     /* ── Tables ─────────────────────────────────────── */
 
     .table-wrapper {
+      /* display: flex; */
       position: relative;
       margin-top: calc(var(--spacing) * 7);
       margin-bottom: calc(var(--spacing) * 7);
 
       .selectedCell {
-        border: 1px solid var(--color-primary);
+        background-color: color-mix(in oklch, var(--color-primary) 16%, transparent);
+      }
+    }
+
+    .table-scroll {
+      --WINDOW-X-SPACE: calc(100vw - var(--content-max-width));
+      display: flex;
+      overflow: auto;
+
+      margin: 0 calc(-1 * var(--WINDOW-X-SPACE) / 2);
+      padding: 0 calc(var(--WINDOW-X-SPACE) / 2);
+
+      /* max-width: 100%;
+      overflow-x: auto; */
+
+      &::-webkit-scrollbar {
+        height: 7px;
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        margin: 0 calc(var(--WINDOW-X-SPACE) / 2);
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 9999px;
+        background-color: var(--color-border);
       }
     }
 
     & table:not(.not-typography table) {
       width: 100%;
-      overflow: hidden;
+      min-width: var(--content-max-width);
+      border-collapse: collapse;
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
+      overflow: hidden;
 
-      & thead tr {
-        margin: 0;
-        border-top: 1px solid var(--color-border);
-        padding: 0;
-      }
-
-      & th {
-        border: 1px solid var(--color-border);
-        padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 4);
+      & th,
+      & td {
+        white-space: nowrap;
         text-align: left;
-        font-weight: 600;
-        font-size: calc(var(--text-sm) * var(--font-size-multiplier));
-        background-color: var(--color-muted);
         font-variant-numeric: tabular-nums;
+        transition: background-color 0.12s ease;
+
+        &:not(:last-child) {
+          border-right: 1px solid var(--color-border);
+        }
 
         &[align="center"] {
           text-align: center;
@@ -200,27 +228,29 @@
         &[align="right"] {
           text-align: right;
         }
-      }
-
-      & tbody tr {
-        margin: 0;
-        border-top: 1px solid var(--color-border);
-        padding: 0;
       }
 
       & td {
-        border: 1px solid var(--color-border);
-        padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 4);
-        text-align: left;
-        background-color: var(--color-card);
-        font-variant-numeric: tabular-nums;
+        padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+      }
 
-        &[align="center"] {
-          text-align: center;
+      & th {
+        padding: calc(var(--spacing) * 1) calc(var(--spacing) * 4);
+        background-color: var(--color-muted);
+        border-bottom: 1px solid var(--color-border);
+        font-weight: 600;
+        font-size: calc(var(--text-sm) * var(--font-size-multiplier));
+      }
+
+      & tbody tr {
+        border-top: 1px solid var(--color-border);
+
+        &:first-child {
+          border-top: none;
         }
 
-        &[align="right"] {
-          text-align: right;
+        &:hover td:not(.selectedCell) {
+          background-color: var(--color-muted);
         }
       }
     }
@@ -301,7 +331,8 @@
 
     & code:not(pre code):not(.not-typography code) {
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
+      color: var(--color-muted-foreground);
+      border-radius: var(--radius-sm);
       background-color: var(--color-muted);
       padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
       font-family: var(--font-mono);
@@ -507,14 +538,13 @@
   &.math-display {
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
-    background-color: var(--color-card);
     margin-block: calc(var(--spacing) * 7);
 
     .math-content {
       font-family: var(--font-mono);
       font-size: calc(var(--text-sm) * var(--font-size-multiplier));
       padding: calc(var(--spacing) * 3);
-      background-color: var(--color-sidebar);
+      background-color: var(--color-muted);
       border-bottom: 1px solid var(--color-border);
 
       &::before,

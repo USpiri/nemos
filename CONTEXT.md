@@ -40,6 +40,18 @@ A sparse delta of preference overrides scoped to a single Workspace, stored at `
 ### Tab
 An open Note in the editor. Multiple Tabs can be open simultaneously in a browser-like tab bar. Tabs persist across app restarts.
 
+### Table
+A block-level element in a Note's editor, built on `@tiptap/extension-table` and always shaped as a rectangular grid with no merged cells — the shape a GitHub-Flavored-Markdown table can represent. Every cell holds exactly one paragraph of inline content (text, marks, inline elements) — no nested lists, blockquotes, code blocks, or extra paragraphs — so any Table built in the editor round-trips losslessly through the Note's Markdown file. A Table's first row is always its Header Row.
+
+### Header Row
+The first row of a Table, made of header cells rather than body cells. Every Table has exactly one Header Row; it cannot be deleted and cannot be reordered out of the first position.
+
+### Column Alignment
+A per-column `left` / `center` / `right` / none property of a Table, stored on every cell in that column — Header Row cell included — so a column's cells never disagree about alignment. Round-trips to and from the column's delimiter syntax in the Note's saved Markdown (`:--`, `:-:`, `--:`, or a plain `---` for none), including for a Table hand-authored or edited outside Nemos.
+
+### Row Handle / Column Handle
+A small grip that appears on hover at the start of a Table row (Row Handle) or the top of a Table column (Column Handle), opening a menu of actions scoped to that row or column — insert, delete, duplicate, move, clear contents, and, for a Column Handle, set Column Alignment or sort the Table's rows by that column's values.
+
 ### Source Mode
 The per-element state in which an inline element — a Math expression, Mermaid diagram, SMILES structure, or Link — shows its raw, directly-editable markup source instead of its rendered form. An element enters Source Mode when the cursor, or a selection fully contained within it, moves into it (by click or by keyboard navigation), and leaves Source Mode the instant the cursor moves elsewhere, at which point it re-renders from the (possibly just-edited) source. Each element type implements Source Mode with whatever mechanism fits it — Math/Mermaid/SMILES toggle a `showSource` node attribute, Link unwraps its mark into literal text and re-parses it on exit — but the observable behavior is the same across all of them.
 

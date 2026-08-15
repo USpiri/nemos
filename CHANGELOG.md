@@ -5,6 +5,32 @@
 ### New Features
 
 - **Inline, writing-first link editing**: Clicking into a link, or moving the cursor into one with the arrow keys, now reveals its raw `[label](url)` markdown source as directly-editable text — the same in-place pattern already used by Math, Mermaid, and Smiles. Moving the cursor away re-parses and re-renders it; an unparseable or empty-href edit is left as plain text instead of erroring. A new `Ctrl`/`Cmd`+`K` shortcut wraps the current selection into a link and drops straight into this editable state, ready to type the destination. ([#42](https://github.com/USpiri/nemos/issues/42))
+- **Table column alignment**: Tables now preserve left/center/right column alignment when opening and saving a Note — previously parsed from the file and silently discarded. Table cells are also now restricted to a single line of inline content.
+- **Table Row/Column handles**: Hovering the start of a table row or the top of a column now reveals a handle whose menu can insert, duplicate, delete, or move that row/column — rows and columns can also be reordered by dragging the handle directly.
+- **Clear row/column contents**: The Row and Column Handle menus now have a clear-contents action.
+- **Column alignment from the handle menu**: The Column Handle menu now has an Align submenu (left/center/right/none) and persists correctly through Markdown save/reload.
+- **Sort rows by column**: The Column Handle menu now has Sort ascending / Sort descending actions that reorder body rows by that column's text.
+- **Table keyboard shortcuts**: Tables can now be created and restructured entirely from the keyboard.
+
+  | Category | Shortcut | Action |
+  | --- | --- | --- |
+  | Navigation | `Tab` / `Shift`+`Tab` | Next / previous cell |
+  | Navigation | `Enter` / `Shift`+`Enter` | Next / previous row, same column |
+  | Navigation | `Backspace` | At the start of an empty, non-header row: delete it, cursor to end of previous row |
+  | Navigation | `Backspace` | At the very start of the header, when the whole table is empty: delete the table |
+  | Navigation | `Tab` | In an empty last row: exit the table to a new paragraph after it |
+  | Insert | `Ctrl`/`Cmd`+`Shift`+`↑` / `↓` | Insert row above / below |
+  | Insert | `Ctrl`/`Cmd`+`Shift`+`←` / `→` | Insert column left / right |
+  | Move | `Ctrl`/`Cmd`+`Alt`+`↑` / `↓` | Move current row up / down |
+  | Move | `Ctrl`/`Cmd`+`Alt`+`←` / `→` | Move current column left / right |
+  | Delete | `Ctrl`/`Cmd`+`Shift`+`Delete` | Delete current row |
+  | Delete | `Ctrl`/`Cmd`+`Alt`+`Backspace` | Delete current column |
+  | Duplicate | `Ctrl`/`Cmd`+`Shift`+`D` | Duplicate current row |
+  | Duplicate | `Ctrl`/`Cmd`+`Alt`+`D` | Duplicate current column |
+  | Selection | `Shift`+`Space` | Select current row |
+  | Selection | `Ctrl`/`Cmd`+`Space` | Select current column |
+
+  Column delete uses `Backspace` rather than `Delete` because Windows reserves `Ctrl`+`Alt`+`Delete` at the OS level — no application ever receives that combination.
 
 ### Fixes
 

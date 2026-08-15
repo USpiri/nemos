@@ -6,36 +6,257 @@ import {
   TableRow,
 } from '@tiptap/extension-table'
 import { Extension, ReactNodeViewRenderer } from '@tiptap/react'
+import { setColumnAlign, setColumnAlignAt, TableAlign } from './align'
+import {
+  clearColumnAt,
+  clearRowAt,
+  deleteColumnAt,
+  deleteRowAt,
+  duplicateColumnAt,
+  duplicateRowAt,
+  insertColumnAt,
+  insertRowAt,
+  moveColumnAt,
+  moveRowAt,
+  SortDirection,
+  sortRowsByColumn,
+} from './handle-commands'
+import { TableHandle } from './handle-extension'
+import {
+  deleteColumnAtCursor,
+  deleteEmptyRowOnBackspace,
+  deleteEmptyTableOnBackspace,
+  deleteRowAtCursor,
+  duplicateColumnAtCursor,
+  duplicateRowAtCursor,
+  exitTableOnTab,
+  goToAdjacentRow,
+  insertColumnAtCursor,
+  insertRowAtCursor,
+  moveColumnAtCursor,
+  moveRowAtCursor,
+  selectColumnAtCursor,
+  selectRowAtCursor,
+} from './keyboard-commands'
+import { parseTableMarkdown, renderTableToMarkdown } from './markdown'
 import TableNodeView from './Table'
 
-// TODO:
-// - Delete column/row by pressing backspace when empty row/column is selected
-// - Escape from table by pressing tab on empty row
-// - Add table node view
+declare module '@tiptap/react' {
+  interface Commands<ReturnType> {
+    tableAlign: {
+      /** Sets the alignment of every cell (header included) in the current column. */
+      setColumnAlign: (align: TableAlign) => ReturnType
+      /** Sets the alignment of every cell (header included) in column `col` of the table at `tablePos`. */
+      setColumnAlignAt: (
+        tablePos: number,
+        col: number,
+        align: TableAlign,
+      ) => ReturnType
+    }
+    tableHandle: {
+      /** Inserts a body row at `row` in the table at `tablePos` (existing rows shift down). */
+      insertRow: (tablePos: number, row: number) => ReturnType
+      /** Inserts a column at `col` in the table at `tablePos` (existing columns shift right). */
+      insertColumn: (tablePos: number, col: number) => ReturnType
+      /** Deletes the body row at `row` in the table at `tablePos`. */
+      deleteRowAt: (tablePos: number, row: number) => ReturnType
+      /** Deletes the column at `col` in the table at `tablePos`. */
+      deleteColumnAt: (tablePos: number, col: number) => ReturnType
+      /** Duplicates the row at `row` in the table at `tablePos`, inserting the copy after it. */
+      duplicateRow: (tablePos: number, row: number) => ReturnType
+      /** Duplicates the column at `col` in the table at `tablePos`, inserting the copy after it. */
+      duplicateColumn: (tablePos: number, col: number) => ReturnType
+      /** Moves the body row at `from` to `to` in the table at `tablePos`. */
+      moveRow: (tablePos: number, from: number, to: number) => ReturnType
+      /** Moves the column at `from` to `to` in the table at `tablePos`. */
+      moveColumn: (tablePos: number, from: number, to: number) => ReturnType
+      /** Empties every cell in the row at `row` in the table at `tablePos`. */
+      clearRow: (tablePos: number, row: number) => ReturnType
+      /** Empties every cell in the column at `col` in the table at `tablePos`. */
+      clearColumn: (tablePos: number, col: number) => ReturnType
+      /** Reorders body rows in the table at `tablePos` by the text content of column `col`. */
+      sortRowsByColumn: (
+        tablePos: number,
+        col: number,
+        direction: SortDirection,
+      ) => ReturnType
+    }
+  }
+}
 
-// export const Table = TableKit.configure({
-//   table: {
-//     allowTableNodeSelection: true,
-//     renderWrapper: true,
-//   },
-// }).extend({
+const alignAttribute = {
+  align: {
+    default: null as TableAlign,
+    parseHTML: (element: HTMLElement) => element.getAttribute('align') || null,
+    renderHTML: (attributes: { align?: TableAlign }) =>
+      attributes.align ? { align: attributes.align } : {},
+  },
+}
 
-//   addKeyboardShortcuts() {
-//     return {
-//       ...this.parent?.(),
-//       'Shift-Control-Enter': () => this.editor.commands.addRowBefore(),
-//       'Control-Enter': () => this.editor.commands.addRowAfter(),
-//       'Shift-Control-Tab': () =>
-//         this.editor.chain().addColumnBefore().goToPreviousCell().run(),
-//       'Control-Tab': () => {
-//         return this.editor.chain().addColumnAfter().goToNextCell().run()
-//       },
-//     }
-//   },
-//   onUpdate() {
-//     this.editor.commands.fixTables()
-//   },
-// })
+const AlignedTableCell = TableCell.extend({
+  content: 'paragraph',
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      ...alignAttribute,
+    }
+  },
+})
+
+const AlignedTableHeader = TableHeader.extend({
+  content: 'paragraph',
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      ...alignAttribute,
+    }
+  },
+})
+
+const AlignedTable = TableExtension.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(TableNodeView, {
+      contentDOMElementTag: 'table',
+    })
+  },
+  parseMarkdown: parseTableMarkdown,
+  renderMarkdown: renderTableToMarkdown,
+  addCommands() {
+    return {
+      ...this.parent?.(),
+      // GFM tables cannot represent merged cells — disabled so a table can
+      // never be built that Markdown can't losslessly round-trip.
+      mergeCells: () => () => false,
+      splitCell: () => () => false,
+      mergeOrSplit: () => () => false,
+      setColumnAlign:
+        (align: TableAlign) =>
+        ({ state, dispatch }) =>
+          setColumnAlign(state, dispatch, align),
+      setColumnAlignAt:
+        (tablePos: number, col: number, align: TableAlign) =>
+        ({ state, dispatch }) =>
+          setColumnAlignAt(state, dispatch, tablePos, col, align),
+      insertRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          insertRowAt(state, dispatch, tablePos, row),
+      insertColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          insertColumnAt(state, dispatch, tablePos, col),
+      deleteRowAt:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          deleteRowAt(state, dispatch, tablePos, row),
+      deleteColumnAt:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          deleteColumnAt(state, dispatch, tablePos, col),
+      duplicateRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          duplicateRowAt(state, dispatch, tablePos, row),
+      duplicateColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          duplicateColumnAt(state, dispatch, tablePos, col),
+      moveRow:
+        (tablePos: number, from: number, to: number) =>
+        ({ state, dispatch }) =>
+          moveRowAt(state, dispatch, tablePos, from, to),
+      moveColumn:
+        (tablePos: number, from: number, to: number) =>
+        ({ state, dispatch }) =>
+          moveColumnAt(state, dispatch, tablePos, from, to),
+      clearRow:
+        (tablePos: number, row: number) =>
+        ({ state, dispatch }) =>
+          clearRowAt(state, dispatch, tablePos, row),
+      clearColumn:
+        (tablePos: number, col: number) =>
+        ({ state, dispatch }) =>
+          clearColumnAt(state, dispatch, tablePos, col),
+      sortRowsByColumn:
+        (tablePos: number, col: number, direction: SortDirection) =>
+        ({ state, dispatch }) =>
+          sortRowsByColumn(state, dispatch, tablePos, col, direction),
+    }
+  },
+  addKeyboardShortcuts() {
+    // Captured once so the fallback path reuses the base extension's own
+    // Tab/Backspace handling (goToNextCell/addRowAfter, deleteTableWhenAll-
+    // CellsSelected) rather than reimplementing it.
+    const parentShortcuts = this.parent?.() ?? {}
+
+    return {
+      ...parentShortcuts,
+      Tab: (props) => {
+        if (exitTableOnTab(this.editor.state, this.editor.view.dispatch)) {
+          return true
+        }
+        return parentShortcuts.Tab?.(props) ?? false
+      },
+      Backspace: (props) => {
+        if (
+          deleteEmptyTableOnBackspace(
+            this.editor.state,
+            this.editor.view.dispatch,
+          )
+        ) {
+          return true
+        }
+        if (
+          deleteEmptyRowOnBackspace(
+            this.editor.state,
+            this.editor.view.dispatch,
+          )
+        ) {
+          return true
+        }
+        return parentShortcuts.Backspace?.(props) ?? false
+      },
+      Enter: () =>
+        goToAdjacentRow(this.editor.state, this.editor.view.dispatch, 1),
+      'Shift-Enter': () =>
+        goToAdjacentRow(this.editor.state, this.editor.view.dispatch, -1),
+
+      'Mod-Shift-ArrowUp': () =>
+        insertRowAtCursor(this.editor.state, this.editor.view.dispatch, 0),
+      'Mod-Shift-ArrowDown': () =>
+        insertRowAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+      'Mod-Shift-ArrowLeft': () =>
+        insertColumnAtCursor(this.editor.state, this.editor.view.dispatch, 0),
+      'Mod-Shift-ArrowRight': () =>
+        insertColumnAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+
+      'Mod-Alt-ArrowUp': () =>
+        moveRowAtCursor(this.editor.state, this.editor.view.dispatch, -1),
+      'Mod-Alt-ArrowDown': () =>
+        moveRowAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+      'Mod-Alt-ArrowLeft': () =>
+        moveColumnAtCursor(this.editor.state, this.editor.view.dispatch, -1),
+      'Mod-Alt-ArrowRight': () =>
+        moveColumnAtCursor(this.editor.state, this.editor.view.dispatch, 1),
+
+      'Mod-Shift-Delete': () =>
+        deleteRowAtCursor(this.editor.state, this.editor.view.dispatch),
+      // Not Mod-Alt-Delete: Windows reserves Ctrl+Alt+Delete at the OS level
+      // (the Secure Attention Sequence) — no application ever receives it.
+      'Mod-Alt-Backspace': () =>
+        deleteColumnAtCursor(this.editor.state, this.editor.view.dispatch),
+      'Mod-Shift-d': () =>
+        duplicateRowAtCursor(this.editor.state, this.editor.view.dispatch),
+      'Mod-Alt-d': () =>
+        duplicateColumnAtCursor(this.editor.state, this.editor.view.dispatch),
+
+      'Shift-Space': () =>
+        selectRowAtCursor(this.editor.state, this.editor.view.dispatch),
+      'Mod-Space': () =>
+        selectColumnAtCursor(this.editor.state, this.editor.view.dispatch),
+    }
+  },
+})
 
 export const Table = Extension.create<TableKitOptions>({
   name: 'tableKit',
@@ -43,24 +264,17 @@ export const Table = Extension.create<TableKitOptions>({
     const extensions = []
     if (this.options.table !== false) {
       extensions.push(
-        TableExtension.configure({
+        AlignedTable.configure({
           allowTableNodeSelection: true,
-          // renderWrapper: true,
-        }).extend({
-          addNodeView() {
-            return ReactNodeViewRenderer(TableNodeView, {
-              // as: 'table',
-              contentDOMElementTag: 'table',
-            })
-          },
         }),
+        TableHandle,
       )
     }
     if (this.options.tableCell !== false) {
-      extensions.push(TableCell.configure(this.options.tableCell))
+      extensions.push(AlignedTableCell.configure(this.options.tableCell))
     }
     if (this.options.tableHeader !== false) {
-      extensions.push(TableHeader.configure(this.options.tableHeader))
+      extensions.push(AlignedTableHeader.configure(this.options.tableHeader))
     }
     if (this.options.tableRow !== false) {
       extensions.push(TableRow.configure(this.options.tableRow))

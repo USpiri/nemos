@@ -4,6 +4,7 @@ import { GripVertical } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
+import { TableHandles } from './extensions/table/TableHandles'
 import { Extensions } from './extensions'
 
 import './editor.css'
@@ -78,6 +79,7 @@ export const Editor = ({
           </Button>
         </DragHandle>
         <EditorContent editor={editor} />
+        <TableHandles editor={editor} />
       </EditorContext.Provider>
     </>
   )
