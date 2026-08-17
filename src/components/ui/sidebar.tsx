@@ -118,6 +118,13 @@ function SidebarProvider({
         event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
         (event.metaKey || event.ctrlKey)
       ) {
+        // Let editor commands (e.g. bold) take this shortcut when focus is
+        // inside a contenteditable region such as the Tiptap/ProseMirror editor.
+        const target = event.target as HTMLElement | null
+        if (target?.closest('[contenteditable="true"]')) {
+          return
+        }
+
         event.preventDefault()
         toggleSidebar()
       }
