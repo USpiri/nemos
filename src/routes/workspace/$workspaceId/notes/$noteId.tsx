@@ -52,7 +52,7 @@ function NoteView({
 }) {
   const [frontmatter, setFrontmatter] = useState<Frontmatter>(note.frontmatter)
 
-  const { save } = useNoteEditor({
+  const { save, saveNow } = useNoteEditor({
     workspaceId,
     relativePath: noteId,
     initialContent: note.content,
@@ -62,9 +62,9 @@ function NoteView({
   const handleFrontmatterChange = useCallback(
     (updated: Frontmatter) => {
       setFrontmatter(updated)
-      save({ frontmatter: updated })
+      saveNow({ frontmatter: updated })
     },
-    [save],
+    [saveNow],
   )
 
   return (

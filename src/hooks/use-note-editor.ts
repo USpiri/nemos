@@ -59,5 +59,8 @@ export const useNoteEditor = ({
 
   useEffect(() => () => void save.flush(), [save])
 
-  return { save }
+  // `save` debounces continuous input (content typing); `saveNow` bypasses that
+  // for discrete one-off changes (e.g. frontmatter toggles) that must persist
+  // immediately rather than risk being lost to a hard refresh mid-debounce.
+  return { save, saveNow: saveFn }
 }
