@@ -5,8 +5,8 @@ import {
   applyThemeCSS,
   GLOBAL_ATTR,
   injectSnippetStyle,
-  ROOT_ATTR,
   removeStaleSnippets,
+  ROOT_ATTR,
 } from './style-injectors'
 import type { SnippetDescriptor } from './theme.types'
 import { filterEnabled } from './utils'

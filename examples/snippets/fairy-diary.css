@@ -26,44 +26,32 @@
   Designed for light mode.
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cinzel+Decorative:wght@400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cinzel+Decorative:wght@400&display=swap');
 
 /* ── Parchment page ─────────────────────────────────────────────────────── */
 
 main.fairy-diary,
 .fairy-diary .ProseMirror {
-  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-family: 'Caveat', 'Segoe Print', cursive !important;
   font-size: 2rem !important;
   line-height: 2 !important;
   color: #2c1a0e !important;
   background:
-    radial-gradient(
-      ellipse at 8% 8%,
-      rgba(255, 248, 218, 0.95) 0%,
-      transparent 52%
-    ),
-    radial-gradient(
-      ellipse at 92% 92%,
-      rgba(195, 162, 100, 0.35) 0%,
-      transparent 52%
-    ),
-    radial-gradient(
-      ellipse at 50% 30%,
-      rgba(248, 238, 200, 0.5) 0%,
-      transparent 65%
-    ),
+    radial-gradient(ellipse at 8%  8%,  rgba(255, 248, 218, 0.95) 0%, transparent 52%),
+    radial-gradient(ellipse at 92% 92%, rgba(195, 162, 100, 0.35) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 30%, rgba(248, 238, 200, 0.50) 0%, transparent 65%),
     #f2e6c4 !important;
   border-radius: 2px !important;
   box-shadow:
-    0 1px 3px rgba(100, 60, 20, 0.1),
-    0 6px 20px rgba(100, 60, 20, 0.1),
+    0 1px 3px  rgba(100, 60, 20, 0.10),
+    0 6px 20px rgba(100, 60, 20, 0.10),
     inset 0 0 80px rgba(160, 110, 40, 0.06) !important;
 }
 
 /* ── Headings ───────────────────────────────────────────────────────────── */
 
 .fairy-diary .typography h1 {
-  font-family: "Cinzel Decorative", serif !important;
+  font-family: 'Cinzel Decorative', serif !important;
   font-size: 1.7rem !important;
   font-weight: 400 !important;
   text-align: center !important;
@@ -74,30 +62,30 @@ main.fairy-diary,
 
 /* Fairy-dust row above every h1 */
 .fairy-diary .typography h1::before {
-  content: "✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦";
+  content: '✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦  ·  ✦';
   display: block;
   text-align: center;
   font-size: 0.6rem;
   letter-spacing: 0.35rem;
-  color: rgba(140, 85, 30, 0.4);
+  color: rgba(140, 85, 30, 0.40);
   margin-bottom: 1.5rem;
   font-family: sans-serif;
   font-weight: 400;
 }
 
 .fairy-diary .typography h2 {
-  font-family: "Caveat", cursive !important;
+  font-family: 'Caveat', cursive !important;
   font-size: 1.5rem !important;
   font-weight: 600 !important;
   color: #5e2f0d !important;
-  border-bottom: 1px dashed rgba(160, 100, 40, 0.3) !important;
+  border-bottom: 1px dashed rgba(160, 100, 40, 0.30) !important;
   padding-bottom: 0.15rem !important;
   margin-top: 1.5rem !important;
   margin-bottom: 0.4rem !important;
 }
 
 .fairy-diary .typography h3 {
-  font-family: "Caveat", cursive !important;
+  font-family: 'Caveat', cursive !important;
   font-size: 1.35rem !important;
   font-weight: 600 !important;
   color: #6b3a15 !important;
@@ -128,7 +116,7 @@ main.fairy-diary,
 }
 
 .fairy-diary .typography hr::after {
-  content: "·  ✦  ·  ✿  ·  ✦  ·";
+  content: '·  ✦  ·  ✿  ·  ✦  ·';
   display: block;
   text-align: center;
   font-size: 1rem;
@@ -169,14 +157,14 @@ main.fairy-diary,
 
 /* Diamond jewel centred on the top border */
 .fairy-diary .typography blockquote::before {
-  content: "✦";
+  content: '✦';
   position: absolute;
   top: -0.85rem;
   left: 50%;
   transform: translateX(-50%);
   padding: 0 0.65rem;
   background: #f2e6c4; /* matches parchment */
-  color: rgba(150, 90, 30, 0.5);
+  color: rgba(150, 90, 30, 0.50);
   font-size: 1.1rem;
   font-family: sans-serif;
   line-height: 1;
@@ -184,7 +172,7 @@ main.fairy-diary,
 
 /* Corner flourish */
 .fairy-diary .typography blockquote::after {
-  content: "❧";
+  content: '❧';
   position: absolute;
   bottom: 0.4rem;
   right: 0.75rem;
@@ -195,7 +183,7 @@ main.fairy-diary,
 
 .fairy-diary .typography blockquote p {
   font-style: italic !important;
-  color: rgba(130, 75, 20, 0.5) !important;
+  color: rgba(130, 75, 20, 0.50) !important;
   text-align: center !important;
   text-indent: 0 !important;
   margin: 0 !important;
@@ -211,7 +199,7 @@ main.fairy-diary,
 /* ── Inline code ────────────────────────────────────────────────────────── */
 
 .fairy-diary .typography code {
-  font-family: "Caveat", cursive !important;
+  font-family: 'Caveat', cursive !important;
   background: rgba(200, 165, 100, 0.18) !important;
   color: #5a2e08 !important;
   border-radius: 3px !important;

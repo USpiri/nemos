@@ -19,7 +19,7 @@
      ```block``` shot list
    ───────────────────────────────────────────────────────────────────────── */
 
-@import url("https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
 
 /* ── Page — undeveloped film black, perforated edges ──────────────────── */
 
@@ -32,16 +32,8 @@ main.shooting-script {
 
   background-repeat: repeat-y, repeat-y, repeat-y, repeat-y;
   background-attachment: local, local, local, local;
-  background-position:
-    left top,
-    left top,
-    right top,
-    right top;
-  background-size:
-    28px 34px,
-    28px 100%,
-    28px 34px,
-    28px 100%;
+  background-position: left top, left top, right top, right top;
+  background-size: 28px 34px, 28px 100%, 28px 34px, 28px 100%;
   background-image:
     radial-gradient(circle at 14px 17px, #16130f 6px, transparent 7px),
     linear-gradient(#3a2c18, #3a2c18),
@@ -57,27 +49,23 @@ main.shooting-script {
 }
 
 .shooting-script .editor::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 2.4rem;
   left: 40px;
   right: 40px;
   height: 10px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #f2ead6 0 10px,
-    #16130f 10px 20px
-  );
+  background: repeating-linear-gradient(-45deg, #f2ead6 0 10px, #16130f 10px 20px);
 }
 
 main.shooting-script .editor::after {
-  content: "SCENE ___  ·  TAKE ___  ·  ROLL A  ·  SHOOTING SCRIPT — FINAL DRAFT";
+  content: 'SCENE ___  ·  TAKE ___  ·  ROLL A  ·  SHOOTING SCRIPT — FINAL DRAFT';
   position: absolute;
   top: 0.9rem;
   left: 40px;
   right: 40px;
   text-align: center;
-  font-family: "Special Elite", "Courier New", monospace;
+  font-family: 'Special Elite', 'Courier New', monospace;
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   color: #c8862e;
@@ -86,7 +74,7 @@ main.shooting-script .editor::after {
 /* ── Body copy ──────────────────────────────────────────────────────────── */
 
 main.shooting-script .editor {
-  font-family: "Courier Prime", "Courier New", Courier, monospace;
+  font-family: 'Courier Prime', 'Courier New', Courier, monospace;
   font-size: 0.92rem;
   line-height: 1.7;
   color: #e8e1cf;
@@ -99,7 +87,7 @@ main.shooting-script .editor h1 {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: "Special Elite", "Courier New", monospace;
+  font-family: 'Special Elite', 'Courier New', monospace;
   font-size: 1rem;
   font-weight: normal;
   text-transform: uppercase;
@@ -112,7 +100,7 @@ main.shooting-script .editor h1 {
 }
 
 main.shooting-script .editor h1::before {
-  content: "";
+  content: '';
   display: inline-block;
   flex-shrink: 0;
   width: 1.3rem;
@@ -125,7 +113,7 @@ main.shooting-script .editor h1::before {
 
 main.shooting-script .editor h2 {
   text-align: center;
-  font-family: "Special Elite", "Courier New", monospace;
+  font-family: 'Special Elite', 'Courier New', monospace;
   font-size: 0.9rem;
   font-weight: normal;
   text-transform: uppercase;
@@ -136,7 +124,7 @@ main.shooting-script .editor h2 {
 }
 
 main.shooting-script .editor h2::before {
-  content: "● ";
+  content: '● ';
   color: #7c2020;
   font-size: 0.55rem;
   vertical-align: middle;
@@ -146,7 +134,7 @@ main.shooting-script .editor h2::before {
 
 main.shooting-script .editor h3 {
   text-align: right;
-  font-family: "Special Elite", "Courier New", monospace;
+  font-family: 'Special Elite', 'Courier New', monospace;
   font-style: italic;
   font-size: 0.7rem;
   font-weight: normal;
@@ -184,7 +172,7 @@ main.shooting-script .editor blockquote {
   margin: 0.4rem auto 1.4rem;
   padding: 0;
   border: none;
-  font-family: "Courier Prime", monospace;
+  font-family: 'Courier Prime', monospace;
   color: #f2ead6;
   font-size: 0.92rem;
   line-height: 1.6;
@@ -209,7 +197,7 @@ main.shooting-script .editor hr {
 }
 
 main.shooting-script .editor hr::before {
-  content: "\25C9";
+  content: '\25C9';
   position: absolute;
   left: 50%;
   top: 50%;
@@ -221,13 +209,13 @@ main.shooting-script .editor hr::before {
 }
 
 main.shooting-script .editor hr::after {
-  content: "REEL CHANGE";
+  content: 'REEL CHANGE';
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, 0.9rem);
   white-space: nowrap;
-  font-family: "Special Elite", monospace;
+  font-family: 'Special Elite', monospace;
   font-size: 0.52rem;
   letter-spacing: 0.3em;
   color: #4a4438;
@@ -236,7 +224,7 @@ main.shooting-script .editor hr::after {
 /* ── Camera directions (inline code) ───────────────────────────────────── */
 
 main.shooting-script .editor code {
-  font-family: "Special Elite", monospace;
+  font-family: 'Special Elite', monospace;
   background: #3a2c18;
   color: #c8862e;
   border: 1px solid #4a4438;
@@ -258,9 +246,9 @@ main.shooting-script .editor .codeblock pre {
 }
 
 main.shooting-script .editor .codeblock pre::before {
-  content: "SHOT LIST";
+  content: 'SHOT LIST';
   display: block;
-  font-family: "Special Elite", monospace;
+  font-family: 'Special Elite', monospace;
   font-size: 0.58rem;
   letter-spacing: 0.25em;
   color: #7c2020;
