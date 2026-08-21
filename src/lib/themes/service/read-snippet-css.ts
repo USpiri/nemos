@@ -1,10 +1,10 @@
-import { SNIPPETS_DIR, WORKSPACE_SNIPPETS_DIR } from '@/config/constants'
+import { ROOT_SNIPPETS_DIR, SNIPPETS_DIR } from '@/config/constants'
 import { exists, existsAppData, read, readAppData } from '@/lib/fs'
 
 export const readSnippetCss = async (
-  scope: 'global' | 'workspace',
+  scope: 'global' | 'root',
   filename: string,
-  workspaceFsPath: string | null,
+  rootFsPath: string | null,
 ): Promise<string | null> => {
   if (scope === 'global') {
     const path = `${SNIPPETS_DIR}/${filename}`
@@ -16,8 +16,8 @@ export const readSnippetCss = async (
     return null
   }
 
-  if (!workspaceFsPath) return null
-  const path = `${workspaceFsPath}/${WORKSPACE_SNIPPETS_DIR}/${filename}`
+  if (!rootFsPath) return null
+  const path = `${rootFsPath}/${ROOT_SNIPPETS_DIR}/${filename}`
   try {
     if (await exists(path)) return await read(path)
   } catch {

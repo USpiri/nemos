@@ -13,8 +13,9 @@ import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import { NoteError as NoteErrorClass } from '@/lib/notes'
+import { rootFolderName } from '@/lib/paths'
 
-const route = getRouteApi('/workspace/$workspaceId/notes/$noteId')
+const route = getRouteApi('/workspace/$rootPath/notes/$noteId')
 
 export const NoteError = ({ error, reset }: ErrorComponentProps) => {
   return (
@@ -31,9 +32,9 @@ const NoteErrorSwitch = ({
   error: Error
   reset: () => void
 }) => {
-  const { workspaceId, noteId } = route.useParams()
+  const { rootPath, noteId } = route.useParams()
   const { deleteNoteAndRefresh } = useWorkspaceActions({
-    workspace: workspaceId,
+    workspace: rootFolderName(rootPath),
   })
 
   if (error instanceof NoteErrorClass) {
@@ -46,8 +47,8 @@ const NoteErrorSwitch = ({
           >
             <div className="flex flex-col items-center gap-4">
               <Link
-                to="/workspace/$workspaceId"
-                params={{ workspaceId }}
+                to="/workspace/$rootPath"
+                params={{ rootPath }}
                 variant="outline"
               >
                 <ArrowLeft />
@@ -65,8 +66,8 @@ const NoteErrorSwitch = ({
           >
             <div className="flex flex-col items-center gap-4">
               <Link
-                to="/workspace/$workspaceId"
-                params={{ workspaceId }}
+                to="/workspace/$rootPath"
+                params={{ rootPath }}
                 variant="outline"
               >
                 <ArrowLeft />

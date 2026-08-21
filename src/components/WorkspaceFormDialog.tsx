@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useCreateWorkspace } from '@/hooks/use-create-workspace'
 import { useDialog } from '@/hooks/use-dialog'
+import { toAbsoluteRootPath } from '@/lib/paths'
 import {
   CreateWorkspaceInput,
   createWorkspaceSchema,
@@ -42,12 +43,12 @@ export const WorkspaceFormDialog = () => {
 
   const onSubmit = useCallback(
     async (data: CreateWorkspaceInput) => {
-      await createWorkspace(data.name, () => {
+      await createWorkspace(data.name, async () => {
         close()
         reset()
         navigate({
-          to: '/workspace/$workspaceId',
-          params: { workspaceId: data.name },
+          to: '/workspace/$rootPath',
+          params: { rootPath: await toAbsoluteRootPath(data.name) },
         })
       })
     },

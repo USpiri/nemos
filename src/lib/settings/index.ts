@@ -1,4 +1,4 @@
-export { initWorkspaceSettings } from './init-workspace-settings'
+export { initRootSettings } from './init-root-settings'
 export { resolveSettings } from './resolve-settings'
 export {
   AppearanceSettings,

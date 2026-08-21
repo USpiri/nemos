@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
-import { SNIPPETS_DIR, WORKSPACE_SNIPPETS_DIR } from '@/config/constants'
+import { ROOT_SNIPPETS_DIR, SNIPPETS_DIR } from '@/config/constants'
 import { useReloadStyles } from '@/hooks/use-reload-styles'
 import { ensureDir, ensureDirAppData } from '@/lib/fs'
 import { openAppDataPath, openPath } from '@/lib/opener'
@@ -43,42 +43,39 @@ export const AppearanceSection = () => {
   const theme = useAppearanceSettings((s) => s.theme)
   const autoSyncTheme = useAppearanceSettings((s) => s.autoSyncTheme)
   const activeTheme = useAppearanceSettings((s) => s.activeTheme)
-  const workspacePath = useAppearanceSettings((s) => s.workspacePath)
+  const rootPath = useAppearanceSettings((s) => s.rootPath)
   const disabledGlobalSnippets = useAppearanceSettings(
     (s) => s.disabledGlobalSnippets,
   )
-  const disabledWorkspaceSnippets = useAppearanceSettings(
-    (s) => s.disabledWorkspaceSnippets,
+  const disabledRootSnippets = useAppearanceSettings(
+    (s) => s.disabledRootSnippets,
   )
   const update = useAppearanceSettings((s) => s.update)
   const revertKey = useAppearanceSettings((s) => s.revertKey)
-  const workspaceDelta = useAppearanceSettings((s) => s.workspaceDelta)
+  const rootDelta = useAppearanceSettings((s) => s.rootDelta)
 
   const reloadStyles = useReloadStyles()
 
   const [availableThemes, setAvailableThemes] = useState<ThemeDescriptor[]>([])
   const [globalSnippets, setGlobalSnippets] = useState<SnippetDescriptor[]>([])
-  const [workspaceSnippets, setWorkspaceSnippets] = useState<
-    SnippetDescriptor[]
-  >([])
+  const [rootSnippets, setRootSnippets] = useState<SnippetDescriptor[]>([])
 
   useEffect(() => {
-    if (!workspacePath) return
-    loadThemes(workspacePath)
+    if (!rootPath) return
+    loadThemes(rootPath)
       .then(setAvailableThemes)
       .catch((e) => console.error('Failed to load themes', e))
-    loadCssSnippets(workspacePath)
-      .then(({ globalSnippets, workspaceSnippets }) => {
+    loadCssSnippets(rootPath)
+      .then(({ globalSnippets, rootSnippets }) => {
         setGlobalSnippets(globalSnippets)
-        setWorkspaceSnippets(workspaceSnippets)
+        setRootSnippets(rootSnippets)
       })
       .catch((e) => console.error('Failed to load snippets', e))
-  }, [workspacePath])
+  }, [rootPath])
 
   const hasAutoSyncThemeOrThemeDelta =
-    workspaceDelta.autoSyncTheme !== undefined ||
-    workspaceDelta.theme !== undefined
-  const hasActiveThemeDelta = workspaceDelta.activeTheme !== undefined
+    rootDelta.autoSyncTheme !== undefined || rootDelta.theme !== undefined
+  const hasActiveThemeDelta = rootDelta.activeTheme !== undefined
 
   const handleAutoSyncThemeChange = (checked: boolean) => {
     update({ autoSyncTheme: theme === 'system' ? checked : false })
@@ -94,17 +91,17 @@ export const AppearanceSection = () => {
     })
   }
 
-  const handleToggleWorkspaceSnippet = (id: string) => {
+  const handleToggleRootSnippet = (id: string) => {
     update({
-      disabledWorkspaceSnippets: toggleSnippetId(disabledWorkspaceSnippets, id),
+      disabledRootSnippets: toggleSnippetId(disabledRootSnippets, id),
     })
   }
 
   const handleReloadStyles = () => {
     reloadStyles()
-      .then(({ globalSnippets, workspaceSnippets }) => {
+      .then(({ globalSnippets, rootSnippets }) => {
         setGlobalSnippets(globalSnippets)
-        setWorkspaceSnippets(workspaceSnippets)
+        setRootSnippets(rootSnippets)
       })
       .catch((e) => console.error('Failed to reload styles', e))
   }
@@ -193,7 +190,7 @@ export const AppearanceSection = () => {
         <div className="space-y-0.5">
           <p className="font-medium text-sm">Global snippets</p>
           <p className="text-muted-foreground text-xs">
-            CSS snippets applied across all workspaces.
+            CSS snippets applied across all Roots.
           </p>
         </div>
         <Button
@@ -244,9 +241,9 @@ export const AppearanceSection = () => {
 
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
-          <p className="font-medium text-sm">Workspace snippets</p>
+          <p className="font-medium text-sm">Root snippets</p>
           <p className="text-muted-foreground text-xs">
-            CSS snippets applied only in this workspace.
+            CSS snippets applied only in this Root.
           </p>
         </div>
         <Button
@@ -254,8 +251,8 @@ export const AppearanceSection = () => {
           size="sm"
           className="h-7 gap-1.5 text-xs"
           onClick={() => {
-            if (!workspacePath) return
-            const dir = `${workspacePath}/${WORKSPACE_SNIPPETS_DIR}`
+            if (!rootPath) return
+            const dir = `${rootPath}/${ROOT_SNIPPETS_DIR}`
             ensureDir(dir).then(() => openPath(dir))
           }}
         >
@@ -263,18 +260,18 @@ export const AppearanceSection = () => {
           Open folder
         </Button>
       </div>
-      {workspaceSnippets.length === 0 ? (
+      {rootSnippets.length === 0 ? (
         <p className="text-muted-foreground text-xs">
-          No snippets found. Add <code>.css</code> files to the workspace
-          snippets folder.
+          No snippets found. Add <code>.css</code> files to the Root snippets
+          folder.
         </p>
       ) : (
         <div className="space-y-2">
-          {workspaceSnippets.map((s) => (
+          {rootSnippets.map((s) => (
             <Field key={s.id} orientation="horizontal">
               <FieldContent>
                 <FieldLabel
-                  htmlFor={`workspace-snippet-${s.id}`}
+                  htmlFor={`root-snippet-${s.id}`}
                   className="text-xs"
                 >
                   {s.displayName}
@@ -284,9 +281,9 @@ export const AppearanceSection = () => {
                 </FieldDescription>
               </FieldContent>
               <Switch
-                id={`workspace-snippet-${s.id}`}
-                checked={!disabledWorkspaceSnippets.includes(s.id)}
-                onCheckedChange={() => handleToggleWorkspaceSnippet(s.id)}
+                id={`root-snippet-${s.id}`}
+                checked={!disabledRootSnippets.includes(s.id)}
+                onCheckedChange={() => handleToggleRootSnippet(s.id)}
               />
             </Field>
           ))}

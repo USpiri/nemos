@@ -1,4 +1,4 @@
-import { linkOptions } from '@tanstack/react-router'
+import { linkOptions, useParams } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { Link } from '../ui/link'
 import { TreeNodeContextMenu } from './TreeNodeContextMenu'
@@ -25,11 +25,12 @@ export const TreeNode = ({
   note,
   children,
 }: Props) => {
+  const { rootPath } = useParams({ strict: false })
   const props = isDroppable
     ? { onClick: onToggle }
     : linkOptions({
-        to: '/workspace/$workspaceId/notes/$noteId',
-        params: { workspaceId: workspace, noteId: note },
+        to: '/workspace/$rootPath/notes/$noteId',
+        params: { rootPath: rootPath!, noteId: note },
         activeProps: {
           className: 'text-foreground!',
         },

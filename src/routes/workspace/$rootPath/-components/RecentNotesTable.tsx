@@ -16,10 +16,10 @@ import { getNoteRelativeDir } from '@/lib/workspace/utils'
 
 type Props = {
   notes: DetailedWorkspaceEntry[]
-  workspaceId: string
+  rootPath: string
 }
 
-export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
+export const RecentNotesTable = ({ notes, rootPath }: Props) => {
   return (
     <div className="rounded-md border">
       <Table>
@@ -36,9 +36,9 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
             <TableRow key={note.path}>
               <TableCell>
                 <Link
-                  to="/workspace/$workspaceId/notes/$noteId"
+                  to="/workspace/$rootPath/notes/$noteId"
                   params={{
-                    workspaceId,
+                    rootPath,
                     noteId: toRelativePath(note.path),
                   }}
                   className="flex items-center gap-2"
@@ -57,8 +57,8 @@ export const RecentNotesTable = ({ notes, workspaceId }: Props) => {
               </TableCell>
               <TableCell className="text-right">
                 <LinkComponent
-                  to="/workspace/$workspaceId/notes/$noteId"
-                  params={{ workspaceId, noteId: toRelativePath(note.path) }}
+                  to="/workspace/$rootPath/notes/$noteId"
+                  params={{ rootPath, noteId: toRelativePath(note.path) }}
                   size="sm"
                   variant="ghost"
                 >

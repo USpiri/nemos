@@ -1,6 +1,6 @@
 export const THEME_ATTR = 'data-nemos-theme'
 export const GLOBAL_ATTR = 'data-nemos-snippet-global'
-export const WORKSPACE_ATTR = 'data-nemos-snippet-workspace'
+export const ROOT_ATTR = 'data-nemos-snippet-root'
 
 export function applyThemeCSS(css: string | null) {
   const existing = document.querySelector(`[${THEME_ATTR}]`)

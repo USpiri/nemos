@@ -18,7 +18,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const autoSyncTheme = useAppearanceSettings((s) => s.autoSyncTheme)
   const setTheme = useAppearanceSettings((s) => s.update)
   const activeTheme = useAppearanceSettings((s) => s.activeTheme)
-  const workspacePath = useAppearanceSettings((s) => s.workspacePath)
+  const rootPath = useAppearanceSettings((s) => s.rootPath)
 
   useEffect(() => {
     if (theme !== 'system') {
@@ -47,13 +47,13 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       return
     }
     let cancelled = false
-    readThemeCss(activeTheme, workspacePath).then((css) => {
+    readThemeCss(activeTheme, rootPath).then((css) => {
       if (!cancelled) applyThemeCSS(css)
     })
     return () => {
       cancelled = true
     }
-  }, [activeTheme, workspacePath])
+  }, [activeTheme, rootPath])
 
   return <>{children}</>
 }

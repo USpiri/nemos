@@ -4,15 +4,15 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 
-const route = getRouteApi('/workspace/$workspaceId')
+const route = getRouteApi('/workspace/$rootPath')
 
 // TODO: Implement import notes
 export const WorkspaceActions = () => {
-  const { workspaceId } = route.useParams()
+  const { folderName } = route.useLoaderData()
 
   const { createNoteAndNavigate, createFolderAndRefresh } = useWorkspaceActions(
     {
-      workspace: workspaceId,
+      workspace: folderName,
     },
   )
 
