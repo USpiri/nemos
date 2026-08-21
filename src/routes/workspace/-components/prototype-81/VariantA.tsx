@@ -2,7 +2,7 @@
 // Workspaces (pinned) and Recent via two tabs — kept separate rather than
 // merged. Primary affordance is the list itself; pin/unpin and missing-root
 // resolution are inline row actions. Sidebar switcher becomes a grouped
-// Select. Picked by Marc on 2026-08-20, with these two tweaks applied live.
+// Select. Picked on 2026-08-20, with these two tweaks applied live.
 import {
   AlertTriangleIcon,
   ClockIcon,
