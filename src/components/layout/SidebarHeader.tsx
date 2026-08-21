@@ -8,14 +8,14 @@ import {
   SidebarMenuButton,
 } from '../ui/sidebar'
 
-const route = getRouteApi('/workspace/$workspaceId')
+const route = getRouteApi('/workspace/$rootPath')
 
 export const SidebarHeader = () => {
-  const { workspaceId } = route.useParams()
+  const { folderName } = route.useLoaderData()
 
   const { createNoteAndNavigate, createFolderAndRefresh } = useWorkspaceActions(
     {
-      workspace: workspaceId,
+      workspace: folderName,
     },
   )
 

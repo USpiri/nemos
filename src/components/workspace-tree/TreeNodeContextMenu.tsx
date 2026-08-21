@@ -8,6 +8,7 @@ import {
   SquareArrowOutUpRight,
   Trash2,
 } from 'lucide-react'
+import { useParams } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import { createNoteTab } from '@/lib/tabs'
@@ -46,18 +47,19 @@ export const TreeNodeContextMenu = ({
   } = useWorkspaceActions({
     workspace,
   })
+  const { rootPath } = useParams({ strict: false })
   const openNewTab = useTabsStore((s) => s.openNewTab)
   const closeTab = useTabsStore((s) => s.closeTab)
   const setRenamingPath = useRenameStore((state) => state.setRenamingPath)
 
   const handleOpenNote = useCallback(() => {
     const tabData = createNoteTab({
-      workspaceId: workspace,
+      rootPath: rootPath!,
       noteId: note,
     })
     openNewTab(tabData)
     navigateToNote(note)
-  }, [workspace, note, openNewTab, navigateToNote])
+  }, [rootPath, note, openNewTab, navigateToNote])
 
   const handleDeleteNote = useCallback(() => {
     closeTab(note)

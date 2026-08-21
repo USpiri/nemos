@@ -8,26 +8,26 @@ import {
 } from './ui/select'
 
 const route = getRouteApi('__root__')
-const workspaceRoute = getRouteApi('/workspace/$workspaceId')
+const workspaceRoute = getRouteApi('/workspace/$rootPath')
 
 export const WorkspaceSelector = () => {
-  const { workspaceId } = workspaceRoute.useParams()
+  const { rootPath } = workspaceRoute.useParams()
   const { workspaces } = route.useLoaderData()
   const navigate = useNavigate()
 
-  const handleWorkspaceChange = (workspaceId: string | null) => {
-    if (!workspaceId) return
-    navigate({ to: '/workspace/$workspaceId', params: { workspaceId } })
+  const handleWorkspaceChange = (rootPath: string | null) => {
+    if (!rootPath) return
+    navigate({ to: '/workspace/$rootPath', params: { rootPath } })
   }
 
   return (
-    <Select value={workspaceId} onValueChange={handleWorkspaceChange}>
+    <Select value={rootPath} onValueChange={handleWorkspaceChange}>
       <SelectTrigger className="w-full">
         <SelectValue />
       </SelectTrigger>
       <SelectContent className="p-1">
         {workspaces.map((workspace) => (
-          <SelectItem key={workspace.name} value={workspace.name}>
+          <SelectItem key={workspace.path} value={workspace.path}>
             {workspace.name}
           </SelectItem>
         ))}

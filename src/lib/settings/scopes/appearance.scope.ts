@@ -13,19 +13,30 @@ export const AppearanceSettings = z.object({
   autoSyncTheme: z.boolean(),
   activeTheme: z.string().nullable().default(null),
   disabledGlobalSnippets: z.array(z.string()).default([]),
-  disabledWorkspaceSnippets: z.array(z.string()).default([]),
+  disabledRootSnippets: z.array(z.string()).default([]),
 })
 export type AppearanceSettings = z.infer<typeof AppearanceSettings>
 
 export const useAppearanceSettings = createScope({
   key: 'appearance',
-  version: 1,
+  version: 2,
   schema: AppearanceSettings,
   defaults: {
     theme: Themes.SYSTEM,
     autoSyncTheme: true,
     activeTheme: null,
     disabledGlobalSnippets: [],
-    disabledWorkspaceSnippets: [],
+    disabledRootSnippets: [],
+  },
+  // One-time rename of the pre-#84 `disabledWorkspaceSnippets` key inside a
+  // Root's own delta file (`.config/settings.json`), which the global
+  // `migrate` hook can't see since it only runs against the global blob.
+  migrateRootDelta: (raw) => {
+    const legacy = raw as Partial<AppearanceSettings> & {
+      disabledWorkspaceSnippets?: string[]
+    }
+    if (legacy.disabledWorkspaceSnippets === undefined) return raw
+    const { disabledWorkspaceSnippets, ...rest } = legacy
+    return { ...rest, disabledRootSnippets: disabledWorkspaceSnippets }
   },
 })

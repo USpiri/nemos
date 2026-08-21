@@ -31,17 +31,17 @@ vi.mock('@/lib/themes/style-injectors', () => ({
   injectSnippetStyle: mockInjectSnippetStyle,
   removeStaleSnippets: mockRemoveStaleSnippets,
   GLOBAL_ATTR: 'data-nemos-snippet-global',
-  WORKSPACE_ATTR: 'data-nemos-snippet-workspace',
+  ROOT_ATTR: 'data-nemos-snippet-root',
 }))
 
-const WORKSPACE = 'nemos-app/my-workspace'
+const ROOT = 'nemos-app/my-root'
 const snippet = (id: string) => ({ id, displayName: id })
 
 beforeEach(() => {
   vi.clearAllMocks()
   mockLoadCssSnippets.mockResolvedValue({
     globalSnippets: [],
-    workspaceSnippets: [],
+    rootSnippets: [],
   })
   mockReadSnippetCss.mockResolvedValue(null)
 })
@@ -52,21 +52,21 @@ describe('reloadStyles — theme', () => {
 
     await reloadStyles({
       activeTheme: 'nord',
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
-    expect(mockReadThemeCss).toHaveBeenCalledWith('nord', WORKSPACE)
+    expect(mockReadThemeCss).toHaveBeenCalledWith('nord', ROOT)
     expect(mockApplyThemeCSS).toHaveBeenCalledWith('body { color: red }')
   })
 
   it('applies null CSS to remove theme style tag when activeTheme is null', async () => {
     await reloadStyles({
       activeTheme: null,
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
     expect(mockReadThemeCss).not.toHaveBeenCalled()
@@ -79,7 +79,7 @@ describe('reloadStyles — snippets', () => {
     mockReadThemeCss.mockResolvedValue(null)
     mockLoadCssSnippets.mockResolvedValue({
       globalSnippets: [snippet('nord'), snippet('dracula')],
-      workspaceSnippets: [snippet('custom')],
+      rootSnippets: [snippet('custom')],
     })
     mockReadSnippetCss.mockImplementation(
       (_scope: string, filename: string) => `/* ${filename} */`,
@@ -87,9 +87,9 @@ describe('reloadStyles — snippets', () => {
 
     await reloadStyles({
       activeTheme: null,
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
     expect(mockInjectSnippetStyle).toHaveBeenCalledWith(
@@ -103,7 +103,7 @@ describe('reloadStyles — snippets', () => {
       '/* dracula.css */',
     )
     expect(mockInjectSnippetStyle).toHaveBeenCalledWith(
-      'data-nemos-snippet-workspace',
+      'data-nemos-snippet-root',
       'custom',
       '/* custom.css */',
     )
@@ -113,15 +113,15 @@ describe('reloadStyles — snippets', () => {
     mockReadThemeCss.mockResolvedValue(null)
     mockLoadCssSnippets.mockResolvedValue({
       globalSnippets: [snippet('nord'), snippet('dracula')],
-      workspaceSnippets: [],
+      rootSnippets: [],
     })
     mockReadSnippetCss.mockResolvedValue('/* css */')
 
     await reloadStyles({
       activeTheme: null,
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: ['nord'],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
     const calls = mockInjectSnippetStyle.mock.calls
@@ -132,15 +132,15 @@ describe('reloadStyles — snippets', () => {
     mockReadThemeCss.mockResolvedValue(null)
     mockLoadCssSnippets.mockResolvedValue({
       globalSnippets: [snippet('nord')],
-      workspaceSnippets: [],
+      rootSnippets: [],
     })
     mockReadSnippetCss.mockResolvedValue('/* css */')
 
     await reloadStyles({
       activeTheme: null,
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
     expect(mockRemoveStaleSnippets).toHaveBeenCalledWith(
@@ -148,41 +148,41 @@ describe('reloadStyles — snippets', () => {
       new Set(['nord']),
     )
     expect(mockRemoveStaleSnippets).toHaveBeenCalledWith(
-      'data-nemos-snippet-workspace',
+      'data-nemos-snippet-root',
       new Set(),
     )
   })
 
-  it('returns updated globalSnippets and workspaceSnippets', async () => {
+  it('returns updated globalSnippets and rootSnippets', async () => {
     mockReadThemeCss.mockResolvedValue(null)
     mockLoadCssSnippets.mockResolvedValue({
       globalSnippets: [snippet('nord')],
-      workspaceSnippets: [snippet('custom')],
+      rootSnippets: [snippet('custom')],
     })
     mockReadSnippetCss.mockResolvedValue('/* css */')
 
     const result = await reloadStyles({
       activeTheme: null,
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
     expect(result.globalSnippets).toEqual([snippet('nord')])
-    expect(result.workspaceSnippets).toEqual([snippet('custom')])
+    expect(result.rootSnippets).toEqual([snippet('custom')])
   })
 })
 
 describe('reloadStyles — edge cases', () => {
-  it('returns empty lists and skips snippet loading when workspacePath is null', async () => {
+  it('returns empty lists and skips snippet loading when rootPath is null', async () => {
     const result = await reloadStyles({
       activeTheme: null,
-      workspacePath: null,
+      rootPath: null,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
-    expect(result).toEqual({ globalSnippets: [], workspaceSnippets: [] })
+    expect(result).toEqual({ globalSnippets: [], rootSnippets: [] })
     expect(mockLoadCssSnippets).not.toHaveBeenCalled()
   })
 
@@ -192,11 +192,11 @@ describe('reloadStyles — edge cases', () => {
 
     const result = await reloadStyles({
       activeTheme: null,
-      workspacePath: WORKSPACE,
+      rootPath: ROOT,
       disabledGlobalSnippets: [],
-      disabledWorkspaceSnippets: [],
+      disabledRootSnippets: [],
     })
 
-    expect(result).toEqual({ globalSnippets: [], workspaceSnippets: [] })
+    expect(result).toEqual({ globalSnippets: [], rootSnippets: [] })
   })
 })

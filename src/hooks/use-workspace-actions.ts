@@ -1,4 +1,4 @@
-import { useNavigate, useRouter } from '@tanstack/react-router'
+import { useNavigate, useParams, useRouter } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import {
   newFolderRelativePath,
@@ -23,6 +23,9 @@ interface Props {
 export const useWorkspaceActions = ({ workspace }: Props) => {
   const navigate = useNavigate()
   const router = useRouter()
+  // Route/session identity is the Root's absolute path (#84); `workspace`
+  // above is the bare folder name used by the fs-mutation hooks below.
+  const { rootPath } = useParams({ strict: false })
 
   const { createNote: createNoteFn } = useCreateNote({ workspaceId: workspace })
   const { createFolder: createFolderFn } = useCreateFolder({
@@ -43,18 +46,18 @@ export const useWorkspaceActions = ({ workspace }: Props) => {
 
   const refreshWorkspace = useCallback(() => {
     router.invalidate({
-      filter: (route) => route.id === '/workspace/$workspaceId',
+      filter: (route) => route.id === '/workspace/$rootPath',
     })
   }, [router.invalidate])
 
   const navigateToNote = useCallback(
     (relativeNotePath: string) => {
       navigate({
-        to: '/workspace/$workspaceId/notes/$noteId',
-        params: { workspaceId: workspace, noteId: relativeNotePath },
+        to: '/workspace/$rootPath/notes/$noteId',
+        params: { rootPath: rootPath!, noteId: relativeNotePath },
       })
     },
-    [navigate, workspace],
+    [navigate, rootPath],
   )
 
   const createNote = useCallback(

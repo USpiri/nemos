@@ -33,8 +33,8 @@ export const WorkspaceList = ({ workspaces }: Props) => {
               Open to view notes
             </CardDescription>
             <Link
-              to="/workspace/$workspaceId"
-              params={{ workspaceId: workspace.name }}
+              to="/workspace/$rootPath"
+              params={{ rootPath: workspace.path }}
               size="sm"
               variant="outline"
             >
