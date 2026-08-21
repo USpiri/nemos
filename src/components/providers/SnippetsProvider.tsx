@@ -4,8 +4,8 @@ import { filterEnabled, loadCssSnippets, readSnippetCss } from '@/lib/themes'
 import {
   GLOBAL_ATTR,
   injectSnippetStyle,
-  removeStaleSnippets,
   ROOT_ATTR,
+  removeStaleSnippets,
 } from '@/lib/themes/style-injectors'
 
 export const SnippetsProvider = ({

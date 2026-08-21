@@ -1,3 +1,4 @@
+import { useParams } from '@tanstack/react-router'
 import {
   ArrowUpRight,
   Copy,
@@ -8,7 +9,6 @@ import {
   SquareArrowOutUpRight,
   Trash2,
 } from 'lucide-react'
-import { useParams } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
 import { createNoteTab } from '@/lib/tabs'

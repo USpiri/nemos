@@ -12,7 +12,9 @@ export interface ScopeDefinition<TSchema extends z.ZodObject> {
    * right after the delta is loaded; if it changes the object, the result
    * is persisted back so it only runs once per Root.
    */
-  migrateRootDelta?: (raw: Partial<z.infer<TSchema>>) => Partial<z.infer<TSchema>>
+  migrateRootDelta?: (
+    raw: Partial<z.infer<TSchema>>,
+  ) => Partial<z.infer<TSchema>>
 }
 
 export interface PersistedScope<T> {

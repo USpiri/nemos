@@ -16,7 +16,9 @@ export interface MigrateResult {
 }
 
 /** Scan a workspace for unmigrated .note files */
-export const findLegacyNotes = async (workspaceId: string): Promise<string[]> => {
+export const findLegacyNotes = async (
+  workspaceId: string,
+): Promise<string[]> => {
   let entries: { path: string; name: string; isFile: boolean }[] = []
   try {
     entries = await readDirRecursive(toFsPath(workspaceId))

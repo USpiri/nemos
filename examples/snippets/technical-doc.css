@@ -3,7 +3,7 @@
    Apply with:  cssClass: technical-doc
    ───────────────────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
 
 /* ── Container ─────────────────────────────────────────────────── */
 
@@ -20,11 +20,11 @@ main.technical-doc {
 /* Classification bar — top and bottom */
 main.technical-doc::before,
 main.technical-doc::after {
-  content: '— RESTRICTED — TSI SURVEY DIVISION — INTERNAL USE ONLY —';
+  content: "— RESTRICTED — TSI SURVEY DIVISION — INTERNAL USE ONLY —";
   display: block;
-  position: sticky;          /* was: fixed — sticky stays inside the scroll container */
+  position: sticky; /* was: fixed — sticky stays inside the scroll container */
   text-align: center;
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-family: "Share Tech Mono", "Courier New", monospace;
   font-size: 0.6rem;
   letter-spacing: 0.25em;
   color: #3a6a8a;
@@ -35,18 +35,23 @@ main.technical-doc::after {
   pointer-events: none;
 }
 
-main.technical-doc::before { top: 0; border-bottom: 1px solid #1a3a5a; }
-main.technical-doc::after  { bottom: 0; }
+main.technical-doc::before {
+  top: 0;
+  border-bottom: 1px solid #1a3a5a;
+}
+main.technical-doc::after {
+  bottom: 0;
+}
 /* ── Note properties area (title / tags) ───────────────────────── */
 
-main.technical-doc [class*='px-10']:first-of-type {
+main.technical-doc [class*="px-10"]:first-of-type {
   padding-top: 4rem !important;
 }
 
 /* ── Editor content ────────────────────────────────────────────── */
 
 main.technical-doc .ProseMirror {
-  font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+  font-family: "Share Tech Mono", "Courier New", Courier, monospace;
   font-size: 0.82rem;
   line-height: 1.75;
   color: #9ec8e8;
@@ -56,7 +61,7 @@ main.technical-doc .ProseMirror {
 /* ── Headings ──────────────────────────────────────────────────── */
 
 main.technical-doc .ProseMirror h1 {
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-family: "Share Tech Mono", "Courier New", monospace;
   font-size: 1rem;
   font-weight: normal;
   text-transform: uppercase;
@@ -69,7 +74,7 @@ main.technical-doc .ProseMirror h1 {
 }
 
 main.technical-doc .ProseMirror h2 {
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-family: "Share Tech Mono", "Courier New", monospace;
   font-size: 0.85rem;
   font-weight: normal;
   text-transform: uppercase;
@@ -82,7 +87,7 @@ main.technical-doc .ProseMirror h2 {
 }
 
 main.technical-doc .ProseMirror h3 {
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-family: "Share Tech Mono", "Courier New", monospace;
   font-size: 0.8rem;
   font-weight: normal;
   text-transform: uppercase;
@@ -109,7 +114,7 @@ main.technical-doc .ProseMirror hr {
 }
 
 main.technical-doc .ProseMirror hr::before {
-  content: '◆';
+  content: "◆";
   position: absolute;
   left: 50%;
   top: 50%;
@@ -144,7 +149,7 @@ main.technical-doc .ProseMirror blockquote {
 }
 
 main.technical-doc .ProseMirror blockquote::before {
-  content: '▸ NOTE: ';
+  content: "▸ NOTE: ";
   color: #3a7aaa;
   font-style: normal;
   font-size: 0.72rem;
@@ -193,7 +198,7 @@ main.technical-doc .ProseMirror code {
   color: #60d8b0;
   padding: 0.1em 0.45em;
   border-radius: 2px;
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-family: "Share Tech Mono", "Courier New", monospace;
   font-size: 0.9em;
   border: 1px solid #1a4a6a;
 }

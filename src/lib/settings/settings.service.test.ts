@@ -47,7 +47,10 @@ describe('createScope', () => {
 
   describe('resetToDefaults()', () => {
     it('sets state to hardcoded defaults', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({})
 
       const scope = createScope(testDef)
@@ -62,7 +65,10 @@ describe('createScope', () => {
     })
 
     it('persists defaults to global store', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({})
 
       const scope = createScope(testDef)
@@ -80,7 +86,10 @@ describe('createScope', () => {
     })
 
     it("clears the scope's root delta so re-init does not re-apply stale overrides", async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson
         .mockResolvedValueOnce({ test: { theme: 'light' } }) // init: root delta
         .mockResolvedValueOnce({ test: { theme: 'light' } }) // resetToDefaults: removeRootDelta read
@@ -103,7 +112,10 @@ describe('createScope', () => {
     })
 
     it('reflects loaded root delta after init', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({ test: { theme: 'light' } })
 
       const scope = createScope(testDef)
@@ -113,7 +125,10 @@ describe('createScope', () => {
     })
 
     it('is empty after reset()', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson
         .mockResolvedValueOnce({ test: { theme: 'light', value: 99 } })
         .mockResolvedValueOnce({ test: { theme: 'light', value: 99 } })
@@ -126,7 +141,10 @@ describe('createScope', () => {
     })
 
     it('accumulates keys from update() into rootDelta', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({})
 
       const scope = createScope(testDef)
@@ -142,7 +160,10 @@ describe('createScope', () => {
 
   describe('revertKey()', () => {
     it('removes the key from rootDelta in state', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({ test: { theme: 'light', value: 99 } })
 
       const scope = createScope(testDef)
@@ -154,7 +175,10 @@ describe('createScope', () => {
     })
 
     it('reverts state for that key to the global value', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({ test: { theme: 'light', value: 99 } })
 
       const scope = createScope(testDef)
@@ -166,10 +190,16 @@ describe('createScope', () => {
     })
 
     it('persists the delta file without that key', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson
         .mockResolvedValueOnce({ test: { theme: 'light', value: 99 } }) // init
-        .mockResolvedValueOnce({ test: { theme: 'light', value: 99 }, other: { x: 1 } }) // revertKey read
+        .mockResolvedValueOnce({
+          test: { theme: 'light', value: 99 },
+          other: { x: 1 },
+        }) // revertKey read
 
       const scope = createScope(testDef)
       await scope.getState().init(ROOT)
@@ -202,7 +232,10 @@ describe('createScope', () => {
     })
 
     it("removes the scope's key from the root delta file", async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson
         .mockResolvedValueOnce({ test: { theme: 'light' }, other: { x: 1 } }) // init
         .mockResolvedValueOnce({ test: { theme: 'light' }, other: { x: 1 } }) // reset
@@ -218,7 +251,10 @@ describe('createScope', () => {
     })
 
     it('does not modify global settings', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({})
 
       const scope = createScope(testDef)
@@ -245,7 +281,10 @@ describe('createScope', () => {
     }
 
     it('leaves the delta untouched when no legacy key is present', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({ test: { theme: 'light' } })
 
       const scope = createScope(migratingDef)
@@ -256,7 +295,10 @@ describe('createScope', () => {
     })
 
     it('applies the rename and persists the migrated delta once', async () => {
-      mockGet.mockResolvedValue({ _meta: { version: 1 }, data: { theme: 'dark', value: 5 } })
+      mockGet.mockResolvedValue({
+        _meta: { version: 1 },
+        data: { theme: 'dark', value: 5 },
+      })
       mockReadJson.mockResolvedValue({ test: { legacyKey: 'light' } })
 
       const scope = createScope(migratingDef)
@@ -264,9 +306,12 @@ describe('createScope', () => {
 
       expect(scope.getState().theme).toBe('light')
       expect(scope.getState().rootDelta).toEqual({ theme: 'light' })
-      expect(mockWriteJson).toHaveBeenCalledWith(`${ROOT}/.config/settings.json`, {
-        test: { theme: 'light' },
-      })
+      expect(mockWriteJson).toHaveBeenCalledWith(
+        `${ROOT}/.config/settings.json`,
+        {
+          test: { theme: 'light' },
+        },
+      )
     })
   })
 })

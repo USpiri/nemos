@@ -99,7 +99,10 @@ describe('deleteEmptyTableOnBackspace', () => {
     const editor = createEditor(EMPTY_TABLE)
     editor.commands.setTextSelection(findCellContentStart(editor, 0, 0))
 
-    const result = deleteEmptyTableOnBackspace(editor.state, editor.view.dispatch)
+    const result = deleteEmptyTableOnBackspace(
+      editor.state,
+      editor.view.dispatch,
+    )
 
     expect(result).toBe(true)
     expect(editor.state.doc.childCount).toBe(1)
@@ -118,7 +121,10 @@ Some text
 `)
     editor.commands.setTextSelection(findCellContentStart(editor, 0, 0))
 
-    const result = deleteEmptyTableOnBackspace(editor.state, editor.view.dispatch)
+    const result = deleteEmptyTableOnBackspace(
+      editor.state,
+      editor.view.dispatch,
+    )
 
     expect(result).toBe(true)
     expect(editor.state.doc.childCount).toBe(1)
@@ -131,7 +137,10 @@ Some text
     editor.commands.setTextSelection(findCellStart(editor, 'A'))
     const before = editor.state.doc.toJSON()
 
-    const result = deleteEmptyTableOnBackspace(editor.state, editor.view.dispatch)
+    const result = deleteEmptyTableOnBackspace(
+      editor.state,
+      editor.view.dispatch,
+    )
 
     expect(result).toBe(false)
     expect(editor.state.doc.toJSON()).toEqual(before)
@@ -143,13 +152,15 @@ Some text
     editor.commands.setTextSelection(findCellContentStart(editor, 0, 1))
     const before = editor.state.doc.toJSON()
 
-    const result = deleteEmptyTableOnBackspace(editor.state, editor.view.dispatch)
+    const result = deleteEmptyTableOnBackspace(
+      editor.state,
+      editor.view.dispatch,
+    )
 
     expect(result).toBe(false)
     expect(editor.state.doc.toJSON()).toEqual(before)
     editor.destroy()
   })
-
 })
 
 describe('deleteEmptyRowOnBackspace', () => {

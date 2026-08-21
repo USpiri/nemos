@@ -137,7 +137,9 @@ export function createScope<TSchema extends z.ZodObject>(
       }
       const effective = resolveSettings(globalData, rootDelta)
 
-      set({ ...effective, rootDelta, _initialized: true, rootPath } as Partial<ScopeStore<Data>>)
+      set({ ...effective, rootDelta, _initialized: true, rootPath } as Partial<
+        ScopeStore<Data>
+      >)
     },
 
     update: async (patch) => {
