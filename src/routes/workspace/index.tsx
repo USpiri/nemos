@@ -11,6 +11,11 @@ import {
   WorkspaceList,
   WorkspacePending,
 } from './-components'
+import { PrototypeSwitcher } from './-components/prototype-81/PrototypeSwitcher'
+import { usePrototypeVariant } from './-components/prototype-81/use-prototype-variant'
+import { VariantA } from './-components/prototype-81/VariantA'
+import { VariantB } from './-components/prototype-81/VariantB'
+import { VariantC } from './-components/prototype-81/VariantC'
 
 export const Route = createFileRoute('/workspace/')({
   loader: async () => {
@@ -22,10 +27,37 @@ export const Route = createFileRoute('/workspace/')({
   component: WorkspaceIndex,
 })
 
+const PROTOTYPE_VARIANTS = [
+  { key: 'A', label: 'Unified list' },
+  { key: 'B', label: 'Grid + Recent table' },
+  { key: 'C', label: 'Sidebar-first rail' },
+]
+
 function WorkspaceIndex() {
   const { workspaces } = Route.useLoaderData()
   const router = useRouter()
   const { open } = useDialog()
+
+  // PROTOTYPE for issue #81 — dev-only, throwaway. See -components/prototype-81.
+  const { variant, cycle } = usePrototypeVariant(
+    PROTOTYPE_VARIANTS.map((v) => v.key),
+    'A',
+  )
+
+  if (import.meta.env.DEV) {
+    return (
+      <>
+        {variant === 'A' && <VariantA />}
+        {variant === 'B' && <VariantB />}
+        {variant === 'C' && <VariantC />}
+        <PrototypeSwitcher
+          variants={PROTOTYPE_VARIANTS}
+          current={variant}
+          onCycle={cycle}
+        />
+      </>
+    )
+  }
 
   const handleRefresh = () => {
     void router.invalidate()
