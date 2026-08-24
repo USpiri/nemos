@@ -12,7 +12,7 @@ export const SidebarContent = () => {
   return (
     <SidebarContentBase>
       <ScrollArea className="[&_[data-slot=scroll-area-viewport]>div]:block! h-full [&_[data-slot=scroll-area-viewport]>div]:h-full!">
-        <WorkspaceTree tree={tree} root={ROOT} workspace={folderName} />
+        <WorkspaceTree tree={tree} root={ROOT} rootFolderName={folderName} />
       </ScrollArea>
     </SidebarContentBase>
   )

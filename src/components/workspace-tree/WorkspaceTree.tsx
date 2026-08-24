@@ -2,7 +2,7 @@ import { DropOptions, NodeModel } from '@minoru/react-dnd-treeview'
 import { useParams } from '@tanstack/react-router'
 import { ChevronDown, ChevronRight, FileText } from 'lucide-react'
 import { EXTENSION } from '@/config/constants'
-import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { useRootActions } from '@/hooks/use-root-actions'
 import { getBaseName, toRelativePath } from '@/lib/paths'
 import { EditableFilename } from '../EditableFilename'
 import { Tree } from '../ui/tree'
@@ -13,13 +13,14 @@ import { TreeNode } from './TreeNode'
 interface Props {
   tree: NodeModel[]
   root: string
-  workspace: string
+  rootFolderName: string
 }
 
-export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
+export const WorkspaceTree = ({ tree, root, rootFolderName }: Props) => {
   const { noteId: currentNoteId } = useParams({ strict: false })
-  const { moveNote, moveFolder, refreshWorkspace, navigateToNote } =
-    useWorkspaceActions({ workspace })
+  const { moveNote, moveFolder, refreshRoot, navigateToNote } = useRootActions({
+    root: rootFolderName,
+  })
 
   const handleDrop = async (
     _tree: NodeModel[],
@@ -33,14 +34,14 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
 
     if (dragSource.droppable) {
       const newFolderId = await moveFolder(sourceId, targetId)
-      refreshWorkspace()
+      refreshRoot()
       if (newFolderId && currentNoteId?.startsWith(`${sourceId}/`)) {
         const updatedNoteId = currentNoteId.replace(sourceId, newFolderId)
         navigateToNote(updatedNoteId)
       }
     } else {
       const newNoteId = await moveNote(sourceId, targetId)
-      refreshWorkspace()
+      refreshRoot()
       if (newNoteId && currentNoteId === sourceId) {
         navigateToNote(newNoteId)
       }
@@ -48,10 +49,10 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
   }
 
   return (
-    <TreeContextMenu workspace={workspace}>
+    <TreeContextMenu root={rootFolderName}>
       <Tree
         tree={tree}
-        rootId={`${root}/${workspace}`}
+        rootId={`${root}/${rootFolderName}`}
         render={(
           node,
           { depth, isOpen, onToggle, isDragging, isDropTarget },
@@ -62,7 +63,7 @@ export const WorkspaceTree = ({ tree, root, workspace }: Props) => {
             isDroppable={!!node.droppable}
             isDragging={isDragging}
             isDropTarget={isDropTarget}
-            workspace={workspace}
+            root={rootFolderName}
             note={toRelativePath(node.id.toString())}
             onToggle={onToggle}
           >

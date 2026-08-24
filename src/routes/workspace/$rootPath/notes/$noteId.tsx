@@ -37,7 +37,7 @@ function NoteIdComponent() {
   return (
     <NoteView
       key={noteId}
-      workspaceId={folderName}
+      rootFolderName={folderName}
       noteId={noteId}
       note={note}
     />
@@ -45,18 +45,18 @@ function NoteIdComponent() {
 }
 
 function NoteView({
-  workspaceId,
+  rootFolderName,
   noteId,
   note,
 }: {
-  workspaceId: string
+  rootFolderName: string
   noteId: string
   note: Note
 }) {
   const [frontmatter, setFrontmatter] = useState<Frontmatter>(note.frontmatter)
 
   const { save, saveNow } = useNoteEditor({
-    workspaceId,
+    workspaceId: rootFolderName,
     relativePath: noteId,
     initialContent: note.content,
     initialFrontmatter: note.frontmatter,

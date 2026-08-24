@@ -39,7 +39,7 @@ function RouteComponent() {
     <SidebarProvider>
       <MigrationOverlay
         key={rootPath}
-        workspaceId={folderName}
+        rootFolderName={folderName}
         legacyCount={legacyCount}
       />
       <Sidebar />

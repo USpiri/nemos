@@ -10,7 +10,7 @@ interface Props {
   isDroppable: boolean
   isDragging: boolean
   isDropTarget: boolean
-  workspace: string
+  root: string
   note: string
   children: React.ReactNode
 }
@@ -21,7 +21,7 @@ export const TreeNode = ({
   isDroppable,
   isDragging,
   isDropTarget,
-  workspace,
+  root,
   note,
   children,
 }: Props) => {
@@ -37,11 +37,7 @@ export const TreeNode = ({
       })
 
   return (
-    <TreeNodeContextMenu
-      isFolder={isDroppable}
-      workspace={workspace}
-      note={note}
-    >
+    <TreeNodeContextMenu isFolder={isDroppable} root={root} note={note}>
       <Link
         {...props}
         className={cn(

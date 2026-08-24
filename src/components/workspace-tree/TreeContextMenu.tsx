@@ -1,5 +1,5 @@
 import { FilePlus, FolderOpen, FolderPlus, RefreshCw } from 'lucide-react'
-import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { useRootActions } from '@/hooks/use-root-actions'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -10,17 +10,17 @@ import {
 
 interface Props {
   children: React.ReactNode
-  workspace: string
+  root: string
 }
 
-export const TreeContextMenu = ({ children, workspace }: Props) => {
+export const TreeContextMenu = ({ children, root }: Props) => {
   const {
     createNoteAndNavigate,
     createFolderAndRefresh,
-    refreshWorkspace,
+    refreshRoot,
     revealInExplorer,
-  } = useWorkspaceActions({
-    workspace,
+  } = useRootActions({
+    root,
   })
 
   return (
@@ -51,7 +51,7 @@ export const TreeContextMenu = ({ children, workspace }: Props) => {
         </ContextMenuItem>
         <ContextMenuItem
           className="rounded-none px-2 py-1.5 text-muted-foreground text-xs"
-          onClick={() => refreshWorkspace()}
+          onClick={() => refreshRoot()}
         >
           <RefreshCw className="text-foreground" />
           Refresh

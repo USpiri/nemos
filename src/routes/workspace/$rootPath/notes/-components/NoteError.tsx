@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
-import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { useRootActions } from '@/hooks/use-root-actions'
 import { NoteError as NoteErrorClass } from '@/lib/notes'
 import { rootFolderName } from '@/lib/paths'
 
@@ -33,8 +33,8 @@ const NoteErrorSwitch = ({
   reset: () => void
 }) => {
   const { rootPath, noteId } = route.useParams()
-  const { deleteNoteAndRefresh } = useWorkspaceActions({
-    workspace: rootFolderName(rootPath),
+  const { deleteNoteAndRefresh } = useRootActions({
+    root: rootFolderName(rootPath),
   })
 
   if (error instanceof NoteErrorClass) {
