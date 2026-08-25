@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { toAbsoluteRootPath } from '@/lib/paths'
 import type { Tab } from '@/lib/tabs'
 
 interface TabsState {
@@ -258,39 +257,10 @@ export const useTabsStore = create<TabsState & TabsActions>()(
     }),
     {
       name: 'nemos-tabs',
-      version: 1,
       partialize: (state) => ({
         tabs: state.tabs,
         activeTabId: state.activeTabId,
       }),
-      // v0 -> v1 (#84): tab identity moved from a bare workspace folder name
-      // to the Root's absolute path. Legacy persisted tabs only have
-      // `payload.workspaceId`; recompute the matching absolute path once so
-      // existing tabs still resolve to the right Root after upgrading.
-      migrate: async (persistedState, version) => {
-        const state = persistedState as TabsState
-        if (version >= 1) return state
-        const tabs = await Promise.all(
-          state.tabs.map(async (tab) => {
-            if (tab.type !== 'note') return tab
-            const payload = tab.payload as {
-              workspaceId?: string
-              rootPath?: string
-              noteId: string
-            }
-            if (payload.rootPath !== undefined) return tab
-            const { workspaceId, ...rest } = payload
-            return {
-              ...tab,
-              payload: {
-                ...rest,
-                rootPath: await toAbsoluteRootPath(workspaceId!),
-              },
-            }
-          }),
-        )
-        return { ...state, tabs }
-      },
     },
   ),
 )
