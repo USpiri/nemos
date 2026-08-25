@@ -10,18 +10,15 @@ import {
 
 interface Props {
   children: React.ReactNode
-  root: string
 }
 
-export const TreeContextMenu = ({ children, root }: Props) => {
+export const TreeContextMenu = ({ children }: Props) => {
   const {
     createNoteAndNavigate,
     createFolderAndRefresh,
     refreshRoot,
     revealInExplorer,
-  } = useRootActions({
-    root,
-  })
+  } = useRootActions()
 
   return (
     <ContextMenu>

@@ -1,9 +1,10 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { FolderPlus } from 'lucide-react'
+import { FolderOpen, FolderPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Code, H1, P } from '@/components/ui/typography'
 import { ROOT } from '@/config/constants'
 import { useDialog } from '@/hooks/use-dialog'
+import { useOpenFolder } from '@/hooks/use-open-folder'
 import { getWorkspaces } from '@/lib/workspace'
 import {
   WorkspaceEmpty,
@@ -26,6 +27,7 @@ function WorkspaceIndex() {
   const { workspaces } = Route.useLoaderData()
   const router = useRouter()
   const { open } = useDialog()
+  const { openFolder } = useOpenFolder()
 
   const handleRefresh = () => {
     void router.invalidate()
@@ -51,9 +53,14 @@ function WorkspaceIndex() {
         )}
       </section>
 
-      <Button variant="outline" onClick={() => open('workspace')}>
-        <FolderPlus /> Create a new workspace
-      </Button>
+      <div className="flex flex-row flex-wrap gap-2">
+        <Button variant="outline" onClick={() => open('workspace')}>
+          <FolderPlus /> Create a new workspace
+        </Button>
+        <Button variant="outline" onClick={openFolder}>
+          <FolderOpen /> Open Folder
+        </Button>
+      </div>
     </div>
   )
 }

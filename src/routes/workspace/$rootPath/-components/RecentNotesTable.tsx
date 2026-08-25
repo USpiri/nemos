@@ -39,7 +39,7 @@ export const RecentNotesTable = ({ notes, rootPath }: Props) => {
                   to="/workspace/$rootPath/notes/$noteId"
                   params={{
                     rootPath,
-                    noteId: toRelativePath(note.path),
+                    noteId: toRelativePath(note.path, rootPath),
                   }}
                   className="flex items-center gap-2"
                 >
@@ -48,7 +48,7 @@ export const RecentNotesTable = ({ notes, rootPath }: Props) => {
                 </Link>
               </TableCell>
               <TableCell>
-                <Code>{getNoteRelativeDir(note.path)}</Code>
+                <Code>{getNoteRelativeDir(note.path, rootPath)}</Code>
               </TableCell>
               <TableCell>
                 <P variant="muted" className="text-xs">
@@ -58,7 +58,10 @@ export const RecentNotesTable = ({ notes, rootPath }: Props) => {
               <TableCell className="text-right">
                 <LinkComponent
                   to="/workspace/$rootPath/notes/$noteId"
-                  params={{ rootPath, noteId: toRelativePath(note.path) }}
+                  params={{
+                    rootPath,
+                    noteId: toRelativePath(note.path, rootPath),
+                  }}
                   size="sm"
                   variant="ghost"
                 >

@@ -55,8 +55,8 @@ export const isNoteFile = (entry: WorkspaceEntry) => {
   return entry.isFile && isNotePath(entry.name)
 }
 
-export const getNoteRelativeDir = (path: string) => {
-  const relative = toRelativePath(path)
+export const getNoteRelativeDir = (path: string, rootPath: string) => {
+  const relative = toRelativePath(path, rootPath)
   const containerRelative = getContainerPath(relative)
   return containerRelative ? `/${containerRelative}` : '/'
 }

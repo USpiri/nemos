@@ -44,11 +44,7 @@ describe('readSnippetCss', () => {
     mockExists.mockResolvedValue(true)
     mockRead.mockResolvedValue('.ws { color: blue }')
 
-    const result = await readSnippetCss(
-      'workspace',
-      'my-snippet.css',
-      WORKSPACE,
-    )
+    const result = await readSnippetCss('root', 'my-snippet.css', WORKSPACE)
 
     expect(result).toBe('.ws { color: blue }')
     expect(mockRead).toHaveBeenCalledWith(
@@ -59,13 +55,11 @@ describe('readSnippetCss', () => {
   it('returns null when workspace file does not exist', async () => {
     mockExists.mockResolvedValue(false)
 
-    expect(
-      await readSnippetCss('workspace', 'my-snippet.css', WORKSPACE),
-    ).toBeNull()
+    expect(await readSnippetCss('root', 'my-snippet.css', WORKSPACE)).toBeNull()
   })
 
   it('returns null when workspace scope requested but workspaceFsPath is null', async () => {
-    expect(await readSnippetCss('workspace', 'my-snippet.css', null)).toBeNull()
+    expect(await readSnippetCss('root', 'my-snippet.css', null)).toBeNull()
     expect(mockExists).not.toHaveBeenCalled()
   })
 
@@ -83,7 +77,7 @@ describe('readSnippetCss', () => {
     mockRead.mockRejectedValue(new Error('io error'))
 
     await expect(
-      readSnippetCss('workspace', 'my-snippet.css', WORKSPACE),
+      readSnippetCss('root', 'my-snippet.css', WORKSPACE),
     ).resolves.toBeNull()
   })
 
@@ -93,7 +87,7 @@ describe('readSnippetCss', () => {
     mockExistsAppData.mockResolvedValue(true)
     mockReadAppData.mockResolvedValue('.global {}')
 
-    const wsResult = await readSnippetCss('workspace', 'shared.css', WORKSPACE)
+    const wsResult = await readSnippetCss('root', 'shared.css', WORKSPACE)
     const globalResult = await readSnippetCss('global', 'shared.css', WORKSPACE)
 
     expect(wsResult).toBe('.ws {}')
