@@ -6,79 +6,64 @@ import {
   GLOBAL_ATTR,
   injectSnippetStyle,
   removeStaleSnippets,
-  WORKSPACE_ATTR,
+  ROOT_ATTR,
 } from './style-injectors'
 import type { SnippetDescriptor } from './theme.types'
 import { filterEnabled } from './utils'
 
 interface ReloadStylesParams {
   activeTheme: string | null
-  workspacePath: string | null
+  rootPath: string | null
   disabledGlobalSnippets: string[]
-  disabledWorkspaceSnippets: string[]
+  disabledRootSnippets: string[]
 }
 
 interface ReloadStylesResult {
   globalSnippets: SnippetDescriptor[]
-  workspaceSnippets: SnippetDescriptor[]
+  rootSnippets: SnippetDescriptor[]
 }
 
 export async function reloadStyles({
   activeTheme,
-  workspacePath,
+  rootPath,
   disabledGlobalSnippets,
-  disabledWorkspaceSnippets,
+  disabledRootSnippets,
 }: ReloadStylesParams): Promise<ReloadStylesResult> {
   if (activeTheme) {
-    const css = await readThemeCss(activeTheme, workspacePath)
+    const css = await readThemeCss(activeTheme, rootPath)
     applyThemeCSS(css)
   } else {
     applyThemeCSS(null)
   }
 
-  if (!workspacePath) {
-    return { globalSnippets: [], workspaceSnippets: [] }
+  if (!rootPath) {
+    return { globalSnippets: [], rootSnippets: [] }
   }
 
   let globalSnippets: SnippetDescriptor[] = []
-  let workspaceSnippets: SnippetDescriptor[] = []
+  let rootSnippets: SnippetDescriptor[] = []
 
   try {
-    ;({ globalSnippets, workspaceSnippets } =
-      await loadCssSnippets(workspacePath))
+    ;({ globalSnippets, rootSnippets } = await loadCssSnippets(rootPath))
   } catch {
-    return { globalSnippets: [], workspaceSnippets: [] }
+    return { globalSnippets: [], rootSnippets: [] }
   }
 
   const enabledGlobal = filterEnabled(globalSnippets, disabledGlobalSnippets)
-  const enabledWorkspace = filterEnabled(
-    workspaceSnippets,
-    disabledWorkspaceSnippets,
-  )
+  const enabledRoot = filterEnabled(rootSnippets, disabledRootSnippets)
 
   for (const snippet of enabledGlobal) {
-    const css = await readSnippetCss(
-      'global',
-      `${snippet.id}.css`,
-      workspacePath,
-    )
+    const css = await readSnippetCss('global', `${snippet.id}.css`, rootPath)
     if (css) injectSnippetStyle(GLOBAL_ATTR, snippet.id, css)
   }
 
-  for (const snippet of enabledWorkspace) {
-    const css = await readSnippetCss(
-      'workspace',
-      `${snippet.id}.css`,
-      workspacePath,
-    )
-    if (css) injectSnippetStyle(WORKSPACE_ATTR, snippet.id, css)
+  for (const snippet of enabledRoot) {
+    const css = await readSnippetCss('root', `${snippet.id}.css`, rootPath)
+    if (css) injectSnippetStyle(ROOT_ATTR, snippet.id, css)
   }
 
   removeStaleSnippets(GLOBAL_ATTR, new Set(enabledGlobal.map((s) => s.id)))
-  removeStaleSnippets(
-    WORKSPACE_ATTR,
-    new Set(enabledWorkspace.map((s) => s.id)),
-  )
+  removeStaleSnippets(ROOT_ATTR, new Set(enabledRoot.map((s) => s.id)))
 
-  return { globalSnippets, workspaceSnippets }
+  return { globalSnippets, rootSnippets }
 }

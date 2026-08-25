@@ -17,7 +17,7 @@ const file = (name: string) => ({
   isFile: true,
   isSymlink: false,
 })
-const WORKSPACE = 'nemos-app/my-workspace'
+const ROOT = 'nemos-app/my-root'
 
 describe('loadCssSnippets', () => {
   beforeEach(() => {
@@ -28,26 +28,26 @@ describe('loadCssSnippets', () => {
     mockReadDirAppData.mockRejectedValue(new Error('not found'))
     mockReadDir.mockRejectedValue(new Error('not found'))
 
-    const result = await loadCssSnippets(WORKSPACE)
-    expect(result).toEqual({ globalSnippets: [], workspaceSnippets: [] })
+    const result = await loadCssSnippets(ROOT)
+    expect(result).toEqual({ globalSnippets: [], rootSnippets: [] })
   })
 
-  it('returns global snippets when workspace directory does not exist', async () => {
+  it('returns global snippets when root directory does not exist', async () => {
     mockReadDirAppData.mockResolvedValue([file('nord.css')])
     mockReadDir.mockRejectedValue(new Error('not found'))
 
-    const result = await loadCssSnippets(WORKSPACE)
+    const result = await loadCssSnippets(ROOT)
     expect(result.globalSnippets).toEqual([{ id: 'nord', displayName: 'Nord' }])
-    expect(result.workspaceSnippets).toEqual([])
+    expect(result.rootSnippets).toEqual([])
   })
 
-  it('returns workspace snippets when global directory does not exist', async () => {
+  it('returns root snippets when global directory does not exist', async () => {
     mockReadDirAppData.mockRejectedValue(new Error('not found'))
     mockReadDir.mockResolvedValue([file('my-snippet.css')])
 
-    const result = await loadCssSnippets(WORKSPACE)
+    const result = await loadCssSnippets(ROOT)
     expect(result.globalSnippets).toEqual([])
-    expect(result.workspaceSnippets).toEqual([
+    expect(result.rootSnippets).toEqual([
       { id: 'my-snippet', displayName: 'My Snippet' },
     ])
   })
@@ -65,7 +65,7 @@ describe('loadCssSnippets', () => {
     ])
     mockReadDir.mockResolvedValue([])
 
-    const result = await loadCssSnippets(WORKSPACE)
+    const result = await loadCssSnippets(ROOT)
     expect(result.globalSnippets).toEqual([
       { id: 'valid', displayName: 'Valid' },
     ])
@@ -76,23 +76,20 @@ describe('loadCssSnippets', () => {
       file('shared.css'),
       file('global-only.css'),
     ])
-    mockReadDir.mockResolvedValue([
-      file('shared.css'),
-      file('workspace-only.css'),
-    ])
+    mockReadDir.mockResolvedValue([file('shared.css'), file('root-only.css')])
 
-    const result = await loadCssSnippets(WORKSPACE)
+    const result = await loadCssSnippets(ROOT)
     expect(result.globalSnippets).toHaveLength(2)
-    expect(result.workspaceSnippets).toHaveLength(2)
+    expect(result.rootSnippets).toHaveLength(2)
     expect(result.globalSnippets.map((s) => s.id)).toContain('shared')
-    expect(result.workspaceSnippets.map((s) => s.id)).toContain('shared')
+    expect(result.rootSnippets.map((s) => s.id)).toContain('shared')
   })
 
   it('derives display name from filename using toDisplayName', async () => {
     mockReadDirAppData.mockResolvedValue([file('my-dracula-theme.css')])
     mockReadDir.mockResolvedValue([])
 
-    const result = await loadCssSnippets(WORKSPACE)
+    const result = await loadCssSnippets(ROOT)
     expect(result.globalSnippets[0].displayName).toBe('My Dracula Theme')
   })
 })

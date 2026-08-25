@@ -1,3 +1,4 @@
+import { useParams } from '@tanstack/react-router'
 import {
   ArrowUpRight,
   Copy,
@@ -9,7 +10,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useCallback } from 'react'
-import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { useRootActions } from '@/hooks/use-root-actions'
 import { createNoteTab } from '@/lib/tabs'
 import { useTabsStore } from '@/store'
 import { useRenameStore } from '@/store/rename.store'
@@ -24,14 +25,14 @@ import {
 interface Props {
   children: React.ReactNode
   isFolder: boolean
-  workspace: string
+  root: string
   note: string
 }
 
 export const TreeNodeContextMenu = ({
   children,
   isFolder,
-  workspace,
+  root,
   note,
 }: Props) => {
   const {
@@ -42,27 +43,28 @@ export const TreeNodeContextMenu = ({
     navigateToNote,
     revealInExplorer,
     deleteNote,
-    refreshWorkspace,
-  } = useWorkspaceActions({
-    workspace,
+    refreshRoot,
+  } = useRootActions({
+    root,
   })
+  const { rootPath } = useParams({ strict: false })
   const openNewTab = useTabsStore((s) => s.openNewTab)
   const closeTab = useTabsStore((s) => s.closeTab)
   const setRenamingPath = useRenameStore((state) => state.setRenamingPath)
 
   const handleOpenNote = useCallback(() => {
     const tabData = createNoteTab({
-      workspaceId: workspace,
+      rootPath: rootPath!,
       noteId: note,
     })
     openNewTab(tabData)
     navigateToNote(note)
-  }, [workspace, note, openNewTab, navigateToNote])
+  }, [rootPath, note, openNewTab, navigateToNote])
 
   const handleDeleteNote = useCallback(() => {
     closeTab(note)
-    deleteNote(note, { onSuccess: refreshWorkspace })
-  }, [closeTab, deleteNote, note, refreshWorkspace])
+    deleteNote(note, { onSuccess: refreshRoot })
+  }, [closeTab, deleteNote, note, refreshRoot])
 
   return (
     <ContextMenu>

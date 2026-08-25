@@ -1,4 +1,4 @@
-import { linkOptions } from '@tanstack/react-router'
+import { linkOptions, useParams } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { Link } from '../ui/link'
 import { TreeNodeContextMenu } from './TreeNodeContextMenu'
@@ -10,7 +10,7 @@ interface Props {
   isDroppable: boolean
   isDragging: boolean
   isDropTarget: boolean
-  workspace: string
+  root: string
   note: string
   children: React.ReactNode
 }
@@ -21,26 +21,23 @@ export const TreeNode = ({
   isDroppable,
   isDragging,
   isDropTarget,
-  workspace,
+  root,
   note,
   children,
 }: Props) => {
+  const { rootPath } = useParams({ strict: false })
   const props = isDroppable
     ? { onClick: onToggle }
     : linkOptions({
-        to: '/workspace/$workspaceId/notes/$noteId',
-        params: { workspaceId: workspace, noteId: note },
+        to: '/workspace/$rootPath/notes/$noteId',
+        params: { rootPath: rootPath!, noteId: note },
         activeProps: {
           className: 'text-foreground!',
         },
       })
 
   return (
-    <TreeNodeContextMenu
-      isFolder={isDroppable}
-      workspace={workspace}
-      note={note}
-    >
+    <TreeNodeContextMenu isFolder={isDroppable} root={root} note={note}>
       <Link
         {...props}
         className={cn(

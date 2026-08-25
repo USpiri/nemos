@@ -1,4 +1,4 @@
-import { THEMES_DIR, WORKSPACE_THEMES_DIR } from '@/config/constants'
+import { ROOT_THEMES_DIR, THEMES_DIR } from '@/config/constants'
 import { exists, existsAppData, readDir, readDirAppData } from '@/lib/fs'
 import type { ThemeDescriptor } from '../theme.types'
 import { mergeThemes, toDisplayName } from '../utils'
@@ -25,10 +25,10 @@ const loadGlobalThemes = async (): Promise<ThemeDescriptor[]> => {
   return descriptors.filter((d): d is ThemeDescriptor => d !== null)
 }
 
-const loadWorkspaceThemes = async (
-  workspaceFsPath: string,
+const loadRootThemes = async (
+  rootFsPath: string,
 ): Promise<ThemeDescriptor[]> => {
-  const themesPath = `${workspaceFsPath}/${WORKSPACE_THEMES_DIR}`
+  const themesPath = `${rootFsPath}/${ROOT_THEMES_DIR}`
   let entries: Awaited<ReturnType<typeof readDir>>
   try {
     entries = await readDir(themesPath)
@@ -51,11 +51,11 @@ const loadWorkspaceThemes = async (
 }
 
 export const loadThemes = async (
-  workspaceFsPath: string,
+  rootFsPath: string,
 ): Promise<ThemeDescriptor[]> => {
-  const [globalThemes, workspaceThemes] = await Promise.all([
+  const [globalThemes, rootThemes] = await Promise.all([
     loadGlobalThemes(),
-    loadWorkspaceThemes(workspaceFsPath),
+    loadRootThemes(rootFsPath),
   ])
-  return mergeThemes(globalThemes, workspaceThemes)
+  return mergeThemes(globalThemes, rootThemes)
 }

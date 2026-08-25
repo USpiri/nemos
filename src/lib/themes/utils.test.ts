@@ -32,28 +32,28 @@ describe('mergeThemes', () => {
     displayName: toDisplayName(id),
   })
 
-  it('returns global-only themes when no workspace themes exist', () => {
+  it('returns global-only themes when no root themes exist', () => {
     const result = mergeThemes([g('alpha'), g('beta')], [])
     expect(result.map((t) => t.id)).toEqual(['alpha', 'beta'])
   })
 
-  it('returns workspace-only themes when no global themes exist', () => {
+  it('returns root-only themes when no global themes exist', () => {
     const result = mergeThemes([], [g('gamma'), g('delta')])
     expect(result.map((t) => t.id)).toEqual(['delta', 'gamma'])
   })
 
-  it('workspace entry wins on ID collision', () => {
+  it('root entry wins on ID collision', () => {
     const globalTheme: ThemeDescriptor = {
       id: 'my-theme',
       displayName: 'Global Name',
     }
-    const workspaceTheme: ThemeDescriptor = {
+    const rootTheme: ThemeDescriptor = {
       id: 'my-theme',
-      displayName: 'Workspace Name',
+      displayName: 'Root Name',
     }
-    const result = mergeThemes([globalTheme], [workspaceTheme])
+    const result = mergeThemes([globalTheme], [rootTheme])
     expect(result).toHaveLength(1)
-    expect(result[0].displayName).toBe('Workspace Name')
+    expect(result[0].displayName).toBe('Root Name')
   })
 
   it('result is sorted alphabetically by displayName', () => {
@@ -114,14 +114,13 @@ describe('AppearanceSettings schema — disabled snippets', () => {
     if (result.success) expect(result.data.disabledGlobalSnippets).toEqual([])
   })
 
-  it('defaults disabledWorkspaceSnippets to [] when field is missing', () => {
+  it('defaults disabledRootSnippets to [] when field is missing', () => {
     const result = AppearanceSettings.safeParse({
       theme: 'system',
       autoSyncTheme: true,
     })
     expect(result.success).toBe(true)
-    if (result.success)
-      expect(result.data.disabledWorkspaceSnippets).toEqual([])
+    if (result.success) expect(result.data.disabledRootSnippets).toEqual([])
   })
 
   it('accepts string array for disabledGlobalSnippets', () => {

@@ -3,6 +3,7 @@ import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useNoteEditor } from '@/hooks/use-note-editor'
 import type { Frontmatter, Note } from '@/lib/notes'
 import { readNote } from '@/lib/notes'
+import { rootFolderName } from '@/lib/paths'
 import { createNoteTab } from '@/lib/tabs'
 import { cn } from '@/lib/utils'
 import { useTabsStore } from '@/store'
@@ -13,28 +14,30 @@ const Editor = lazy(() =>
   import('@/components/editor/Editor').then((m) => ({ default: m.Editor })),
 )
 
-export const Route = createFileRoute('/workspace/$workspaceId/notes/$noteId')({
+export const Route = createFileRoute('/workspace/$rootPath/notes/$noteId')({
   component: NoteIdComponent,
   pendingComponent: NotePending,
   errorComponent: NoteError,
-  loader: ({ params: { workspaceId, noteId } }) =>
-    readNote(workspaceId, noteId),
+  loader: async ({ params: { rootPath, noteId } }) => {
+    const folderName = rootFolderName(rootPath)
+    return { note: await readNote(folderName, noteId), folderName }
+  },
 })
 
 function NoteIdComponent() {
-  const { workspaceId, noteId } = Route.useParams()
-  const note = Route.useLoaderData()
+  const { rootPath, noteId } = Route.useParams()
+  const { note, folderName } = Route.useLoaderData()
   const openTab = useTabsStore((s) => s.openTab)
 
   useEffect(() => {
-    const tabData = createNoteTab({ workspaceId, noteId })
+    const tabData = createNoteTab({ rootPath, noteId })
     openTab(tabData)
-  }, [workspaceId, noteId, openTab])
+  }, [rootPath, noteId, openTab])
 
   return (
     <NoteView
       key={noteId}
-      workspaceId={workspaceId}
+      rootFolderName={folderName}
       noteId={noteId}
       note={note}
     />
@@ -42,18 +45,18 @@ function NoteIdComponent() {
 }
 
 function NoteView({
-  workspaceId,
+  rootFolderName,
   noteId,
   note,
 }: {
-  workspaceId: string
+  rootFolderName: string
   noteId: string
   note: Note
 }) {
   const [frontmatter, setFrontmatter] = useState<Frontmatter>(note.frontmatter)
 
   const { save, saveNow } = useNoteEditor({
-    workspaceId,
+    workspaceId: rootFolderName,
     relativePath: noteId,
     initialContent: note.content,
     initialFrontmatter: note.frontmatter,

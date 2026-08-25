@@ -1,3 +1,4 @@
+import { documentDir, join } from '@tauri-apps/api/path'
 import {
   DEFAULT_FOLDER_NAME,
   DEFAULT_NOTE_NAME,
@@ -8,32 +9,59 @@ import {
 // ── Filesystem paths (used only at the fs layer) ──────────────────────────────
 
 /**
- * Returns nemos-app/workspaceId or nemos-app/workspaceId/relativePath
+ * Returns nemos-app/folderName or nemos-app/folderName/relativePath
  *
  * Example:
- * - "workspaceId" → "nemos-app/workspaceId"
- * - "workspaceId/folder/note.note" → "nemos-app/workspaceId/folder/note.note"\
+ * - "folderName" → "nemos-app/folderName"
+ * - "folderName/folder/note.note" → "nemos-app/folderName/folder/note.note"\
  */
-export const toFsPath = (workspaceId: string, relativePath = ''): string =>
+export const toFsPath = (folderName: string, relativePath = ''): string =>
   relativePath
-    ? `${ROOT}/${workspaceId}/${relativePath}`
-    : `${ROOT}/${workspaceId}`
+    ? `${ROOT}/${folderName}/${relativePath}`
+    : `${ROOT}/${folderName}`
 
 // ── Relative path extraction ──────────────────────────────────────────────────
 
 /**
- * Strips ROOT/workspaceId/ prefix from a fsPath produced by toFsPath → relativePath
+ * Strips ROOT/folderName/ prefix from a fsPath produced by toFsPath → relativePath
  *
  * Example:
- * - "nemos-app/workspaceId/folder/note.note" → "folder/note.note"
- * - "nemos-app/workspaceId/folder" → "folder"
- * - "nemos-app/workspaceId" → ""
+ * - "nemos-app/folderName/folder/note.note" → "folder/note.note"
+ * - "nemos-app/folderName/folder" → "folder"
+ * - "nemos-app/folderName" → ""
  */
 export const toRelativePath = (fsPath: string): string =>
   fsPath
     .split('/')
     .slice(ROOT.split('/').length + 1)
     .join('/')
+
+// ── Root identity (path-based, per #84) ────────────────────────────────────────
+
+/**
+ * Returns the OS-absolute path to a Root given its folder name relative to
+ * ROOT (e.g. "personal" → "C:/Users/.../Documents/nemos-app/personal").
+ * This is the value used as route/session/tab identity for a Root.
+ */
+export const toAbsoluteRootPath = async (folderName: string): Promise<string> =>
+  join(await documentDir(), ROOT, folderName)
+
+/**
+ * Recovers the ROOT-relative folder name from a Root's absolute path, so
+ * existing folder-name-keyed fs functions (toFsPath, getWorkspaceTree, etc.)
+ * keep working unchanged. Scoped to Roots that are flat children of ROOT —
+ * true for every Root that exists today; arbitrary Roots are out of scope
+ * for this prefactor.
+ *
+ * A plain last-segment split (not Tauri's IPC-backed `basename`) so this can
+ * be called synchronously from route loaders, error components, and other
+ * places that can't await — every Root path is produced by
+ * toAbsoluteRootPath, so the shape is always known.
+ */
+export const rootFolderName = (absolutePath: string): string => {
+  const segments = absolutePath.split(/[/\\]/).filter(Boolean)
+  return segments[segments.length - 1] ?? ''
+}
 
 // ── Path component helpers ────────────────────────────────────────────────────
 
@@ -43,7 +71,7 @@ export const toRelativePath = (fsPath: string): string =>
  * Example:
  * - "folder/note.note" → "note.note"
  * - "folder" → "folder"
- * - "workspaceId/folder" → "folder"
+ * - "folderName/folder" → "folder"
  */
 export const getEntryName = (path: string): string =>
   path.split('/').pop() ?? ''
@@ -54,7 +82,7 @@ export const getEntryName = (path: string): string =>
  * Example:
  * - "folder/note.note" → "folder"
  * - "folder" → ""
- * - "workspaceId/folder" → "workspaceId"
+ * - "folderName/folder" → "folderName"
  */
 export const getParentPath = (path: string): string =>
   path.split('/').slice(0, -1).join('/')
@@ -65,7 +93,7 @@ export const getParentPath = (path: string): string =>
  * Example:
  * - "folder/noteName.note" → "noteName"
  * - "folder" → "folder" (no extension, it's a folder)
- * - "workspaceId/folder" → "folder" (no extension, it's a folder)
+ * - "folderName/folder" → "folder" (no extension, it's a folder)
  */
 export const getBaseName = (path: string): string => {
   const name = getEntryName(path)
@@ -110,7 +138,7 @@ export const getContainerPath = (path: string): string =>
 // ── New entry path builders ───────────────────────────────────────────────────
 
 /**
- * Returns a new note relative path inside the given parent entry (or workspace root if empty).
+ * Returns a new note relative path inside the given parent entry (or the Root itself if empty).
  *
  * Example:
  * - "folder" → "folder/noteName.note"
@@ -124,7 +152,7 @@ export const newNoteRelativePath = (parentRelativePath = ''): string => {
 }
 
 /**
- * Returns a new folder relative path inside the given parent entry (or workspace root if empty).
+ * Returns a new folder relative path inside the given parent entry (or the Root itself if empty).
  *
  * Example:
  * - "folder" → "folder/new-folder"
