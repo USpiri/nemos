@@ -23,29 +23,24 @@ export const useRootActions = () => {
   // #85 — also its fs identity: a Root can live anywhere on disk, so its
   // absolute path is what the fs-mutation hooks below key off of.
   const { rootPath } = useParams({ strict: false })
+  // Every caller of this hook lives under /workspace/$rootPath/*, so this is
+  // always defined at runtime despite the `strict: false` param type above.
+  const root = rootPath!
 
-  const { createNote: createNoteFn } = useCreateNote({
-    workspaceId: rootPath!,
-  })
+  const { createNote: createNoteFn } = useCreateNote({ workspaceId: root })
   const { createFolder: createFolderFn } = useCreateFolder({
-    workspaceId: rootPath!,
+    workspaceId: root,
   })
-  const { copyNote: copyNoteFn } = useCopyNote({ workspaceId: rootPath! })
-  const { renameNote: renameNoteFn } = useRenameNote({
-    workspaceId: rootPath!,
-  })
+  const { copyNote: copyNoteFn } = useCopyNote({ workspaceId: root })
+  const { renameNote: renameNoteFn } = useRenameNote({ workspaceId: root })
   const { renameFolder: renameFolderFn } = useRenameFolder({
-    workspaceId: rootPath!,
+    workspaceId: root,
   })
-  const { moveNote: moveNoteFn } = useMoveNote({ workspaceId: rootPath! })
-  const { moveFolder: moveFolderFn } = useMoveFolder({
-    workspaceId: rootPath!,
-  })
-  const { deleteNote: deleteNoteFn } = useDeleteNote({
-    workspaceId: rootPath!,
-  })
+  const { moveNote: moveNoteFn } = useMoveNote({ workspaceId: root })
+  const { moveFolder: moveFolderFn } = useMoveFolder({ workspaceId: root })
+  const { deleteNote: deleteNoteFn } = useDeleteNote({ workspaceId: root })
   const { deleteFolder: deleteFolderFn } = useDeleteFolder({
-    workspaceId: rootPath!,
+    workspaceId: root,
   })
   const { openInExplorer } = useOpenInExplorer()
 
@@ -59,10 +54,10 @@ export const useRootActions = () => {
     (relativeNotePath: string) => {
       navigate({
         to: '/workspace/$rootPath/notes/$noteId',
-        params: { rootPath: rootPath!, noteId: relativeNotePath },
+        params: { rootPath: root, noteId: relativeNotePath },
       })
     },
-    [navigate, rootPath],
+    [navigate, root],
   )
 
   const createNote = useCallback(
@@ -70,9 +65,9 @@ export const useRootActions = () => {
       const relativePath = newNoteRelativePath(note)
       const noteFsPath = await createNoteFn(relativePath)
       if (!noteFsPath) return
-      return toRelativePath(noteFsPath, rootPath!)
+      return toRelativePath(noteFsPath, root)
     },
-    [createNoteFn, rootPath],
+    [createNoteFn, root],
   )
 
   const createFolder = useCallback(
@@ -80,54 +75,54 @@ export const useRootActions = () => {
       const relativePath = newFolderRelativePath(folder)
       const folderFsPath = await createFolderFn(relativePath)
       if (!folderFsPath) return
-      return toRelativePath(folderFsPath, rootPath!)
+      return toRelativePath(folderFsPath, root)
     },
-    [createFolderFn, rootPath],
+    [createFolderFn, root],
   )
 
   const copyNote = useCallback(
     async (relativeNotePath: string) => {
       await copyNoteFn(relativeNotePath, (noteFsPath) => {
-        navigateToNote(toRelativePath(noteFsPath, rootPath!))
+        navigateToNote(toRelativePath(noteFsPath, root))
       })
     },
-    [copyNoteFn, navigateToNote, rootPath],
+    [copyNoteFn, navigateToNote, root],
   )
 
   const renameNote = useCallback(
     async (relativeNotePath: string, newName: string) => {
       const noteFsPath = await renameNoteFn(relativeNotePath, newName)
       if (!noteFsPath) return
-      return toRelativePath(noteFsPath, rootPath!)
+      return toRelativePath(noteFsPath, root)
     },
-    [renameNoteFn, rootPath],
+    [renameNoteFn, root],
   )
 
   const renameFolder = useCallback(
     async (relativeFolderPath: string, newName: string) => {
       const folderFsPath = await renameFolderFn(relativeFolderPath, newName)
       if (!folderFsPath) return
-      return toRelativePath(folderFsPath, rootPath!)
+      return toRelativePath(folderFsPath, root)
     },
-    [renameFolderFn, rootPath],
+    [renameFolderFn, root],
   )
 
   const moveNote = useCallback(
     async (relativeNotePath: string, destination: string) => {
       const noteFsPath = await moveNoteFn(relativeNotePath, destination)
       if (!noteFsPath) return
-      return toRelativePath(noteFsPath, rootPath!)
+      return toRelativePath(noteFsPath, root)
     },
-    [moveNoteFn, rootPath],
+    [moveNoteFn, root],
   )
 
   const moveFolder = useCallback(
     async (relativeFolderPath: string, destination: string) => {
       const folderFsPath = await moveFolderFn(relativeFolderPath, destination)
       if (!folderFsPath) return
-      return toRelativePath(folderFsPath, rootPath!)
+      return toRelativePath(folderFsPath, root)
     },
-    [moveFolderFn, rootPath],
+    [moveFolderFn, root],
   )
 
   const deleteNote = useCallback(deleteNoteFn, [])
@@ -141,9 +136,9 @@ export const useRootActions = () => {
 
   const revealInExplorer = useCallback(
     async (relativeNotePath?: string) => {
-      await openInExplorer({ workspace: rootPath!, note: relativeNotePath })
+      await openInExplorer({ workspace: root, note: relativeNotePath })
     },
-    [openInExplorer, rootPath],
+    [openInExplorer, root],
   )
 
   const createNoteAndNavigate = useCallback(
