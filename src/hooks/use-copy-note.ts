@@ -3,10 +3,10 @@ import { toast } from 'sonner'
 import { copyNote as copyNoteFn } from '@/lib/notes'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
 }
 
-export const useCopyNote = ({ workspaceId }: Props) => {
+export const useCopyNote = ({ rootPath }: Props) => {
   const copyNote = useCallback(
     async (relativePath: string, onSuccess?: (notePath: string) => void) => {
       if (!relativePath) {
@@ -15,13 +15,13 @@ export const useCopyNote = ({ workspaceId }: Props) => {
       }
 
       try {
-        const notePath = await copyNoteFn({ workspaceId, relativePath })
+        const notePath = await copyNoteFn({ rootPath, relativePath })
         onSuccess?.(notePath)
       } catch {
         toast.error('Failed to copy note')
       }
     },
-    [workspaceId],
+    [rootPath],
   )
 
   return { copyNote }

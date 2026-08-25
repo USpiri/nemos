@@ -3,10 +3,10 @@ import { toast } from 'sonner'
 import { NoteError, renameFolder as renameFolderFn } from '@/lib/notes'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
 }
 
-export const useRenameFolder = ({ workspaceId }: Props) => {
+export const useRenameFolder = ({ rootPath }: Props) => {
   const renameFolder = useCallback(
     async (relativePath: string, newName: string) => {
       if (!relativePath || !newName) {
@@ -16,7 +16,7 @@ export const useRenameFolder = ({ workspaceId }: Props) => {
 
       try {
         const folderPath = await renameFolderFn({
-          workspaceId,
+          rootPath,
           relativePath,
           newName,
         })
@@ -36,7 +36,7 @@ export const useRenameFolder = ({ workspaceId }: Props) => {
         }
       }
     },
-    [workspaceId],
+    [rootPath],
   )
 
   return { renameFolder }

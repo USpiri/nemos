@@ -3,17 +3,17 @@ import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
   relativePath: string
   content?: string
 }
 
 export const createNote = async ({
-  workspaceId,
+  rootPath,
   relativePath,
   content,
 }: Props) => {
-  const notePath = toFsPath(workspaceId, relativePath)
+  const notePath = toFsPath(rootPath, relativePath)
 
   try {
     const uniquePath = await getUniquePath(notePath)

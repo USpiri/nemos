@@ -27,20 +27,20 @@ export const useRootActions = () => {
   // always defined at runtime despite the `strict: false` param type above.
   const root = rootPath!
 
-  const { createNote: createNoteFn } = useCreateNote({ workspaceId: root })
+  const { createNote: createNoteFn } = useCreateNote({ rootPath: root })
   const { createFolder: createFolderFn } = useCreateFolder({
-    workspaceId: root,
+    rootPath: root,
   })
-  const { copyNote: copyNoteFn } = useCopyNote({ workspaceId: root })
-  const { renameNote: renameNoteFn } = useRenameNote({ workspaceId: root })
+  const { copyNote: copyNoteFn } = useCopyNote({ rootPath: root })
+  const { renameNote: renameNoteFn } = useRenameNote({ rootPath: root })
   const { renameFolder: renameFolderFn } = useRenameFolder({
-    workspaceId: root,
+    rootPath: root,
   })
-  const { moveNote: moveNoteFn } = useMoveNote({ workspaceId: root })
-  const { moveFolder: moveFolderFn } = useMoveFolder({ workspaceId: root })
-  const { deleteNote: deleteNoteFn } = useDeleteNote({ workspaceId: root })
+  const { moveNote: moveNoteFn } = useMoveNote({ rootPath: root })
+  const { moveFolder: moveFolderFn } = useMoveFolder({ rootPath: root })
+  const { deleteNote: deleteNoteFn } = useDeleteNote({ rootPath: root })
   const { deleteFolder: deleteFolderFn } = useDeleteFolder({
-    workspaceId: root,
+    rootPath: root,
   })
   const { openInExplorer } = useOpenInExplorer()
 

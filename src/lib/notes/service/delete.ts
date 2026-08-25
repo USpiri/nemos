@@ -3,15 +3,15 @@ import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 
 interface DeleteNoteProps {
-  workspaceId: string
+  rootPath: string
   relativePath: string
 }
 
 export const deleteNote = async ({
-  workspaceId,
+  rootPath,
   relativePath,
 }: DeleteNoteProps) => {
-  const notePath = toFsPath(workspaceId, relativePath)
+  const notePath = toFsPath(rootPath, relativePath)
   try {
     await removeFile(notePath)
   } catch (error) {
@@ -23,15 +23,15 @@ export const deleteNote = async ({
 }
 
 interface DeleteFolderProps {
-  workspaceId: string
+  rootPath: string
   relativePath: string
 }
 
 export const deleteFolder = async ({
-  workspaceId,
+  rootPath,
   relativePath,
 }: DeleteFolderProps) => {
-  const folderPath = toFsPath(workspaceId, relativePath)
+  const folderPath = toFsPath(rootPath, relativePath)
   try {
     await removeDir(folderPath)
   } catch (error) {

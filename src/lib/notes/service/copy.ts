@@ -3,7 +3,7 @@ import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
   relativePath: string
 }
 
@@ -13,12 +13,12 @@ interface Props {
  * throws an error if for some reason the note cannot be copied or
  * the note relative path is empty.
  */
-export const copyNote = async ({ workspaceId, relativePath }: Props) => {
+export const copyNote = async ({ rootPath, relativePath }: Props) => {
   if (!relativePath) {
     throw new NoteError('COPY_FAILED', 'Note path is required')
   }
 
-  const notePath = toFsPath(workspaceId, relativePath)
+  const notePath = toFsPath(rootPath, relativePath)
 
   try {
     const uniquePath = await getUniquePath(notePath)

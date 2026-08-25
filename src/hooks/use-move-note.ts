@@ -3,10 +3,10 @@ import { toast } from 'sonner'
 import { moveNote as moveNoteFn, NoteError } from '@/lib/notes'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
 }
 
-export const useMoveNote = ({ workspaceId }: Props) => {
+export const useMoveNote = ({ rootPath }: Props) => {
   const moveNote = useCallback(
     async (relativePath: string, destinationPath: string) => {
       if (!relativePath) {
@@ -16,7 +16,7 @@ export const useMoveNote = ({ workspaceId }: Props) => {
 
       try {
         const notePath = await moveNoteFn({
-          workspaceId,
+          rootPath,
           relativePath,
           destinationPath,
         })
@@ -36,7 +36,7 @@ export const useMoveNote = ({ workspaceId }: Props) => {
         }
       }
     },
-    [workspaceId],
+    [rootPath],
   )
 
   return { moveNote }

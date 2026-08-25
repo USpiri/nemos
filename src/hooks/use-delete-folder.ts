@@ -5,10 +5,10 @@ import { getEntryName } from '@/lib/paths'
 import { useDialog } from './use-dialog'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
 }
 
-export const useDeleteFolder = ({ workspaceId }: Props) => {
+export const useDeleteFolder = ({ rootPath }: Props) => {
   const { open } = useDialog()
 
   const deleteFolder = useCallback(
@@ -18,7 +18,7 @@ export const useDeleteFolder = ({ workspaceId }: Props) => {
     ) => {
       const performDelete = async () => {
         try {
-          await deleteFolderFn({ workspaceId, relativePath })
+          await deleteFolderFn({ rootPath, relativePath })
           options.onSuccess?.()
         } catch (error) {
           if (error instanceof NoteError) {
@@ -46,7 +46,7 @@ export const useDeleteFolder = ({ workspaceId }: Props) => {
         })
       }
     },
-    [workspaceId, open],
+    [rootPath, open],
   )
   return { deleteFolder }
 }

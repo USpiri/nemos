@@ -49,7 +49,7 @@ function NoteView({
   const [frontmatter, setFrontmatter] = useState<Frontmatter>(note.frontmatter)
 
   const { save, saveNow } = useNoteEditor({
-    workspaceId: rootPath,
+    rootPath,
     relativePath: noteId,
     initialContent: note.content,
     initialFrontmatter: note.frontmatter,

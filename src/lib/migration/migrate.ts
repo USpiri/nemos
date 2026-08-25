@@ -16,10 +16,10 @@ export interface MigrateResult {
 }
 
 /** Scan a workspace for unmigrated .note files */
-export const findLegacyNotes = async (workspaceId: string): Promise<string[]> => {
+export const findLegacyNotes = async (rootPath: string): Promise<string[]> => {
   let entries: { path: string; name: string; isFile: boolean }[] = []
   try {
-    entries = await readDirRecursive(toFsPath(workspaceId))
+    entries = await readDirRecursive(toFsPath(rootPath))
   } catch {
     return []
   }
@@ -75,14 +75,14 @@ export const migrateSingleNote = async (
 
 /** Migrate all .note files in a workspace; returns progress stats */
 export const migrateAllNotes = async (
-  workspaceId: string,
+  rootPath: string,
   options: {
     deleteAfter?: boolean
     onProgress?: (done: number, total: number) => void
   } = {},
 ): Promise<MigrateResult> => {
   const { deleteAfter = false, onProgress } = options
-  const paths = await findLegacyNotes(workspaceId)
+  const paths = await findLegacyNotes(rootPath)
   const result: MigrateResult = {
     total: paths.length,
     succeeded: 0,

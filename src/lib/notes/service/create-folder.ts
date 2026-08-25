@@ -3,12 +3,12 @@ import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
   relativePath: string
 }
 
-export const createFolder = async ({ workspaceId, relativePath }: Props) => {
-  const folderPath = toFsPath(workspaceId, relativePath)
+export const createFolder = async ({ rootPath, relativePath }: Props) => {
+  const folderPath = toFsPath(rootPath, relativePath)
 
   try {
     const uniquePath = await getUniquePath(folderPath)

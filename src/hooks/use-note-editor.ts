@@ -5,12 +5,12 @@ import type { Frontmatter } from '@/lib/notes'
 import { NoteError, writeNote } from '@/lib/notes'
 
 export const useNoteEditor = ({
-  workspaceId,
+  rootPath,
   relativePath,
   initialContent,
   initialFrontmatter,
 }: {
-  workspaceId: string
+  rootPath: string
   relativePath: string
   initialContent: string
   initialFrontmatter: Frontmatter
@@ -36,7 +36,7 @@ export const useNoteEditor = ({
       }
 
       try {
-        await writeNote(workspaceId, relativePath, next)
+        await writeNote(rootPath, relativePath, next)
         lastSaved.current = next
       } catch (error) {
         if (error instanceof NoteError) {
@@ -52,7 +52,7 @@ export const useNoteEditor = ({
         }
       }
     },
-    [workspaceId, relativePath],
+    [rootPath, relativePath],
   )
 
   const save = useDebouncedCallback(saveFn, 1000)
