@@ -1,7 +1,6 @@
 import { useNavigate, useParams, useRouter } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import {
-  getContainerPath,
   newFolderRelativePath,
   newNoteRelativePath,
   toFsPath,
@@ -138,10 +137,8 @@ export const useRootActions = () => {
 
   const revealInExplorer = useCallback(
     async (relativeNotePath?: string) => {
-      const containerPath = relativeNotePath
-        ? getContainerPath(relativeNotePath)
-        : ''
-      await openInExplorer(toFsPath(root, containerPath))
+      const path = relativeNotePath ? toFsPath(root, relativeNotePath) : root
+      await openInExplorer(path)
     },
     [openInExplorer, root],
   )
