@@ -1,5 +1,4 @@
 import { readDirRecursive, stat } from '@/lib/fs'
-import { toFsPath } from '@/lib/paths'
 import { isNoteFile } from '../utils'
 import { DetailedWorkspaceEntry } from '../workspace.type'
 import { sortRecentEntries } from './sort-entries'
@@ -14,9 +13,9 @@ import { sortRecentEntries } from './sort-entries'
  * - isSymlink: boolean (true if the workspace entry is a symlink)
  */
 export const getWorkspaceEntries = async (
-  workspace: string,
+  rootPath: string,
 ): Promise<DetailedWorkspaceEntry[]> => {
-  const entries = await readDirRecursive(toFsPath(workspace))
+  const entries = await readDirRecursive(rootPath)
 
   // filter out non-note files
   const notes = entries.filter(isNoteFile)
@@ -38,8 +37,8 @@ export const getWorkspaceEntries = async (
  *   - path: string (the full path to the note)
  *   - modified: Date (the last modified date of the note)
  */
-export const getWorkspaceSummary = async (workspace: string, limit = 10) => {
-  const entries = await getWorkspaceEntries(workspace)
+export const getWorkspaceSummary = async (rootPath: string, limit = 10) => {
+  const entries = await getWorkspaceEntries(rootPath)
   const notes = sortRecentEntries(entries).slice(0, limit)
   return {
     count: entries.length,

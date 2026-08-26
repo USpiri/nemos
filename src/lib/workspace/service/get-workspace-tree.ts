@@ -1,5 +1,4 @@
 import { readDirRecursive } from '@/lib/fs'
-import { toFsPath } from '@/lib/paths'
 import { WorkspaceError } from '../errors'
 import { isValidWorkspaceTreeEntry, mapWorkspaceTree } from '../utils'
 
@@ -11,9 +10,9 @@ import { isValidWorkspaceTreeEntry, mapWorkspaceTree } from '../utils'
  * - text: string (the name of the workspace tree entry)
  * - droppable: boolean (true if the workspace tree entry is a directory)
  */
-export const getWorkspaceTree = async (workspace: string) => {
+export const getWorkspaceTree = async (rootPath: string) => {
   try {
-    const tree = await readDirRecursive(toFsPath(workspace))
+    const tree = await readDirRecursive(rootPath)
     const filteredTree = tree.filter(isValidWorkspaceTreeEntry)
     return mapWorkspaceTree(filteredTree)
   } catch {
