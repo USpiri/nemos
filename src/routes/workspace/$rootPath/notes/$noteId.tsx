@@ -3,6 +3,7 @@ import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useNoteEditor } from '@/hooks/use-note-editor'
 import type { Frontmatter, Note } from '@/lib/notes'
 import { readNote } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 import { createNoteTab } from '@/lib/tabs'
 import { cn } from '@/lib/utils'
 import { useTabsStore } from '@/store'
@@ -18,7 +19,7 @@ export const Route = createFileRoute('/workspace/$rootPath/notes/$noteId')({
   pendingComponent: NotePending,
   errorComponent: NoteError,
   loader: async ({ params: { rootPath, noteId } }) => {
-    return { note: await readNote(rootPath, noteId) }
+    return { note: await readNote(toFsPath(rootPath, noteId)) }
   },
 })
 

@@ -1,19 +1,13 @@
 import { removeDir, removeFile } from '@/lib/fs/remove'
-import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 
 interface DeleteNoteProps {
-  rootPath: string
-  relativePath: string
+  path: string
 }
 
-export const deleteNote = async ({
-  rootPath,
-  relativePath,
-}: DeleteNoteProps) => {
-  const notePath = toFsPath(rootPath, relativePath)
+export const deleteNote = async ({ path }: DeleteNoteProps) => {
   try {
-    await removeFile(notePath)
+    await removeFile(path)
   } catch (error) {
     throw new NoteError(
       'DELETE_FAILED',
@@ -23,17 +17,12 @@ export const deleteNote = async ({
 }
 
 interface DeleteFolderProps {
-  rootPath: string
-  relativePath: string
+  path: string
 }
 
-export const deleteFolder = async ({
-  rootPath,
-  relativePath,
-}: DeleteFolderProps) => {
-  const folderPath = toFsPath(rootPath, relativePath)
+export const deleteFolder = async ({ path }: DeleteFolderProps) => {
   try {
-    await removeDir(folderPath)
+    await removeDir(path)
   } catch (error) {
     throw new NoteError(
       'DELETE_FAILED',

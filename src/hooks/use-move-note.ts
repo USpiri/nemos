@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { moveNote as moveNoteFn, NoteError } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 
 interface Props {
   rootPath: string
@@ -15,11 +16,9 @@ export const useMoveNote = ({ rootPath }: Props) => {
       }
 
       try {
-        const notePath = await moveNoteFn({
-          rootPath,
-          relativePath,
-          destinationPath,
-        })
+        const fromPath = toFsPath(rootPath, relativePath)
+        const toDir = toFsPath(rootPath, destinationPath)
+        const notePath = await moveNoteFn({ fromPath, toDir })
         return notePath
       } catch (error) {
         if (error instanceof NoteError) {

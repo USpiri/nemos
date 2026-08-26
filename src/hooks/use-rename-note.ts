@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { NoteError, renameNote as renameNoteFn } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 
 interface Props {
   rootPath: string
@@ -15,11 +16,8 @@ export const useRenameNote = ({ rootPath }: Props) => {
       }
 
       try {
-        const notePath = await renameNoteFn({
-          rootPath,
-          relativePath,
-          newName,
-        })
+        const path = toFsPath(rootPath, relativePath)
+        const notePath = await renameNoteFn({ path, newName })
         return notePath
       } catch (error) {
         if (error instanceof NoteError) {

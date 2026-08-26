@@ -1,28 +1,20 @@
 import { getUniquePath, write } from '@/lib/fs'
-import { toFsPath } from '@/lib/paths'
 import { NoteError } from '../errors'
 
 interface Props {
-  rootPath: string
-  relativePath: string
+  path: string
   content?: string
 }
 
-export const createNote = async ({
-  rootPath,
-  relativePath,
-  content,
-}: Props) => {
-  const notePath = toFsPath(rootPath, relativePath)
-
+export const createNote = async ({ path, content }: Props) => {
   try {
-    const uniquePath = await getUniquePath(notePath)
+    const uniquePath = await getUniquePath(path)
     await write(uniquePath, content ?? '')
     return uniquePath
   } catch (error) {
     throw new NoteError(
       'CREATE_FAILED',
-      `Failed to create note: ${notePath}\n` +
+      `Failed to create note: ${path}\n` +
         `Cause: ${error instanceof Error ? error.message : 'Unknown error'}`,
     )
   }

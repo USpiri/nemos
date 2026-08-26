@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { useDebouncedCallback } from 'use-debounce'
 import type { Frontmatter } from '@/lib/notes'
 import { NoteError, writeNote } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 
 export const useNoteEditor = ({
   rootPath,
@@ -36,7 +37,7 @@ export const useNoteEditor = ({
       }
 
       try {
-        await writeNote(rootPath, relativePath, next)
+        await writeNote(toFsPath(rootPath, relativePath), next)
         lastSaved.current = next
       } catch (error) {
         if (error instanceof NoteError) {

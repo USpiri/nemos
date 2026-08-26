@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { deleteNote as deleteNoteFn, NoteError } from '@/lib/notes'
-import { getEntryName } from '@/lib/paths'
+import { getEntryName, toFsPath } from '@/lib/paths'
 import { useDialog } from './use-dialog'
 
 interface Props {
@@ -18,7 +18,8 @@ export const useDeleteNote = ({ rootPath }: Props) => {
     ) => {
       const performDelete = async () => {
         try {
-          await deleteNoteFn({ rootPath, relativePath })
+          const path = toFsPath(rootPath, relativePath)
+          await deleteNoteFn({ path })
           options.onSuccess?.()
         } catch (error) {
           if (error instanceof NoteError) {
