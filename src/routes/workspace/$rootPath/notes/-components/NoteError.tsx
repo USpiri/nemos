@@ -13,7 +13,6 @@ import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
 import { useRootActions } from '@/hooks/use-root-actions'
 import { NoteError as NoteErrorClass } from '@/lib/notes'
-import { rootFolderName } from '@/lib/paths'
 
 const route = getRouteApi('/workspace/$rootPath/notes/$noteId')
 
@@ -33,9 +32,7 @@ const NoteErrorSwitch = ({
   reset: () => void
 }) => {
   const { rootPath, noteId } = route.useParams()
-  const { deleteNoteAndRefresh } = useRootActions({
-    root: rootFolderName(rootPath),
-  })
+  const { deleteNoteAndRefresh } = useRootActions()
 
   if (error instanceof NoteErrorClass) {
     switch (error.code) {

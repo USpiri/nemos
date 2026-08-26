@@ -1,16 +1,18 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { createNote as createNoteFn, NoteError } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
 }
 
-export const useCreateNote = ({ workspaceId }: Props) => {
+export const useCreateNote = ({ rootPath }: Props) => {
   const createNote = useCallback(
     async (relativePath: string, onSuccess?: (notePath: string) => void) => {
       try {
-        const notePath = await createNoteFn({ workspaceId, relativePath })
+        const path = toFsPath(rootPath, relativePath)
+        const notePath = await createNoteFn({ path })
         onSuccess?.(notePath)
         return notePath
       } catch (error) {
@@ -23,7 +25,7 @@ export const useCreateNote = ({ workspaceId }: Props) => {
         }
       }
     },
-    [workspaceId],
+    [rootPath],
   )
 
   return { createNote }

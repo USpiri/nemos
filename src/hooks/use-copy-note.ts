@@ -1,12 +1,13 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { copyNote as copyNoteFn } from '@/lib/notes'
+import { toFsPath } from '@/lib/paths'
 
 interface Props {
-  workspaceId: string
+  rootPath: string
 }
 
-export const useCopyNote = ({ workspaceId }: Props) => {
+export const useCopyNote = ({ rootPath }: Props) => {
   const copyNote = useCallback(
     async (relativePath: string, onSuccess?: (notePath: string) => void) => {
       if (!relativePath) {
@@ -15,13 +16,14 @@ export const useCopyNote = ({ workspaceId }: Props) => {
       }
 
       try {
-        const notePath = await copyNoteFn({ workspaceId, relativePath })
+        const path = toFsPath(rootPath, relativePath)
+        const notePath = await copyNoteFn({ path })
         onSuccess?.(notePath)
       } catch {
         toast.error('Failed to copy note')
       }
     },
-    [workspaceId],
+    [rootPath],
   )
 
   return { copyNote }

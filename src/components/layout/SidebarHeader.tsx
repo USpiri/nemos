@@ -1,4 +1,3 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { FolderPlus, Settings, SquarePen } from 'lucide-react'
 import { useDialog } from '@/hooks/use-dialog'
 import { useRootActions } from '@/hooks/use-root-actions'
@@ -8,14 +7,8 @@ import {
   SidebarMenuButton,
 } from '../ui/sidebar'
 
-const route = getRouteApi('/workspace/$rootPath')
-
 export const SidebarHeader = () => {
-  const { folderName } = route.useLoaderData()
-
-  const { createNoteAndNavigate, createFolderAndRefresh } = useRootActions({
-    root: folderName,
-  })
+  const { createNoteAndNavigate, createFolderAndRefresh } = useRootActions()
 
   const { open } = useDialog()
 

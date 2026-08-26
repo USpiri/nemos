@@ -1,18 +1,11 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { Download, FolderPlus, Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useRootActions } from '@/hooks/use-root-actions'
 
-const route = getRouteApi('/workspace/$rootPath')
-
 // TODO: Implement import notes
 export const WorkspaceActions = () => {
-  const { folderName } = route.useLoaderData()
-
-  const { createNoteAndNavigate, createFolderAndRefresh } = useRootActions({
-    root: folderName,
-  })
+  const { createNoteAndNavigate, createFolderAndRefresh } = useRootActions()
 
   const handleImportNotes = () =>
     toast.info('Import notes is not implemented yet')

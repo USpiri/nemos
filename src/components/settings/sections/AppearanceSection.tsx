@@ -19,7 +19,7 @@ import { Switch } from '@/components/ui/switch'
 import { ROOT_SNIPPETS_DIR, SNIPPETS_DIR } from '@/config/constants'
 import { useReloadStyles } from '@/hooks/use-reload-styles'
 import { ensureDir, ensureDirAppData } from '@/lib/fs'
-import { openAppDataPath, openPath } from '@/lib/opener'
+import { openAppDataPath, revealPath } from '@/lib/opener'
 import type { Theme } from '@/lib/settings'
 import { useAppearanceSettings } from '@/lib/settings'
 import { loadCssSnippets, toggleSnippetId } from '@/lib/themes'
@@ -253,7 +253,7 @@ export const AppearanceSection = () => {
           onClick={() => {
             if (!rootPath) return
             const dir = `${rootPath}/${ROOT_SNIPPETS_DIR}`
-            ensureDir(dir).then(() => openPath(dir))
+            ensureDir(dir).then(() => revealPath(dir))
           }}
         >
           <FolderOpen className="size-3.5" />

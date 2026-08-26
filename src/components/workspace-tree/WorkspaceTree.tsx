@@ -12,15 +12,12 @@ import { TreeNode } from './TreeNode'
 
 interface Props {
   tree: NodeModel[]
-  root: string
-  rootFolderName: string
+  rootPath: string
 }
 
-export const WorkspaceTree = ({ tree, root, rootFolderName }: Props) => {
+export const WorkspaceTree = ({ tree, rootPath }: Props) => {
   const { noteId: currentNoteId } = useParams({ strict: false })
-  const { moveNote, moveFolder, refreshRoot, navigateToNote } = useRootActions({
-    root: rootFolderName,
-  })
+  const { moveNote, moveFolder, refreshRoot, navigateToNote } = useRootActions()
 
   const handleDrop = async (
     _tree: NodeModel[],
@@ -29,8 +26,10 @@ export const WorkspaceTree = ({ tree, root, rootFolderName }: Props) => {
     const { dragSource, dropTargetId } = options
     if (!dragSource) return
 
-    const sourceId = toRelativePath(dragSource.id.toString())
-    const targetId = dropTargetId ? toRelativePath(dropTargetId.toString()) : ''
+    const sourceId = toRelativePath(dragSource.id.toString(), rootPath)
+    const targetId = dropTargetId
+      ? toRelativePath(dropTargetId.toString(), rootPath)
+      : ''
 
     if (dragSource.droppable) {
       const newFolderId = await moveFolder(sourceId, targetId)
@@ -49,10 +48,10 @@ export const WorkspaceTree = ({ tree, root, rootFolderName }: Props) => {
   }
 
   return (
-    <TreeContextMenu root={rootFolderName}>
+    <TreeContextMenu>
       <Tree
         tree={tree}
-        rootId={`${root}/${rootFolderName}`}
+        rootId={rootPath}
         render={(
           node,
           { depth, isOpen, onToggle, isDragging, isDropTarget },
@@ -63,8 +62,7 @@ export const WorkspaceTree = ({ tree, root, rootFolderName }: Props) => {
             isDroppable={!!node.droppable}
             isDragging={isDragging}
             isDropTarget={isDropTarget}
-            root={rootFolderName}
-            note={toRelativePath(node.id.toString())}
+            note={toRelativePath(node.id.toString(), rootPath)}
             onToggle={onToggle}
           >
             {node.droppable ? (

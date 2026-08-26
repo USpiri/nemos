@@ -25,16 +25,10 @@ import {
 interface Props {
   children: React.ReactNode
   isFolder: boolean
-  root: string
   note: string
 }
 
-export const TreeNodeContextMenu = ({
-  children,
-  isFolder,
-  root,
-  note,
-}: Props) => {
+export const TreeNodeContextMenu = ({ children, isFolder, note }: Props) => {
   const {
     createNoteAndNavigate,
     createFolderAndRefresh,
@@ -44,9 +38,7 @@ export const TreeNodeContextMenu = ({
     revealInExplorer,
     deleteNote,
     refreshRoot,
-  } = useRootActions({
-    root,
-  })
+  } = useRootActions()
   const { rootPath } = useParams({ strict: false })
   const openNewTab = useTabsStore((s) => s.openNewTab)
   const closeTab = useTabsStore((s) => s.closeTab)

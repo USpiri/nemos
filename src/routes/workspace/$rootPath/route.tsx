@@ -7,25 +7,23 @@ import { MigrationOverlay } from '@/components/MigrationOverlay'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useTabShortcuts } from '@/hooks/use-tab-shortcuts'
 import { findLegacyNotes } from '@/lib/migration'
-import { rootFolderName, toFsPath } from '@/lib/paths'
 import { initRootSettings } from '@/lib/settings'
 import { getWorkspaceTree } from '@/lib/workspace'
 
 export const Route = createFileRoute('/workspace/$rootPath')({
   component: RouteComponent,
   loader: async ({ params: { rootPath } }) => {
-    const folderName = rootFolderName(rootPath)
-    const workspaceTree = await getWorkspaceTree(folderName).catch(() => {
+    const workspaceTree = await getWorkspaceTree(rootPath).catch(() => {
       toast.error('Workspace not found', {
         description: 'The workspace you are looking for does not exist.',
       })
       throw redirect({ to: '/workspace', replace: true })
     })
     const [legacyPaths] = await Promise.all([
-      findLegacyNotes(folderName),
-      initRootSettings(toFsPath(folderName)),
+      findLegacyNotes(rootPath),
+      initRootSettings(rootPath),
     ])
-    return { workspaceTree, legacyCount: legacyPaths.length, folderName }
+    return { workspaceTree, legacyCount: legacyPaths.length }
   },
 })
 
@@ -33,13 +31,13 @@ function RouteComponent() {
   useTabShortcuts()
 
   const { rootPath } = Route.useParams()
-  const { legacyCount, folderName } = Route.useLoaderData()
+  const { legacyCount } = Route.useLoaderData()
 
   return (
     <SidebarProvider>
       <MigrationOverlay
         key={rootPath}
-        rootFolderName={folderName}
+        rootPath={rootPath}
         legacyCount={legacyCount}
       />
       <Sidebar />

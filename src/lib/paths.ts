@@ -9,32 +9,32 @@ import {
 // ── Filesystem paths (used only at the fs layer) ──────────────────────────────
 
 /**
- * Returns nemos-app/folderName or nemos-app/folderName/relativePath
+ * Returns a Root's absolute path, or a path inside it, given the Root's own
+ * absolute path (per #85, a Root can live anywhere on disk — not just under
+ * ROOT — so this joins onto whatever absolute path it's given rather than
+ * reconstructing one from ROOT).
  *
  * Example:
- * - "folderName" → "nemos-app/folderName"
- * - "folderName/folder/note.note" → "nemos-app/folderName/folder/note.note"\
+ * - "C:/Users/x/Documents/nemos-app/personal" → same, unchanged
+ * - "C:/Users/x/Documents/nemos-app/personal", "folder/note.md" →
+ *   "C:/Users/x/Documents/nemos-app/personal/folder/note.md"
  */
-export const toFsPath = (folderName: string, relativePath = ''): string =>
-  relativePath
-    ? `${ROOT}/${folderName}/${relativePath}`
-    : `${ROOT}/${folderName}`
+export const toFsPath = (rootPath: string, relativePath = ''): string =>
+  relativePath ? `${rootPath}/${relativePath}` : rootPath
 
 // ── Relative path extraction ──────────────────────────────────────────────────
 
 /**
- * Strips ROOT/folderName/ prefix from a fsPath produced by toFsPath → relativePath
+ * Strips a Root's absolute path prefix from one of its fsPaths (produced by
+ * toFsPath, or by recursively walking the Root) → relativePath.
  *
  * Example:
- * - "nemos-app/folderName/folder/note.note" → "folder/note.note"
- * - "nemos-app/folderName/folder" → "folder"
- * - "nemos-app/folderName" → ""
+ * - "C:/.../personal/folder/note.md", "C:/.../personal" → "folder/note.md"
+ * - "C:/.../personal/folder", "C:/.../personal" → "folder"
+ * - "C:/.../personal", "C:/.../personal" → ""
  */
-export const toRelativePath = (fsPath: string): string =>
-  fsPath
-    .split('/')
-    .slice(ROOT.split('/').length + 1)
-    .join('/')
+export const toRelativePath = (fsPath: string, rootPath: string): string =>
+  fsPath === rootPath ? '' : fsPath.slice(rootPath.length + 1)
 
 // ── Root identity (path-based, per #84) ────────────────────────────────────────
 
@@ -47,16 +47,14 @@ export const toAbsoluteRootPath = async (folderName: string): Promise<string> =>
   join(await documentDir(), ROOT, folderName)
 
 /**
- * Recovers the ROOT-relative folder name from a Root's absolute path, so
- * existing folder-name-keyed fs functions (toFsPath, getWorkspaceTree, etc.)
- * keep working unchanged. Scoped to Roots that are flat children of ROOT —
- * true for every Root that exists today; arbitrary Roots are out of scope
- * for this prefactor.
+ * Returns the last path segment of a Root's absolute path — used only for
+ * display (e.g. a header title), not for fs path construction (per #85, a
+ * Root can live anywhere on disk, so its absolute path is used directly for
+ * fs operations rather than being reconstructed from a folder name).
  *
  * A plain last-segment split (not Tauri's IPC-backed `basename`) so this can
  * be called synchronously from route loaders, error components, and other
- * places that can't await — every Root path is produced by
- * toAbsoluteRootPath, so the shape is always known.
+ * places that can't await.
  */
 export const rootFolderName = (absolutePath: string): string => {
   const segments = absolutePath.split(/[/\\]/).filter(Boolean)

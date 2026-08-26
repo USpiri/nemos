@@ -3,7 +3,7 @@ import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useNoteEditor } from '@/hooks/use-note-editor'
 import type { Frontmatter, Note } from '@/lib/notes'
 import { readNote } from '@/lib/notes'
-import { rootFolderName } from '@/lib/paths'
+import { toFsPath } from '@/lib/paths'
 import { createNoteTab } from '@/lib/tabs'
 import { cn } from '@/lib/utils'
 import { useTabsStore } from '@/store'
@@ -19,14 +19,13 @@ export const Route = createFileRoute('/workspace/$rootPath/notes/$noteId')({
   pendingComponent: NotePending,
   errorComponent: NoteError,
   loader: async ({ params: { rootPath, noteId } }) => {
-    const folderName = rootFolderName(rootPath)
-    return { note: await readNote(folderName, noteId), folderName }
+    return { note: await readNote(toFsPath(rootPath, noteId)) }
   },
 })
 
 function NoteIdComponent() {
   const { rootPath, noteId } = Route.useParams()
-  const { note, folderName } = Route.useLoaderData()
+  const { note } = Route.useLoaderData()
   const openTab = useTabsStore((s) => s.openTab)
 
   useEffect(() => {
@@ -35,28 +34,23 @@ function NoteIdComponent() {
   }, [rootPath, noteId, openTab])
 
   return (
-    <NoteView
-      key={noteId}
-      rootFolderName={folderName}
-      noteId={noteId}
-      note={note}
-    />
+    <NoteView key={noteId} rootPath={rootPath} noteId={noteId} note={note} />
   )
 }
 
 function NoteView({
-  rootFolderName,
+  rootPath,
   noteId,
   note,
 }: {
-  rootFolderName: string
+  rootPath: string
   noteId: string
   note: Note
 }) {
   const [frontmatter, setFrontmatter] = useState<Frontmatter>(note.frontmatter)
 
   const { save, saveNow } = useNoteEditor({
-    workspaceId: rootFolderName,
+    rootPath,
     relativePath: noteId,
     initialContent: note.content,
     initialFrontmatter: note.frontmatter,

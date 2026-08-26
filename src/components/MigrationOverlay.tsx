@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button'
 import { migrateAllNotes } from '@/lib/migration'
 
 interface Props {
-  rootFolderName: string
+  rootPath: string
   legacyCount: number
 }
 
-export const MigrationOverlay = ({ rootFolderName, legacyCount }: Props) => {
+export const MigrationOverlay = ({ rootPath, legacyCount }: Props) => {
   const [phase, setPhase] = useState<'prompt' | 'migrating' | 'done'>(
     legacyCount > 0 ? 'prompt' : 'done',
   )
@@ -17,7 +17,7 @@ export const MigrationOverlay = ({ rootFolderName, legacyCount }: Props) => {
 
   const runMigration = (deleteAfter: boolean) => {
     setPhase('migrating')
-    migrateAllNotes(rootFolderName, {
+    migrateAllNotes(rootPath, {
       deleteAfter,
       onProgress: (done, total) => setProgress({ done, total }),
     })
