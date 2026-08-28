@@ -5,10 +5,14 @@ import { WorkspaceError } from '@/lib/workspace/errors'
 
 export const useCreateWorkspace = () => {
   const createWorkspace = useCallback(
-    async (workspace: string, onSuccess?: () => void) => {
+    async (
+      location: string,
+      name: string,
+      onSuccess?: (path: string) => void,
+    ) => {
       try {
-        await createWorkspaceFn(workspace)
-        onSuccess?.()
+        const path = await createWorkspaceFn(location, name)
+        onSuccess?.(path)
       } catch (error) {
         if (error instanceof WorkspaceError) {
           switch (error.code) {
