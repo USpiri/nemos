@@ -4,6 +4,7 @@ export type WorkspaceErrorCode =
   | 'CREATE_FAILED'
   | 'GET_WORKSPACES_FAILED'
   | 'GET_WORKSPACE_TREE_FAILED'
+  | 'ALREADY_PINNED'
 
 export class WorkspaceError extends Error {
   readonly code: WorkspaceErrorCode

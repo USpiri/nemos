@@ -8,17 +8,17 @@ import {
 } from '@/components/ui/card'
 import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
-import { type WorkspaceEntry } from '@/lib/workspace'
+import { type WorkspacePin } from '@/lib/workspace'
 
 type Props = {
-  workspaces: WorkspaceEntry[]
+  workspaces: WorkspacePin[]
 }
 
 export const WorkspaceList = ({ workspaces }: Props) => {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {workspaces.map((workspace) => (
-        <Card key={workspace.name} className="h-full">
+        <Card key={workspace.path} className="h-full">
           <CardHeader className="gap-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <FolderIcon className="text-muted-foreground size-4" />
