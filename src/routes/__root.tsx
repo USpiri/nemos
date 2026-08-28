@@ -9,10 +9,7 @@ import { GlobalError } from './-components/GlobalError'
 
 export const Route = createRootRoute({
   component: RootComponent,
-  loader: async () => {
-    const workspaces = await getWorkspaces()
-    return { workspaces }
-  },
+  loader: () => getWorkspaces(),
   errorComponent: GlobalError,
 })
 

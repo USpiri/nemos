@@ -5,7 +5,7 @@ import { Code, H1, P } from '@/components/ui/typography'
 import { ROOT } from '@/config/constants'
 import { useDialog } from '@/hooks/use-dialog'
 import { useOpenFolder } from '@/hooks/use-open-folder'
-import { getWorkspaces } from '@/lib/workspace'
+import { getWorkspaces, useWorkspaceRegistry } from '@/lib/workspace'
 import {
   WorkspaceEmpty,
   WorkspaceError,
@@ -14,17 +14,14 @@ import {
 } from './-components'
 
 export const Route = createFileRoute('/workspace/')({
-  loader: async () => {
-    const workspaces = await getWorkspaces()
-    return { workspaces }
-  },
+  loader: () => getWorkspaces(),
   pendingComponent: WorkspacePending,
   errorComponent: WorkspaceError,
   component: WorkspaceIndex,
 })
 
 function WorkspaceIndex() {
-  const { workspaces } = Route.useLoaderData()
+  const workspaces = useWorkspaceRegistry((state) => state.workspaces)
   const router = useRouter()
   const { open } = useDialog()
   const { openFolder } = useOpenFolder()

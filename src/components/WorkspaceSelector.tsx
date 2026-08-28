@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import { useWorkspaceRegistry } from '@/lib/workspace'
 import {
   Select,
   SelectContent,
@@ -7,12 +8,11 @@ import {
   SelectValue,
 } from './ui/select'
 
-const route = getRouteApi('__root__')
 const workspaceRoute = getRouteApi('/workspace/$rootPath')
 
 export const WorkspaceSelector = () => {
   const { rootPath } = workspaceRoute.useParams()
-  const { workspaces } = route.useLoaderData()
+  const workspaces = useWorkspaceRegistry((state) => state.workspaces)
   const navigate = useNavigate()
 
   const handleWorkspaceChange = (rootPath: string | null) => {

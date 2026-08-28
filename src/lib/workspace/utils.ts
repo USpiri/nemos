@@ -30,23 +30,6 @@ export const isValidWorkspaceTreeEntry = (entry: WorkspaceEntry) => {
   return true
 }
 
-/**
- * Checks if a workspace directory is valid.
- * Returns true if the workspace directory is a directory and it's not hidden.
- *
- * Example:
- * - a directory that is hidden (returns false)
- * - a directory that is not hidden (returns true)
- * - a file (returns false)
- */
-export const isValidWorkspaceDirectory = (entry: WorkspaceEntry) => {
-  // Checked against `name`, not `path` — `path` is now the Root's OS-absolute
-  // path (per #84) and can't be split on '/' the way a ROOT-relative fsPath
-  // can. Workspaces are always flat children of ROOT, so the name alone is
-  // enough to detect a dot-prefixed (hidden) directory.
-  return entry.isDirectory && !entry.name.startsWith('.')
-}
-
 export const hasHiddenParent = (path: string) => {
   return path.split('/').some((part) => part.startsWith('.'))
 }
