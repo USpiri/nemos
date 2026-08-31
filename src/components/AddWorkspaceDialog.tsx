@@ -1,16 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
-import { FolderOpen } from 'lucide-react'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { useCreateWorkspace } from '@/hooks/use-create-workspace'
 import { useDialog } from '@/hooks/use-dialog'
 import { usePinWorkspace } from '@/hooks/use-pin-workspace'
 import { openFolderDialog } from '@/lib/dialog'
-import { defaultWorkspaceParentPath } from '@/lib/paths'
+import { defaultWorkspaceParentPath, rootFolderName } from '@/lib/paths'
 import {
-  CreateWorkspaceInput,
-  createWorkspaceSchema,
+  AddWorkspaceInput,
+  addWorkspaceSchema,
 } from '@/lib/workspace/workspace.schema'
 import { Button } from './ui/button'
 import {
@@ -29,55 +27,61 @@ import {
   FieldLabel,
 } from './ui/field'
 import { Input } from './ui/input'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from './ui/input-group'
 
-export const WorkspaceFormDialog = () => {
+/**
+ * A Workspace is a pin onto an existing folder (#86) — nothing gets created
+ * on disk here. Picking a folder becomes that folder's Root directly, and
+ * submitting pins it under the (editable) display name.
+ */
+export const AddWorkspaceDialog = () => {
   const { close, isOpen } = useDialog()
-  const { createWorkspace } = useCreateWorkspace()
   const { pinWorkspace } = usePinWorkspace()
   const navigate = useNavigate()
-  const open = isOpen('workspace')
+  const open = isOpen('add-workspace')
 
   const {
     handleSubmit,
     register,
     reset,
     setValue,
+    watch,
     formState: { errors, isSubmitting },
-  } = useForm<CreateWorkspaceInput>({
-    resolver: zodResolver(createWorkspaceSchema),
-    defaultValues: { location: '', name: '' },
+  } = useForm<AddWorkspaceInput>({
+    resolver: zodResolver(addWorkspaceSchema),
+    defaultValues: { path: '', name: '' },
   })
 
-  useEffect(() => {
-    if (!open) return
-    defaultWorkspaceParentPath().then((location) => reset({ location, name: '' }))
-  }, [open, reset])
+  const path = watch('path')
 
   const handleBrowse = useCallback(async () => {
-    const picked = await openFolderDialog()
+    const defaultPath = await defaultWorkspaceParentPath()
+    const picked = await openFolderDialog(defaultPath)
     if (!picked) return
-    setValue('location', picked, { shouldValidate: true })
+    setValue('path', picked, { shouldValidate: true })
+    setValue('name', rootFolderName(picked), { shouldValidate: true })
   }, [setValue])
 
+  const handleBrowseKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return
+      event.preventDefault()
+      handleBrowse()
+    },
+    [handleBrowse],
+  )
+
   const onSubmit = useCallback(
-    async (data: CreateWorkspaceInput) => {
-      await createWorkspace(data.location, data.name, async (path) => {
-        await pinWorkspace(path)
+    async (data: AddWorkspaceInput) => {
+      await pinWorkspace(data.path, data.name, () => {
         close()
         reset()
         navigate({
           to: '/workspace/$rootPath',
-          params: { rootPath: path },
+          params: { rootPath: data.path },
         })
       })
     },
-    [createWorkspace, pinWorkspace, navigate, close, reset],
+    [pinWorkspace, navigate, close, reset],
   )
 
   const handleClose = () => {
@@ -89,38 +93,29 @@ export const WorkspaceFormDialog = () => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader className="sr-only">
-          <DialogTitle>Create Workspace</DialogTitle>
+          <DialogTitle>Add Workspace</DialogTitle>
           <DialogDescription>
-            Creates a new folder and pins it as a Workspace automatically
+            Pin an existing folder as a Workspace for quick access
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="location">Location</FieldLabel>
-              <InputGroup>
-                <InputGroupInput
-                  id="location"
-                  autoComplete="off"
-                  aria-invalid={!!errors.location}
-                  {...register('location')}
-                />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton
-                    type="button"
-                    size="icon-xs"
-                    onClick={handleBrowse}
-                    aria-label="Browse for a folder"
-                  >
-                    <FolderOpen />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+              <FieldLabel htmlFor="path">Folder</FieldLabel>
+              <Input
+                id="path"
+                readOnly
+                placeholder="Choose a folder..."
+                value={path}
+                onClick={handleBrowse}
+                onKeyDown={handleBrowseKeyDown}
+                aria-invalid={!!errors.path}
+                className="cursor-pointer"
+              />
               <FieldDescription>
-                Defaults to the nemos-app folder — browse to put this
-                Workspace somewhere else instead
+                Click to choose the folder to pin as a Workspace
               </FieldDescription>
-              {errors.location && <FieldError errors={[errors.location]} />}
+              {errors.path && <FieldError errors={[errors.path]} />}
             </Field>
             <Field>
               <FieldLabel htmlFor="name">Workspace Name</FieldLabel>
@@ -132,7 +127,7 @@ export const WorkspaceFormDialog = () => {
                 {...register('name')}
               />
               <FieldDescription>
-                Becomes the new folder&apos;s name under Location
+                Shown in the sidebar — defaults to the folder&apos;s name
               </FieldDescription>
               {errors.name && <FieldError errors={[errors.name]} />}
             </Field>
@@ -148,7 +143,7 @@ export const WorkspaceFormDialog = () => {
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Create Workspace'}
+              {isSubmitting ? 'Adding...' : 'Add Workspace'}
             </Button>
           </DialogFooter>
         </form>

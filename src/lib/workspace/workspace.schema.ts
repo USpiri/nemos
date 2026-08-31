@@ -1,8 +1,11 @@
 import { z } from 'zod/v3'
-import { fsNameSchema } from '../fs'
 
-export const createWorkspaceSchema = z.object({
-  location: z.string().min(1, 'Location is required'),
-  name: fsNameSchema,
+export const addWorkspaceSchema = z.object({
+  path: z.string().min(1, 'Choose a folder'),
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Name is required')
+    .max(100, 'Name is too long'),
 })
-export type CreateWorkspaceInput = z.infer<typeof createWorkspaceSchema>
+export type AddWorkspaceInput = z.infer<typeof addWorkspaceSchema>

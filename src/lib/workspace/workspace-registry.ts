@@ -17,7 +17,7 @@ interface WorkspaceRegistryState {
   workspaces: WorkspacePin[]
   _initialized: boolean
   init: () => Promise<void>
-  pin: (path: string) => Promise<void>
+  pin: (path: string, name?: string) => Promise<void>
   unpin: (path: string) => Promise<void>
   rename: (path: string, name: string) => Promise<void>
 }
@@ -47,16 +47,20 @@ export const useWorkspaceRegistry = create<WorkspaceRegistryState>()(
       set({ workspaces: parsed.success ? parsed.data : [], _initialized: true })
     },
 
-    pin: async (path) => {
+    // `name` defaults to the folder's basename when omitted (e.g. a future
+    // "Pin this Workspace" action on an already-open Root); the "Add
+    // Workspace" dialog (#87) passes the user-edited display name instead.
+    pin: async (path, name) => {
       const { workspaces } = get()
-      if (workspaces.some((workspace) => workspace.path === path)) {
+      const existing = workspaces.find((workspace) => workspace.path === path)
+      if (existing) {
         throw new WorkspaceError(
           'ALREADY_PINNED',
-          'This folder is already pinned as a Workspace',
+          `This folder is already a workspace named '${existing.name}'`,
         )
       }
 
-      const next = [...workspaces, { name: rootFolderName(path), path }]
+      const next = [...workspaces, { name: name ?? rootFolderName(path), path }]
       set({ workspaces: next })
       await persistWorkspaces(next)
     },

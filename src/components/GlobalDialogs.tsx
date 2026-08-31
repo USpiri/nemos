@@ -1,6 +1,6 @@
+import { AddWorkspaceDialog } from './AddWorkspaceDialog'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import { SettingsDialog } from './settings/SettingsDialog'
-import { WorkspaceFormDialog } from './WorkspaceFormDialog'
 
 /**
  * GlobalDialogs component
@@ -10,7 +10,7 @@ import { WorkspaceFormDialog } from './WorkspaceFormDialog'
 export const GlobalDialogs = () => {
   return (
     <>
-      <WorkspaceFormDialog />
+      <AddWorkspaceDialog />
       <DeleteConfirmDialog />
       <SettingsDialog />
     </>
