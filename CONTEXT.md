@@ -25,6 +25,9 @@ The folder currently open in Nemos — the directory that Notes and Folders are 
 ### Workspace
 A user-pinned Root, registered for quick access (e.g. from a sidebar or switcher). Pinning is opt-in — most opened Roots are never pinned. A Workspace has a stable identity assigned at pin time and a user-editable display name independent of the folder's actual name, so two Workspaces can point at same-named folders without conflict, and renaming a Workspace's label never touches the filesystem. Unpinning removes the bookmark only; it never deletes or modifies the underlying folder.
 
+### Recent Roots
+A most-recently-used list of the last 10 Roots opened, capped and reordered on every open regardless of Workspace pin status. A Root can appear in both the Workspace list and Recent Roots at the same time. Opening a Recent entry whose folder no longer exists silently drops it from the list with a toast — unlike a missing pinned Workspace, it never prompts to relocate or delete.
+
 ### Frontmatter
 The YAML block at the top of a Note file. Built-in fields: `readonly` (bool — makes the Note non-editable), `tags` (string[]), `cssClass` (string — applied as a CSS class on the note container). Additional arbitrary fields are allowed.
 

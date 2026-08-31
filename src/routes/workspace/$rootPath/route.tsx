@@ -8,17 +8,23 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useTabShortcuts } from '@/hooks/use-tab-shortcuts'
 import { findLegacyNotes } from '@/lib/migration'
 import { initRootSettings } from '@/lib/settings'
-import { getWorkspaceTree } from '@/lib/workspace'
+import { getWorkspaceTree, useRecentRoots } from '@/lib/workspace'
 
 export const Route = createFileRoute('/workspace/$rootPath')({
   component: RouteComponent,
   loader: async ({ params: { rootPath } }) => {
-    const workspaceTree = await getWorkspaceTree(rootPath).catch(() => {
-      toast.error('Workspace not found', {
-        description: 'The workspace you are looking for does not exist.',
+    const workspaceTree = await getWorkspaceTree(rootPath).catch(async () => {
+      // The Root no longer exists at this path — drop any stale Recent
+      // entry for it too (#88); no-op if it was never recorded there.
+      await useRecentRoots.getState().remove(rootPath)
+      toast.error('Root not found', {
+        description: 'The folder you are looking for does not exist.',
       })
       throw redirect({ to: '/workspace', replace: true })
     })
+    // Every successful Root open — pinned or not — bumps/upserts the
+    // Recent Roots MRU list (#88).
+    await useRecentRoots.getState().recordOpen(rootPath)
     const [legacyPaths] = await Promise.all([
       findLegacyNotes(rootPath),
       initRootSettings(rootPath),
