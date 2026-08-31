@@ -2,10 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { useDialog } from '@/hooks/use-dialog'
 import { usePinWorkspace } from '@/hooks/use-pin-workspace'
 import { openFolderDialog } from '@/lib/dialog'
 import { defaultWorkspaceParentPath, rootFolderName } from '@/lib/paths'
+import {
+  alreadyPinnedMessage,
+  findPinnedWorkspace,
+  useWorkspaceRegistry,
+} from '@/lib/workspace'
 import {
   AddWorkspaceInput,
   addWorkspaceSchema,
@@ -52,14 +58,25 @@ export const AddWorkspaceDialog = () => {
   })
 
   const path = watch('path')
+  const workspaces = useWorkspaceRegistry((state) => state.workspaces)
 
   const handleBrowse = useCallback(async () => {
     const defaultPath = await defaultWorkspaceParentPath()
     const picked = await openFolderDialog(defaultPath)
     if (!picked) return
+
+    const existing = findPinnedWorkspace(workspaces, picked)
+    if (existing) {
+      toast.warning('Already a Workspace', {
+        description: alreadyPinnedMessage(existing.name),
+        richColors: true,
+      })
+      return
+    }
+
     setValue('path', picked, { shouldValidate: true })
     setValue('name', rootFolderName(picked), { shouldValidate: true })
-  }, [setValue])
+  }, [setValue, workspaces])
 
   const handleBrowseKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {

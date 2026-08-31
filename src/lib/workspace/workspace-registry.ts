@@ -28,6 +28,18 @@ const persistWorkspaces = async (workspaces: WorkspacePin[]) => {
 }
 
 /**
+ * Looks up an existing pin for `path` without mutating anything — lets a
+ * caller (e.g. the "Add Workspace" dialog, right after the folder picker
+ * returns, #87) surface the same already-pinned conflict `pin()` enforces,
+ * before committing to a write.
+ */
+export const findPinnedWorkspace = (workspaces: WorkspacePin[], path: string) =>
+  workspaces.find((workspace) => workspace.path === path)
+
+export const alreadyPinnedMessage = (existingName: string) =>
+  `This folder is already a workspace named '${existingName}'`
+
+/**
  * The Workspace pin registry (#86) — a small, cross-Root bookmark list kept
  * as its own top-level key in the global settings `LazyStore`, not routed
  * through the per-Root settings-delta mechanism (`createScope`) since pins
@@ -52,12 +64,9 @@ export const useWorkspaceRegistry = create<WorkspaceRegistryState>()(
     // Workspace" dialog (#87) passes the user-edited display name instead.
     pin: async (path, name) => {
       const { workspaces } = get()
-      const existing = workspaces.find((workspace) => workspace.path === path)
+      const existing = findPinnedWorkspace(workspaces, path)
       if (existing) {
-        throw new WorkspaceError(
-          'ALREADY_PINNED',
-          `This folder is already a workspace named '${existing.name}'`,
-        )
+        throw new WorkspaceError('ALREADY_PINNED', alreadyPinnedMessage(existing.name))
       }
 
       const next = [...workspaces, { name: name ?? rootFolderName(path), path }]
