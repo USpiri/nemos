@@ -17,3 +17,12 @@ export type WorkspacePin = {
   name: string
   path: string
 }
+
+/**
+ * An entry in the Recent Roots MRU list (#88) — recorded on every Root
+ * open, pinned or not.
+ */
+export type RecentRoot = {
+  path: string
+  lastOpenedAt: number
+}
