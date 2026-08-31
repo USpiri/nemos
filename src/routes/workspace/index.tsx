@@ -1,8 +1,7 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { FolderOpen, FolderPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Code, H1, P } from '@/components/ui/typography'
-import { ROOT } from '@/config/constants'
+import { H1, P } from '@/components/ui/typography'
 import { useDialog } from '@/hooks/use-dialog'
 import { useOpenFolder } from '@/hooks/use-open-folder'
 import { getWorkspaces, useWorkspaceRegistry } from '@/lib/workspace'
@@ -37,8 +36,9 @@ function WorkspaceIndex() {
       <header className="max-w-2xl space-y-6">
         <H1 size="sm">Your workspaces</H1>
         <P variant="muted" size="sm">
-          Each workspace is a folder you manage inside <Code>{ROOT}</Code>. Pick
-          one to continue or create a new folder to start fresh.
+          Workspaces are folders you've pinned for quick access, wherever
+          they live on disk. Pick one to continue, or add a folder to get
+          started.
         </P>
       </header>
 
@@ -51,8 +51,8 @@ function WorkspaceIndex() {
       </section>
 
       <div className="flex flex-row flex-wrap gap-2">
-        <Button variant="outline" onClick={() => open('workspace')}>
-          <FolderPlus /> Create a new workspace
+        <Button variant="outline" onClick={() => open('add-workspace')}>
+          <FolderPlus /> Add Workspace
         </Button>
         <Button variant="outline" onClick={openFolder}>
           <FolderOpen /> Open Folder

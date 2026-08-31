@@ -29,8 +29,8 @@ export const WorkspaceEmpty = ({ onRefresh }: Props) => {
       <EmptyContent className="flex flex-row justify-center gap-2">
         <Button onClick={onRefresh}>Refresh list</Button>
         or
-        <Button variant="outline" onClick={() => open('workspace')}>
-          Create a new workspace
+        <Button variant="outline" onClick={() => open('add-workspace')}>
+          Add Workspace
         </Button>
       </EmptyContent>
     </Empty>

@@ -47,6 +47,15 @@ export const toAbsoluteRootPath = async (folderName: string): Promise<string> =>
   join(await documentDir(), ROOT, folderName)
 
 /**
+ * Returns `Documents/nemos-app` — the initial directory the "Add Workspace"
+ * dialog's folder picker opens to (#87). Purely a picker convenience; the
+ * folder the user picks becomes the Workspace's Root directly, wherever it
+ * lives on disk.
+ */
+export const defaultWorkspaceParentPath = async (): Promise<string> =>
+  join(await documentDir(), ROOT)
+
+/**
  * Returns the last path segment of a Root's absolute path — used only for
  * display (e.g. a header title), not for fs path construction (per #85, a
  * Root can live anywhere on disk, so its absolute path is used directly for

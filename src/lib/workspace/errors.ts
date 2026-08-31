@@ -1,7 +1,4 @@
 export type WorkspaceErrorCode =
-  | 'ALREADY_EXISTS'
-  | 'INVALID_NAME'
-  | 'CREATE_FAILED'
   | 'GET_WORKSPACES_FAILED'
   | 'GET_WORKSPACE_TREE_FAILED'
   | 'ALREADY_PINNED'

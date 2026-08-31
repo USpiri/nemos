@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 export type DialogType =
-  | 'workspace'
+  | 'add-workspace'
   | 'update'
   | 'delete-confirmation'
   | 'settings'

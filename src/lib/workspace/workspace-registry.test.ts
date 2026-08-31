@@ -92,6 +92,27 @@ describe('useWorkspaceRegistry', () => {
       ])
       expect(mockSet).not.toHaveBeenCalled()
     })
+
+    it('names the entry with the given display name instead of the basename', async () => {
+      await useWorkspaceRegistry
+        .getState()
+        .pin('/Users/x/Documents/nemos-app/personal', 'My Notes')
+
+      expect(useWorkspaceRegistry.getState().workspaces).toEqual([
+        { name: 'My Notes', path: '/Users/x/Documents/nemos-app/personal' },
+      ])
+    })
+
+    it('names the already-pinned error after the existing entry', async () => {
+      await useWorkspaceRegistry.getState().pin('/roots/personal', 'My Notes')
+
+      await expect(
+        useWorkspaceRegistry.getState().pin('/roots/personal'),
+      ).rejects.toMatchObject({
+        code: 'ALREADY_PINNED',
+        message: "This folder is already a workspace named 'My Notes'",
+      })
+    })
   })
 
   describe('unpin()', () => {

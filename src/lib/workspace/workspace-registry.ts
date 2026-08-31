@@ -17,7 +17,7 @@ interface WorkspaceRegistryState {
   workspaces: WorkspacePin[]
   _initialized: boolean
   init: () => Promise<void>
-  pin: (path: string) => Promise<void>
+  pin: (path: string, name?: string) => Promise<void>
   unpin: (path: string) => Promise<void>
   rename: (path: string, name: string) => Promise<void>
 }
@@ -26,6 +26,18 @@ const persistWorkspaces = async (workspaces: WorkspacePin[]) => {
   await store.set(REGISTRY_KEY, workspaces)
   await store.save()
 }
+
+/**
+ * Looks up an existing pin for `path` without mutating anything — lets a
+ * caller (e.g. the "Add Workspace" dialog, right after the folder picker
+ * returns, #87) surface the same already-pinned conflict `pin()` enforces,
+ * before committing to a write.
+ */
+export const findPinnedWorkspace = (workspaces: WorkspacePin[], path: string) =>
+  workspaces.find((workspace) => workspace.path === path)
+
+export const alreadyPinnedMessage = (existingName: string) =>
+  `This folder is already a workspace named '${existingName}'`
 
 /**
  * The Workspace pin registry (#86) — a small, cross-Root bookmark list kept
@@ -47,16 +59,17 @@ export const useWorkspaceRegistry = create<WorkspaceRegistryState>()(
       set({ workspaces: parsed.success ? parsed.data : [], _initialized: true })
     },
 
-    pin: async (path) => {
+    // `name` defaults to the folder's basename when omitted (e.g. a future
+    // "Pin this Workspace" action on an already-open Root); the "Add
+    // Workspace" dialog (#87) passes the user-edited display name instead.
+    pin: async (path, name) => {
       const { workspaces } = get()
-      if (workspaces.some((workspace) => workspace.path === path)) {
-        throw new WorkspaceError(
-          'ALREADY_PINNED',
-          'This folder is already pinned as a Workspace',
-        )
+      const existing = findPinnedWorkspace(workspaces, path)
+      if (existing) {
+        throw new WorkspaceError('ALREADY_PINNED', alreadyPinnedMessage(existing.name))
       }
 
-      const next = [...workspaces, { name: rootFolderName(path), path }]
+      const next = [...workspaces, { name: name ?? rootFolderName(path), path }]
       set({ workspaces: next })
       await persistWorkspaces(next)
     },
