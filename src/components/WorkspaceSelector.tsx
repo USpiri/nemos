@@ -1,6 +1,11 @@
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import { PinIcon } from 'lucide-react'
 import { rootFolderName } from '@/lib/paths'
-import { useRecentRoots, useWorkspaceRegistry } from '@/lib/workspace'
+import {
+  findPinnedWorkspace,
+  useRecentRoots,
+  useWorkspaceRegistry,
+} from '@/lib/workspace'
 import {
   Select,
   SelectContent,
@@ -14,10 +19,10 @@ import {
 const workspaceRoute = getRouteApi('/workspace/$rootPath')
 
 // The same Root path can be both a pinned Workspace and a Recent entry at
-// once (#88 is deliberately pin-status-agnostic). Radix's Select can't have
-// two items sharing one `value` — it registers both as "selected" and the
-// trigger ends up rendering both labels concatenated — so each group's
-// items are namespaced by prefix and un-prefixed back to a path on change.
+// once. Select component can't have two items sharing one `value` — it
+// registers both as "selected" and the trigger ends up rendering both
+// labels concatenated — so each group's items are namespaced by prefix
+// and un-prefixed back to a path on change.
 const WORKSPACE_PREFIX = 'workspace:'
 const RECENT_PREFIX = 'recent:'
 
@@ -79,14 +84,23 @@ export const WorkspaceSelector = () => {
         <SelectGroup>
           <SelectLabel>Recent</SelectLabel>
           {recents.length ? (
-            recents.map((recent) => (
-              <SelectItem
-                key={recent.path}
-                value={`${RECENT_PREFIX}${recent.path}`}
-              >
-                {rootFolderName(recent.path)}
-              </SelectItem>
-            ))
+            recents.map((recent) => {
+              const pin = findPinnedWorkspace(workspaces, recent.path)
+
+              return (
+                <SelectItem
+                  key={recent.path}
+                  value={`${RECENT_PREFIX}${recent.path}`}
+                >
+                  <span className="flex min-w-0 items-center gap-1.5">
+                    {pin && <PinIcon className="size-3 shrink-0" />}
+                    <span className="truncate">
+                      {pin?.name ?? rootFolderName(recent.path)}
+                    </span>
+                  </span>
+                </SelectItem>
+              )
+            })
           ) : (
             <SelectItem value="__no-recents__" disabled>
               No recent folders

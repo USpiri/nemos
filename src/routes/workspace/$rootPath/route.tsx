@@ -8,12 +8,29 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useTabShortcuts } from '@/hooks/use-tab-shortcuts'
 import { findLegacyNotes } from '@/lib/migration'
 import { initRootSettings } from '@/lib/settings'
-import { getWorkspaceTree, useRecentRoots } from '@/lib/workspace'
+import {
+  findPinnedWorkspace,
+  getWorkspaceTree,
+  useRecentRoots,
+  useWorkspaceRegistry,
+} from '@/lib/workspace'
+import { useDialogStore } from '@/store'
 
 export const Route = createFileRoute('/workspace/$rootPath')({
   component: RouteComponent,
   loader: async ({ params: { rootPath } }) => {
     const workspaceTree = await getWorkspaceTree(rootPath).catch(async () => {
+      // A pinned Workspace gets a Relocate/Delete pin/Retry prompt (#90)
+      // instead of the silent drop-with-toast below.
+      const pin = findPinnedWorkspace(
+        useWorkspaceRegistry.getState().workspaces,
+        rootPath,
+      )
+      if (pin) {
+        useDialogStore.getState().open('workspace-missing-path', { ...pin })
+        throw redirect({ to: '/workspace', replace: true })
+      }
+
       // The Root no longer exists at this path — drop any stale Recent
       // entry for it too (#88); no-op if it was never recorded there.
       await useRecentRoots.getState().remove(rootPath)

@@ -185,4 +185,72 @@ describe('useWorkspaceRegistry', () => {
       ])
     })
   })
+
+  describe('relocate()', () => {
+    it('changes only the path, leaving the name untouched', async () => {
+      await useWorkspaceRegistry.getState().pin('/roots/personal')
+
+      await useWorkspaceRegistry
+        .getState()
+        .relocate('/roots/personal', '/roots/personal-moved')
+
+      expect(useWorkspaceRegistry.getState().workspaces).toEqual([
+        { name: 'personal', path: '/roots/personal-moved' },
+      ])
+    })
+
+    it('persists the relocated entry', async () => {
+      await useWorkspaceRegistry.getState().pin('/roots/personal')
+      mockSet.mockClear()
+
+      await useWorkspaceRegistry
+        .getState()
+        .relocate('/roots/personal', '/roots/personal-moved')
+
+      expect(mockSet).toHaveBeenCalledWith('workspaceRegistry', [
+        { name: 'personal', path: '/roots/personal-moved' },
+      ])
+    })
+
+    it('does not affect other entries', async () => {
+      await useWorkspaceRegistry.getState().pin('/roots/personal')
+      await useWorkspaceRegistry.getState().pin('/roots/work')
+
+      await useWorkspaceRegistry
+        .getState()
+        .relocate('/roots/personal', '/roots/personal-moved')
+
+      expect(useWorkspaceRegistry.getState().workspaces).toEqual([
+        { name: 'personal', path: '/roots/personal-moved' },
+        { name: 'work', path: '/roots/work' },
+      ])
+    })
+
+    it('throws and does not relocate when the new path is already pinned by another entry', async () => {
+      await useWorkspaceRegistry.getState().pin('/roots/personal')
+      await useWorkspaceRegistry.getState().pin('/roots/work')
+      mockSet.mockClear()
+
+      await expect(
+        useWorkspaceRegistry.getState().relocate('/roots/personal', '/roots/work'),
+      ).rejects.toMatchObject({
+        code: 'ALREADY_PINNED',
+        message: "This folder is already a workspace named 'work'",
+      })
+
+      expect(useWorkspaceRegistry.getState().workspaces).toEqual([
+        { name: 'personal', path: '/roots/personal' },
+        { name: 'work', path: '/roots/work' },
+      ])
+      expect(mockSet).not.toHaveBeenCalled()
+    })
+
+    it('is a no-op when the path is not pinned', async () => {
+      await useWorkspaceRegistry
+        .getState()
+        .relocate('/roots/missing', '/roots/missing-moved')
+
+      expect(useWorkspaceRegistry.getState().workspaces).toEqual([])
+    })
+  })
 })

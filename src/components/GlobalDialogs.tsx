@@ -1,6 +1,7 @@
 import { AddWorkspaceDialog } from './AddWorkspaceDialog'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import { SettingsDialog } from './settings/SettingsDialog'
+import { WorkspaceMissingPathDialog } from './WorkspaceMissingPathDialog'
 
 /**
  * GlobalDialogs component
@@ -13,6 +14,7 @@ export const GlobalDialogs = () => {
       <AddWorkspaceDialog />
       <DeleteConfirmDialog />
       <SettingsDialog />
+      <WorkspaceMissingPathDialog />
     </>
   )
 }
