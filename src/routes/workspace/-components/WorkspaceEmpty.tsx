@@ -6,15 +6,9 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from '@/components/ui/empty'
-import { Code } from '@/components/ui/typography'
-import { ROOT } from '@/config/constants'
 import { useDialog } from '@/hooks/use-dialog'
 
-type Props = {
-  onRefresh?: () => void
-}
-
-export const WorkspaceEmpty = ({ onRefresh }: Props) => {
+export const WorkspaceEmpty = () => {
   const { open } = useDialog()
 
   return (
@@ -22,13 +16,11 @@ export const WorkspaceEmpty = ({ onRefresh }: Props) => {
       <EmptyHeader>
         <EmptyTitle>No workspaces yet</EmptyTitle>
         <EmptyDescription>
-          Create a folder inside <Code>{ROOT}</Code>. Or you can create a new
-          workspace folder by clicking the button below.
+          Workspaces are folders you've pinned for quick access — they can live
+          anywhere on disk, not just in one dedicated folder.
         </EmptyDescription>
       </EmptyHeader>
-      <EmptyContent className="flex flex-row justify-center gap-2">
-        <Button onClick={onRefresh}>Refresh list</Button>
-        or
+      <EmptyContent>
         <Button variant="outline" onClick={() => open('add-workspace')}>
           Add Workspace
         </Button>

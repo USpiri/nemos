@@ -1,3 +1,5 @@
+export * from './RecentRootList'
+export * from './RecentRootsEmpty'
 export * from './WorkspaceEmpty'
 export * from './WorkspaceError'
 export * from './WorkspaceList'
