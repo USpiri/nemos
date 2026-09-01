@@ -20,6 +20,7 @@ interface WorkspaceRegistryState {
   pin: (path: string, name?: string) => Promise<void>
   unpin: (path: string) => Promise<void>
   rename: (path: string, name: string) => Promise<void>
+  relocate: (path: string, newPath: string) => Promise<void>
 }
 
 const persistWorkspaces = async (workspaces: WorkspacePin[]) => {
@@ -29,8 +30,7 @@ const persistWorkspaces = async (workspaces: WorkspacePin[]) => {
 
 /**
  * Looks up an existing pin for `path` without mutating anything — lets a
- * caller (e.g. the "Add Workspace" dialog, right after the folder picker
- * returns, #87) surface the same already-pinned conflict `pin()` enforces,
+ * caller surface the same already-pinned conflict `pin()` enforces,
  * before committing to a write.
  */
 export const findPinnedWorkspace = (workspaces: WorkspacePin[], path: string) =>
@@ -40,7 +40,7 @@ export const alreadyPinnedMessage = (existingName: string) =>
   `This folder is already a workspace named '${existingName}'`
 
 /**
- * The Workspace pin registry (#86) — a small, cross-Root bookmark list kept
+ * Workspace pin registry (#86) — a small, cross-Root bookmark list kept
  * as its own top-level key in the global settings `LazyStore`, not routed
  * through the per-Root settings-delta mechanism (`createScope`) since pins
  * aren't scoped to any single Root.
@@ -66,7 +66,10 @@ export const useWorkspaceRegistry = create<WorkspaceRegistryState>()(
       const { workspaces } = get()
       const existing = findPinnedWorkspace(workspaces, path)
       if (existing) {
-        throw new WorkspaceError('ALREADY_PINNED', alreadyPinnedMessage(existing.name))
+        throw new WorkspaceError(
+          'ALREADY_PINNED',
+          alreadyPinnedMessage(existing.name),
+        )
       }
 
       const next = [...workspaces, { name: name ?? rootFolderName(path), path }]
@@ -85,6 +88,23 @@ export const useWorkspaceRegistry = create<WorkspaceRegistryState>()(
     rename: async (path, name) => {
       const next = get().workspaces.map((workspace) =>
         workspace.path === path ? { ...workspace, name } : workspace,
+      )
+      set({ workspaces: next })
+      await persistWorkspaces(next)
+    },
+
+    relocate: async (path, newPath) => {
+      const { workspaces } = get()
+      const conflict = findPinnedWorkspace(workspaces, newPath)
+      if (conflict && conflict.path !== path) {
+        throw new WorkspaceError(
+          'ALREADY_PINNED',
+          alreadyPinnedMessage(conflict.name),
+        )
+      }
+
+      const next = workspaces.map((workspace) =>
+        workspace.path === path ? { ...workspace, path: newPath } : workspace,
       )
       set({ workspaces: next })
       await persistWorkspaces(next)
