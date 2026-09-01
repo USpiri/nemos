@@ -10,7 +10,7 @@ type Props = {
 
 export const RecentRootList = ({ recents }: Props) => {
   return (
-    <ul className="divide-y divide-border rounded-lg border">
+    <ul className="divide-y divide-border rounded-lg">
       {recents.map((recent) => (
         <li key={recent.path} className="flex items-center gap-3 px-3 py-2.5">
           <FolderIcon className="size-4 shrink-0 text-muted-foreground" />

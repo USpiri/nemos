@@ -9,7 +9,7 @@ type Props = {
 
 export const WorkspaceList = ({ workspaces }: Props) => {
   return (
-    <ul className="divide-y divide-border rounded-lg border">
+    <ul className="divide-y divide-border">
       {workspaces.map((workspace) => (
         <li
           key={workspace.path}

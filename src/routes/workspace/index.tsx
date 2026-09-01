@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { FolderOpen, FolderPlus } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { H1, P } from '@/components/ui/typography'
 import { useDialog } from '@/hooks/use-dialog'
 import { useOpenFolder } from '@/hooks/use-open-folder'
@@ -34,7 +35,7 @@ function WorkspaceIndex() {
   const { openFolder } = useOpenFolder()
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-10 py-32">
+    <div className="mx-auto grid h-screen w-full max-w-4xl grid-rows-[auto_auto_1fr] gap-6 overflow-hidden px-10 py-16">
       <header className="max-w-2xl space-y-6">
         <H1 size="sm">Get started</H1>
         <P variant="muted" size="sm" className="text-balance">
@@ -81,19 +82,21 @@ function WorkspaceIndex() {
         </div>
       </div>
 
-      <section className="flex-1">
-        {view === 'workspaces' ? (
-          workspaces.length ? (
-            <WorkspaceList workspaces={workspaces} />
+      <ScrollArea className="h-full overflow-hidden">
+        <section className="rounded-lg border">
+          {view === 'workspaces' ? (
+            workspaces.length ? (
+              <WorkspaceList workspaces={workspaces} />
+            ) : (
+              <WorkspaceEmpty />
+            )
+          ) : recents.length ? (
+            <RecentRootList recents={recents} />
           ) : (
-            <WorkspaceEmpty />
-          )
-        ) : recents.length ? (
-          <RecentRootList recents={recents} />
-        ) : (
-          <RecentRootsEmpty />
-        )}
-      </section>
+            <RecentRootsEmpty />
+          )}
+        </section>
+      </ScrollArea>
     </div>
   )
 }
