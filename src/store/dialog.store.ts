@@ -6,6 +6,7 @@ export type DialogType =
   | 'delete-confirmation'
   | 'settings'
   | 'workspace-missing-path'
+  | 'pins-migration'
 
 interface DialogState {
   dialog: DialogType | null
