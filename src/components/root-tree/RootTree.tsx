@@ -15,7 +15,7 @@ interface Props {
   rootPath: string
 }
 
-export const WorkspaceTree = ({ tree, rootPath }: Props) => {
+export const RootTree = ({ tree, rootPath }: Props) => {
   const { noteId: currentNoteId } = useParams({ strict: false })
   const { moveNote, moveFolder, refreshRoot, navigateToNote } = useRootActions()
 

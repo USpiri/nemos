@@ -17,7 +17,7 @@ A single `.md` file on the local filesystem. A Note consists of optional YAML fr
 A `.note` file — the pre-migration format that stored note data as JSON (`{ content: TipTapJSON, readonly?: boolean }`). Legacy Notes are not opened or understood by the app after migration; they exist only as migration sources.
 
 ### Migration
-The one-time process of converting Legacy Notes in a Workspace to Notes. Triggered automatically when the app detects Legacy Notes on Workspace open; the user chooses whether to delete the source files after conversion.
+The one-time process of converting Legacy Notes in a Root to Notes. Triggered automatically when the app detects Legacy Notes on Root open; the user chooses whether to delete the source files after conversion.
 
 ### Root
 The folder currently open in Nemos — the directory that Notes and Folders are read from. A Root can be opened (via Open Folder) without ever being pinned as a Workspace. Only one Root is open at a time; opening a different Root, whether by switching Workspaces or opening a new folder, replaces it.

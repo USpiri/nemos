@@ -11,7 +11,7 @@ type Props = {
 }
 
 // TODO: Implement import notes
-export const WorkspaceActions = ({ rootPath }: Props) => {
+export const RootActions = ({ rootPath }: Props) => {
   const { createNoteAndNavigate, createFolderAndRefresh } = useRootActions()
   const { pinWorkspace } = usePinWorkspace()
   const isPinned = useWorkspaceRegistry(

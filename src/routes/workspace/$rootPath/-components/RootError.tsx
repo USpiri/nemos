@@ -10,7 +10,7 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 
-export const WorkspaceError = ({ error, reset }: ErrorComponentProps) => {
+export const RootError = ({ error, reset }: ErrorComponentProps) => {
   return (
     <main className="flex h-full items-center justify-center p-6">
       <Empty>
@@ -18,7 +18,7 @@ export const WorkspaceError = ({ error, reset }: ErrorComponentProps) => {
           <EmptyMedia variant="icon" className="bg-destructive/10">
             <AlertCircle className="text-destructive" />
           </EmptyMedia>
-          <EmptyTitle>Error loading workspaces</EmptyTitle>
+          <EmptyTitle>Error loading Root</EmptyTitle>
           <EmptyDescription>{error.message}</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>

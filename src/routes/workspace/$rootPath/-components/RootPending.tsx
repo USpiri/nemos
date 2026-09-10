@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export const WorkspacePending = () => {
+export const RootPending = () => {
   return (
     <div className="mx-auto flex h-full w-full max-w-4xl flex-col gap-6 px-8 py-16">
       <div className="flex items-center gap-3">

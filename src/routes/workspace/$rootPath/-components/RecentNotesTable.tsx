@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/table'
 import { Code, P } from '@/components/ui/typography'
 import { toRelativePath } from '@/lib/paths'
-import { DetailedWorkspaceEntry } from '@/lib/workspace'
+import { DetailedRootEntry } from '@/lib/workspace'
 import { getNoteRelativeDir } from '@/lib/workspace/utils'
 
 type Props = {
-  notes: DetailedWorkspaceEntry[]
+  notes: DetailedRootEntry[]
   rootPath: string
 }
 

@@ -10,7 +10,7 @@ import { findLegacyNotes } from '@/lib/migration'
 import { initRootSettings } from '@/lib/settings'
 import {
   findPinnedWorkspace,
-  getWorkspaceTree,
+  getRootTree,
   useRecentRoots,
   useWorkspaceRegistry,
 } from '@/lib/workspace'
@@ -19,7 +19,7 @@ import { useDialogStore } from '@/store'
 export const Route = createFileRoute('/workspace/$rootPath')({
   component: RouteComponent,
   loader: async ({ params: { rootPath } }) => {
-    const workspaceTree = await getWorkspaceTree(rootPath).catch(async () => {
+    const rootTree = await getRootTree(rootPath).catch(async () => {
       // A pinned Workspace gets a Relocate/Delete pin/Retry prompt (#90)
       // instead of the silent drop-with-toast below.
       const pin = findPinnedWorkspace(
@@ -46,7 +46,7 @@ export const Route = createFileRoute('/workspace/$rootPath')({
       findLegacyNotes(rootPath),
       initRootSettings(rootPath),
     ])
-    return { workspaceTree, legacyCount: legacyPaths.length }
+    return { rootTree, legacyCount: legacyPaths.length }
   },
 })
 

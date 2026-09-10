@@ -1,10 +1,10 @@
 import { DirEntry } from '@tauri-apps/plugin-fs'
 
-export type WorkspaceEntry = DirEntry & {
+export type RootEntry = DirEntry & {
   path: string
 }
 
-export type DetailedWorkspaceEntry = WorkspaceEntry & {
+export type DetailedRootEntry = RootEntry & {
   modified?: Date | null
 }
 

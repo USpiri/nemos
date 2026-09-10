@@ -15,7 +15,7 @@ export interface MigrateResult {
   failed: string[]
 }
 
-/** Scan a workspace for unmigrated .note files */
+/** Scan a Root for unmigrated .note files */
 export const findLegacyNotes = async (rootPath: string): Promise<string[]> => {
   let entries: { path: string; name: string; isFile: boolean }[] = []
   try {
@@ -73,7 +73,7 @@ export const migrateSingleNote = async (
   }
 }
 
-/** Migrate all .note files in a workspace; returns progress stats */
+/** Migrate all .note files in a Root; returns progress stats */
 export const migrateAllNotes = async (
   rootPath: string,
   options: {
