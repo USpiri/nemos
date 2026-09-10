@@ -1,5 +1,6 @@
 import { AddWorkspaceDialog } from './AddWorkspaceDialog'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
+import { PinsMigrationDialog } from './PinsMigrationDialog'
 import { SettingsDialog } from './settings/SettingsDialog'
 import { WorkspaceMissingPathDialog } from './WorkspaceMissingPathDialog'
 
@@ -13,6 +14,7 @@ export const GlobalDialogs = () => {
     <>
       <AddWorkspaceDialog />
       <DeleteConfirmDialog />
+      <PinsMigrationDialog />
       <SettingsDialog />
       <WorkspaceMissingPathDialog />
     </>
