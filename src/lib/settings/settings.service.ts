@@ -157,13 +157,9 @@ export function createScope<TSchema extends z.ZodObject>(
       })
 
       if (rootPath) {
-        const settingsPath = `${rootPath}/${ROOT_SETTINGS_FILE}`
-        let all: Record<string, unknown> = {}
-        try {
-          all = await readJson<Record<string, unknown>>(settingsPath)
-        } catch {
-          return
-        }
+        const all = await readAllRootSettings(rootPath)
+        if (!all) return
+
         const scopeDelta = { ...(all[def.key] as Record<string, unknown>) }
         delete scopeDelta[key as string]
         if (Object.keys(scopeDelta).length === 0) {
@@ -171,7 +167,7 @@ export function createScope<TSchema extends z.ZodObject>(
         } else {
           all[def.key] = scopeDelta
         }
-        await writeJson(settingsPath, all)
+        await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
       }
     },
 
