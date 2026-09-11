@@ -1,5 +1,5 @@
 import { readDirRecursive } from '@/lib/fs'
-import { WorkspaceError } from '../errors'
+import { RootError } from '../errors'
 import { isValidRootTreeEntry, mapRootTree } from '../utils'
 
 /**
@@ -16,6 +16,6 @@ export const getRootTree = async (rootPath: string) => {
     const filteredTree = tree.filter(isValidRootTreeEntry)
     return mapRootTree(filteredTree)
   } catch {
-    throw new WorkspaceError('GET_ROOT_TREE_FAILED', 'Failed to get Root tree')
+    throw new RootError('GET_ROOT_TREE_FAILED', 'Failed to get Root tree')
   }
 }
