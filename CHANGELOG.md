@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+### New Features
+
+- **Open any folder as a Root**: Notes aren't limited to `Documents/nemos-app` anymore — Open Folder lets you open any folder on disk, unpinned by default. ([#83](https://github.com/USpiri/nemos/issues/83), [#85](https://github.com/USpiri/nemos/issues/85))
+- **Workspaces are now pins, not folders**: pin, unpin, or rename a bookmark to a Root without touching the filesystem. Create Workspace and Open Folder are now distinct entry points. ([#86](https://github.com/USpiri/nemos/issues/86), [#87](https://github.com/USpiri/nemos/issues/87))
+- **Recent Roots**: the last 10 folders you've opened, pinned or not, for quick reopening. ([#88](https://github.com/USpiri/nemos/issues/88))
+- **Grouped Workspaces/Recent switcher**: the sidebar switcher and `/workspace` page now separate pinned Workspaces from Recent Roots, plus a "Pin this Workspace" action for the current unpinned Root. ([#89](https://github.com/USpiri/nemos/issues/89))
+- **Missing/moved Workspace recovery**: opening a pinned Workspace whose folder was deleted or moved now offers to relocate, delete, or retry instead of failing silently. ([#90](https://github.com/USpiri/nemos/issues/90))
+- **One-time upgrade migration**: existing installs get a one-time prompt to pin their existing `nemos-app` subdirectories as Workspaces. ([#91](https://github.com/USpiri/nemos/issues/91))
+
+### Improvements
+
+- "Workspace Settings/Theme/CSS Snippet" renamed to "Root Settings/Theme/CSS Snippet" — "Workspace" now means only a pinned bookmark. ([#83](https://github.com/USpiri/nemos/issues/83), [#84](https://github.com/USpiri/nemos/issues/84))
+
+### Fixes
+
+- The Workspaces page now scrolls when the list overflows the window, instead of hiding the "Create Workspace" button off-screen. ([#82](https://github.com/USpiri/nemos/issues/82))
+
+---
+
 ## v1.2.1 — Patch
 
 ### Fixes
