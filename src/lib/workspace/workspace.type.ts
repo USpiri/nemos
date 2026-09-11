@@ -13,7 +13,7 @@ export type DetailedRootEntry = RootEntry & {
  * keyed by its absolute `path`. `name` defaults to the folder's basename on
  * pin but is independently editable, so it is never derived from `path`.
  */
-export type WorkspacePin = {
+export type WorkspaceEntry = {
   name: string
   path: string
 }

@@ -6,7 +6,7 @@ import {
   checkPinsMigration,
   declinePinsMigration,
 } from '@/lib/workspace/service/migrate-pins'
-import type { WorkspacePin } from '@/lib/workspace/workspace.type'
+import type { WorkspaceEntry } from '@/lib/workspace/workspace.type'
 import { useDialogStore } from '@/store'
 
 /**
@@ -37,7 +37,7 @@ export const usePinsMigration = () => {
   }, [open])
 
   const accept = useCallback(
-    async (candidates: WorkspacePin[]) => {
+    async (candidates: WorkspaceEntry[]) => {
       try {
         await acceptPinsMigration(candidates)
       } catch {

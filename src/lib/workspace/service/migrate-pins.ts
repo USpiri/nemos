@@ -3,7 +3,7 @@ import { readDir } from '@/lib/fs'
 import { toAbsoluteRootPath } from '@/lib/paths'
 import { store } from '@/lib/settings'
 import { WorkspaceError } from '../errors'
-import type { WorkspacePin } from '../workspace.type'
+import type { WorkspaceEntry } from '../workspace.type'
 import { useWorkspaceRegistry } from '../workspace-registry'
 
 const PROMPTED_KEY = 'pinsMigrationPrompted'
@@ -18,7 +18,7 @@ const setPinsMigrationPrompted = async () => {
  * pin migration — the same directory shape `getWorkspaces()` scanned
  * before the pin registry replaced it, minus hidden folders.
  */
-const getMigrationCandidates = async (): Promise<WorkspacePin[]> => {
+const getMigrationCandidates = async (): Promise<WorkspaceEntry[]> => {
   const entries = await readDir(ROOT)
   const dirs = entries.filter(
     (entry) => entry.isDirectory && !entry.name.startsWith('.'),
@@ -45,7 +45,7 @@ const getMigrationCandidates = async (): Promise<WorkspacePin[]> => {
  * a transient error (e.g. a permission issue) is retried on next launch
  * rather than permanently forfeiting the migration.
  */
-export const checkPinsMigration = async (): Promise<WorkspacePin[] | null> => {
+export const checkPinsMigration = async (): Promise<WorkspaceEntry[] | null> => {
   const prompted = await store.get<boolean>(PROMPTED_KEY)
   if (prompted) return null
 
@@ -64,7 +64,7 @@ export const checkPinsMigration = async (): Promise<WorkspacePin[] | null> => {
  * candidate that's already pinned (e.g. manually added before this ran) is
  * skipped rather than failing the whole batch.
  */
-export const acceptPinsMigration = async (candidates: WorkspacePin[]) => {
+export const acceptPinsMigration = async (candidates: WorkspaceEntry[]) => {
   // Guards against running before the registry's own init() has loaded
   // already-persisted pins (init() is a no-op once that's happened) — pin()
   // persists by overwriting the store with the full in-memory list, so

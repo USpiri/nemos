@@ -3,18 +3,18 @@ import { create } from 'zustand'
 import { rootFolderName } from '@/lib/paths'
 import { store } from '@/lib/settings'
 import { WorkspaceError } from './errors'
-import type { WorkspacePin } from './workspace.type'
+import type { WorkspaceEntry } from './workspace.type'
 
 const REGISTRY_KEY = 'workspaceRegistry'
 
-const workspacePinSchema = z.object({
+const workspaceEntrySchema = z.object({
   name: z.string(),
   path: z.string(),
 })
-const workspaceRegistrySchema = z.array(workspacePinSchema)
+const workspaceRegistrySchema = z.array(workspaceEntrySchema)
 
 interface WorkspaceRegistryState {
-  workspaces: WorkspacePin[]
+  workspaces: WorkspaceEntry[]
   _initialized: boolean
   init: () => Promise<void>
   pin: (path: string, name?: string) => Promise<void>
@@ -23,7 +23,7 @@ interface WorkspaceRegistryState {
   relocate: (path: string, newPath: string) => Promise<void>
 }
 
-const persistWorkspaces = async (workspaces: WorkspacePin[]) => {
+const persistWorkspaces = async (workspaces: WorkspaceEntry[]) => {
   await store.set(REGISTRY_KEY, workspaces)
   await store.save()
 }
@@ -33,7 +33,7 @@ const persistWorkspaces = async (workspaces: WorkspacePin[]) => {
  * caller surface the same already-pinned conflict `pin()` enforces,
  * before committing to a write.
  */
-export const findPinnedWorkspace = (workspaces: WorkspacePin[], path: string) =>
+export const findPinnedWorkspace = (workspaces: WorkspaceEntry[], path: string) =>
   workspaces.find((workspace) => workspace.path === path)
 
 export const alreadyPinnedMessage = (existingName: string) =>

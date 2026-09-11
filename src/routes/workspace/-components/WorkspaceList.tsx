@@ -1,10 +1,10 @@
 import { ArrowRightIcon, FolderIcon } from 'lucide-react'
 import { Link } from '@/components/ui/link'
 import { Code } from '@/components/ui/typography'
-import { type WorkspacePin } from '@/lib/workspace'
+import { type WorkspaceEntry } from '@/lib/workspace'
 
 type Props = {
-  workspaces: WorkspacePin[]
+  workspaces: WorkspaceEntry[]
 }
 
 export const WorkspaceList = ({ workspaces }: Props) => {

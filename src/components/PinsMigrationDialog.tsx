@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDialog } from '@/hooks/use-dialog'
 import { usePinsMigration } from '@/hooks/use-pins-migration'
-import type { WorkspacePin } from '@/lib/workspace/workspace.type'
+import type { WorkspaceEntry } from '@/lib/workspace/workspace.type'
 import { Button } from './ui/button'
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
 } from './ui/dialog'
 
 interface PinsMigrationData {
-  candidates: WorkspacePin[]
+  candidates: WorkspaceEntry[]
 }
 
 /**
