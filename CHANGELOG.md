@@ -18,6 +18,10 @@
 ### Fixes
 
 - The Workspaces page now scrolls when the list overflows the window, instead of hiding the "Create Workspace" button off-screen. ([#82](https://github.com/USpiri/nemos/issues/82))
+- Printing a note no longer shows app chrome, and content now paginates correctly across multiple pages instead of being cut off. ([#102](https://github.com/USpiri/nemos/issues/102), [#10
+3](https://github.com/USpiri/nemos/issues/103), [#104](https://github.com/USpiri/nemos/issues/104), [#105](htt
+ps://github.com/USpiri/nemos/issues/105), [#106](https://github.com/USpiri/nemos/issues/106), [#107](https://g
+ithub.com/USpiri/nemos/issues/107), [#108](https://github.com/USpiri/nemos/issues/108))
 
 ---
 
