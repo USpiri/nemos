@@ -623,3 +623,35 @@
     max-width: var(--container-sm);
   }
 }
+
+/* ── Print ────────────────────────────────────────── */
+
+@media print {
+
+  .drag-handle,
+  .table-handle-overlay,
+  .typography .image-resize-trigger,
+  .typography .image-align-buttons {
+    display: none;
+  }
+
+  .typography figure:not(.not-typography figure).has-focus>img {
+    outline: none;
+  }
+
+  .table-scroll {
+    overflow: visible;
+  }
+
+  .typography table:not(.not-typography table) {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+
+    & th,
+    & td {
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+  }
+}
