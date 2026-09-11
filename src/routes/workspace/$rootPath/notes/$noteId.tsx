@@ -68,7 +68,7 @@ function NoteView({
     <main className={cn('note h-full', frontmatter.cssClass)}>
       <Suspense fallback={<NotePending />}>
         <NoteProperties
-          className="mx-auto w-full max-w-3xl px-10 pt-20 print:hidden"
+          className="mx-auto w-full max-w-3xl px-10 pt-20"
           frontmatter={frontmatter}
           onChange={handleFrontmatterChange}
         />
