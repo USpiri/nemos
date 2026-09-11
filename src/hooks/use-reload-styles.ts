@@ -5,32 +5,27 @@ import type { SnippetDescriptor } from '@/lib/themes/theme.types'
 
 interface ReloadResult {
   globalSnippets: SnippetDescriptor[]
-  workspaceSnippets: SnippetDescriptor[]
+  rootSnippets: SnippetDescriptor[]
 }
 
 export function useReloadStyles(): () => Promise<ReloadResult> {
   const activeTheme = useAppearanceSettings((s) => s.activeTheme)
-  const workspacePath = useAppearanceSettings((s) => s.workspacePath)
+  const rootPath = useAppearanceSettings((s) => s.rootPath)
   const disabledGlobalSnippets = useAppearanceSettings(
     (s) => s.disabledGlobalSnippets,
   )
-  const disabledWorkspaceSnippets = useAppearanceSettings(
-    (s) => s.disabledWorkspaceSnippets,
+  const disabledRootSnippets = useAppearanceSettings(
+    (s) => s.disabledRootSnippets,
   )
 
   return useCallback(
     () =>
       reloadStyles({
         activeTheme,
-        workspacePath,
+        rootPath,
         disabledGlobalSnippets,
-        disabledWorkspaceSnippets,
+        disabledRootSnippets,
       }),
-    [
-      activeTheme,
-      workspacePath,
-      disabledGlobalSnippets,
-      disabledWorkspaceSnippets,
-    ],
+    [activeTheme, rootPath, disabledGlobalSnippets, disabledRootSnippets],
   )
 }

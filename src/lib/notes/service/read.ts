@@ -1,14 +1,13 @@
 import matter from 'gray-matter'
 import { read } from '@/lib/fs'
 import { emptyNote, FrontmatterSchema, NoteError } from '@/lib/notes'
-import { toFsPath } from '@/lib/paths'
 
-export const readNote = async (workspaceId: string, relativePath: string) => {
+export const readNote = async (path: string) => {
   let raw: string
   try {
-    raw = await read(toFsPath(workspaceId, relativePath))
+    raw = await read(path)
   } catch {
-    throw new NoteError('NOT_FOUND', `Note not found: ${relativePath}`)
+    throw new NoteError('NOT_FOUND', `Note not found: ${path}`)
   }
 
   if (raw.trim().length === 0) return emptyNote
@@ -19,9 +18,6 @@ export const readNote = async (workspaceId: string, relativePath: string) => {
     return { frontmatter, content }
   } catch (error) {
     if (error instanceof NoteError) throw error
-    throw new NoteError(
-      'INVALID_CONTENT',
-      `Invalid note content: ${relativePath}`,
-    )
+    throw new NoteError('INVALID_CONTENT', `Invalid note content: ${path}`)
   }
 }

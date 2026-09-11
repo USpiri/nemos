@@ -5,7 +5,7 @@ import {
   GLOBAL_ATTR,
   injectSnippetStyle,
   removeStaleSnippets,
-  WORKSPACE_ATTR,
+  ROOT_ATTR,
 } from '@/lib/themes/style-injectors'
 
 export const SnippetsProvider = ({
@@ -13,64 +13,53 @@ export const SnippetsProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const workspacePath = useAppearanceSettings((s) => s.workspacePath)
+  const rootPath = useAppearanceSettings((s) => s.rootPath)
   const disabledGlobal = useAppearanceSettings((s) => s.disabledGlobalSnippets)
-  const disabledWorkspace = useAppearanceSettings(
-    (s) => s.disabledWorkspaceSnippets,
-  )
+  const disabledRoot = useAppearanceSettings((s) => s.disabledRootSnippets)
 
   // Mirrors the pipeline in reload-styles.ts but needs a cancellation flag to
   // drop stale async reads when deps change before the effect completes.
   useEffect(() => {
-    if (!workspacePath) return
+    if (!rootPath) return
     let cancelled = false
 
-    loadCssSnippets(workspacePath).then(
-      async ({ globalSnippets, workspaceSnippets }) => {
-        if (cancelled) return
+    loadCssSnippets(rootPath).then(async ({ globalSnippets, rootSnippets }) => {
+      if (cancelled) return
 
-        const enabledGlobal = filterEnabled(globalSnippets, disabledGlobal)
-        const enabledWorkspace = filterEnabled(
-          workspaceSnippets,
-          disabledWorkspace,
+      const enabledGlobal = filterEnabled(globalSnippets, disabledGlobal)
+      const enabledRoot = filterEnabled(rootSnippets, disabledRoot)
+
+      const nextGlobalIds = new Set(enabledGlobal.map((s) => s.id))
+      const nextRootIds = new Set(enabledRoot.map((s) => s.id))
+
+      for (const snippet of enabledGlobal) {
+        if (cancelled) return
+        const css = await readSnippetCss(
+          'global',
+          `${snippet.id}.css`,
+          rootPath,
         )
+        if (cancelled || !css) continue
+        injectSnippetStyle(GLOBAL_ATTR, snippet.id, css)
+      }
 
-        const nextGlobalIds = new Set(enabledGlobal.map((s) => s.id))
-        const nextWorkspaceIds = new Set(enabledWorkspace.map((s) => s.id))
-
-        for (const snippet of enabledGlobal) {
-          if (cancelled) return
-          const css = await readSnippetCss(
-            'global',
-            `${snippet.id}.css`,
-            workspacePath,
-          )
-          if (cancelled || !css) continue
-          injectSnippetStyle(GLOBAL_ATTR, snippet.id, css)
-        }
-
-        for (const snippet of enabledWorkspace) {
-          if (cancelled) return
-          const css = await readSnippetCss(
-            'workspace',
-            `${snippet.id}.css`,
-            workspacePath,
-          )
-          if (cancelled || !css) continue
-          injectSnippetStyle(WORKSPACE_ATTR, snippet.id, css)
-        }
-
+      for (const snippet of enabledRoot) {
         if (cancelled) return
+        const css = await readSnippetCss('root', `${snippet.id}.css`, rootPath)
+        if (cancelled || !css) continue
+        injectSnippetStyle(ROOT_ATTR, snippet.id, css)
+      }
 
-        removeStaleSnippets(GLOBAL_ATTR, nextGlobalIds)
-        removeStaleSnippets(WORKSPACE_ATTR, nextWorkspaceIds)
-      },
-    )
+      if (cancelled) return
+
+      removeStaleSnippets(GLOBAL_ATTR, nextGlobalIds)
+      removeStaleSnippets(ROOT_ATTR, nextRootIds)
+    })
 
     return () => {
       cancelled = true
     }
-  }, [workspacePath, disabledGlobal, disabledWorkspace])
+  }, [rootPath, disabledGlobal, disabledRoot])
 
   return <>{children}</>
 }

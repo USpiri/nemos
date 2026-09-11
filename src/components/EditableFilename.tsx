@@ -1,5 +1,5 @@
 import { useParams } from '@tanstack/react-router'
-import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { useRootActions } from '@/hooks/use-root-actions'
 import { toRelativePath } from '@/lib/paths'
 import { useRenameStore } from '@/store/rename.store'
 import {
@@ -30,14 +30,10 @@ export const EditableFilename = ({
   context,
 }: Props) => {
   const { isRenaming, setRenamingPath } = useRenameStore()
-  const { workspaceId } = useParams({ strict: false })
-  const { renameNoteAndNavigate, renameFolderAndRefresh } = useWorkspaceActions(
-    {
-      workspace: workspaceId!,
-    },
-  )
+  const { rootPath } = useParams({ strict: false })
+  const { renameNoteAndNavigate, renameFolderAndRefresh } = useRootActions()
 
-  const relativePath = toRelativePath(path)
+  const relativePath = toRelativePath(path, rootPath!)
   const shouldEdit = isRenaming(relativePath, context)
 
   const handleSubmit = (value: string) => {

@@ -2,9 +2,9 @@ import { LazyStore } from '@tauri-apps/plugin-store'
 import type { z } from 'zod'
 import { create } from 'zustand'
 import {
+  ROOT_CONFIG_DIR,
+  ROOT_SETTINGS_FILE,
   SETTINGS_FILE,
-  WORKSPACE_CONFIG_DIR,
-  WORKSPACE_SETTINGS_FILE,
 } from '@/config/constants'
 import { ensureDir, readJson, writeJson } from '@/lib/fs'
 import { resolveSettings } from './resolve-settings'
@@ -33,7 +33,7 @@ export function createScope<TSchema extends z.ZodObject>(
 ) {
   type Data = z.infer<TSchema>
 
-  let _workspacePath: string | null = null
+  let _rootPath: string | null = null
   let _globalData: Data | null = null
 
   const persistGlobal = async (data: Data) => {
@@ -41,56 +41,58 @@ export function createScope<TSchema extends z.ZodObject>(
     await store.save()
   }
 
-  const loadWorkspaceDelta = async (
-    workspacePath: string,
-  ): Promise<Partial<Data>> => {
+  // Returns null (rather than `{}`) when the file doesn't exist or can't be
+  // read, so callers can tell "nothing to do" (removeRootDelta) apart from
+  // "safe to start from an empty file" (saveRootDelta/replaceRootDelta).
+  const readAllRootSettings = async (
+    rootPath: string,
+  ): Promise<Record<string, unknown> | null> => {
     try {
-      const all = await readJson<Record<string, Partial<Data>>>(
-        `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`,
+      return await readJson<Record<string, unknown>>(
+        `${rootPath}/${ROOT_SETTINGS_FILE}`,
       )
-      return (all[def.key] as Partial<Data>) ?? {}
     } catch {
-      return {}
+      return null
     }
   }
 
-  const removeWorkspaceDelta = async (workspacePath: string) => {
-    const settingsPath = `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`
-    let all: Record<string, unknown> = {}
-    try {
-      all = await readJson<Record<string, unknown>>(settingsPath)
-    } catch {
-      return
-    }
+  const loadRootDelta = async (rootPath: string): Promise<Partial<Data>> => {
+    const all = await readAllRootSettings(rootPath)
+    return (all?.[def.key] as Partial<Data>) ?? {}
+  }
+
+  const removeRootDelta = async (rootPath: string) => {
+    const all = await readAllRootSettings(rootPath)
+    if (!all) return
     delete all[def.key]
-    await writeJson(settingsPath, all)
+    await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
   }
 
-  const saveWorkspaceDelta = async (
-    workspacePath: string,
-    patch: Partial<Data>,
-  ) => {
-    const configDir = `${workspacePath}/${WORKSPACE_CONFIG_DIR}`
-    const settingsPath = `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`
+  const saveRootDelta = async (rootPath: string, patch: Partial<Data>) => {
+    const configDir = `${rootPath}/${ROOT_CONFIG_DIR}`
     await ensureDir(configDir, { recursive: true })
-    let all: Record<string, unknown> = {}
-    try {
-      all = await readJson<Record<string, unknown>>(settingsPath)
-    } catch {
-      /* no existing settings, will create new */
-    }
+    const all = (await readAllRootSettings(rootPath)) ?? {}
     all[def.key] = { ...(all[def.key] as Record<string, unknown>), ...patch }
-    await writeJson(settingsPath, all)
+    await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
+  }
+
+  // Unlike saveRootDelta (which merges a patch on top), this fully replaces
+  // the scope's delta entry — needed for migrateRootDelta, which may rename
+  // or drop keys rather than just add to them.
+  const replaceRootDelta = async (rootPath: string, delta: Partial<Data>) => {
+    const all = (await readAllRootSettings(rootPath)) ?? {}
+    all[def.key] = delta
+    await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
   }
 
   return create<ScopeStore<Data>>()((set) => ({
     ...def.defaults,
     _initialized: false,
-    workspacePath: null,
-    workspaceDelta: {} as Partial<Data>,
+    rootPath: null,
+    rootDelta: {} as Partial<Data>,
 
-    init: async (workspacePath: string) => {
-      _workspacePath = workspacePath
+    init: async (rootPath: string) => {
+      _rootPath = rootPath
 
       const stored = await store.get<PersistedScope<unknown>>(def.key)
       let globalData: Data
@@ -117,42 +119,47 @@ export function createScope<TSchema extends z.ZodObject>(
 
       _globalData = globalData
 
-      const workspaceDelta = await loadWorkspaceDelta(workspacePath)
-      const effective = resolveSettings(globalData, workspaceDelta)
+      let rootDelta = await loadRootDelta(rootPath)
+      if (def.migrateRootDelta) {
+        const migratedDelta = def.migrateRootDelta(rootDelta)
+        if (migratedDelta !== rootDelta) {
+          rootDelta = migratedDelta
+          await replaceRootDelta(rootPath, rootDelta)
+        }
+      }
+      const effective = resolveSettings(globalData, rootDelta)
 
-      set({ ...effective, workspaceDelta, _initialized: true, workspacePath } as Partial<ScopeStore<Data>>)
+      set({ ...effective, rootDelta, _initialized: true, rootPath } as Partial<
+        ScopeStore<Data>
+      >)
     },
 
     update: async (patch) => {
-      const workspacePath = _workspacePath
+      const rootPath = _rootPath
       set((prev) => ({
         ...(patch as Partial<ScopeStore<Data>>),
-        workspaceDelta: { ...prev.workspaceDelta, ...patch },
+        rootDelta: { ...prev.rootDelta, ...patch },
       }))
-      if (workspacePath) await saveWorkspaceDelta(workspacePath, patch)
+      if (rootPath) await saveRootDelta(rootPath, patch)
     },
 
     revertKey: async (key) => {
-      const workspacePath = _workspacePath
+      const rootPath = _rootPath
       const globalData = _globalData ?? def.defaults
 
       set((prev) => {
-        const nextDelta = { ...prev.workspaceDelta }
+        const nextDelta = { ...prev.rootDelta }
         delete nextDelta[key]
         return {
           [key]: globalData[key],
-          workspaceDelta: nextDelta,
+          rootDelta: nextDelta,
         } as Partial<ScopeStore<Data>>
       })
 
-      if (workspacePath) {
-        const settingsPath = `${workspacePath}/${WORKSPACE_SETTINGS_FILE}`
-        let all: Record<string, unknown> = {}
-        try {
-          all = await readJson<Record<string, unknown>>(settingsPath)
-        } catch {
-          return
-        }
+      if (rootPath) {
+        const all = await readAllRootSettings(rootPath)
+        if (!all) return
+
         const scopeDelta = { ...(all[def.key] as Record<string, unknown>) }
         delete scopeDelta[key as string]
         if (Object.keys(scopeDelta).length === 0) {
@@ -160,21 +167,21 @@ export function createScope<TSchema extends z.ZodObject>(
         } else {
           all[def.key] = scopeDelta
         }
-        await writeJson(settingsPath, all)
+        await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
       }
     },
 
     reset: async () => {
-      const workspacePath = _workspacePath
+      const rootPath = _rootPath
       const globalData = _globalData ?? def.defaults
-      if (workspacePath) await removeWorkspaceDelta(workspacePath)
-      set({ ...globalData, workspaceDelta: {} } as Partial<ScopeStore<Data>>)
+      if (rootPath) await removeRootDelta(rootPath)
+      set({ ...globalData, rootDelta: {} } as Partial<ScopeStore<Data>>)
     },
 
     resetToDefaults: async () => {
-      const workspacePath = _workspacePath
-      if (workspacePath) await removeWorkspaceDelta(workspacePath)
-      set({ ...def.defaults, workspaceDelta: {} } as Partial<ScopeStore<Data>>)
+      const rootPath = _rootPath
+      if (rootPath) await removeRootDelta(rootPath)
+      set({ ...def.defaults, rootDelta: {} } as Partial<ScopeStore<Data>>)
       await persistGlobal(def.defaults)
     },
   }))

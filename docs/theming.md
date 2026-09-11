@@ -12,7 +12,7 @@ Styles are applied in this order:
 
 1. Nemos base styles
 2. Active Theme (`theme.css`)
-3. CSS Snippets — Global first, then Workspace
+3. CSS Snippets — Global first, then Root
 
 Later layers win on any property conflict via CSS cascade. A Theme that only overrides one variable leaves everything else untouched.
 

@@ -1,23 +1,14 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { FolderPlus, Settings, SquarePen } from 'lucide-react'
 import { useDialog } from '@/hooks/use-dialog'
-import { useWorkspaceActions } from '@/hooks/use-workspace-actions'
+import { useRootActions } from '@/hooks/use-root-actions'
 import {
   SidebarHeader as SidebarHeaderBase,
   SidebarMenu,
   SidebarMenuButton,
 } from '../ui/sidebar'
 
-const route = getRouteApi('/workspace/$workspaceId')
-
 export const SidebarHeader = () => {
-  const { workspaceId } = route.useParams()
-
-  const { createNoteAndNavigate, createFolderAndRefresh } = useWorkspaceActions(
-    {
-      workspace: workspaceId,
-    },
-  )
+  const { createNoteAndNavigate, createFolderAndRefresh } = useRootActions()
 
   const { open } = useDialog()
 

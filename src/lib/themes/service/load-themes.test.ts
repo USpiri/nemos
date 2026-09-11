@@ -22,7 +22,7 @@ const dir = (name: string) => ({
   isFile: false,
   isSymlink: false,
 })
-const WORKSPACE = 'nemos-app/my-workspace'
+const ROOT = 'nemos-app/my-root'
 
 describe('loadThemes', () => {
   beforeEach(() => {
@@ -33,25 +33,25 @@ describe('loadThemes', () => {
     mockReadDirAppData.mockRejectedValue(new Error('not found'))
     mockReadDir.mockRejectedValue(new Error('not found'))
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result).toEqual([])
   })
 
-  it('returns global themes when workspace directory does not exist', async () => {
+  it('returns global themes when root directory does not exist', async () => {
     mockReadDirAppData.mockResolvedValue([dir('nord')])
     mockExistsAppData.mockResolvedValue(true)
     mockReadDir.mockRejectedValue(new Error('not found'))
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result).toEqual([{ id: 'nord', displayName: 'Nord' }])
   })
 
-  it('returns workspace themes when global directory does not exist', async () => {
+  it('returns root themes when global directory does not exist', async () => {
     mockReadDirAppData.mockRejectedValue(new Error('not found'))
     mockReadDir.mockResolvedValue([dir('my-theme')])
     mockExists.mockResolvedValue(true)
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result).toEqual([{ id: 'my-theme', displayName: 'My Theme' }])
   })
 
@@ -62,17 +62,17 @@ describe('loadThemes', () => {
       .mockResolvedValueOnce(true) // has-css/theme.css
     mockReadDir.mockResolvedValue([])
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result).toEqual([{ id: 'has-css', displayName: 'Has Css' }])
   })
 
-  it('workspace theme wins on ID collision', async () => {
+  it('root theme wins on ID collision', async () => {
     mockReadDirAppData.mockResolvedValue([dir('shared-theme')])
     mockExistsAppData.mockResolvedValue(true)
     mockReadDir.mockResolvedValue([dir('shared-theme')])
     mockExists.mockResolvedValue(true)
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result).toHaveLength(1)
     expect(result[0].id).toBe('shared-theme')
   })
@@ -83,7 +83,7 @@ describe('loadThemes', () => {
     mockReadDir.mockResolvedValue([dir('apple-theme')])
     mockExists.mockResolvedValue(true)
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result.map((t) => t.displayName)).toEqual([
       'Apple Theme',
       'Zebra Theme',
@@ -95,7 +95,7 @@ describe('loadThemes', () => {
     mockExistsAppData.mockResolvedValue(true)
     mockReadDir.mockResolvedValue([])
 
-    const result = await loadThemes(WORKSPACE)
+    const result = await loadThemes(ROOT)
     expect(result[0].displayName).toBe('My Dracula Theme')
   })
 })

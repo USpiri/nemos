@@ -3,19 +3,19 @@ import { getBaseName } from '@/lib/paths'
 import type { NoteTab, Tab } from './tab.type'
 
 export const createNoteTab = ({
-  workspaceId,
+  rootPath,
   noteId,
 }: {
-  workspaceId: string
+  rootPath: string
   noteId: string
 }): NoteTab => {
   return {
     id: noteId,
     type: 'note',
     title: getBaseName(noteId) || 'Untitled',
-    path: `workspace/${workspaceId}/notes/${noteId}`,
+    path: `workspace/${rootPath}/notes/${noteId}`,
     dirty: false,
-    payload: { workspaceId, noteId },
+    payload: { rootPath, noteId },
   }
 }
 
@@ -23,9 +23,9 @@ export const buildNavigationFromTab = (tab: Tab): LinkOptions => {
   switch (tab.type) {
     case 'note':
       return linkOptions({
-        to: '/workspace/$workspaceId/notes/$noteId',
+        to: '/workspace/$rootPath/notes/$noteId',
         params: {
-          workspaceId: tab.payload.workspaceId as string,
+          rootPath: tab.payload.rootPath as string,
           noteId: tab.payload.noteId as string,
         },
       })

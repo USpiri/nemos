@@ -14,7 +14,7 @@ export interface BaseTab<Type extends TabType> {
 
 export interface NoteTab extends BaseTab<'note'> {
   payload: {
-    workspaceId: string
+    rootPath: string
     noteId: string
   }
 }

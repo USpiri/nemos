@@ -33,10 +33,10 @@ export const TabContextMenu = ({ tab, children }: Props) => {
   const handleCloseAllTabs = useCallback(() => {
     closeAllTabs()
     navigate({
-      to: '/workspace/$workspaceId',
-      params: { workspaceId: tab.payload.workspaceId },
+      to: '/workspace/$rootPath',
+      params: { rootPath: tab.payload.rootPath },
     })
-  }, [closeAllTabs, navigate, tab.payload.workspaceId])
+  }, [closeAllTabs, navigate, tab.payload.rootPath])
 
   return (
     <ContextMenu>

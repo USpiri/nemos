@@ -1,6 +1,8 @@
+import { AddWorkspaceDialog } from './AddWorkspaceDialog'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
+import { PinsMigrationDialog } from './PinsMigrationDialog'
 import { SettingsDialog } from './settings/SettingsDialog'
-import { WorkspaceFormDialog } from './WorkspaceFormDialog'
+import { WorkspaceMissingPathDialog } from './WorkspaceMissingPathDialog'
 
 /**
  * GlobalDialogs component
@@ -10,9 +12,11 @@ import { WorkspaceFormDialog } from './WorkspaceFormDialog'
 export const GlobalDialogs = () => {
   return (
     <>
-      <WorkspaceFormDialog />
+      <AddWorkspaceDialog />
       <DeleteConfirmDialog />
+      <PinsMigrationDialog />
       <SettingsDialog />
+      <WorkspaceMissingPathDialog />
     </>
   )
 }

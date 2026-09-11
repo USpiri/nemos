@@ -1,14 +1,14 @@
-import { THEMES_DIR, WORKSPACE_THEMES_DIR } from '@/config/constants'
+import { ROOT_THEMES_DIR, THEMES_DIR } from '@/config/constants'
 import { exists, existsAppData, read, readAppData } from '@/lib/fs'
 
 export const readThemeCss = async (
   themeId: string,
-  workspaceFsPath: string | null,
+  rootFsPath: string | null,
 ): Promise<string | null> => {
-  if (workspaceFsPath) {
-    const wsPath = `${workspaceFsPath}/${WORKSPACE_THEMES_DIR}/${themeId}/theme.css`
+  if (rootFsPath) {
+    const rootPath = `${rootFsPath}/${ROOT_THEMES_DIR}/${themeId}/theme.css`
     try {
-      if (await exists(wsPath)) return await read(wsPath)
+      if (await exists(rootPath)) return await read(rootPath)
     } catch {
       // Ignore errors and fallback to global themes
     }

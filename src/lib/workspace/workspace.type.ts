@@ -1,9 +1,28 @@
 import { DirEntry } from '@tauri-apps/plugin-fs'
 
-export type WorkspaceEntry = DirEntry & {
+export type RootEntry = DirEntry & {
   path: string
 }
 
-export type DetailedWorkspaceEntry = WorkspaceEntry & {
+export type DetailedRootEntry = RootEntry & {
   modified?: Date | null
+}
+
+/**
+ * A pinned Workspace entry in the registry (#86) — a bookmark to a Root,
+ * keyed by its absolute `path`. `name` defaults to the folder's basename on
+ * pin but is independently editable, so it is never derived from `path`.
+ */
+export type WorkspaceEntry = {
+  name: string
+  path: string
+}
+
+/**
+ * An entry in the Recent Roots MRU list (#88) — recorded on every Root
+ * open, pinned or not.
+ */
+export type RecentRoot = {
+  path: string
+  lastOpenedAt: number
 }

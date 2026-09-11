@@ -3,7 +3,6 @@ import {
   getContainerPath,
   getEntryName,
   getParentPath,
-  toFsPath,
   toNoteFileName,
 } from '@/lib/paths'
 import { NoteError } from '../errors'
@@ -51,22 +50,16 @@ const moveOrRename = async ({
 }
 
 interface RenameNoteProps {
-  workspaceId: string
-  relativePath: string
+  path: string
   newName: string
 }
 
-export const renameNote = async ({
-  workspaceId,
-  relativePath,
-  newName,
-}: RenameNoteProps) => {
-  const fromPath = toFsPath(workspaceId, relativePath)
-  const parentDir = getContainerPath(fromPath)
+export const renameNote = async ({ path, newName }: RenameNoteProps) => {
+  const parentDir = getContainerPath(path)
   const newPath = `${parentDir}/${toNoteFileName(newName)}`
 
   return moveOrRename({
-    fromPath,
+    fromPath: path,
     toPath: newPath,
     entity: 'note',
     operation: 'rename',
@@ -74,22 +67,16 @@ export const renameNote = async ({
 }
 
 interface RenameFolderProps {
-  workspaceId: string
-  relativePath: string
+  path: string
   newName: string
 }
 
-export const renameFolder = async ({
-  workspaceId,
-  relativePath,
-  newName,
-}: RenameFolderProps) => {
-  const folderPath = toFsPath(workspaceId, relativePath)
-  const parentDir = getParentPath(folderPath)
+export const renameFolder = async ({ path, newName }: RenameFolderProps) => {
+  const parentDir = getParentPath(path)
   const newPath = `${parentDir}/${newName}`
 
   return moveOrRename({
-    fromPath: folderPath,
+    fromPath: path,
     toPath: newPath,
     entity: 'folder',
     operation: 'rename',
@@ -97,22 +84,13 @@ export const renameFolder = async ({
 }
 
 interface MoveNoteProps {
-  workspaceId: string
-  relativePath: string
-  destinationPath: string
+  fromPath: string
+  toDir: string
 }
 
-export const moveNote = async ({
-  workspaceId,
-  relativePath,
-  destinationPath,
-}: MoveNoteProps) => {
-  const fromPath = toFsPath(workspaceId, relativePath)
+export const moveNote = async ({ fromPath, toDir }: MoveNoteProps) => {
   const fileName = getEntryName(fromPath)
-  const destDir = destinationPath
-    ? toFsPath(workspaceId, destinationPath)
-    : toFsPath(workspaceId)
-  const newPath = `${destDir}/${fileName}`
+  const newPath = `${toDir}/${fileName}`
 
   return moveOrRename({
     fromPath,
@@ -123,25 +101,16 @@ export const moveNote = async ({
 }
 
 interface MoveFolderProps {
-  workspaceId: string
-  relativePath: string
-  destinationPath: string
+  fromPath: string
+  toDir: string
 }
 
-export const moveFolder = async ({
-  workspaceId,
-  relativePath,
-  destinationPath,
-}: MoveFolderProps) => {
-  const folderPath = toFsPath(workspaceId, relativePath)
-  const folderName = getEntryName(folderPath)
-  const destDir = destinationPath
-    ? toFsPath(workspaceId, destinationPath)
-    : toFsPath(workspaceId)
-  const newPath = `${destDir}/${folderName}`
+export const moveFolder = async ({ fromPath, toDir }: MoveFolderProps) => {
+  const folderName = getEntryName(fromPath)
+  const newPath = `${toDir}/${folderName}`
 
   return moveOrRename({
-    fromPath: folderPath,
+    fromPath,
     toPath: newPath,
     entity: 'folder',
     operation: 'move',

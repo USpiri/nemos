@@ -1,4 +1,4 @@
-import { SNIPPETS_DIR, WORKSPACE_SNIPPETS_DIR } from '@/config/constants'
+import { ROOT_SNIPPETS_DIR, SNIPPETS_DIR } from '@/config/constants'
 import { readDir, readDirAppData } from '@/lib/fs'
 import type { SnippetDescriptor } from '../theme.types'
 import { toDisplayName } from '../utils'
@@ -18,10 +18,10 @@ const loadGlobalSnippets = async (): Promise<SnippetDescriptor[]> => {
     })
 }
 
-const loadWorkspaceSnippets = async (
-  workspaceFsPath: string,
+const loadRootSnippets = async (
+  rootFsPath: string,
 ): Promise<SnippetDescriptor[]> => {
-  const snippetsPath = `${workspaceFsPath}/${WORKSPACE_SNIPPETS_DIR}`
+  const snippetsPath = `${rootFsPath}/${ROOT_SNIPPETS_DIR}`
   let entries: Awaited<ReturnType<typeof readDir>>
   try {
     entries = await readDir(snippetsPath)
@@ -37,14 +37,14 @@ const loadWorkspaceSnippets = async (
 }
 
 export const loadCssSnippets = async (
-  workspaceFsPath: string,
+  rootFsPath: string,
 ): Promise<{
   globalSnippets: SnippetDescriptor[]
-  workspaceSnippets: SnippetDescriptor[]
+  rootSnippets: SnippetDescriptor[]
 }> => {
-  const [globalSnippets, workspaceSnippets] = await Promise.all([
+  const [globalSnippets, rootSnippets] = await Promise.all([
     loadGlobalSnippets(),
-    loadWorkspaceSnippets(workspaceFsPath),
+    loadRootSnippets(rootFsPath),
   ])
-  return { globalSnippets, workspaceSnippets }
+  return { globalSnippets, rootSnippets }
 }
