@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.1 — Patch
+
+### Fixes
+
+- Fixed every note failing to open with an "Invalid note content" error in packaged builds. The Markdown frontmatter parser depended on the `Buffer` global, which Vite only polyfilled for the dev server — not for `tauri build` output — so any note with content would throw as soon as it was opened outside of `pnpm tauri dev`.
+
+---
+
 ## v1.2.0 — Markdown, Theming & Table Editing
 
 ### New Features
