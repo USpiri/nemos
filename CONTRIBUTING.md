@@ -83,7 +83,7 @@ For bugs found on `main` before any release:
 
 Cut from `main` when the next set of features is ready.
 
-1. Update `CHANGELOG.md` for the release by hand, following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/):
+1. Update `CHANGELOG.md` for the release by hand, following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The section heading must be exactly `## vX.Y.0` (an optional ` — Title` suffix is fine) — CI extracts this section verbatim as the release body and the in-app updater's "What's new" text, so the heading has to match the tag:
    ```sh
    git add CHANGELOG.md
    git commit -m "docs(changelog): update for vX.Y.0"
@@ -99,7 +99,7 @@ Cut from `main` when the next set of features is ready.
    git tag vX.Y.0
    git push origin main --tags
    ```
-4. CI builds installers and creates a **draft** GitHub Release.
+4. CI extracts the `## vX.Y.0` section from `CHANGELOG.md` (via `scripts/extract-changelog.js`), builds installers, and creates a **draft** GitHub Release using that section as the body.
 5. Go to [Releases](https://github.com/USpiri/nemos/releases), review the draft, and **publish** it.
 6. Delete `fix/vX.Y-1.x` if it exists (previous minor's maintenance line is now end-of-life).
 
@@ -126,7 +126,7 @@ git commit -m "fix: <description>"
 
 #### Step 3 — Update the patch changelog
 
-Back on `fix/vX.Y.x`, add the entry for this patch by hand, following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/):
+Back on `fix/vX.Y.x`, add the entry for this patch by hand, following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The section heading must be exactly `## vX.Y.Z` — CI extracts this section verbatim as the release body and the in-app updater's "What's new" text:
 
 ```sh
 git add CHANGELOG.md
@@ -143,7 +143,7 @@ git tag vX.Y.Z
 git push origin fix/vX.Y.x --tags
 ```
 
-CI builds installers and creates a draft release. Publish it on GitHub.
+CI extracts the `## vX.Y.Z` section from `CHANGELOG.md`, builds installers, and creates a draft release using that section as the body. Publish it on GitHub.
 
 #### Step 5 — Merge the fix back into `main`
 
