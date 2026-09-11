@@ -16,6 +16,7 @@ const workspaceRegistrySchema = z.array(workspaceEntrySchema)
 interface WorkspaceRegistryState {
   workspaces: WorkspaceEntry[]
   _initialized: boolean
+  _initPromise: Promise<void> | null
   init: () => Promise<void>
   pin: (path: string, name?: string) => Promise<void>
   unpin: (path: string) => Promise<void>
@@ -49,14 +50,23 @@ export const useWorkspaceRegistry = create<WorkspaceRegistryState>()(
   (set, get) => ({
     workspaces: [],
     _initialized: false,
+    _initPromise: null,
 
     init: async () => {
       if (get()._initialized) return
 
-      const stored = await store.get<unknown>(REGISTRY_KEY)
-      const parsed = workspaceRegistrySchema.safeParse(stored)
+      let promise = get()._initPromise
+      if (!promise) {
+        promise = (async () => {
+          const stored = await store.get<unknown>(REGISTRY_KEY)
+          const parsed = workspaceRegistrySchema.safeParse(stored)
 
-      set({ workspaces: parsed.success ? parsed.data : [], _initialized: true })
+          set({ workspaces: parsed.success ? parsed.data : [], _initialized: true })
+        })()
+        set({ _initPromise: promise })
+      }
+
+      await promise
     },
 
     // `name` defaults to the folder's basename when omitted (e.g. a future
