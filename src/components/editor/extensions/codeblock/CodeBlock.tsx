@@ -35,7 +35,7 @@ export const CodeBlock = ({
       <pre>
         <NodeViewContent className={`language-${node.attrs.language}`} />
       </pre>
-      <div className="absolute top-9 right-2 flex flex-row items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className="absolute top-9 right-2 flex flex-row items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100 print:hidden">
         <CopyButton content={node.textContent} variant="ghost" tabIndex={-1} />
         {isEditable && (
           <LanguageSelector
