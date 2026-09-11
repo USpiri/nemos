@@ -1,9 +1,26 @@
 # Changelog
 
-## Unreleased
+## v1.2.1 — Patch
+
+### Fixes
+
+- Fixed every note failing to open with an "Invalid note content" error in packaged builds. The Markdown frontmatter parser depended on the `Buffer` global, which Vite only polyfilled for the dev server — not for `tauri build` output — so any note with content would throw as soon as it was opened outside of `pnpm tauri dev`.
+
+---
+
+## v1.2.0 — Markdown, Theming & Table Editing
 
 ### New Features
 
+- **Stable semantic theming API**: A stable layer of semantic CSS classes is now applied to key DOM regions.
+- **CSS Snippets**: Drop individual `.css` files into the global snippets folder (`<AppData>/snippets/`) or into a workspace's `.config/snippets/` folder to apply additive styles on top of the active theme. All snippets are enabled by default; each can independently be toggled on or off per workspace from Settings > Appearance. Global snippets are injected first; workspace snippets follow, so workspace rules win on any property conflict via the CSS cascade.
+- **Custom theme system**: Drop a folder containing a `theme.css` file into the global themes directory or the workspace themes directory (`.config/themes/<ThemeID>/`). Theme CSS is injected after the app's base styles so the app never breaks regardless of what the file contains. The light/dark/system toggle continues to work independently. Themes are discovered from both scopes each time Appearance settings opens, workspace themes override global themes with the same ID.
+- **Two-layer settings (Global + Workspace)**: Settings now operate on two layers — a Global Settings file in the OS app data directory and a per-workspace `.config/settings.json`.
+- **Markdown as native format**: Notes are now stored as `.md` files. The editor serializes and deserializes content as Markdown using `@tiptap/markdown`, replacing the previous custom `.note` format.
+- **Frontmatter support**: Notes now support YAML frontmatter (parsed via `gray-matter`) for structured metadata — title, tags, creation date, and update date are stored directly in each file.
+- **Note Properties panel**: A new side panel in the note editor exposes the frontmatter fields (title, tags, dates) for direct editing without touching the raw file.
+- **Tag management**: New `TagInput` / `TokenInput` components let you add and remove tags from the Note Properties panel.
+- **Automatic migration**: On workspace load, a `MigrationOverlay` detects legacy `.note` files and migrates them to the new `.md` format in-place with frontmatter injected automatically.
 - **Inline, writing-first link editing**: Clicking into a link, or moving the cursor into one with the arrow keys, now reveals its raw `[label](url)` markdown source as directly-editable text — the same in-place pattern already used by Math, Mermaid, and Smiles. Moving the cursor away re-parses and re-renders it; an unparseable or empty-href edit is left as plain text instead of erroring. A new `Ctrl`/`Cmd`+`K` shortcut wraps the current selection into a link and drops straight into this editable state, ready to type the destination. ([#42](https://github.com/USpiri/nemos/issues/42))
 - **Table column alignment**: Tables now preserve left/center/right column alignment when opening and saving a Note — previously parsed from the file and silently discarded. Table cells are also now restricted to a single line of inline content.
 - **Table Row/Column handles**: Hovering the start of a table row or the top of a column now reveals a handle whose menu can insert, duplicate, delete, or move that row/column — rows and columns can also be reordered by dragging the handle directly.
@@ -32,30 +49,6 @@
 
   Column delete uses `Backspace` rather than `Delete` because Windows reserves `Ctrl`+`Alt`+`Delete` at the OS level — no application ever receives that combination.
 
-### Fixes
-
-- Typing or pasting `++text++` now applies underline formatting live in the editor, matching the existing `~~text~~` behavior for strikethrough. ([#44](https://github.com/USpiri/nemos/issues/44))
-- Math nodes now correctly exit Source mode when clicking another math node or losing focus. ([#46](https://github.com/USpiri/nemos/issues/46))
-- Smiles nodes now correctly exit Source mode when clicking another node or losing focus. ([#47](https://github.com/USpiri/nemos/issues/47))
-- Mermaid nodes now correctly exit Source mode when clicking another node or losing focus. ([#48](https://github.com/USpiri/nemos/issues/48))
-- Code blocks no longer let the copy button/language selector overlay obscure code text. ([#49](https://github.com/USpiri/nemos/issues/49))
-
----
-
-## v1.2.0 — Markdown & Theming API
-
-### New Features
-
-- **Stable semantic theming API**: A stable layer of semantic CSS classes is now applied to key DOM regions.
-- **CSS Snippets**: Drop individual `.css` files into the global snippets folder (`<AppData>/snippets/`) or into a workspace's `.config/snippets/` folder to apply additive styles on top of the active theme. All snippets are enabled by default; each can independently be toggled on or off per workspace from Settings > Appearance. Global snippets are injected first; workspace snippets follow, so workspace rules win on any property conflict via the CSS cascade.
-- **Custom theme system**: Drop a folder containing a `theme.css` file into the global themes directory or the workspace themes directory (`.config/themes/<ThemeID>/`). Theme CSS is injected after the app's base styles so the app never breaks regardless of what the file contains. The light/dark/system toggle continues to work independently. Themes are discovered from both scopes each time Appearance settings opens, workspace themes override global themes with the same ID.
-- **Two-layer settings (Global + Workspace)**: Settings now operate on two layers — a Global Settings file in the OS app data directory and a per-workspace `.config/settings.json`.
-- **Markdown as native format**: Notes are now stored as `.md` files. The editor serializes and deserializes content as Markdown using `@tiptap/markdown`, replacing the previous custom `.note` format.
-- **Frontmatter support**: Notes now support YAML frontmatter (parsed via `gray-matter`) for structured metadata — title, tags, creation date, and update date are stored directly in each file.
-- **Note Properties panel**: A new side panel in the note editor exposes the frontmatter fields (title, tags, dates) for direct editing without touching the raw file.
-- **Tag management**: New `TagInput` / `TokenInput` components let you add and remove tags from the Note Properties panel.
-- **Automatic migration**: On workspace load, a `MigrationOverlay` detects legacy `.note` files and migrates them to the new `.md` format in-place with frontmatter injected automatically.
-
 ### Improvements
 
 - New `Accordion` and `Combobox` UI components added to the component library.
@@ -65,6 +58,15 @@
 
 - The rename now correctly navigates to the renamed note and refreshes the workspace tree. ([#38](https://github.com/USpiri/nemos/issues/38))
 - Mermaid diagrams now support click-to-edit, matching the existing Smiles and KaTeX behavior. ([#40](https://github.com/USpiri/nemos/issues/40))
+- Typing or pasting `++text++` now applies underline formatting live in the editor, matching the existing `~~text~~` behavior for strikethrough. ([#44](https://github.com/USpiri/nemos/issues/44))
+- Math nodes now correctly exit Source mode when clicking another math node or losing focus. ([#46](https://github.com/USpiri/nemos/issues/46))
+- Smiles nodes now correctly exit Source mode when clicking another node or losing focus. ([#47](https://github.com/USpiri/nemos/issues/47))
+- Mermaid nodes now correctly exit Source mode when clicking another node or losing focus. ([#48](https://github.com/USpiri/nemos/issues/48))
+- Code blocks no longer let the copy button/language selector overlay obscure code text. ([#49](https://github.com/USpiri/nemos/issues/49))
+- The settings sidebar footer now shows the real app version instead of a hardcoded `v1.0.0`.
+- The code block language selector is now hidden while a note is read-only, instead of staying visible and interactive.
+- `Ctrl`/`Cmd`+`B` inside the editor no longer also toggles the sidebar — the shortcut is now scoped to the editor's own bold command when focus is inside it.
+- Frontmatter changes (like the readonly toggle) now save immediately instead of sitting in a debounce window, so they're no longer lost on a hard refresh.
 
 ### Breaking Changes
 

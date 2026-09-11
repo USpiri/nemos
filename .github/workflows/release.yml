@@ -61,6 +61,16 @@ jobs:
       - name: install frontend dependencies
         run: pnpm install # change this to npm, pnpm or bun depending on which one you use.
 
+      - name: extract release notes from changelog
+        id: release_notes
+        shell: bash
+        run: |
+          {
+            echo 'body<<NEMOS_CHANGELOG_EOF'
+            node scripts/extract-changelog.js "${{ github.ref_name }}"
+            echo 'NEMOS_CHANGELOG_EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -69,7 +79,7 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: "${{ env.APP_NAME }} v__VERSION__"
-          releaseBody: 'See the assets to download this version and install.'
+          releaseBody: ${{ steps.release_notes.outputs.body }}
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}

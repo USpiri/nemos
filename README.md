@@ -33,6 +33,9 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
 - **Workspaces**: Organize your notes into separate workspaces, each with its own directory, file tree, and recent notes view.
 - **Tabbed Editing**: Open multiple notes at once with keyboard shortcuts, context menus, and tab persistence across sessions.
 - **Rich Text Editor** (TipTap v3): Headings, paragraphs, bold, italics, quotes, inline code, strikethrough, underline, task lists, and more.
+- **Frontmatter & Tags**: Notes carry YAML frontmatter (title, tags, dates) editable from a dedicated Note Properties panel, without touching the raw file.
+- **Custom Themes & CSS Snippets**: Drop a `theme.css` folder or standalone `.css` snippets into the global or per-workspace config folder to restyle the app on top of a stable semantic theming API.
+- **Two-Layer Settings**: Global defaults with per-workspace overrides for Appearance, Editor, and General settings.
 - **Advanced Editor Extensions**:
   - **Slash Commands**: Type `/` to insert headings, lists, code blocks, math, diagrams, and more.
   - **Code Blocks**: Language selector, syntax highlighting, and copy button.
@@ -40,12 +43,13 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
   - **Mathematical Notation**: Inline and display math with KaTeX.
   - **Chemical Notation**: Support for SMILES chemical structures.
   - **Resizable Images**: Drag to resize and align images.
-  - **Tables**: Interactive tables with add row/column buttons.
+  - **Links**: Writing-first inline link editing—click into a link to edit its raw markdown source directly.
+  - **Tables**: Row/column handles for inserting, deleting, duplicating, moving, aligning, clearing, and sorting, plus a full keyboard-shortcut set.
   - **File Upload**: Drag-and-drop or paste images directly into the editor.
 - **File Tree with Drag & Drop**: Hierarchical workspace tree with drag-and-drop for moving notes and folders, context menus, and "Reveal in Explorer".
 - **Auto-Save**: Notes are saved automatically as you type.
 - **In-App Updates**: Automatic update checking with download progress tracking.
-- **Local-First**: No cloud storage—your notes stay on your device.
+- **Local-First**: No cloud storage—your notes stay on your device as plain Markdown files.
 
 ## 🖼️ Screenshoots
 
@@ -58,7 +62,7 @@ Nemos is an intuitive and easy-to-use note-taking application designed to help u
 - **Language**: TypeScript.
 - **Routing**: TanStack Router (file-based).
 - **Editor**: TipTap v3.
-- **Database**: None! Notes are stored locally as `.note` files.
+- **Database**: None! Notes are stored locally as plain `.md` files.
 - **State Management**: Zustand.
 - **Styling**: Tailwind CSS v4 + shadcn/ui.
 - **Linting & Formatting**: Biome.
@@ -79,9 +83,12 @@ src/
 |   ├── app/                       # App initialization
 |   ├── editor/                    # Editor utilities
 |   ├── fs/                        # Filesystem abstraction
+|   ├── migration/                 # Legacy `.note` → `.md` migration
 |   ├── notes/                     # Note reading/writing & schemas
 |   ├── opener/                    # File & URL opener
+|   ├── settings/                  # Two-layer (global + workspace) settings
 |   ├── tabs/                      # Tab utilities
+|   ├── themes/                    # Custom theme & CSS snippet loading
 |   ├── updater/                   # In-app updater service
 |   └── workspace/                 # Workspace management & tree building
 ├── routes/                        # TanStack Router file-based routes
@@ -142,7 +149,7 @@ git tag v<version>
 git push origin main --tags
 ```
 
-Pushing a `v*` tag triggers the CI workflow that builds for macOS, Linux, and Windows, then creates a draft GitHub Release.
+Pushing a `v*` tag triggers the CI workflow that builds for Windows, then creates a draft GitHub Release.
 
 ## 🤝 Contributing
 
