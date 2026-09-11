@@ -41,56 +41,48 @@ export function createScope<TSchema extends z.ZodObject>(
     await store.save()
   }
 
-  const loadRootDelta = async (rootPath: string): Promise<Partial<Data>> => {
+  // Returns null (rather than `{}`) when the file doesn't exist or can't be
+  // read, so callers can tell "nothing to do" (removeRootDelta) apart from
+  // "safe to start from an empty file" (saveRootDelta/replaceRootDelta).
+  const readAllRootSettings = async (
+    rootPath: string,
+  ): Promise<Record<string, unknown> | null> => {
     try {
-      const all = await readJson<Record<string, Partial<Data>>>(
+      return await readJson<Record<string, unknown>>(
         `${rootPath}/${ROOT_SETTINGS_FILE}`,
       )
-      return (all[def.key] as Partial<Data>) ?? {}
     } catch {
-      return {}
+      return null
     }
   }
 
+  const loadRootDelta = async (rootPath: string): Promise<Partial<Data>> => {
+    const all = await readAllRootSettings(rootPath)
+    return (all?.[def.key] as Partial<Data>) ?? {}
+  }
+
   const removeRootDelta = async (rootPath: string) => {
-    const settingsPath = `${rootPath}/${ROOT_SETTINGS_FILE}`
-    let all: Record<string, unknown> = {}
-    try {
-      all = await readJson<Record<string, unknown>>(settingsPath)
-    } catch {
-      return
-    }
+    const all = await readAllRootSettings(rootPath)
+    if (!all) return
     delete all[def.key]
-    await writeJson(settingsPath, all)
+    await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
   }
 
   const saveRootDelta = async (rootPath: string, patch: Partial<Data>) => {
     const configDir = `${rootPath}/${ROOT_CONFIG_DIR}`
-    const settingsPath = `${rootPath}/${ROOT_SETTINGS_FILE}`
     await ensureDir(configDir, { recursive: true })
-    let all: Record<string, unknown> = {}
-    try {
-      all = await readJson<Record<string, unknown>>(settingsPath)
-    } catch {
-      /* no existing settings, will create new */
-    }
+    const all = (await readAllRootSettings(rootPath)) ?? {}
     all[def.key] = { ...(all[def.key] as Record<string, unknown>), ...patch }
-    await writeJson(settingsPath, all)
+    await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
   }
 
   // Unlike saveRootDelta (which merges a patch on top), this fully replaces
   // the scope's delta entry — needed for migrateRootDelta, which may rename
   // or drop keys rather than just add to them.
   const replaceRootDelta = async (rootPath: string, delta: Partial<Data>) => {
-    const settingsPath = `${rootPath}/${ROOT_SETTINGS_FILE}`
-    let all: Record<string, unknown> = {}
-    try {
-      all = await readJson<Record<string, unknown>>(settingsPath)
-    } catch {
-      /* no existing settings, will create new */
-    }
+    const all = (await readAllRootSettings(rootPath)) ?? {}
     all[def.key] = delta
-    await writeJson(settingsPath, all)
+    await writeJson(`${rootPath}/${ROOT_SETTINGS_FILE}`, all)
   }
 
   return create<ScopeStore<Data>>()((set) => ({
@@ -137,7 +129,9 @@ export function createScope<TSchema extends z.ZodObject>(
       }
       const effective = resolveSettings(globalData, rootDelta)
 
-      set({ ...effective, rootDelta, _initialized: true, rootPath } as Partial<ScopeStore<Data>>)
+      set({ ...effective, rootDelta, _initialized: true, rootPath } as Partial<
+        ScopeStore<Data>
+      >)
     },
 
     update: async (patch) => {
