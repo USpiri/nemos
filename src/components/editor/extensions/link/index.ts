@@ -8,10 +8,16 @@ import {
   TextSelection,
   type Transaction,
 } from '@tiptap/pm/state'
+import type { EditorView } from '@tiptap/pm/view'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { InputRule, markInputRule, ReactMarkViewRenderer } from '@tiptap/react'
+import { resolveLinkFromDoc } from './get-document-headings'
 import { parseLinkSource, serializeLinkSource } from './grammar'
 import { LinkView } from './LinkView'
+import {
+  defaultLinkNavigationOptions,
+  type LinkNavigationOptions,
+} from './link-options'
 
 function linkInputRule(config: Parameters<typeof markInputRule>[0]) {
   const defaultMarkInputRule = markInputRule(config)
@@ -191,13 +197,97 @@ function materializeLinkPlugin(linkType: MarkType) {
   })
 }
 
-export const Link = LinkExtension.extend<LinkOptions>({
+/*
+ * Ctrl (or Cmd, for a future Mac build) + click follows a Link in edit
+ * mode; a plain click follows it in read-only mode (ADR-0011) — this is
+ * the single condition every handler below gates on, so edit/read-only
+ * behavior never drifts apart between them.
+ * */
+function shouldFollowLink(view: EditorView, event: MouseEvent) {
+  return view.editable ? event.ctrlKey || event.metaKey : true
+}
+
+function getAnchorElement(event: Event): HTMLAnchorElement | null {
+  const element = event.target as HTMLElement
+  const target = (
+    element.matches('a') ? event.target : element.parentElement
+  ) as HTMLAnchorElement | null
+  if (!target || target.tagName !== 'A' || !target.hasAttribute('href')) {
+    return null
+  }
+  return target
+}
+
+/*
+ * The DOM anchor's own `.href` is browser-resolved (absolute) — reading the
+ * mark's `href` attribute instead keeps the exact raw target string
+ * resolveLink expects (a relative Note path, a bare `#slug`, ...).
+ * */
+function getRawHref(
+  view: EditorView,
+  target: HTMLAnchorElement,
+  linkType: MarkType,
+): string {
+  try {
+    const $pos = view.state.doc.resolve(view.posAtDOM(target, 0))
+    const mark =
+      $pos.marks().find((m) => m.type === linkType) ??
+      $pos.nodeAfter?.marks.find((m) => m.type === linkType) ??
+      $pos.nodeBefore?.marks.find((m) => m.type === linkType)
+    if (mark) return (mark.attrs.href as string) ?? ''
+  } catch {
+    // Fall through to the DOM attribute below.
+  }
+  return target.getAttribute('href') ?? ''
+}
+
+function followLink(
+  view: EditorView,
+  linkType: MarkType,
+  target: HTMLAnchorElement,
+  options: LinkNavigationOptions,
+) {
+  const href = getRawHref(view, target, linkType)
+  const resolution = resolveLinkFromDoc(view.state.doc, href, options)
+
+  switch (resolution.kind) {
+    case 'external':
+      openUrl(href)
+      return
+    case 'note':
+      if (resolution.resolved) options.onNavigateToNote(resolution.path)
+      else options.onCreateNote(resolution.path)
+      return
+    case 'anchor':
+      // A hash-only "navigation" to the Note we're already viewing — the
+      // router's own hashScrollIntoView does the actual scrolling. Broken
+      // anchors are safe to pass through too: there's simply no heading id
+      // to scroll to, a graceful no-op.
+      options.onNavigateToNote(options.currentNotePath, {
+        anchor: resolution.slug,
+      })
+      return
+    case 'noteAnchor':
+      if (resolution.noteResolved) {
+        options.onNavigateToNote(resolution.path, { anchor: resolution.slug })
+      } else {
+        options.onCreateNote(resolution.path)
+      }
+      return
+    case 'unresolved':
+      return
+  }
+}
+
+export const Link = LinkExtension.extend<LinkOptions & LinkNavigationOptions>({
   inclusive: false,
 
   addOptions() {
     return {
       ...(this.parent?.() as LinkOptions),
-      openOnClick: 'whenNotEditable',
+      ...defaultLinkNavigationOptions,
+      // Gives Nemos the complete control of navigation.
+      openOnClick: false,
     }
   },
 
@@ -270,101 +360,88 @@ export const Link = LinkExtension.extend<LinkOptions>({
 
   addProseMirrorPlugins() {
     let hoveredElement: HTMLElement | null = null
+    const linkType = this.type
+    const options = this.options
+
     return [
       new Plugin({
         props: {
           /*
-           * Ctrl + click to open on edit mode
-           * Click to open on read-only mode
-           *
            * Only guards against ProseMirror's own selection-placement
            * fallback here — the browser's native caret jump on mousedown
            * (which fires first and would otherwise trigger materialize
            * before this even runs) is blocked in handleDOMEvents.mousedown.
            * */
           handleClick(view, _pos, event) {
-            if (!view.editable) return false
-            if (!event.ctrlKey) return false
-
-            const element = event.target as HTMLElement
-            const target = (
-              element.matches('a') ? event.target : element.parentElement
-            ) as HTMLAnchorElement
-            if (target.tagName !== 'A' && !target.hasAttribute('href'))
-              return false
-
-            return true
+            if (!shouldFollowLink(view, event)) return false
+            return getAnchorElement(event) !== null
           },
 
           handleDOMEvents: {
             /*
-             * Ctrl + mousedown on a link opens it and blocks the browser's
-             * native caret placement, so the selection never moves into the
-             * link (which would otherwise materialize it) on the way there.
+             * Follows the link and blocks the browser's native caret
+             * placement, so the selection never moves into the link (which
+             * would otherwise materialize it) on the way there.
              * */
             mousedown: (view, event) => {
-              if (!view.editable) return false
-              if (!event.ctrlKey) return false
+              if (!shouldFollowLink(view, event)) return false
 
-              const element = event.target as HTMLElement
-              const target = (
-                element.matches('a') ? event.target : element.parentElement
-              ) as HTMLAnchorElement
-              if (target.tagName !== 'A' || !target.hasAttribute('href'))
-                return false
+              const target = getAnchorElement(event)
+              if (!target) return false
 
               event.preventDefault()
-              openUrl(target.href)
+              followLink(view, linkType, target, options)
               return true
             },
 
             /*
              * Prevent default anchor behaviour
              * https://github.com/tauri-apps/tauri/issues/2791
+             *
+             * In read-only mode this also fixes the pre-existing bug where
+             * a plain click fell through to @tiptap/extension-link's own
+             * openOnClick handling (a raw window.open), bypassing the
+             * resolution/navigation above entirely.
              * */
             click: (view, event) => {
-              if (!view.editable) return
+              if (!shouldFollowLink(view, event)) return
 
-              const element = event.target as HTMLElement
-              const target = (
-                element.matches('a') ? event.target : element.parentElement
-              ) as HTMLAnchorElement
-              if (target.tagName === 'A' && target.hasAttribute('href')) {
+              if (getAnchorElement(event)) {
                 event.preventDefault()
                 event.stopPropagation()
               }
             },
 
             /*
-             * cursor-pointer on ctrl + key + hover
+             * cursor-pointer on hover — always in read-only mode, only
+             * while Ctrl/Cmd is held in edit mode, matching the click
+             * requirement above.
              * */
-            mouseover: (_, event) => {
-              const element = event.target as HTMLElement
-              const target = (
-                element.matches('a') ? event.target : element.parentElement
-              ) as HTMLAnchorElement
-              if (target.tagName === 'A' && target.hasAttribute('href')) {
-                hoveredElement = target
-                if (event.ctrlKey) target.classList.add('cursor-pointer')
+            mouseover: (view, event) => {
+              const target = getAnchorElement(event)
+              if (!target) return
+              hoveredElement = target
+              if (shouldFollowLink(view, event)) {
+                target.classList.add('cursor-pointer')
               }
             },
             mouseout: (_, event) => {
-              const element = event.target as HTMLElement
-              const target = (
-                element.matches('a') ? event.target : element.parentElement
-              ) as HTMLAnchorElement
-              if (target.tagName === 'A' && target.hasAttribute('href')) {
-                target.classList.remove('cursor-pointer')
-                hoveredElement = null
-              }
+              const target = getAnchorElement(event)
+              if (!target) return
+              target.classList.remove('cursor-pointer')
+              hoveredElement = null
             },
-            keydown: (_, event) => {
-              if (event.key === 'Control' && hoveredElement) {
+            keydown: (view, event) => {
+              const isModifierKey =
+                event.key === 'Control' || event.key === 'Meta'
+              if (view.editable && isModifierKey && hoveredElement) {
                 hoveredElement.classList.add('cursor-pointer')
               }
             },
-            keyup: (_, event) => {
-              if (event.key === 'Control' && hoveredElement) {
+            keyup: (view, event) => {
+              const isModifierKey =
+                event.key === 'Control' || event.key === 'Meta'
+              if (view.editable && isModifierKey && hoveredElement) {
                 hoveredElement.classList.remove('cursor-pointer')
               }
             },

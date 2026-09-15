@@ -52,10 +52,11 @@ export const useRootActions = () => {
   }, [router.invalidate])
 
   const navigateToNote = useCallback(
-    (relativeNotePath: string) => {
+    (relativeNotePath: string, anchor?: string) => {
       navigate({
         to: '/workspace/$rootPath/notes/$noteId',
         params: { rootPath: root, noteId: relativeNotePath },
+        hash: anchor,
       })
     },
     [navigate, root],

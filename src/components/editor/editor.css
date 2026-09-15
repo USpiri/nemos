@@ -152,6 +152,20 @@
       }
     }
 
+    /* An unresolved Note Link or Heading Anchor (ADR-0011) — missing
+       Note, or a Note whose anchor doesn't match any heading. */
+    & a.link-broken:not(.not-typography a.link-broken) {
+      color: var(--color-destructive);
+      text-decoration-style: dashed;
+      text-decoration-color: color-mix(in oklch,
+          var(--color-destructive) 45%,
+          transparent);
+
+      &:hover {
+        text-decoration-color: var(--color-destructive);
+      }
+    }
+
     /* ── Blockquote ─────────────────────────────────── */
 
     & blockquote:not(.not-typography blockquote) {
