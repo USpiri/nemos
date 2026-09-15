@@ -14,11 +14,14 @@
 ### Improvements
 
 - "Workspace Settings/Theme/CSS Snippet" renamed to "Root Settings/Theme/CSS Snippet" — "Workspace" now means only a pinned bookmark. ([#83](https://github.com/USpiri/nemos/issues/83), [#84](https://github.com/USpiri/nemos/issues/84))
+- **Full Mermaid theme**: Mermaid diagrams now have a complete custom theme matching the app's look and feel across every diagram type — flowchart, ER, sequence, state, class, Gantt, and pie — instead of just node fills and text. Every role (node/actor/task fills, borders, lines, labels, notes, errors) is exposed as a `--mermaid-*` CSS variable for Theme/Snippet overrides; see `docs/theming.md`.
 
 ### Fixes
 
 - The Workspaces page now scrolls when the list overflows the window, instead of hiding the "Create Workspace" button off-screen. ([#82](https://github.com/USpiri/nemos/issues/82))
 - Printing a note no longer shows app chrome, and content now paginates correctly across multiple pages instead of being cut off. ([#102](https://github.com/USpiri/nemos/issues/102), [#103](https://github.com/USpiri/nemos/issues/103), [#104](https://github.com/USpiri/nemos/issues/104), [#105](https://github.com/USpiri/nemos/issues/105), [#106](https://github.com/USpiri/nemos/issues/106), [#107](https://github.com/USpiri/nemos/issues/107), [#108](https://github.com/USpiri/nemos/issues/108))
+- Mermaid diagrams re-enabled their live theme-reactive styling for flowcharts and ER diagrams (node fills, edges, clusters), which had been disabled.
+- Mermaid diagrams no longer fail to render with `Unsupported color format` — the app's oklch-based theme colors are now converted to rgb before being handed to Mermaid's color engine, which doesn't understand oklch().
 
 ---
 

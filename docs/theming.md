@@ -116,16 +116,127 @@ Eleven slots for syntax highlighting, mapped to token categories by the built-in
 
 ### Mermaid diagram colors
 
+Nemos configures Mermaid with a custom `base` theme built from these variables. Overriding one changes it across every diagram type (flowchart, ER, sequence, gantt, pie, etc.) that uses that role.
+
+Note: because Mermaid's theme is resolved once when the diagram engine loads, a Theme (or Snippet) change to these variables may require reopening the note before it's picked up.
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-background` | Diagram background |
+| `--mermaid-font-family` | Diagram text font |
+
+**Core palette**
+
 | Variable | Purpose |
 |----------|---------|
 | `--mermaid-primary-color` | Node fill |
 | `--mermaid-primary-text-color` | Node text |
 | `--mermaid-primary-border-color` | Node border |
-| `--mermaid-line-color` | Connector lines |
 | `--mermaid-secondary-color` | Secondary node fill |
+| `--mermaid-secondary-text-color` | Secondary node text |
+| `--mermaid-secondary-border-color` | Secondary node border |
 | `--mermaid-tertiary-color` | Tertiary node fill |
+| `--mermaid-tertiary-text-color` | Tertiary node text |
+| `--mermaid-tertiary-border-color` | Tertiary node border |
+| `--mermaid-line-color` | Connector lines |
+| `--mermaid-text-color` | Default diagram text |
+| `--mermaid-title-color` | Diagram/section titles |
+
+**Flowchart / ER diagram**
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-main-bkg` | Node background |
+| `--mermaid-node-border` | Node border |
+| `--mermaid-cluster-bkg` | Subgraph/cluster background |
+| `--mermaid-cluster-border` | Subgraph/cluster border |
+| `--mermaid-default-link-color` | Edge line color |
 | `--mermaid-edge-label-background` | Edge label background |
 | `--mermaid-edge-label-color` | Edge label text |
+| `--mermaid-error-bkg-color` | Parse error background |
+| `--mermaid-error-text-color` | Parse error text |
+| `--mermaid-note-bkg-color` | Note background |
+| `--mermaid-note-text-color` | Note text |
+| `--mermaid-note-border-color` | Note border |
+| `--mermaid-row-odd` | ER attribute table odd row background |
+| `--mermaid-row-even` | ER attribute table even row background |
+
+**Sequence diagram**
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-actor-bkg` | Actor box background |
+| `--mermaid-actor-border` | Actor box border |
+| `--mermaid-actor-text-color` | Actor label text |
+| `--mermaid-actor-line-color` | Actor lifeline |
+| `--mermaid-signal-color` | Message arrow color |
+| `--mermaid-signal-text-color` | Message text |
+| `--mermaid-label-box-bkg-color` | Loop/alt label box background |
+| `--mermaid-label-box-border-color` | Loop/alt label box border |
+| `--mermaid-label-text-color` | Loop/alt label text |
+| `--mermaid-loop-text-color` | Loop/alt condition text |
+| `--mermaid-activation-border-color` | Activation bar border |
+| `--mermaid-activation-bkg-color` | Activation bar background |
+| `--mermaid-sequence-number-color` | Message sequence number text |
+| `--mermaid-person-bkg` | Person actor shape background |
+| `--mermaid-person-border` | Person actor shape border |
+
+**State diagram**
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-state-bkg` | State node background |
+| `--mermaid-state-label-color` | State node text |
+| `--mermaid-transition-color` | Transition arrow color |
+| `--mermaid-transition-label-color` | Transition label text |
+| `--mermaid-label-background-color` | Transition label background |
+| `--mermaid-composite-background` | Composite (nested) state background |
+| `--mermaid-composite-title-background` | Composite state title bar background |
+| `--mermaid-composite-border` | Composite state border |
+| `--mermaid-inner-end-background` | Final-state inner circle fill |
+| `--mermaid-special-state-color` | Start/end state circle fill |
+
+**Class diagram**
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-class-text` | Class name/member text |
+| `--mermaid-relation-color` | Relationship line color |
+| `--mermaid-relation-label-background` | Relationship label background |
+| `--mermaid-relation-label-color` | Relationship label text |
+
+**Gantt chart**
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-section-bkg-color` | Section band background |
+| `--mermaid-alt-section-bkg-color` | Alternating section band background |
+| `--mermaid-task-border-color` | Task bar border |
+| `--mermaid-task-bkg-color` | Task bar background |
+| `--mermaid-task-text-color` | Task text (on task bar) |
+| `--mermaid-task-text-light-color` | Task text (on light background) |
+| `--mermaid-task-text-outside-color` | Task text (outside bar) |
+| `--mermaid-task-text-clickable-color` | Clickable task text |
+| `--mermaid-active-task-border-color` | Active task border |
+| `--mermaid-active-task-bkg-color` | Active task background |
+| `--mermaid-grid-color` | Grid lines |
+| `--mermaid-done-task-bkg-color` | Done task background |
+| `--mermaid-done-task-border-color` | Done task border |
+| `--mermaid-crit-border-color` | Critical task border |
+| `--mermaid-crit-bkg-color` | Critical task background |
+| `--mermaid-today-line-color` | "Today" marker line |
+
+**Pie chart**
+
+| Variable | Purpose |
+|----------|---------|
+| `--mermaid-pie-1` through `--mermaid-pie-5` | Slice fills |
+| `--mermaid-pie-title-text-color` | Chart title |
+| `--mermaid-pie-section-text-color` | Slice value labels |
+| `--mermaid-pie-legend-text-color` | Legend text |
+| `--mermaid-pie-stroke-color` | Slice border |
+| `--mermaid-pie-outer-stroke-color` | Outer circle border |
+| `--mermaid-pie-opacity` | Slice fill opacity |
 
 ### SMILES molecule colors
 
