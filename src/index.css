@@ -55,14 +55,104 @@ body {
   --smiles-color-background: var(--background);
 
   /* Mermaid colors */
-  --mermaid-primary-color: #fafafa;
-  --mermaid-primary-text-color: #000;
-  --mermaid-primary-border-color: #e5e5e5;
-  --mermaid-line-color: #a1a1a1;
-  --mermaid-secondary-color: #fca5a5;
-  --mermaid-tertiary-color: #f4f4f592;
-  --mermaid-edge-label-background: #bbf7d0;
-  --mermaid-edge-label-color: #bae6fd;
+  --mermaid-background: var(--background);
+  --mermaid-font-family: inherit;
+
+  /* Core palette */
+  --mermaid-primary-color: var(--secondary);
+  --mermaid-primary-text-color: var(--foreground);
+  --mermaid-primary-border-color: var(--border);
+  --mermaid-secondary-color: var(--muted);
+  --mermaid-secondary-text-color: var(--foreground);
+  --mermaid-secondary-border-color: var(--border);
+  --mermaid-tertiary-color: var(--card);
+  --mermaid-tertiary-text-color: var(--foreground);
+  --mermaid-tertiary-border-color: var(--border);
+  --mermaid-line-color: var(--muted-foreground);
+  --mermaid-text-color: var(--foreground);
+  --mermaid-title-color: var(--foreground);
+
+  /* Flowchart / ER diagram */
+  --mermaid-main-bkg: var(--secondary);
+  --mermaid-node-border: var(--border);
+  --mermaid-cluster-bkg: color-mix(in oklch, var(--secondary) 50%, transparent);
+  --mermaid-cluster-border: var(--border);
+  --mermaid-default-link-color: var(--muted-foreground);
+  --mermaid-edge-label-background: var(--card);
+  --mermaid-edge-label-color: var(--foreground);
+  --mermaid-error-bkg-color: var(--card);
+  --mermaid-error-text-color: var(--destructive);
+  --mermaid-note-bkg-color: var(--accent);
+  --mermaid-note-text-color: var(--accent-foreground);
+  --mermaid-note-border-color: var(--border);
+  --mermaid-row-odd: var(--card);
+  --mermaid-row-even: var(--muted);
+
+  /* Sequence diagram */
+  --mermaid-actor-bkg: var(--secondary);
+  --mermaid-actor-border: var(--border);
+  --mermaid-actor-text-color: var(--foreground);
+  --mermaid-actor-line-color: var(--border);
+  --mermaid-signal-color: var(--foreground);
+  --mermaid-signal-text-color: var(--foreground);
+  --mermaid-label-box-bkg-color: var(--secondary);
+  --mermaid-label-box-border-color: var(--border);
+  --mermaid-label-text-color: var(--foreground);
+  --mermaid-loop-text-color: var(--foreground);
+  --mermaid-activation-border-color: var(--border);
+  --mermaid-activation-bkg-color: var(--muted);
+  --mermaid-sequence-number-color: var(--foreground);
+  --mermaid-person-bkg: var(--secondary);
+  --mermaid-person-border: var(--border);
+
+  /* State diagram */
+  --mermaid-state-bkg: var(--secondary);
+  --mermaid-state-label-color: var(--foreground);
+  --mermaid-transition-color: var(--muted-foreground);
+  --mermaid-transition-label-color: var(--foreground);
+  --mermaid-label-background-color: var(--card);
+  --mermaid-composite-background: var(--muted);
+  --mermaid-composite-title-background: var(--secondary);
+  --mermaid-composite-border: var(--border);
+  --mermaid-inner-end-background: var(--foreground);
+  --mermaid-special-state-color: var(--foreground);
+
+  /* Class diagram */
+  --mermaid-class-text: var(--foreground);
+  --mermaid-relation-color: var(--muted-foreground);
+  --mermaid-relation-label-background: var(--card);
+  --mermaid-relation-label-color: var(--foreground);
+
+  /* Gantt chart */
+  --mermaid-section-bkg-color: var(--muted);
+  --mermaid-alt-section-bkg-color: var(--card);
+  --mermaid-task-border-color: var(--border);
+  --mermaid-task-bkg-color: var(--secondary);
+  --mermaid-task-text-color: var(--foreground);
+  --mermaid-task-text-light-color: var(--foreground);
+  --mermaid-task-text-outside-color: var(--foreground);
+  --mermaid-task-text-clickable-color: var(--primary);
+  --mermaid-active-task-border-color: var(--primary);
+  --mermaid-active-task-bkg-color: color-mix(in oklch, var(--primary) 20%, var(--card));
+  --mermaid-grid-color: var(--border);
+  --mermaid-done-task-bkg-color: var(--muted);
+  --mermaid-done-task-border-color: var(--border);
+  --mermaid-crit-border-color: var(--destructive);
+  --mermaid-crit-bkg-color: color-mix(in oklch, var(--destructive) 20%, var(--card));
+  --mermaid-today-line-color: var(--primary);
+
+  /* Pie chart */
+  --mermaid-pie-1: var(--chart-1);
+  --mermaid-pie-2: var(--chart-2);
+  --mermaid-pie-3: var(--chart-3);
+  --mermaid-pie-4: var(--chart-4);
+  --mermaid-pie-5: var(--chart-5);
+  --mermaid-pie-title-text-color: var(--foreground);
+  --mermaid-pie-section-text-color: var(--foreground);
+  --mermaid-pie-legend-text-color: var(--foreground);
+  --mermaid-pie-stroke-color: var(--border);
+  --mermaid-pie-outer-stroke-color: var(--border);
+  --mermaid-pie-opacity: 0.9;
 
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
@@ -133,14 +223,104 @@ body {
   --smiles-color-background: var(--background);
 
   /* Mermaid colors */
-  --mermaid-primary-color: #171717;
-  --mermaid-primary-text-color: #fff;
-  --mermaid-primary-border-color: #ffffff1a;
-  --mermaid-line-color: #3f3f3f;
-  --mermaid-secondary-color: #fca5a5;
-  --mermaid-tertiary-color: #1725544d;
-  --mermaid-edge-label-background: #10b981;
-  --mermaid-edge-label-color: #000;
+  --mermaid-background: var(--background);
+  --mermaid-font-family: inherit;
+
+  /* Core palette */
+  --mermaid-primary-color: var(--secondary);
+  --mermaid-primary-text-color: var(--foreground);
+  --mermaid-primary-border-color: var(--border);
+  --mermaid-secondary-color: var(--muted);
+  --mermaid-secondary-text-color: var(--foreground);
+  --mermaid-secondary-border-color: var(--border);
+  --mermaid-tertiary-color: var(--card);
+  --mermaid-tertiary-text-color: var(--foreground);
+  --mermaid-tertiary-border-color: var(--border);
+  --mermaid-line-color: var(--muted-foreground);
+  --mermaid-text-color: var(--foreground);
+  --mermaid-title-color: var(--foreground);
+
+  /* Flowchart / ER diagram */
+  --mermaid-main-bkg: var(--secondary);
+  --mermaid-node-border: var(--border);
+  --mermaid-cluster-bkg: color-mix(in oklch, var(--secondary) 50%, transparent);
+  --mermaid-cluster-border: var(--border);
+  --mermaid-default-link-color: var(--muted-foreground);
+  --mermaid-edge-label-background: var(--card);
+  --mermaid-edge-label-color: var(--foreground);
+  --mermaid-error-bkg-color: var(--card);
+  --mermaid-error-text-color: var(--destructive);
+  --mermaid-note-bkg-color: var(--accent);
+  --mermaid-note-text-color: var(--accent-foreground);
+  --mermaid-note-border-color: var(--border);
+  --mermaid-row-odd: var(--card);
+  --mermaid-row-even: var(--muted);
+
+  /* Sequence diagram */
+  --mermaid-actor-bkg: var(--secondary);
+  --mermaid-actor-border: var(--border);
+  --mermaid-actor-text-color: var(--foreground);
+  --mermaid-actor-line-color: var(--border);
+  --mermaid-signal-color: var(--foreground);
+  --mermaid-signal-text-color: var(--foreground);
+  --mermaid-label-box-bkg-color: var(--secondary);
+  --mermaid-label-box-border-color: var(--border);
+  --mermaid-label-text-color: var(--foreground);
+  --mermaid-loop-text-color: var(--foreground);
+  --mermaid-activation-border-color: var(--border);
+  --mermaid-activation-bkg-color: var(--muted);
+  --mermaid-sequence-number-color: var(--foreground);
+  --mermaid-person-bkg: var(--secondary);
+  --mermaid-person-border: var(--border);
+
+  /* State diagram */
+  --mermaid-state-bkg: var(--secondary);
+  --mermaid-state-label-color: var(--foreground);
+  --mermaid-transition-color: var(--muted-foreground);
+  --mermaid-transition-label-color: var(--foreground);
+  --mermaid-label-background-color: var(--card);
+  --mermaid-composite-background: var(--muted);
+  --mermaid-composite-title-background: var(--secondary);
+  --mermaid-composite-border: var(--border);
+  --mermaid-inner-end-background: var(--foreground);
+  --mermaid-special-state-color: var(--foreground);
+
+  /* Class diagram */
+  --mermaid-class-text: var(--foreground);
+  --mermaid-relation-color: var(--muted-foreground);
+  --mermaid-relation-label-background: var(--card);
+  --mermaid-relation-label-color: var(--foreground);
+
+  /* Gantt chart */
+  --mermaid-section-bkg-color: var(--muted);
+  --mermaid-alt-section-bkg-color: var(--card);
+  --mermaid-task-border-color: var(--border);
+  --mermaid-task-bkg-color: var(--secondary);
+  --mermaid-task-text-color: var(--foreground);
+  --mermaid-task-text-light-color: var(--foreground);
+  --mermaid-task-text-outside-color: var(--foreground);
+  --mermaid-task-text-clickable-color: var(--primary);
+  --mermaid-active-task-border-color: var(--primary);
+  --mermaid-active-task-bkg-color: color-mix(in oklch, var(--primary) 20%, var(--card));
+  --mermaid-grid-color: var(--border);
+  --mermaid-done-task-bkg-color: var(--muted);
+  --mermaid-done-task-border-color: var(--border);
+  --mermaid-crit-border-color: var(--destructive);
+  --mermaid-crit-bkg-color: color-mix(in oklch, var(--destructive) 20%, var(--card));
+  --mermaid-today-line-color: var(--primary);
+
+  /* Pie chart */
+  --mermaid-pie-1: var(--chart-1);
+  --mermaid-pie-2: var(--chart-2);
+  --mermaid-pie-3: var(--chart-3);
+  --mermaid-pie-4: var(--chart-4);
+  --mermaid-pie-5: var(--chart-5);
+  --mermaid-pie-title-text-color: var(--foreground);
+  --mermaid-pie-section-text-color: var(--foreground);
+  --mermaid-pie-legend-text-color: var(--foreground);
+  --mermaid-pie-stroke-color: var(--border);
+  --mermaid-pie-outer-stroke-color: var(--border);
+  --mermaid-pie-opacity: 0.9;
 
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);

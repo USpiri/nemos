@@ -10,7 +10,7 @@ import { TableHandles } from './extensions/table/TableHandles'
 
 import './editor.css'
 import './extensions/higlights.css'
-// import './extensions/mermaid.css'
+import './extensions/mermaid.css'
 
 interface Props {
   content?: string
