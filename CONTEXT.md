@@ -58,6 +58,18 @@ A per-column `left` / `center` / `right` / none property of a Table, stored on e
 ### Row Handle / Column Handle
 A small grip that appears on hover at the start of a Table row (Row Handle) or the top of a Table column (Column Handle), opening a menu of actions scoped to that row or column — insert, delete, duplicate, move, clear contents, and, for a Column Handle, set Column Alignment or sort the Table's rows by that column's values.
 
+### Link
+An inline Markdown element (`[label](target)`), rendered in the editor as a mark rather than a node (see ADR-0008 for why). A Link's target resolves to one of three kinds:
+
+#### External Link
+A Link whose target is an absolute URL (`http://`, `https://`, etc.). Opened via the OS's default browser.
+
+#### Note Link
+A Link whose target is a relative path to another Note's file within the same Root, resolved relative to the *linking* Note's own folder — not the Root. Requires the literal `.md` extension. Linking to a Note in a different Root is not yet supported.
+
+#### Heading Anchor
+A Link fragment — `#slug` alone, or appended to a Note Link (`other-note.md#slug`) — that targets a heading. Resolved dynamically by slugifying the target document's current headings at click time (GitHub-Flavored-Markdown algorithm); no slug is stored in the Note's file, so a Heading Anchor breaks silently if the heading's text later changes.
+
 ### Source Mode
 The per-element state in which an inline element — a Math expression, Mermaid diagram, SMILES structure, or Link — shows its raw, directly-editable markup source instead of its rendered form. An element enters Source Mode when the cursor, or a selection fully contained within it, moves into it (by click or by keyboard navigation), and leaves Source Mode the instant the cursor moves elsewhere, at which point it re-renders from the (possibly just-edited) source. Each element type implements Source Mode with whatever mechanism fits it — Math/Mermaid/SMILES toggle a `showSource` node attribute, Link unwraps its mark into literal text and re-parses it on exit — but the observable behavior is the same across all of them.
 

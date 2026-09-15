@@ -2,10 +2,11 @@ import { DragHandle } from '@tiptap/extension-drag-handle-react'
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react'
 import { GripVertical } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
+import { useLinkNavigation } from '@/hooks/use-link-navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
+import { createExtensions } from './extensions'
 import { TableHandles } from './extensions/table/TableHandles'
-import { Extensions } from './extensions'
 
 import './editor.css'
 import './extensions/higlights.css'
@@ -26,9 +27,14 @@ export const Editor = ({
   onUpdate,
   editable = true,
 }: Props) => {
+  // useEditor only reacts to the `[content]` dep below, so this only ever
+  // needs to be right on first mount — a fresh Editor mounts per Note (see
+  // NoteView's `key={noteId}`), matching linkNavigation's own lifetime.
+  const linkNavigation = useLinkNavigation()
+
   const editor = useEditor(
     {
-      extensions: Extensions,
+      extensions: createExtensions(linkNavigation),
       content,
       injectCSS: false,
       autofocus: true,
